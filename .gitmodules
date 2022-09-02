@@ -1,0 +1,3 @@
+[submodule "src/fst"]
+	path = src/fst
+	url = git@e.coding.net:styy/faya-fe/fst.git
