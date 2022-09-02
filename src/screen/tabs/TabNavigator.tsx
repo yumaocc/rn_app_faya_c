@@ -6,8 +6,10 @@ import Home from '../home/Home';
 
 import Mine from '../mine/Mine';
 import Discover from '../discover/Discover';
+// import Notify from '../notify/Notify';
 
 import {primary} from '../../constants/theme';
+// import { View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,50 +19,50 @@ interface TabItemProps {
   size: number;
 }
 
-const tabOptions = {
-  activeColor: primary,
-  items: [
-    {
-      name: 'Home',
-      label: '首页',
-      renderIcon: ({color, size}: TabItemProps) => <Icon name="home" color={color} size={size} />,
-      component: Home,
-    },
-    {
-      name: 'Discover',
-      label: '发现',
-      renderIcon: ({color, size}: TabItemProps) => <Icon name="shop" color={color} size={size} />,
-      component: Discover,
-    },
-    {
-      name: 'Mine',
-      label: '我的',
-      renderIcon: ({color, size}: TabItemProps) => <Icon name="user" color={color} size={size} />,
-      component: Mine,
-    },
-  ],
-};
-
 const TabNavigator: React.FC = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: tabOptions.activeColor,
+        tabBarActiveTintColor: primary,
       }}>
-      {tabOptions.items.map(tabItem => {
-        return (
-          <Tab.Screen
-            key={tabItem.name}
-            name={tabItem.name}
-            component={tabItem.component}
-            options={{
-              headerShown: false,
-              tabBarLabel: tabItem.label,
-              tabBarIcon: tabItem.renderIcon,
-            }}
-          />
-        );
-      })}
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          headerShown: false,
+          tabBarLabel: '首页',
+          tabBarIcon: ({color, size}: TabItemProps) => <Icon name="home" color={color} size={size} />,
+        }}
+      />
+      <Tab.Screen
+        name="Discover"
+        component={Discover}
+        options={{
+          headerShown: false,
+          tabBarLabel: '发现',
+          tabBarIcon: ({color, size}: TabItemProps) => <Icon name="shop" color={color} size={size} />,
+        }}
+      />
+      {/* <View style={{width: 100, height: 100, borderRadius: 50, backgroundColor: '#000'}}>
+      </View> */}
+      {/* <Tab.Screen
+        name="Notify"
+        component={Notify}
+        options={{
+          headerShown: false,
+          tabBarLabel: '通知',
+          tabBarIcon: ({color, size}: TabItemProps) => <Icon name="bell" color={color} size={size} />,
+        }}
+      /> */}
+      <Tab.Screen
+        name="Mine"
+        component={Mine}
+        options={{
+          headerShown: false,
+          tabBarLabel: '我的',
+          tabBarIcon: ({color, size}: TabItemProps) => <Icon name="user" color={color} size={size} />,
+        }}
+      />
     </Tab.Navigator>
   );
 };

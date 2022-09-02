@@ -14,7 +14,7 @@ const headers: AppHeader = {
 };
 axios.defaults.headers.common = {...currentHeader, ...headers};
 
-console.log('headers', headers);
+// console.log('headers', headers);
 
 axios.defaults.timeout = REQUEST_TIMEOUT;
 
@@ -25,8 +25,15 @@ export function resetToken(token: string) {
   axios.defaults.headers.common.token = token;
 }
 
+axios.interceptors.request.use((config: AxiosRequestConfig) => {
+  const {baseURL, url, data} = config;
+  console.log('request', {baseURL, url, data});
+  return config;
+});
+
 axios.interceptors.response.use((response: AxiosResponse) => {
   const {data} = response;
+  // console.log(response.data);
   switch (data.code) {
     case 8000:
       // fixme: 导航怎么办

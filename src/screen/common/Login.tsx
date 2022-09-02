@@ -2,24 +2,24 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {InputItem, Button} from '@ant-design/react-native';
 import {useSelector} from 'react-redux';
-import {useCommonDispatcher} from '../../helper/hooks';
+import {useCommonDispatcher, useUserDispatcher} from '../../helper/hooks';
 import {RootState} from '../../redux/reducers';
 import {LoginState} from '../../fst/models';
 import * as api from '../../apis';
 
 const Login: React.FC = () => {
-  const [phone, setPhone] = React.useState('');
-  const [code, setCode] = React.useState(''); // 验证码
+  const [phone, setPhone] = useState('');
+  const [code, setCode] = useState(''); // 验证码
 
-  const [loginState, setLoginState] = React.useState<LoginState>(LoginState.None);
+  const [loginState, setLoginState] = useState<LoginState>(LoginState.None);
 
   const suggestPhone = useSelector((state: RootState) => state.user.phone);
   const [verifyCodeSend, setVerifyCodeSend] = useState(false);
   const [resendAfter, setResendAfter] = useState(0);
-  // const [userDispatcher] = useUserDispatcher();
+  const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (suggestPhone) {
       setPhone(suggestPhone);
     }
@@ -62,8 +62,21 @@ const Login: React.FC = () => {
     if (!code) {
       return commonDispatcher.error('请输入验证码');
     }
-    // userDispatcher.login({phone, code});
+    login();
+  }
+
+  async function login() {
     setLoginState(LoginState.Loading);
+    try {
+      const res = await api.user.userLogin(phone, code);
+      if (res) {
+        setLoginState(LoginState.Success);
+        userDispatcher.setUserInfo(res);
+      }
+    } catch (error) {
+      commonDispatcher.error(error);
+      setLoginState(LoginState.Error);
+    }
   }
 
   return (

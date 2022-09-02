@@ -1,3 +1,7 @@
 {
-  "cSpell.words": ["Cascader", "SPUF"]
+  "cSpell.words": [
+    "Cascader",
+    "SPUF"
+  ],
+  "editor.formatOnSave": true
 }

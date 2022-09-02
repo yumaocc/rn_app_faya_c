@@ -1,3 +1,3 @@
 export function getBaseURL(): string {
-  return 'http://api-beta.faya.life'; // 生产环境
+  return 'https://api-beta.faya.life'; // 生产环境
 }
