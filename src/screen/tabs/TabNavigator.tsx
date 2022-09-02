@@ -6,10 +6,11 @@ import Home from '../home/Home';
 
 import Mine from '../mine/Mine';
 import Discover from '../discover/Discover';
-// import Notify from '../notify/Notify';
+import Notify from '../notify/Notify';
 
-import {primary} from '../../constants/theme';
-// import { View } from 'react-native';
+import MiddleButton from './MiddleButton';
+import {globalStyleVariables} from '../../constants/styles';
+// import {View} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,11 +20,13 @@ interface TabItemProps {
   size: number;
 }
 
+const NilComponent: React.FC = () => null;
+
 const TabNavigator: React.FC = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: primary,
+        tabBarActiveTintColor: globalStyleVariables.COLOR_PRIMARY,
       }}>
       <Tab.Screen
         name="Home"
@@ -43,9 +46,14 @@ const TabNavigator: React.FC = () => {
           tabBarIcon: ({color, size}: TabItemProps) => <Icon name="shop" color={color} size={size} />,
         }}
       />
-      {/* <View style={{width: 100, height: 100, borderRadius: 50, backgroundColor: '#000'}}>
-      </View> */}
-      {/* <Tab.Screen
+      <Tab.Screen
+        name="_"
+        component={NilComponent}
+        options={{
+          tabBarButton: () => <MiddleButton />,
+        }}
+      />
+      <Tab.Screen
         name="Notify"
         component={Notify}
         options={{
@@ -53,7 +61,7 @@ const TabNavigator: React.FC = () => {
           tabBarLabel: '通知',
           tabBarIcon: ({color, size}: TabItemProps) => <Icon name="bell" color={color} size={size} />,
         }}
-      /> */}
+      />
       <Tab.Screen
         name="Mine"
         component={Mine}

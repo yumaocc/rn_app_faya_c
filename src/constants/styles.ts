@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 
 export const globalStyleVariables = {
-  COLOR_PRIMARY: '#546DAD',
+  COLOR_PRIMARY: '#FF5934',
   COLOR_WARNING: '#FFC107',
   COLOR_DANGER: '#F44336',
   TEXT_COLOR_PRIMARY: '#333',
