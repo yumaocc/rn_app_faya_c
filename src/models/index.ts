@@ -3,3 +3,4 @@ export type {UserInfo} from './user';
 export type {AppHeader, StylePropText, StylePropView, CacheKeys} from './common';
 
 export {UserState} from './user';
+export {WorkTab} from './work';
