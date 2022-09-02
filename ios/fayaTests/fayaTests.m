@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface FayaBDTests : XCTestCase
+@interface fayaTests : XCTestCase
 
 @end
 
-@implementation FayaBDTests
+@implementation fayaTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {

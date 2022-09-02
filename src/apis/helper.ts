@@ -10,7 +10,7 @@ const headers: AppHeader = {
   os: `${Platform.OS}|${Platform.Version || 'N/A'}`,
   version: packageJSON.version,
   platform: 'APP',
-  project: 'FAYABD',
+  project: 'FAYA',
 };
 axios.defaults.headers.common = {...currentHeader, ...headers};
 
