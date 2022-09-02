@@ -1,26 +1,40 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {useSelector} from 'react-redux';
+import {Tabs} from '../../component';
+import {useWorkDispatcher} from '../../helper/hooks';
+import {RootState} from '../../redux/reducers';
 
-interface HomeProps {
-  title?: string;
-}
+const Home: React.FC = () => {
+  const currentTab = useSelector((state: RootState) => state.work.currentTab);
+  const tabs = useSelector((state: RootState) => state.work.tabs);
 
-const Home: React.FC<HomeProps> = props => {
-  const {title} = props;
+  const [workDispatcher] = useWorkDispatcher();
+
+  function handleChangeTab(tab: string) {
+    console.log(tab);
+    const foundTab = tabs.find(t => t.type === tab);
+    if (foundTab) {
+      workDispatcher.changeTab(foundTab);
+    }
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>{title}</Text>
-    </View>
+    <SafeAreaView edges={['top']} style={{flex: 1}}>
+      <View style={styles.container}>
+        <Tabs currentKey={currentTab.type} tabs={tabs.map(tab => ({title: tab.title, key: tab.key}))} onChange={handleChangeTab} />
+      </View>
+    </SafeAreaView>
   );
 };
-Home.defaultProps = {
-  title: 'Home',
-};
+
 export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    backgroundColor: '#6cf',
   },
 });

@@ -4,10 +4,7 @@ import commonSagas from './common/sagas';
 import userSagas from './user/sagas';
 
 function* rootSaga() {
-  yield all([
-    fork(commonSagas),
-    fork(userSagas),
-  ]);
+  yield all([fork(commonSagas), fork(userSagas)]);
 }
 
 export {rootSaga};

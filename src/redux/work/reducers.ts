@@ -1,5 +1,5 @@
 import produce from 'immer';
-import {WorkTab} from '../../models';
+import {WorkTab, WorkTabType} from '../../models';
 import {WorkActions} from './actions';
 import {ActionType} from './types';
 
@@ -9,8 +9,16 @@ export interface WorkState {
 }
 
 export const initialState: WorkState = {
-  tabs: [WorkTab.Follow, WorkTab.Recommend, WorkTab.Nearby],
-  currentTab: WorkTab.Recommend,
+  tabs: [
+    {title: '关注', type: WorkTabType.Follow, key: WorkTabType.Follow},
+    {title: '推荐', type: WorkTabType.Recommend, key: WorkTabType.Recommend},
+    {title: '附近', type: WorkTabType.Nearby, key: WorkTabType.Nearby},
+  ],
+  currentTab: {
+    title: '推荐',
+    type: WorkTabType.Recommend,
+    key: WorkTabType.Recommend,
+  },
 };
 
 export default (state = initialState, action: WorkActions): WorkState => {

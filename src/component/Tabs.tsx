@@ -20,9 +20,7 @@ interface TabsProps {
 const Tabs: React.FC<TabsProps> = props => {
   const {onChange, defaultActiveKey, tabs, currentKey} = props;
 
-  const [activeKey, setActiveKey] = useState(
-    defaultActiveKey || tabs[0]?.key || '',
-  );
+  const [activeKey, setActiveKey] = useState(defaultActiveKey || tabs[0]?.key || '');
 
   useEffect(() => {
     if (currentKey) {
@@ -40,18 +38,9 @@ const Tabs: React.FC<TabsProps> = props => {
     <View style={[styles.container, props.style]}>
       {tabs.map(tab => {
         return (
-          <TouchableOpacity
-            key={tab.key}
-            activeOpacity={0.7}
-            onPress={() => changeTab(tab.key)}>
+          <TouchableOpacity key={tab.key} activeOpacity={0.7} onPress={() => changeTab(tab.key)}>
             <View>
-              <Text
-                style={[
-                  styles.tabText,
-                  activeKey === tab.key ? styles.activeTabText : {},
-                ]}>
-                {tab.title}
-              </Text>
+              <Text style={[styles.tabText, activeKey === tab.key ? styles.activeTabText : {}]}>{tab.title}</Text>
               {/* 指示器 */}
               {/* <View /> */}
             </View>
