@@ -9,3 +9,18 @@ export interface WorkTab {
   key: string;
   type: WorkTabType;
 }
+
+export enum WorkType {
+  Video = 0,
+  Photo = 1,
+}
+export interface WorkF {
+  mainId: string;
+  type: WorkType;
+  coverImage: string;
+  videoUrl: string;
+  userName: string;
+  userAvatar: string;
+  numberOfLikes: number;
+  content: string;
+}

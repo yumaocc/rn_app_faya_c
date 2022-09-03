@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux';
 import {Tabs} from '../../component';
 import {useWorkDispatcher} from '../../helper/hooks';
 import {RootState} from '../../redux/reducers';
+import WorkList from './WorkList';
 
 const Home: React.FC = () => {
   const currentTab = useSelector((state: RootState) => state.work.currentTab);
@@ -24,6 +25,9 @@ const Home: React.FC = () => {
     <SafeAreaView edges={['top']} style={{flex: 1}}>
       <View style={styles.container}>
         <Tabs currentKey={currentTab.type} tabs={tabs.map(tab => ({title: tab.title, key: tab.key}))} onChange={handleChangeTab} />
+        <View style={styles.workContainer}>
+          <WorkList />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -33,8 +37,9 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    backgroundColor: '#6cf',
+  },
+  workContainer: {
+    flex: 1,
+    // backgroundColor: '#6cf',
   },
 });

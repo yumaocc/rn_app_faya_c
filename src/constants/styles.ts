@@ -28,12 +28,22 @@ export const globalStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  containerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   flexCenter: {
     alignContent: 'center',
     justifyContent: 'center',
   },
   width100: {
     width: '100%',
+  },
+  fontStrong: {
+    // 重点字体样式
+    color: globalStyleVariables.TEXT_COLOR_PRIMARY,
+    fontWeight: 'bold',
+    fontSize: 15,
   },
   fontPrimary: {
     // 主要字体样式

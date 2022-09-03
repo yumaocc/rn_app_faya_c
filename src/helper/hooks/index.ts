@@ -1,2 +1,2 @@
-export {useInfinityRotate, useRNSelectPhoto} from './common';
+export {useInfinityRotate, useRNSelectPhoto, useDivideData, useParams} from './common';
 export {useCommonDispatcher, useUserDispatcher, useWorkDispatcher} from './dispatchers';

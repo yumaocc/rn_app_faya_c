@@ -1,3 +1,4 @@
 import * as user from './user';
+import * as work from './work';
 
-export {user};
+export {user, work};

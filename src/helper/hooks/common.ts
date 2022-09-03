@@ -1,6 +1,8 @@
-import { useRef, useEffect, useCallback } from "react";
-import { Animated, Easing } from "react-native";
-import { ImageLibraryOptions, Asset, launchImageLibrary } from "react-native-image-picker";
+import {useRoute} from '@react-navigation/native';
+import {useRef, useEffect, useCallback, useState, useMemo} from 'react';
+import {Animated, Easing} from 'react-native';
+import {ImageLibraryOptions, Asset, launchImageLibrary} from 'react-native-image-picker';
+import {FakeRoute} from '../../models/route';
 
 export function useInfinityRotate() {
   const rotateAnim = useRef(new Animated.Value(0)).current; // 初始角度
@@ -27,7 +29,6 @@ export function useInfinityRotate() {
   return rotateAnim;
 }
 
-
 export function useRNSelectPhoto(): [(option?: Partial<ImageLibraryOptions>) => Promise<Asset[]>] {
   const openGallery = useCallback(async (option: Partial<ImageLibraryOptions> = {}) => {
     const defaultOptions: ImageLibraryOptions = {
@@ -47,4 +48,22 @@ export function useRNSelectPhoto(): [(option?: Partial<ImageLibraryOptions>) => 
     }
   }, []);
   return [openGallery];
+}
+
+export function useDivideData<T>(dataSource: T[]): [T[], T[]] {
+  const [left, setLeft] = useState([]);
+  const [right, setRight] = useState([]);
+  useEffect(() => {
+    const leftData = dataSource.filter((item, index) => index % 2 === 0);
+    const rightData = dataSource.filter((item, index) => index % 2 !== 0);
+    setLeft(leftData);
+    setRight(rightData);
+  }, [dataSource]);
+  return [left, right];
+}
+
+export function useParams<T = any>(): T {
+  const route = useRoute() as FakeRoute;
+  const param = useMemo(() => route.params || {}, [route]);
+  return param;
 }

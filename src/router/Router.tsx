@@ -1,12 +1,13 @@
 import React from 'react';
 import {createNavigationContainerRef} from '@react-navigation/native';
-
-import TabNavigator from '../screen/tabs/TabNavigator';
-import Login from '../screen/common/Login';
 import {useSelector} from 'react-redux';
+
 import {RootState} from '../redux/reducers';
 import {Stack, commonScreenOptions} from './config';
 
+import WorkDetail from '../screen/home/WorkDetail';
+import TabNavigator from '../screen/tabs/TabNavigator';
+import Login from '../screen/common/Login';
 // import RouterSPU from './RouterSPU';
 // import RouterMerchant from './RouterMerchant';
 
@@ -30,6 +31,7 @@ const Navigator: React.FC = () => {
         </>
       )}
       <Stack.Screen name="Tab" component={TabNavigator} options={commonScreenOptions} />
+      <Stack.Screen name="WorkDetail" component={WorkDetail} options={commonScreenOptions} />
     </Stack.Navigator>
   );
 };
