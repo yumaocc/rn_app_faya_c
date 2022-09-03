@@ -47,7 +47,7 @@ const WorkList: React.FC<WorkListProps> = () => {
   }, [pageIndex, fetchData]);
 
   function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
-    console.log(e.nativeEvent);
+    // console.log(e.nativeEvent);
     var offsetY = e.nativeEvent.contentOffset.y; //滑动距离
     var contentSizeHeight = e.nativeEvent.contentSize.height; //scrollView contentSize高度
     var scrollViewHeight = e.nativeEvent.layoutMeasurement.height; //scrollView高度

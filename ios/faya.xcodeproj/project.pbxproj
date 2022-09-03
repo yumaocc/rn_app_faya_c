@@ -16,6 +16,7 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F49777F728C23058007EE7E6 /* antoutline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F49777F528C23058007EE7E6 /* antoutline.ttf */; };
 		F49777F828C23058007EE7E6 /* antfill.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F49777F628C23058007EE7E6 /* antfill.ttf */; };
+		F49777FA28C3B241007EE7E6 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F49777F928C3B241007EE7E6 /* MaterialIcons.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F49777F528C23058007EE7E6 /* antoutline.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = antoutline.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"; sourceTree = "<group>"; };
 		F49777F628C23058007EE7E6 /* antfill.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = antfill.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antfill.ttf"; sourceTree = "<group>"; };
+		F49777F928C3B241007EE7E6 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				F49777F928C3B241007EE7E6 /* MaterialIcons.ttf */,
 				F49777F628C23058007EE7E6 /* antfill.ttf */,
 				F49777F528C23058007EE7E6 /* antoutline.ttf */,
 				13B07FAE1A68108700A75B9A /* faya */,
@@ -248,6 +251,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F49777FA28C3B241007EE7E6 /* MaterialIcons.ttf in Resources */,
 				F49777F728C23058007EE7E6 /* antoutline.ttf in Resources */,
 				F49777F828C23058007EE7E6 /* antfill.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,

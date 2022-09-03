@@ -2,11 +2,15 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {StylePropView} from '../models';
 
 interface NavigationBarProps {
   title?: string | React.ReactNode;
   headerLeft?: React.ReactNode;
   headerRight?: React.ReactNode;
+  safeTop?: boolean;
+  style?: StylePropView;
+  color?: string;
 }
 
 const NavigationBar: React.FC<NavigationBarProps> = props => {
@@ -24,7 +28,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
     return (
       <TouchableOpacity activeOpacity={0.5} onPress={handleBack}>
         <View style={styles.defaultLeft}>
-          <View style={styles.arrow} />
+          <View style={[styles.arrow, {borderColor: props.color}]} />
         </View>
       </TouchableOpacity>
     );
@@ -43,7 +47,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
     const isString = typeof props.title === 'string';
     if (isString) {
       return (
-        <Text style={styles.titleText} numberOfLines={1}>
+        <Text style={[styles.titleText, {color: props.color}]} numberOfLines={1}>
           {props.title}
         </Text>
       );
@@ -53,7 +57,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
   }
 
   return (
-    <View style={{backgroundColor: '#fff', paddingTop: safeArea.top}}>
+    <View style={[{paddingTop: props.safeTop ? safeArea.top : 0}, props.style]}>
       <View style={styles.container}>
         <View style={styles.title}>{renderTitle()}</View>
         <View style={styles.left}>{renderHeaderLeft()}</View>
@@ -64,6 +68,8 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
 };
 NavigationBar.defaultProps = {
   title: '',
+  safeTop: true,
+  color: '#333',
 };
 export default NavigationBar;
 const styles = StyleSheet.create({
@@ -78,7 +84,6 @@ const styles = StyleSheet.create({
     top: 0,
     height: '100%',
     alignItems: 'center',
-    backgroundColor: '#fff',
     flexDirection: 'row',
   },
   right: {
