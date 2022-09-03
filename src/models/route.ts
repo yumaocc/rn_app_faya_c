@@ -9,6 +9,7 @@ export type RootStackParamList = {
   Mine: undefined;
   WorkDetail: {
     id: string;
+    videoUrl: string;
   };
 };
 

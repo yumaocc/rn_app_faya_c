@@ -63,7 +63,7 @@ const WorkList: React.FC<WorkListProps> = () => {
     const normal = isLeft ? cicadaBool(index) && !isFirst : cicadaBool(index) || isFirst;
     return (
       <View style={styles.item} key={work.mainId}>
-        <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetail', {id: work.mainId})}>
+        <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetail', {id: work.mainId, videoUrl: work.videoUrl})}>
           <View style={{width: '100%'}}>
             <Image source={{uri: 'https://fakeimg.pl/100?text=l'}} style={normal ? styles.cover : styles.smallCover} />
           </View>
