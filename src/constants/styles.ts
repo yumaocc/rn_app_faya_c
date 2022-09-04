@@ -10,6 +10,8 @@ export const globalStyleVariables = {
   TEXT_COLOR_TERTIARY: '#999',
   BORDER_COLOR: '#0000001A',
   MODULE_SPACE: 10,
+  MODULE_SPACE_SMALLER: 5,
+  MODULE_SPACE_BIGGER: 15,
   COLOR_PAGE_BACKGROUND: '#f4f4f4',
 };
 
@@ -106,11 +108,11 @@ export const globalStyles = StyleSheet.create({
     color: globalStyleVariables.TEXT_COLOR_SECONDARY,
   },
   lineHorizontal: {
-    height: 1,
+    height: StyleSheet.hairlineWidth,
     backgroundColor: globalStyleVariables.BORDER_COLOR,
   },
   lineVertical: {
-    width: 1,
+    width: StyleSheet.hairlineWidth,
     backgroundColor: globalStyleVariables.BORDER_COLOR,
   },
   borderTop: {
