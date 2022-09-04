@@ -11,6 +11,9 @@ export type RootStackParamList = {
     id: string;
     videoUrl: string;
   };
+  SPUDetail: {
+    id: number;
+  };
 };
 
 export type Props = NativeStackScreenProps<RootStackParamList>;

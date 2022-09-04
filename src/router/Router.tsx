@@ -8,6 +8,9 @@ import {Stack, commonScreenOptions} from './config';
 import WorkDetail from '../screen/home/WorkDetail';
 import TabNavigator from '../screen/tabs/TabNavigator';
 import Login from '../screen/common/Login';
+
+import SPUDetail from '../screen/spu/SPUDetail';
+
 // import RouterSPU from './RouterSPU';
 // import RouterMerchant from './RouterMerchant';
 
@@ -32,6 +35,7 @@ const Navigator: React.FC = () => {
       )}
       <Stack.Screen name="Tab" component={TabNavigator} options={commonScreenOptions} />
       <Stack.Screen name="WorkDetail" component={WorkDetail} options={commonScreenOptions} />
+      <Stack.Screen name="SPUDetail" component={SPUDetail} options={commonScreenOptions} />
     </Stack.Navigator>
   );
 };

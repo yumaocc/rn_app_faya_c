@@ -2,8 +2,9 @@ import {StyleSheet} from 'react-native';
 
 export const globalStyleVariables = {
   COLOR_PRIMARY: '#FF5934',
-  COLOR_WARNING: '#FFC107',
+  COLOR_WARNING: '#FF7715',
   COLOR_DANGER: '#F44336',
+  COLOR_BUD: '#5FBC7F',
   TEXT_COLOR_PRIMARY: '#333',
   TEXT_COLOR_SECONDARY: '#666',
   TEXT_COLOR_TERTIARY: '#999',
@@ -74,6 +75,9 @@ export const globalStyles = StyleSheet.create({
   moduleMarginTop: {
     // 模块上间距
     marginTop: globalStyleVariables.MODULE_SPACE,
+  },
+  halfModuleMarginTop: {
+    marginTop: globalStyleVariables.MODULE_SPACE / 2,
   },
   moduleMarginLeft: {
     // 模块左间距
