@@ -20,7 +20,7 @@ import Footer from './Form/Footer';
 import Switch from './Form/Switch';
 import Checkbox from './Form/Checkbox';
 import DatePicker from './Form/DatePicker';
-
+import InputNumber from './Form/InputNumber';
 export {
   UnitNumber,
   GlobalToast,
@@ -43,4 +43,5 @@ export {
   Modal,
   Switch,
   Checkbox,
+  InputNumber,
 };

@@ -1,7 +1,7 @@
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
-  Login: undefined;
+  Login: {to: keyof RootStackParamList; params: any};
   Tab: undefined;
   Home: undefined;
   Discover: undefined;
@@ -12,6 +12,9 @@ export type RootStackParamList = {
     videoUrl: string;
   };
   SPUDetail: {
+    id: number;
+  };
+  Order: {
     id: number;
   };
 };
