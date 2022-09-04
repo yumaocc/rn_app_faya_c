@@ -14,9 +14,11 @@ export const globalStyleVariables = {
 
 export const globalStyles = StyleSheet.create({
   containerForTmp: {
+    // 调试用，不要用于生产
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#6cf',
   },
   containerLR: {
     // 左右结构容器
