@@ -58,7 +58,7 @@ const InputNumber: React.FC<InputNumberProps> = props => {
           <Icon name="remove" size={20} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
         </View>
       )}
-      <Input clear={false} style={styles.input} styles={{container: {width: 50}}} value={showValue} onChange={handleChange} type="number" />
+      <Input clear={false} style={styles.input} styles={{container: styles.inputContainer}} value={showValue} onChange={handleChange} type="number" />
       {canAdd ? (
         <TouchableOpacity activeOpacity={0.8} onPress={() => handleStep(true)}>
           <View style={styles.action}>
@@ -96,8 +96,17 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
+  inputContainer: {
+    width: 50,
+    height: 24,
+    // backgroundColor: '#ccc',
+    marginLeft: 0,
+    paddingRight: 0,
+  },
   input: {
     height: 24,
     fontSize: 16,
+    backgroundColor: '#6cf',
+    margin: 0,
   },
 });

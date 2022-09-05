@@ -17,6 +17,10 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
 
   console.log(currentSelect);
 
+  function handleClick(select: SKUDetail | PackageDetail) {
+    props.onChangeSelect(select);
+  }
+
   function renderIndicator({current, count}: PaginationProps): React.ReactNode {
     return (
       <View style={styles.indicator}>
@@ -87,15 +91,27 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
       <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
         <Text style={globalStyles.fontStrong}>套餐规格</Text>
         <View style={[{flexDirection: 'row', flexWrap: 'wrap', marginTop: globalStyleVariables.MODULE_SPACE}]}>
-          <View style={[styles.skuItem, styles.skuItemActive]}>
-            <Text style={[styles.skuText, styles.skuTextActive]}>特价二人餐</Text>
-          </View>
-          <View style={[styles.skuItem]}>
-            <Text style={[styles.skuText]}>{'特价二人餐'.repeat(2)}</Text>
-          </View>
-          <View style={[styles.skuItem]}>
-            <Text style={[styles.skuText]}>{'特价二人餐'.repeat(6)}</Text>
-          </View>
+          {spu?.skuList?.map(sku => {
+            const isActive = (currentSelect as SKUDetail)?.id === sku.id;
+            return (
+              <TouchableOpacity activeOpacity={0.8} key={sku.id} onPress={() => handleClick(sku)}>
+                <View style={[styles.skuItem, isActive && styles.skuItemActive]}>
+                  <Text style={[styles.skuText, isActive && styles.skuTextActive]}>{sku.skuName}</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+
+          {spu?.packageDetailsList?.map(packageDetail => {
+            const isActive = (currentSelect as PackageDetail)?.packageId === packageDetail.packageId;
+            return (
+              <TouchableOpacity activeOpacity={0.8} key={packageDetail.packageId} onPress={() => handleClick(packageDetail)}>
+                <View style={[styles.skuItem, isActive && styles.skuItemActive]}>
+                  <Text style={[styles.skuText, isActive && styles.skuTextActive]}>{packageDetail.packageName}</Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </View>
       </View>
 
