@@ -1,9 +1,8 @@
 import {isNil} from 'lodash';
 import React, {useMemo} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, TextInput, NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyleVariables} from '../../../constants/styles';
-import Input from '../Input';
 
 interface InputNumberProps {
   value: number;
@@ -28,12 +27,18 @@ const InputNumber: React.FC<InputNumberProps> = props => {
 
   function handleChange(value: string) {
     if (onChange) {
+      // if (!value) {
+      //   return onChange(undefined);
+      // }
       onChange(Number(value));
     }
   }
+  function handleNativeChange(e: NativeSyntheticEvent<TextInputChangeEventData>) {
+    handleChange(e.nativeEvent.text);
+  }
 
   function handleStep(isAdd = false) {
-    let newValue = value;
+    let newValue = value || 0;
     if (isAdd) {
       newValue += step;
       newValue = Math.min(newValue, max);
@@ -58,7 +63,7 @@ const InputNumber: React.FC<InputNumberProps> = props => {
           <Icon name="remove" size={20} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
         </View>
       )}
-      <Input clear={false} style={styles.input} styles={{container: styles.inputContainer}} value={showValue} onChange={handleChange} type="number" />
+      <TextInput keyboardType="numeric" value={showValue} onChange={handleNativeChange} style={styles.input} />
       {canAdd ? (
         <TouchableOpacity activeOpacity={0.8} onPress={() => handleStep(true)}>
           <View style={styles.action}>
@@ -96,17 +101,11 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  inputContainer: {
-    width: 50,
-    height: 24,
-    // backgroundColor: '#ccc',
-    marginLeft: 0,
-    paddingRight: 0,
-  },
   input: {
-    height: 24,
+    width: 50,
     fontSize: 16,
-    backgroundColor: '#6cf',
     margin: 0,
+    color: '#000',
+    textAlign: 'center',
   },
 });
