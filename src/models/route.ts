@@ -1,4 +1,6 @@
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {IDBody} from '../fst/models';
+import {OrderStatus} from './spu';
 
 export type RootStackParamList = {
   Login: {to: keyof RootStackParamList; params: any};
@@ -11,12 +13,9 @@ export type RootStackParamList = {
     id: string;
     videoUrl: string;
   };
-  SPUDetail: {
-    id: number;
-  };
-  Order: {
-    id: number;
-  };
+  SPUDetail: IDBody;
+  Order: IDBody;
+  OrderList: {state?: OrderStatus};
 };
 
 export type Props = NativeStackScreenProps<RootStackParamList>;

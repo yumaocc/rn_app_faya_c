@@ -134,3 +134,28 @@ export interface OrderForm {
   videoId?: string; // 从哪个视频过来
   wxOpenId?: string;
 }
+
+export enum OrderStatus {
+  All = -1,
+  WaitPay = 0,
+  Paid = 1,
+  Canceled = 2,
+  Timeout = 3,
+  Completed = 4,
+  Refunding = 5,
+  RefundFailed = 51,
+  Refunded = 6,
+  Booked = 7,
+}
+export interface OrderF {
+  id: number;
+  bizName: string;
+  orderBigId: number;
+  orderMiddleId: number;
+  orderSmallId: number;
+  paidRealMoney: number;
+  quantityOfOrder: number;
+  skuName: string;
+  spuCoverImage: string;
+  status: OrderStatus;
+}

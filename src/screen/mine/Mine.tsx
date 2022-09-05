@@ -5,9 +5,12 @@ import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {Tabs} from '../../component';
+import {useNavigation} from '@react-navigation/native';
+import {FakeNavigation} from '../../models';
 
 const Mine: React.FC = () => {
   const {top} = useSafeAreaInsets();
+  const navigation = useNavigation<FakeNavigation>();
 
   const items = [
     {
@@ -85,7 +88,7 @@ const Mine: React.FC = () => {
 
             {/* 订单入口栏 */}
             <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE, paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-              <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
+              <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={() => navigation.navigate('OrderList')}>
                 <View style={[globalStyles.containerRow]}>
                   <View style={[globalStyles.containerCenter, styles.entry]}>
                     <MaterialIcon name="assignment" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
