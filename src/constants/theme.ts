@@ -1,7 +1,9 @@
 // 具体变量请参考ant-theme.ts
 
-export const primary = '#546dad';
-export const primaryTap = '#768abd';
+import {globalStyleVariables} from './styles';
+
+export const primary = globalStyleVariables.COLOR_PRIMARY;
+export const primaryTap = globalStyleVariables.COLOR_PRIMARY_TAP;
 export default {
   // 全局
   brand_primary: primary,
@@ -16,6 +18,6 @@ export default {
   input_font_size: 15,
 
   // switch
-  switch_fill: '#546dad',
-  switch_checked_disabled: '#546dad66', // switch_unchecked的40%透明度
+  switch_fill: primary,
+  switch_checked_disabled: primaryTap, // switch_unchecked的40%透明度
 };

@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyleVariables} from '../../../constants/styles';
 
 interface InputNumberProps {
-  value: number;
+  value?: number;
   min?: number;
   max?: number;
   step?: number;
@@ -63,7 +63,9 @@ const InputNumber: React.FC<InputNumberProps> = props => {
           <Icon name="remove" size={20} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
         </View>
       )}
-      <TextInput keyboardType="numeric" value={showValue} onChange={handleNativeChange} style={styles.input} />
+      <View>
+        <TextInput keyboardType="numeric" value={showValue} onChange={handleNativeChange} style={styles.input} />
+      </View>
       {canAdd ? (
         <TouchableOpacity activeOpacity={0.8} onPress={() => handleStep(true)}>
           <View style={styles.action}>
@@ -91,7 +93,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    // backgroundColor: '#f00',
   },
   action: {
     backgroundColor: '#0000001A',
@@ -105,6 +106,8 @@ const styles = StyleSheet.create({
     width: 50,
     fontSize: 16,
     margin: 0,
+    padding: 0,
+    flex: 1,
     color: '#000',
     textAlign: 'center',
   },

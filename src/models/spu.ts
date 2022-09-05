@@ -106,3 +106,31 @@ export interface SPUDetailF {
   skuList: SKUDetail[];
   packageDetailsList: PackageDetail[];
 }
+
+export enum PayChannel {
+  WECHAT = 'WECHAT',
+  ALIPAY = 'ALIPAY',
+}
+export type PayWay = 'USER_SCAN' | 'MINI_PROGRAM' | 'WECHAT_OFFIACCOUNT' | 'ALIPAY_LIFE' | 'H5PAY' | 'JS_PAY' | 'SDK_PAY';
+
+export interface OrderForm {
+  addressId?: string; // 收货地址
+  agentUserId?: string;
+  amount: number;
+  bizShopId?: number; // 预约店铺ID
+  channel: PayChannel;
+  couponId?: number; // 优惠券id
+  idCard?: string;
+  integralMoney?: string; // 代币抵扣
+  memo?: string;
+  name: string;
+  packageId?: number;
+  payWay: PayWay;
+  showCaseId?: string; // 从哪个橱窗过来的
+  skuId?: number;
+  skuModelId?: number; // 预约型号
+  stockDateInt?: number; // 预约日期 20220101
+  telephone: string;
+  videoId?: string; // 从哪个视频过来
+  wxOpenId?: string;
+}

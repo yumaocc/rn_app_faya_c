@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {StylePropView} from '../../models';
+import {FormConfigContext} from './Context';
 import {useFormInstance} from './hooks';
 
 export interface FormItemProps {
@@ -22,6 +23,7 @@ export interface FormItemProps {
 const FormItem: React.FC<FormItemProps> = props => {
   const {label, hiddenBorderBottom, hiddenBorderTop, valueKey, onChangeKey} = props;
   const formInstance = useFormInstance();
+  const config = useContext(FormConfigContext);
 
   function renderChildren(): React.ReactElement {
     const name = props.name;
@@ -50,9 +52,14 @@ const FormItem: React.FC<FormItemProps> = props => {
     return renderChildren();
   }
 
+  const showTopLine = !hiddenBorderTop && !config.hiddenLine;
+  const showBottomLine = !hiddenBorderBottom && !config.hiddenLine;
+
+  const containerStyle = [showBottomLine && globalStyles.borderBottom, showTopLine && globalStyles.borderTop, styles.container, config.itemStyle?.container, props.style];
+
   if (props.vertical) {
     return (
-      <View style={[hiddenBorderBottom ? {} : globalStyles.borderBottom, hiddenBorderTop ? {} : globalStyles.borderTop, styles.container, props.style]}>
+      <View style={containerStyle}>
         <View style={[styles.item]}>
           <View style={[styles.labelLeft, {maxWidth: '100%'}]}>
             <View style={styles.labelWrapper}>
@@ -73,7 +80,7 @@ const FormItem: React.FC<FormItemProps> = props => {
   }
 
   return (
-    <View style={[hiddenBorderBottom ? {} : globalStyles.borderBottom, hiddenBorderTop ? {} : globalStyles.borderTop, styles.container, props.style]}>
+    <View style={containerStyle}>
       <View style={[styles.item]}>
         <View style={[styles.labelLeft, {maxWidth: '100%'}]}>
           <View style={styles.labelWrapper}>
@@ -87,7 +94,7 @@ const FormItem: React.FC<FormItemProps> = props => {
             </View>
           )}
         </View>
-        <View style={styles.children}>{renderChildren()}</View>
+        <View style={[styles.children, config?.itemStyle?.children]}>{renderChildren()}</View>
       </View>
       {props.extra && <View style={styles.extra}>{props.extra}</View>}
     </View>

@@ -6,4 +6,4 @@ export type {SPUF, SPUShop, PackageDetail, SKUDetail, SPUDetailF} from './spu';
 
 export {UserState} from './user';
 export {WorkTabType, WorkType} from './work';
-export {SPUStatus, SPUType, BookingType} from './spu';
+export {SPUStatus, SPUType, BookingType, PayChannel} from './spu';

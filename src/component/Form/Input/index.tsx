@@ -52,5 +52,6 @@ Input.defaultProps = {
   placeholder: '请输入',
   labelNumber: 2,
   styles: {},
+  onChange: () => {},
 };
 export default Input;
