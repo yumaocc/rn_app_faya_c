@@ -8,7 +8,8 @@ import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {cicadaBool} from '../../fst/helper';
 import {SearchParam} from '../../fst/models';
 import {useCommonDispatcher, useDivideData} from '../../helper/hooks';
-import {FakeNavigation, WorkF} from '../../models';
+import {FakeNavigation, WorkF, WorkType} from '../../models';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 interface WorkListProps {
   // title?: string;
@@ -37,7 +38,7 @@ const WorkList: React.FC<WorkListProps> = () => {
   useEffect(() => {
     async function f() {
       const res = await fetchData({pageIndex, pageSize: 10});
-      // console.log(res);
+      console.log(res);
       setWorks(res as WorkF[]);
     }
     if (!fetchData) {
@@ -64,8 +65,13 @@ const WorkList: React.FC<WorkListProps> = () => {
     return (
       <View style={styles.item} key={work.mainId}>
         <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetail', {id: work.mainId, videoUrl: work.videoUrl})}>
-          <View style={{width: '100%'}}>
+          <View style={{width: '100%', position: 'relative'}}>
             <Image source={{uri: 'https://fakeimg.pl/100?text=l'}} style={normal ? styles.cover : styles.smallCover} />
+            {work.type === WorkType.Video && (
+              <View style={[styles.playIcon]}>
+                <MaterialIcon name="play-circle-filled" size={33} />
+              </View>
+            )}
           </View>
         </TouchableOpacity>
         <Text style={[globalStyles.fontStrong]} numberOfLines={2}>
@@ -144,5 +150,10 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
+  },
+  playIcon: {
+    position: 'absolute',
+    right: globalStyleVariables.MODULE_SPACE,
+    top: globalStyleVariables.MODULE_SPACE,
   },
 });
