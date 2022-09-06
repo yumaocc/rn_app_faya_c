@@ -1,11 +1,10 @@
 import moment, {Moment} from 'moment';
 import React, {useEffect, useMemo, useState} from 'react';
 import {useCallback} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import Popup from '../../Popup';
 import Picker from '../../Picker';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {DATE_TIME_FORMAT, DEFAULT_END_DATE, DEFAULT_START_DATE} from '../../../constants';
 // import {useLog} from '../helper/hooks';
 

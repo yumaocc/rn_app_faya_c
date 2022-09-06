@@ -36,6 +36,7 @@ export enum SPUType {
 }
 
 export interface SPUShop {
+  id?: number;
   addressDetail: string;
   contactPhone: string;
   shopName: string;
@@ -151,6 +152,7 @@ export interface OrderF {
   id: number;
   bizName: string;
   orderBigId: number;
+  orderBigIdStr: string;
   orderMiddleId: number;
   orderSmallId: number;
   paidRealMoney: number;
@@ -159,4 +161,46 @@ export interface OrderF {
   skuName: string;
   spuCoverImage: string;
   status: OrderStatus;
+}
+
+export interface OrderDetailF {
+  id: number;
+  skuName: string;
+  bizName: string;
+  status: OrderStatus;
+  spuCoverImage: string;
+  spuId: number;
+  code: string; // 电子码
+  codeUrl: string; // 电子码地址
+  codeEncrypt: string; // 电子码加密
+  canUseShops: OrderShop[];
+  orderSmallId: string;
+  orderMiddleId: string;
+  orderBigId: string;
+  list: OrderPackage[];
+}
+
+export interface OrderPackage {
+  packageName: string;
+  packageId: number;
+  list: OrderPackageSKU[];
+}
+export interface OrderPackageSKU {
+  orderSmallId: string;
+  status: OrderStatus;
+  skuName: string;
+  codeUrl: string;
+  code: string;
+  bookingName: string;
+  bookingContactPhone: string;
+  bookingDateAndShopAndModel: string;
+  bookingMemo: string;
+  skuModelDateStockId: string;
+}
+
+export interface OrderShop {
+  id: number;
+  shopName: string;
+  shopAddress: string;
+  shopContactPhone: string;
 }

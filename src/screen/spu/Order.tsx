@@ -1,7 +1,6 @@
 import {Button} from '@ant-design/react-native';
 import React from 'react';
-import {View, Text, ScrollView, Image, StyleSheet} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Form, Input, InputNumber, NavigationBar} from '../../component';

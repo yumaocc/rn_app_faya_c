@@ -1,9 +1,8 @@
 import {Button, Icon} from '@ant-design/react-native';
 import React, {useCallback, useEffect} from 'react';
-import {View, StyleSheet, Modal as RNModal, TouchableWithoutFeedback, BackHandler, useWindowDimensions, ScrollView, Text} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {View, StyleSheet, Modal as RNModal, TouchableWithoutFeedback, BackHandler, useWindowDimensions, ScrollView, Text, TouchableOpacity} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../constants/styles';
-import {StylePropView} from '../models';
+import {StylePropText, StylePropView} from '../models';
 
 interface ModalProps {
   title?: string;
@@ -14,13 +13,13 @@ interface ModalProps {
   showCancel?: boolean; // only if footer is true
   okText?: string;
   cancelText?: string;
+  styles?: {[key: string]: StylePropView | StylePropText};
   onOk?: () => Promise<void> | void;
   onCancel?: () => Promise<void> | void;
   onClose: () => void;
 }
 
 const Modal: React.FC<ModalProps> = props => {
-  // const {title} = props;
   const {onClose, onOk, onCancel} = props;
   const windowSize = useWindowDimensions();
 
@@ -74,7 +73,7 @@ const Modal: React.FC<ModalProps> = props => {
         <TouchableWithoutFeedback onPress={handleClickMask}>
           <View style={[styles.mask, props.maskStyle]} />
         </TouchableWithoutFeedback>
-        <View style={[styles.body, {width: windowSize.width - 80}]}>
+        <View style={[styles.body, {width: windowSize.width - 80}, props.styles.body]}>
           <View style={[globalStyles.borderBottom, styles.header]}>
             <View style={[styles.title]}>
               <Text style={[globalStyles.fontPrimary, styles.titleText]}>{props.title}</Text>
@@ -88,7 +87,7 @@ const Modal: React.FC<ModalProps> = props => {
             </View>
           </View>
           <ScrollView style={{maxHeight: windowSize.height - 114}} alwaysBounceVertical={false}>
-            <View style={styles.content}>{props.children}</View>
+            <View style={[styles.content, props.styles.content]}>{props.children}</View>
           </ScrollView>
           {!props.footer ? null : <View style={styles.footer}>{props.footer === true ? renderDefaultFooter() : props.footer}</View>}
         </View>
@@ -102,6 +101,7 @@ Modal.defaultProps = {
   footer: true,
   okText: '确定',
   cancelText: '取消',
+  styles: {},
 };
 export default Modal;
 const styles = StyleSheet.create({
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   },
   close: {
     position: 'absolute',
-    right: 0,
+    right: 10,
     top: 0,
     bottom: 0,
     alignItems: 'center',
@@ -157,12 +157,13 @@ const styles = StyleSheet.create({
   },
   body: {
     borderRadius: 10,
+    overflow: 'hidden',
     backgroundColor: '#fff',
     maxHeight: '80%',
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
   },
   content: {
-    paddingVertical: 10,
+    // paddingVertical: 10,
   },
   footer: {
     paddingBottom: 10,

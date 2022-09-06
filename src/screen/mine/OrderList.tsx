@@ -29,7 +29,7 @@ const OrderList: React.FC = () => {
   useEffect(() => {
     async function f() {
       const res = await api.order.getOrderList({pageIndex: 1, pageSize: 10});
-      console.log(res);
+      // console.log(res);
       setOrders(res);
     }
     f();
@@ -88,7 +88,7 @@ const OrderList: React.FC = () => {
                         </View>
                         <Button
                           onPress={() => {
-                            navigation.navigate('OrderDetail', {orderId: order.orderBigId});
+                            navigation.navigate('OrderDetail', {id: order.orderBigIdStr});
                           }}
                           title="立即使用"
                         />

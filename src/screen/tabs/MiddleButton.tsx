@@ -2,7 +2,6 @@ import {Icon} from '@ant-design/react-native';
 import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {globalStyleVariables} from '../../constants/styles';
-// import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const MiddleButton: React.FC = () => {
   function handleClick() {
