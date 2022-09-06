@@ -10,6 +10,7 @@ import {useParams} from '../../helper/hooks';
 import {OrderDetailF, OrderPackageSKU} from '../../models/spu';
 import * as api from '../../apis';
 import {StylePropView} from '../../models';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const OrderDetail: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -17,6 +18,7 @@ const OrderDetail: React.FC = () => {
   const [showBatch, setShowBatch] = React.useState(false);
   const [showCode, setShowCode] = React.useState(false);
   const [currentCode, setCurrentCode] = React.useState<OrderPackageSKU>();
+  const {bottom} = useSafeAreaInsets();
 
   useEffect(() => {
     async function f() {
@@ -57,7 +59,7 @@ const OrderDetail: React.FC = () => {
               <Button title="批量核销" style={[styles.batchCheck]} textStyle={{color: globalStyleVariables.TEXT_COLOR_PRIMARY}} onPress={() => setShowBatch(true)} />
             </View>
             <ScrollView style={{flex: 1, backgroundColor: '#f4f4f4'}}>
-              <View>
+              <View style={{paddingBottom: bottom}}>
                 {/* 电子码 */}
                 <View style={{padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}}>
                   {orderDetail.list?.map((orderPackage, index) => {
