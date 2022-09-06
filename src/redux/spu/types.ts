@@ -1,0 +1,4 @@
+export enum ActionType {
+  SET_CURRENT_SPU = 'SPU/SET_CURRENT_SPU',
+  SET_CURRENT_SKU = 'SPU/SET_CURRENT_SKU',
+}
