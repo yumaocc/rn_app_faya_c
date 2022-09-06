@@ -4,8 +4,10 @@ import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Video, {LoadError, OnLoadData, OnProgressData} from 'react-native-video';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {NavigationBar} from '../../component';
-import {useParams} from '../../helper/hooks';
+import {useCommonDispatcher, useParams} from '../../helper/hooks';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
+import {WorkDetailF} from '../../models';
+import * as api from '../../apis';
 // import VideoPlayer from '../../component/VideoPlayer/index2';
 
 const WorkDetail: React.FC = () => {
@@ -14,6 +16,8 @@ const WorkDetail: React.FC = () => {
   const [resizeMode, setResizeMode] = React.useState<'none' | 'cover'>('cover');
   const [progress, setProgress] = React.useState<OnProgressData>(null);
   const [paused, setPaused] = React.useState(false);
+  const [workDetail, setWorkDetail] = React.useState<WorkDetailF>();
+  const hasSpu = useMemo(() => workDetail?.spuId && workDetail?.spuName, [workDetail]);
   const seekedPercent = useMemo(() => {
     if (!progress) {
       return 0;
@@ -36,6 +40,19 @@ const WorkDetail: React.FC = () => {
 
   const player = useRef<Video>(null);
   const {bottom} = useSafeAreaInsets();
+  const [commonDispatcher] = useCommonDispatcher();
+
+  useEffect(() => {
+    async function f() {
+      try {
+        const res = await api.work.getWorkDetail(id);
+        setWorkDetail(res);
+      } catch (error) {
+        commonDispatcher.error(error);
+      }
+    }
+    f();
+  }, [id, commonDispatcher]);
 
   // const workDet
   // console.log(id, videoUrl);
@@ -103,44 +120,52 @@ const WorkDetail: React.FC = () => {
                   <Icon name="play-arrow" color="#ddd" size={80} />
                 </View>
               ) : null}
-              <View style={styles.side}>
-                <View style={styles.sideItem}>
-                  <Image source={{uri: 'https://fakeimg.pl/30?text=loading'}} style={[styles.sideItem, styles.avatar]} />
+              {workDetail && (
+                <View style={styles.side}>
+                  <View style={styles.sideItem}>
+                    <Image source={{uri: 'https://fakeimg.pl/30?text=loading'}} style={[styles.sideItem, styles.avatar]} />
+                  </View>
+                  <View style={styles.sideItem}>
+                    <Icon name="favorite" size={50} color="#fff" />
+                    <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfLikes}</Text>
+                  </View>
+                  <View style={styles.sideItem}>
+                    <Icon name="pending" size={50} color="#fff" />
+                    <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfComments}</Text>
+                  </View>
+                  <View style={styles.sideItem}>
+                    <Icon name="grade" size={50} color="#fff" />
+                  </View>
+                  <View style={styles.sideItem}>
+                    <Icon name="share" size={40} color="#fff" />
+                  </View>
                 </View>
-                <View style={styles.sideItem}>
-                  <Icon name="favorite" size={50} color="#fff" />
-                  <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>233</Text>
-                </View>
-                <View style={styles.sideItem}>
-                  <Icon name="pending" size={50} color="#fff" />
-                  <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>999</Text>
-                </View>
-                <View style={styles.sideItem}>
-                  <Icon name="grade" size={50} color="#fff" />
-                </View>
-                <View style={styles.sideItem}>
-                  <Icon name="share" size={40} color="#fff" />
-                </View>
-              </View>
+              )}
               <View style={[styles.bottom]}>
                 <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
                   {/* 发布人 */}
-                  <TouchableOpacity activeOpacity={0.8}>
-                    <View style={[globalStyles.containerRow, {width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}]}>
-                      <Icon name="shopping-cart" color={globalStyleVariables.COLOR_WARNING} size={24} />
-                      <Text style={[globalStyles.fontTertiary, {flex: 1, color: '#fff'}]} numberOfLines={1}>
-                        上海最好吃的美食top超级推荐上海最好吃的美食top超级推荐
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={0.8}>
-                    <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@成都美食娱乐</Text>
-                  </TouchableOpacity>
-                  <View style={{marginVertical: globalStyleVariables.MODULE_SPACE}}>
-                    <Text style={[globalStyles.fontPrimary, {color: '#fff'}]} numberOfLines={5}>
-                      {'内容较多'.repeat(40)}
-                    </Text>
-                  </View>
+                  {hasSpu && (
+                    <TouchableOpacity activeOpacity={0.8}>
+                      <View style={[globalStyles.containerRow, {width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}]}>
+                        <Icon name="shopping-cart" color={globalStyleVariables.COLOR_WARNING} size={24} />
+                        <Text style={[globalStyles.fontTertiary, {flex: 1, color: '#fff'}]} numberOfLines={1}>
+                          {workDetail?.spuName}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  )}
+                  {workDetail && (
+                    <>
+                      <TouchableOpacity activeOpacity={0.8}>
+                        <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@{workDetail.userName}</Text>
+                      </TouchableOpacity>
+                      <View style={{marginVertical: globalStyleVariables.MODULE_SPACE}}>
+                        <Text style={[globalStyles.fontPrimary, {color: '#fff'}]} numberOfLines={5}>
+                          {workDetail.content}
+                        </Text>
+                      </View>
+                    </>
+                  )}
                 </View>
                 {/* 进度条 */}
                 <View style={{backgroundColor: '#000', height: 2, position: 'relative'}}>

@@ -24,3 +24,17 @@ export interface WorkF {
   numberOfLikes: number;
   content: string;
 }
+export interface WorkDetailF {
+  mainId: string;
+  numberOfCollects: number;
+  numberOfLikes: number;
+  numberOfComments: number;
+  spuId?: number;
+  spuName: string;
+  theRemainingNumberOfDays: number;
+  type: WorkType;
+  userId: number;
+  userName: string;
+  // TODO: 缺了用户头像，不过不着急，暂时也没有头像
+  content: string;
+}
