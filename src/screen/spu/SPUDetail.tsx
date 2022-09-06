@@ -44,7 +44,7 @@ const SPUDetail: React.FC = () => {
   return (
     <View style={styles.container}>
       <ScrollView style={{flex: 1}}>{spu ? <SPUDetailView currentSelect={currentSelect} spu={spu} onChangeSelect={setCurrentSelect} /> : <Text>loading...</Text>}</ScrollView>
-      <View style={[{paddingBottom: safeBottom}]}>
+      <View style={[{paddingBottom: safeBottom, backgroundColor: '#fff'}]}>
         <BuyBar onBuy={handleBuy} />
       </View>
     </View>
