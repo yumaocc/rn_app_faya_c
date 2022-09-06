@@ -18,7 +18,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
   const safeArea = useSafeAreaInsets();
 
   function handleBack() {
-    navigation.canGoBack && navigation.goBack();
+    navigation.canGoBack() && navigation.goBack();
   }
 
   function renderHeaderLeft() {

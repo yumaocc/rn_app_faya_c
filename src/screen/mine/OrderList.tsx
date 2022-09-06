@@ -23,7 +23,7 @@ const OrderList: React.FC = () => {
   ];
 
   function handleBack() {
-    console.log('back');
+    navigation.canGoBack() && navigation.goBack();
   }
 
   useEffect(() => {
