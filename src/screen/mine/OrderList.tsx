@@ -37,8 +37,8 @@ const OrderList: React.FC = () => {
 
   return (
     <>
-      <SafeAreaView edges={['top']} style={{backgroundColor: '#f4f4f4', flex: 1}}>
-        <View style={[globalStyles.containerRow, {paddingHorizontal: globalStyleVariables.MODULE_SPACE, height: 50, backgroundColor: '#fff'}]}>
+      <SafeAreaView edges={['top']} style={{backgroundColor: '#fff', flex: 1}}>
+        <View style={[globalStyles.containerRow, {height: 50, backgroundColor: '#fff', paddingRight: globalStyleVariables.MODULE_SPACE}]}>
           <TouchableOpacity activeOpacity={0.5} onPress={handleBack}>
             <View style={styles.arrowContainer}>
               <View style={styles.arrow} />
@@ -55,7 +55,7 @@ const OrderList: React.FC = () => {
           </TouchableOpacity>
         </View>
         <Steps steps={steps} style={styles.stepContainer} />
-        <ScrollView style={{flex: 1}}>
+        <ScrollView style={{flex: 1, backgroundColor: '#f4f4f4'}}>
           <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
             {orders.map(order => {
               return (
