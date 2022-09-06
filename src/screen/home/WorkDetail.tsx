@@ -1,18 +1,19 @@
 import React, {useEffect, useMemo, useRef} from 'react';
-import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Image, Text, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback} from 'react-native';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Video, {LoadError, OnLoadData, OnProgressData} from 'react-native-video';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {NavigationBar} from '../../component';
 import {useParams} from '../../helper/hooks';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
+// import VideoPlayer from '../../component/VideoPlayer/index2';
 
 const WorkDetail: React.FC = () => {
   const {id, videoUrl} = useParams<{id: string; videoUrl: string}>();
   const [error, setError] = React.useState('');
   const [resizeMode, setResizeMode] = React.useState<'none' | 'cover'>('cover');
   const [progress, setProgress] = React.useState<OnProgressData>(null);
-  // const [paused, setPaused] = React.useState(false);
+  const [paused, setPaused] = React.useState(false);
   const seekedPercent = useMemo(() => {
     if (!progress) {
       return 0;
@@ -60,6 +61,13 @@ const WorkDetail: React.FC = () => {
   function handleProgress(e: OnProgressData) {
     setProgress(e);
   }
+  // function togglePlay() {
+  //   // player.current
+  // }
+
+  function handleClick() {
+    setPaused(!paused);
+  }
 
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#000'}}>
@@ -67,6 +75,7 @@ const WorkDetail: React.FC = () => {
         <Video
           onProgress={handleProgress}
           onLoad={handleOnLoad}
+          paused={paused}
           onError={handleError}
           progressUpdateInterval={16}
           ref={player}
@@ -85,50 +94,58 @@ const WorkDetail: React.FC = () => {
       )}
       <View style={styles.cover}>
         <SafeAreaView edges={['top']} style={styles.cover}>
-          <View style={[styles.cover]}>
-            <NavigationBar safeTop={false} color="#fff" />
-            <View style={styles.side}>
-              <View style={styles.sideItem}>
-                <Image source={{uri: 'https://fakeimg.pl/30?text=loading'}} style={[styles.sideItem, styles.avatar]} />
-              </View>
-              <View style={styles.sideItem}>
-                <Icon name="favorite" size={50} color="#fff" />
-                <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>233</Text>
-              </View>
-              <View style={styles.sideItem}>
-                <Icon name="pending" size={50} color="#fff" />
-                <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>999</Text>
-              </View>
-              <View style={styles.sideItem}>
-                <Icon name="grade" size={50} color="#fff" />
-              </View>
-              <View style={styles.sideItem}>
-                <Icon name="share" size={40} color="#fff" />
-              </View>
-            </View>
-            <View style={[styles.bottom]}>
-              <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
-                {/* 发布人 */}
-                <TouchableOpacity activeOpacity={0.8}>
-                  <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@成都美食娱乐</Text>
-                </TouchableOpacity>
-                <View style={{marginVertical: globalStyleVariables.MODULE_SPACE}}>
-                  <Text style={[globalStyles.fontPrimary, {color: '#fff'}]} numberOfLines={5}>
-                    {'内容较多'.repeat(40)}
-                  </Text>
+          <TouchableWithoutFeedback onPress={handleClick}>
+            <View style={[styles.cover]}>
+              <NavigationBar safeTop={false} color="#fff" />
+              {/* 暂停后的播放按钮 */}
+              {paused && !error ? (
+                <View style={[globalStyles.containerCenter, styles.video, {backgroundColor: '#00000044'}]}>
+                  <Icon name="play-arrow" color="#ddd" size={80} />
+                </View>
+              ) : null}
+              <View style={styles.side}>
+                <View style={styles.sideItem}>
+                  <Image source={{uri: 'https://fakeimg.pl/30?text=loading'}} style={[styles.sideItem, styles.avatar]} />
+                </View>
+                <View style={styles.sideItem}>
+                  <Icon name="favorite" size={50} color="#fff" />
+                  <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>233</Text>
+                </View>
+                <View style={styles.sideItem}>
+                  <Icon name="pending" size={50} color="#fff" />
+                  <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>999</Text>
+                </View>
+                <View style={styles.sideItem}>
+                  <Icon name="grade" size={50} color="#fff" />
+                </View>
+                <View style={styles.sideItem}>
+                  <Icon name="share" size={40} color="#fff" />
                 </View>
               </View>
-              {/* 进度条 */}
-              <View style={{backgroundColor: '#000', height: 2, position: 'relative'}}>
-                <View style={[styles.progressBar, {backgroundColor: '#999', width: seekedPercent + '%'}]} />
-                <View style={[styles.progressBar, {backgroundColor: '#fff', width: playPercent + '%'}]} />
-              </View>
-              {/* 下面的框 */}
-              {/* <View style={{height: 50, backgroundColor: '#000'}}>
+              <View style={[styles.bottom]}>
+                <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+                  {/* 发布人 */}
+                  <TouchableOpacity activeOpacity={0.8}>
+                    <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@成都美食娱乐</Text>
+                  </TouchableOpacity>
+                  <View style={{marginVertical: globalStyleVariables.MODULE_SPACE}}>
+                    <Text style={[globalStyles.fontPrimary, {color: '#fff'}]} numberOfLines={5}>
+                      {'内容较多'.repeat(40)}
+                    </Text>
+                  </View>
+                </View>
+                {/* 进度条 */}
+                <View style={{backgroundColor: '#000', height: 2, position: 'relative'}}>
+                  <View style={[styles.progressBar, {backgroundColor: '#999', width: seekedPercent + '%'}]} />
+                  <View style={[styles.progressBar, {backgroundColor: '#fff', width: playPercent + '%'}]} />
+                </View>
+                {/* 下面的框 */}
+                {/* <View style={{height: 50, backgroundColor: '#000'}}>
               </View> */}
-              <View style={{backgroundColor: '#000', height: bottom}} />
+                <View style={{backgroundColor: '#000', height: bottom}} />
+              </View>
             </View>
-          </View>
+          </TouchableWithoutFeedback>
         </SafeAreaView>
       </View>
     </View>
@@ -147,7 +164,6 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: '#000',
   },
   cover: {
     flex: 1,
