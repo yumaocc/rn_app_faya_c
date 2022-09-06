@@ -1,21 +1,43 @@
-import React, {useEffect, useRef} from 'react';
-import {View, StyleSheet, Image, Text} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import Video, {LoadError, OnLoadData} from 'react-native-video';
+import React, {useEffect, useMemo, useRef} from 'react';
+import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import Video, {LoadError, OnLoadData, OnProgressData} from 'react-native-video';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {NavigationBar} from '../../component';
 import {useParams} from '../../helper/hooks';
-import {globalStyles} from '../../constants/styles';
+import {globalStyles, globalStyleVariables} from '../../constants/styles';
 
 const WorkDetail: React.FC = () => {
   const {id, videoUrl} = useParams<{id: string; videoUrl: string}>();
   const [error, setError] = React.useState('');
+  const [resizeMode, setResizeMode] = React.useState<'none' | 'cover'>('cover');
+  const [progress, setProgress] = React.useState<OnProgressData>(null);
+  // const [paused, setPaused] = React.useState(false);
+  const seekedPercent = useMemo(() => {
+    if (!progress) {
+      return 0;
+    }
+    let val = (progress.playableDuration / progress.seekableDuration) * 100;
+    val = Math.max(0, val);
+    val = Math.min(100, val);
+    return val;
+  }, [progress]);
+
+  const playPercent = useMemo(() => {
+    if (!progress) {
+      return 0;
+    }
+    let val = (progress.currentTime / progress.seekableDuration) * 100;
+    val = Math.max(0, val);
+    val = Math.min(100, val);
+    return val;
+  }, [progress]);
 
   const player = useRef<Video>(null);
-  const [resizeMode, setResizeMode] = React.useState<'none' | 'cover'>('cover');
+  const {bottom} = useSafeAreaInsets();
 
   // const workDet
-  console.log(id, videoUrl);
+  // console.log(id, videoUrl);
   useEffect(() => {
     if (!videoUrl) {
       setError('呀，视频不见了～');
@@ -29,17 +51,31 @@ const WorkDetail: React.FC = () => {
     if (naturalSize.orientation === 'landscape') {
       // 横屏视频不缩放，竖屏视频cover
       setResizeMode('none');
-      console.log(resizeMode);
     }
   }
   function handleError(e: LoadError) {
     console.log(e);
     setError('呀，视频加载失败～');
   }
+  function handleProgress(e: OnProgressData) {
+    console.log(e.currentTime);
+    setProgress(e);
+  }
 
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#000'}}>
-      {videoUrl && <Video onLoad={handleOnLoad} onError={handleError} ref={player} source={{uri: videoUrl}} style={styles.video} repeat={true} resizeMode={resizeMode} />}
+      {videoUrl && (
+        <Video
+          onProgress={handleProgress}
+          onLoad={handleOnLoad}
+          onError={handleError}
+          ref={player}
+          source={{uri: videoUrl}}
+          style={styles.video}
+          repeat={true}
+          resizeMode={resizeMode}
+        />
+      )}
       {error && (
         <View style={[styles.video, globalStyles.containerCenter]}>
           <View style={[globalStyles.containerCenter, {backgroundColor: '#f4f4f4', width: '100%', height: 180}]}>
@@ -69,6 +105,28 @@ const WorkDetail: React.FC = () => {
               <View style={styles.sideItem}>
                 <Icon name="share" size={40} color="#fff" />
               </View>
+            </View>
+            <View style={[styles.bottom]}>
+              <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+                {/* 发布人 */}
+                <TouchableOpacity activeOpacity={0.8}>
+                  <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@成都美食娱乐</Text>
+                </TouchableOpacity>
+                <View style={{marginVertical: globalStyleVariables.MODULE_SPACE}}>
+                  <Text style={[globalStyles.fontPrimary, {color: '#fff'}]} numberOfLines={5}>
+                    {'内容较多'.repeat(40)}
+                  </Text>
+                </View>
+              </View>
+              {/* 进度条 */}
+              <View style={{backgroundColor: '#000', height: 2, position: 'relative'}}>
+                <View style={[styles.progressBar, {backgroundColor: '#999', width: seekedPercent + '%'}]} />
+                <View style={[styles.progressBar, {backgroundColor: '#fff', width: playPercent + '%'}]} />
+              </View>
+              {/* 下面的框 */}
+              {/* <View style={{height: 50, backgroundColor: '#000'}}>
+              </View> */}
+              <View style={{backgroundColor: '#000', height: bottom}} />
             </View>
           </View>
         </SafeAreaView>
@@ -116,5 +174,17 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
+  },
+  bottom: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    left: 0,
+  },
+  progressBar: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    height: '100%',
   },
 });
