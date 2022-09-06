@@ -74,17 +74,21 @@ const WorkList: React.FC<WorkListProps> = () => {
             )}
           </View>
         </TouchableOpacity>
-        <Text style={[globalStyles.fontStrong]} numberOfLines={2}>
-          {work.content || '暂无描述信息'.repeat(10)}
-        </Text>
-        <View style={globalStyles.containerLR}>
-          <View style={globalStyles.flexNormal}>
-            <Image source={{uri: 'https://fakeimg.pl/100?text=l'}} style={styles.avatar} />
-            <Text style={[globalStyles.fontPrimary]}>{work.userName}</Text>
-          </View>
-          <View style={globalStyles.flexNormal}>
-            <Icon name="heart" size={20} />
-            <Text style={[globalStyles.fontPrimary]}>{work.numberOfLikes}</Text>
+        <View style={[{padding: globalStyleVariables.MODULE_SPACE}]}>
+          <Text style={[globalStyles.fontStrong, {fontSize: 15}]} numberOfLines={2}>
+            {work.content || '暂无描述'}
+          </Text>
+          <View style={[globalStyles.containerLR, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
+            <View style={[globalStyles.containerRow, {flex: 1}]}>
+              <Image source={{uri: 'https://fakeimg.pl/100?text=l'}} style={styles.avatar} />
+              <Text style={[globalStyles.fontPrimary, {marginLeft: 3, flex: 1}]} numberOfLines={1}>
+                {work.userName}
+              </Text>
+            </View>
+            <View style={globalStyles.containerRow}>
+              <Icon name="heart" size={20} />
+              <Text style={[globalStyles.fontPrimary, {marginLeft: 3}]}>{work.numberOfLikes}</Text>
+            </View>
           </View>
         </View>
       </View>
