@@ -58,7 +58,6 @@ const WorkDetail: React.FC = () => {
     setError('呀，视频加载失败～');
   }
   function handleProgress(e: OnProgressData) {
-    console.log(e.currentTime);
     setProgress(e);
   }
 
@@ -69,6 +68,7 @@ const WorkDetail: React.FC = () => {
           onProgress={handleProgress}
           onLoad={handleOnLoad}
           onError={handleError}
+          progressUpdateInterval={16}
           ref={player}
           source={{uri: videoUrl}}
           style={styles.video}
