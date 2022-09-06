@@ -154,18 +154,16 @@ const WorkDetail: React.FC = () => {
                       </View>
                     </TouchableOpacity>
                   )}
-                  {workDetail && (
-                    <>
-                      <TouchableOpacity activeOpacity={0.8}>
-                        <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@{workDetail.userName}</Text>
-                      </TouchableOpacity>
-                      <View style={{marginVertical: globalStyleVariables.MODULE_SPACE}}>
-                        <Text style={[globalStyles.fontPrimary, {color: '#fff'}]} numberOfLines={5}>
-                          {workDetail.content}
-                        </Text>
-                      </View>
-                    </>
+                  {workDetail?.userName && (
+                    <TouchableOpacity activeOpacity={0.8}>
+                      <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@{workDetail.userName}</Text>
+                    </TouchableOpacity>
                   )}
+                  <View style={{marginVertical: globalStyleVariables.MODULE_SPACE}}>
+                    <Text style={[globalStyles.fontPrimary, {color: '#fff'}]} numberOfLines={5}>
+                      {workDetail?.content}
+                    </Text>
+                  </View>
                 </View>
                 {/* 进度条 */}
                 <View style={{backgroundColor: '#000', height: 2, position: 'relative'}}>
