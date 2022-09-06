@@ -154,6 +154,7 @@ export interface OrderF {
   orderMiddleId: number;
   orderSmallId: number;
   paidRealMoney: number;
+  paidRealMoneyYuan: string;
   quantityOfOrder: number;
   skuName: string;
   spuCoverImage: string;

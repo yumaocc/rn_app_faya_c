@@ -11,6 +11,7 @@ import Picker from './Picker';
 import FormTitle from './FormTitle';
 import Modal from './Modal';
 import NavigationBar from './NavigationBar';
+import Button from './Button';
 
 import Form from './Form';
 import Input from './Form/Input';
@@ -44,4 +45,5 @@ export {
   Switch,
   Checkbox,
   InputNumber,
+  Button,
 };
