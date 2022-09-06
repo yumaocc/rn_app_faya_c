@@ -16,6 +16,7 @@ export type RootStackParamList = {
   SPUDetail: IDBody;
   Order: IDBody;
   OrderList: {state?: OrderStatus};
+  OrderDetail: IDBody;
 };
 
 export type Props = NativeStackScreenProps<RootStackParamList>;

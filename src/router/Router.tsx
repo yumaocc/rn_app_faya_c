@@ -12,6 +12,7 @@ import Login from '../screen/common/Login';
 import SPUDetail from '../screen/spu/SPUDetail';
 import Order from '../screen/spu/Order';
 import OrderList from '../screen/mine/OrderList';
+import OrderDetail from '../screen/mine/OrderDetail';
 
 // import RouterSPU from './RouterSPU';
 // import RouterMerchant from './RouterMerchant';
@@ -40,6 +41,7 @@ const Navigator: React.FC = () => {
       <Stack.Screen name="SPUDetail" component={SPUDetail} options={commonScreenOptions} />
       <Stack.Screen name="Order" component={Order} options={commonScreenOptions} />
       <Stack.Screen name="OrderList" component={OrderList} options={commonScreenOptions} />
+      <Stack.Screen name="OrderDetail" component={OrderDetail} options={commonScreenOptions} />
     </Stack.Navigator>
   );
 };

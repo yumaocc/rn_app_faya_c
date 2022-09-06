@@ -6,11 +6,16 @@ import {Button, Steps} from '../../component';
 import {Step} from '../../component/Steps';
 
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {OrderF, OrderStatus} from '../../models';
+import {FakeNavigation, OrderF, OrderStatus} from '../../models';
 import * as api from '../../apis';
 import {dictOrderState} from '../../helper/dictionary';
+import {useNavigation} from '@react-navigation/native';
 
 const OrderList: React.FC = () => {
+  const [orders, setOrders] = React.useState<OrderF[]>([]);
+
+  const navigation = useNavigation<FakeNavigation>();
+
   const steps: Step[] = [
     {title: ({active}) => <Text style={active ? styles.stepActive : styles.stepInactive}>全部</Text>, key: 'all'},
     {title: ({active}) => <Text style={active ? styles.stepActive : styles.stepInactive}>未支付</Text>, key: 'waitPay'},
@@ -20,8 +25,6 @@ const OrderList: React.FC = () => {
   function handleBack() {
     console.log('back');
   }
-
-  const [orders, setOrders] = React.useState<OrderF[]>([]);
 
   useEffect(() => {
     async function f() {
@@ -83,7 +86,12 @@ const OrderList: React.FC = () => {
                             <Text style={{fontSize: 20}}>{order.paidRealMoneyYuan}</Text>
                           </Text>
                         </View>
-                        <Button title="立即使用" />
+                        <Button
+                          onPress={() => {
+                            navigation.navigate('OrderDetail', {orderId: order.orderBigId});
+                          }}
+                          title="立即使用"
+                        />
                       </View>
                     </View>
                   </View>
