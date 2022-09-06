@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useRef} from 'react';
-import {View, StyleSheet, Image, Text, TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback} from 'react-native';
+import {View, StyleSheet, Image, Text, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Video, {LoadError, OnLoadData, OnProgressData} from 'react-native-video';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -125,6 +125,14 @@ const WorkDetail: React.FC = () => {
               <View style={[styles.bottom]}>
                 <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
                   {/* 发布人 */}
+                  <TouchableOpacity activeOpacity={0.8}>
+                    <View style={[globalStyles.containerRow, {width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}]}>
+                      <Icon name="shopping-cart" color={globalStyleVariables.COLOR_WARNING} size={24} />
+                      <Text style={[globalStyles.fontTertiary, {flex: 1, color: '#fff'}]} numberOfLines={1}>
+                        上海最好吃的美食top超级推荐上海最好吃的美食top超级推荐
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
                   <TouchableOpacity activeOpacity={0.8}>
                     <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@成都美食娱乐</Text>
                   </TouchableOpacity>
