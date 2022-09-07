@@ -9,7 +9,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 interface SPUDetailViewProps {
   spu: SPUDetailF;
   currentSelect: SKUDetail | PackageDetail;
-  onChangeSelect: (sku: SKUDetail | PackageDetail) => void;
+  onChangeSelect: (sku: SKUDetail | PackageDetail, isPackage: boolean) => void;
 }
 
 const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
@@ -17,8 +17,8 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
 
   console.log(currentSelect);
 
-  function handleClick(select: SKUDetail | PackageDetail) {
-    props.onChangeSelect(select);
+  function handleClick(select: SKUDetail | PackageDetail, isPackage = false) {
+    props.onChangeSelect(select, isPackage);
   }
 
   function renderIndicator({current, count}: PaginationProps): React.ReactNode {
@@ -105,7 +105,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
           {spu?.packageDetailsList?.map(packageDetail => {
             const isActive = (currentSelect as PackageDetail)?.packageId === packageDetail.packageId;
             return (
-              <TouchableOpacity activeOpacity={0.8} key={packageDetail.packageId} onPress={() => handleClick(packageDetail)}>
+              <TouchableOpacity activeOpacity={0.8} key={packageDetail.packageId} onPress={() => handleClick(packageDetail, true)}>
                 <View style={[styles.skuItem, isActive && styles.skuItemActive]}>
                   <Text style={[styles.skuText, isActive && styles.skuTextActive]}>{packageDetail.packageName}</Text>
                 </View>

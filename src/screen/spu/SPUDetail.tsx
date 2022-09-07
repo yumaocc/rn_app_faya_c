@@ -1,9 +1,7 @@
 import React, {useEffect} from 'react';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useFetchData} from '../../fst/hooks';
-import {useParams} from '../../helper/hooks';
-import * as api from '../../apis';
+import {useParams, useSPUDispatcher} from '../../helper/hooks';
 import {FakeNavigation, PackageDetail, SKUDetail, SPUDetailF} from '../../models';
 
 import SPUDetailView from './SPUDetailView';
@@ -14,23 +12,20 @@ import {useNavigation} from '@react-navigation/native';
 
 const SPUDetail: React.FC = () => {
   const {id} = useParams<{id: number}>();
-  const [currentSelect, setCurrentSelect] = React.useState<SKUDetail | PackageDetail>(null);
-  const [spu] = useFetchData<SPUDetailF>(api.spu.getSPUDetail, id);
   const token = useSelector((state: RootState) => state.common.token);
+  const spu: SPUDetailF = useSelector((state: RootState) => state.spu.currentSPU);
+  const currentSKU: PackageDetail | SKUDetail = useSelector((state: RootState) => state.spu.currentSKU);
+
+  const [spuDispatcher] = useSPUDispatcher();
+
+  useEffect(() => {
+    spuDispatcher.viewSPU(id);
+  }, [id, spuDispatcher]);
+
+  console.log(spu);
 
   const {bottom: safeBottom} = useSafeAreaInsets();
   const navigation = useNavigation<FakeNavigation>();
-
-  useEffect(() => {
-    if (spu?.skuList?.length) {
-      setCurrentSelect(spu.skuList[0]);
-      return;
-    }
-    if (spu?.packageDetailsList?.length) {
-      setCurrentSelect(spu.packageDetailsList[0]);
-      return;
-    }
-  }, [spu]);
 
   function handleBuy() {
     if (!token) {
@@ -40,10 +35,13 @@ const SPUDetail: React.FC = () => {
     }
   }
 
-  console.log(spu);
+  function handleChangeSKU(sku: SKUDetail | PackageDetail, isPackage: boolean) {
+    spuDispatcher.changeSKU(sku, isPackage);
+  }
+
   return (
     <View style={styles.container}>
-      <ScrollView style={{flex: 1}}>{spu ? <SPUDetailView currentSelect={currentSelect} spu={spu} onChangeSelect={setCurrentSelect} /> : <Text>loading...</Text>}</ScrollView>
+      <ScrollView style={{flex: 1}}>{spu ? <SPUDetailView currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} /> : <Text>loading...</Text>}</ScrollView>
       <View style={[{paddingBottom: safeBottom, backgroundColor: '#fff'}]}>
         <BuyBar onBuy={handleBuy} />
       </View>
