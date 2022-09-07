@@ -1,4 +1,4 @@
-import {all, fork, put, takeLatest} from 'redux-saga/effects';
+import {all, call, fork, put, takeLatest} from 'redux-saga/effects';
 
 import {Actions as CommonActions} from '../common/actions';
 import {Actions} from './actions';
@@ -6,6 +6,7 @@ import {ActionType} from './types';
 import {cache} from '../../helper/cache';
 import {ActionWithPayload} from '../types';
 import {UserInfo} from '../../models';
+import * as api from '../../apis';
 
 function* initUser(): any {
   const phone = yield cache.user.getPhone();
@@ -22,10 +23,30 @@ function* setUserInfo(action: ActionWithPayload<ActionType, UserInfo>) {
     yield put(CommonActions.setToken(token));
   }
 }
+
+function* getWalletInfo(): any {
+  try {
+    const wallet = yield call(api.user.getWallet);
+    yield put(Actions.getWalletInfoSuccess(wallet));
+  } catch (error) {
+    yield put(CommonActions.error(error));
+  }
+}
+function* getCouponList(): any {
+  try {
+    const coupons = yield call(api.user.getCouponList);
+    yield put(Actions.getCouponListSuccess(coupons));
+  } catch (error) {
+    yield put(CommonActions.error(error));
+  }
+}
+
 function* watchUserSagas() {
   yield takeLatest(ActionType.INIT, initUser);
   yield takeLatest(ActionType.LOGOUT, logout);
   yield takeLatest(ActionType.SET_USER_INFO, setUserInfo);
+  yield takeLatest(ActionType.GET_WALLET_INFO, getWalletInfo);
+  yield takeLatest(ActionType.GET_COUPON_LIST, getCouponList);
 }
 
 export default function* userSagas() {

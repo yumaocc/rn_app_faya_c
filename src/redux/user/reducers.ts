@@ -2,17 +2,20 @@ import produce from 'immer';
 import {UserActions} from './actions';
 // import { ActionType } from './types';
 import {ActionType} from './types';
-import {UserInfo} from '../../models';
+import {CouponF, UserInfo, WalletInfo} from '../../models';
 
 export interface UserState {
   phone: string;
   isLogout: boolean;
   userInfo?: UserInfo;
+  walletInfo?: WalletInfo;
+  couponList?: CouponF[];
 }
 
 export const initialState: UserState = {
   phone: '',
   isLogout: false,
+  couponList: [],
 };
 
 export default (state = initialState, action: UserActions): UserState => {
@@ -32,6 +35,14 @@ export default (state = initialState, action: UserActions): UserState => {
       return produce(state, draft => {
         draft.userInfo = undefined;
         draft.isLogout = true;
+      });
+    case ActionType.GET_WALLET_INFO_SUCCESS:
+      return produce(state, draft => {
+        draft.walletInfo = action.payload;
+      });
+    case ActionType.GET_COUPON_LIST_SUCCESS:
+      return produce(state, draft => {
+        draft.couponList = action.payload;
       });
     default:
       return state;

@@ -1,5 +1,5 @@
 import {post} from './helper';
-import {UserInfo} from '../models';
+import {CouponF, UserInfo, WalletInfo} from '../models';
 
 export async function userLogin(phone: string, code: string): Promise<UserInfo> {
   return await post<UserInfo, {code: string; telephone: string}>('/user/login', {
@@ -13,4 +13,12 @@ export async function sendVerifyCode(phone: string) {
   return await post<boolean, {telephone: string}>('/user/login/verify/code', {
     telephone: phone,
   });
+}
+
+export async function getWallet(): Promise<WalletInfo> {
+  return await post('/user/wallet/mine/info');
+}
+
+export async function getCouponList(): Promise<CouponF[]> {
+  return await post('/coupon/main/mine/can/use/list');
 }
