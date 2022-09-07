@@ -6,7 +6,7 @@ import {StylePropView} from '../../models';
 import PickerItem, {PickerItemProps, PICKER_ITEM_HEIGHT} from './PickerItem';
 
 export interface PickerProps {
-  value: string | number;
+  value?: string | number;
   style?: StylePropView;
   items: PickerItemProps[];
   onChange?: (value: string | number) => void;
@@ -92,8 +92,9 @@ const Picker: React.FC<PickerProps> & {
     </View>
   );
 };
-// Picker.defaultProps = {
-// };
+Picker.defaultProps = {
+  value: null,
+};
 Picker.Item = PickerItem;
 export default Picker;
 

@@ -7,7 +7,7 @@ import {useFormInstance} from './hooks';
 
 export interface FormItemProps {
   children: React.ReactNode;
-  label?: string;
+  label?: string | React.ReactNode;
   desc?: string;
   extra?: React.ReactNode;
   hiddenBorderTop?: boolean;
@@ -57,14 +57,19 @@ const FormItem: React.FC<FormItemProps> = props => {
 
   const containerStyle = [showBottomLine && globalStyles.borderBottom, showTopLine && globalStyles.borderTop, styles.container, config.itemStyle?.container, props.style];
 
+  function renderLabel() {
+    if (typeof label === 'string') {
+      return <Text style={[globalStyles.fontPrimary, styles.label]}>{label}</Text>;
+    }
+    return label;
+  }
+
   if (props.vertical) {
     return (
       <View style={containerStyle}>
         <View style={[styles.item]}>
           <View style={[styles.labelLeft, {maxWidth: '100%'}]}>
-            <View style={styles.labelWrapper}>
-              <Text style={[globalStyles.fontPrimary, styles.label]}>{label}</Text>
-            </View>
+            <View style={styles.labelWrapper}>{renderLabel()}</View>
             {props.desc && (
               <View style={{marginTop: 3}}>
                 <Text numberOfLines={1} style={styles.desc}>
@@ -83,9 +88,7 @@ const FormItem: React.FC<FormItemProps> = props => {
     <View style={containerStyle}>
       <View style={[styles.item]}>
         <View style={[styles.labelLeft, {maxWidth: '100%'}]}>
-          <View style={styles.labelWrapper}>
-            <Text style={[globalStyles.fontPrimary, styles.label]}>{label}</Text>
-          </View>
+          <View style={styles.labelWrapper}>{renderLabel()}</View>
           {props.desc && (
             <View>
               <Text numberOfLines={1} style={styles.desc}>
