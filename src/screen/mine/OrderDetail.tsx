@@ -7,7 +7,7 @@ import QRCode from 'react-native-qrcode-svg';
 import {Button, Modal, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useParams} from '../../helper/hooks';
-import {OrderDetailF, OrderPackageSKU} from '../../models/spu';
+import {OrderDetailF, OrderPackageSKU} from '../../models';
 import * as api from '../../apis';
 import {StylePropView} from '../../models';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';

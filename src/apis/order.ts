@@ -1,6 +1,6 @@
 import {SearchParam} from '../fst/models';
 import {OrderF} from '../models';
-import {OrderDetailF} from '../models/spu';
+import {OrderDetailF} from '../models';
 import {post} from './helper';
 
 export async function getOrderList(params: SearchParam): Promise<OrderF[]> {

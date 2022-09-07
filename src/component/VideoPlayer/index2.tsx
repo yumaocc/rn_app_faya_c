@@ -173,7 +173,7 @@ this.animations = {
   const anim_topCrl_opacity = useRef(new Animated.Value(initialValue)).current;
   const anim_video_opacity = useRef(new Animated.Value(1)).current;
   const anim_loader_rotate = useRef(new Animated.Value(0)).current;
-  const anim_loader_MAX_VALUE = useMemo(() => 360);
+  const anim_loader_MAX_VALUE = useMemo(() => 360, []);
 
   const this_styles = {
     videoStyle: props.videoStyle || {},

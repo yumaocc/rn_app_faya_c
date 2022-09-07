@@ -1,6 +1,6 @@
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {IDBody} from '../fst/models';
-import {OrderStatus} from './spu';
+import {OrderStatus} from './order';
 
 export type RootStackParamList = {
   Login: {to: keyof RootStackParamList; params: any};
