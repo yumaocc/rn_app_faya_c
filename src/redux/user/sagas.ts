@@ -40,6 +40,16 @@ function* getCouponList(): any {
     yield put(CommonActions.error(error));
   }
 }
+function* getMyDetail(): any {
+  try {
+    const detail = yield call(api.user.getMineDetail);
+    if (detail) {
+      yield put(Actions.getMyDetailSuccess(detail));
+    }
+  } catch (error) {
+    yield put(CommonActions.error(error));
+  }
+}
 
 function* watchUserSagas() {
   yield takeLatest(ActionType.INIT, initUser);
@@ -47,6 +57,7 @@ function* watchUserSagas() {
   yield takeLatest(ActionType.SET_USER_INFO, setUserInfo);
   yield takeLatest(ActionType.GET_WALLET_INFO, getWalletInfo);
   yield takeLatest(ActionType.GET_COUPON_LIST, getCouponList);
+  yield takeLatest(ActionType.GET_MINE_DETAIL, getMyDetail);
 }
 
 export default function* userSagas() {

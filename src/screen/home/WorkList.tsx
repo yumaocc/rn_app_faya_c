@@ -39,7 +39,7 @@ const WorkList: React.FC<WorkListProps> = () => {
     async function f() {
       const res = await fetchData({pageIndex, pageSize: 10});
       console.log(res);
-      setWorks(res as WorkF[]);
+      setWorks((res as WorkF[]) || []);
     }
     if (!fetchData) {
       return;

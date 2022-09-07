@@ -19,7 +19,7 @@ const Discover: React.FC = () => {
     async function f() {
       const res = await api.spu.getSpuList({pageIndex: 1, pageSize: 10});
       console.log(res);
-      setSpuList(res);
+      setSpuList(res || []);
     }
     f();
   }, []);

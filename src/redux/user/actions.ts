@@ -1,6 +1,6 @@
 import {Action, ActionsUnion, ActionWithPayload, createAction} from '../types';
 import {ActionType} from './types';
-import {CouponF, UserInfo, WalletInfo} from '../../models';
+import {CouponF, MineDetail, UserInfo, WalletInfo} from '../../models';
 
 export const Actions = {
   init: (): Action<ActionType.INIT> => createAction(ActionType.INIT),
@@ -11,6 +11,8 @@ export const Actions = {
   getWalletInfoSuccess: (walletInfo: WalletInfo): ActionWithPayload<ActionType.GET_WALLET_INFO_SUCCESS, WalletInfo> => createAction(ActionType.GET_WALLET_INFO_SUCCESS, walletInfo),
   getCouponList: (): Action<ActionType.GET_COUPON_LIST> => createAction(ActionType.GET_COUPON_LIST),
   getCouponListSuccess: (couponList: CouponF[]): ActionWithPayload<ActionType.GET_COUPON_LIST_SUCCESS, CouponF[]> => createAction(ActionType.GET_COUPON_LIST_SUCCESS, couponList),
+  getMyDetail: (): Action<ActionType.GET_MINE_DETAIL> => createAction(ActionType.GET_MINE_DETAIL),
+  getMyDetailSuccess: (detail: MineDetail): ActionWithPayload<ActionType.GET_MINE_DETAIL_SUCCESS, MineDetail> => createAction(ActionType.GET_MINE_DETAIL_SUCCESS, detail),
 };
 
 export type UserActions = ActionsUnion<typeof Actions>;

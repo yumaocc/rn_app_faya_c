@@ -1,16 +1,26 @@
 import {Icon} from '@ant-design/react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import React from 'react';
-import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {Tabs} from '../../component';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../models';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../redux/reducers';
+import {useUserDispatcher} from '../../helper/hooks';
 
 const Mine: React.FC = () => {
+  const detail = useSelector((state: RootState) => state.user.myDetail);
   const {top} = useSafeAreaInsets();
   const navigation = useNavigation<FakeNavigation>();
+  const isFocused = useIsFocused();
+  const [userDispatcher] = useUserDispatcher();
+
+  useEffect(() => {
+    userDispatcher.getMyDetail();
+  }, [userDispatcher]);
 
   const items = [
     {
@@ -37,8 +47,9 @@ const Mine: React.FC = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
+      {isFocused && <StatusBar barStyle="light-content" />}
       <ScrollView style={{flex: 1}} contentContainerStyle={{position: 'relative'}}>
-        <Image source={{uri: 'https://fakeimg.pl/50?text=loading'}} style={styles.cover} />
+        <Image source={require('../../assets/mine-bg.png')} style={styles.cover} />
         <View style={[styles.container, {paddingTop: 170}]}>
           {/* 顶部扫码等按钮栏 */}
           <View style={[globalStyles.containerLR, {position: 'absolute', top: top + 20, width: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
@@ -54,15 +65,15 @@ const Mine: React.FC = () => {
               <View style={[styles.avatar]} />
               <View style={[globalStyles.containerRow, {justifyContent: 'space-around', flex: 1, height: 62}]}>
                 <View style={{alignItems: 'center', flex: 1}}>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>9999</Text>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{detail?.nums?.fansNums}</Text>
                   <Text style={[globalStyles.fontPrimary]}>粉丝</Text>
                 </View>
                 <View style={{alignItems: 'center', flex: 1}}>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>9.3w</Text>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{detail?.nums?.followNums}</Text>
                   <Text style={[globalStyles.fontPrimary]}>关注</Text>
                 </View>
                 <View style={{alignItems: 'center', flex: 1}}>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>1.6w</Text>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{detail?.nums?.likeNums}</Text>
                   <Text style={[globalStyles.fontPrimary]}>获赞</Text>
                 </View>
               </View>
@@ -71,17 +82,20 @@ const Mine: React.FC = () => {
             {/* 用户基本信息栏 */}
             <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
               <Text style={styles.userName} numberOfLines={1}>
-                成都美食观察者
+                {detail?.nickName}
               </Text>
-              <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop]}>
-                <Text style={[globalStyles.fontPrimary]}>发芽号：132412wantfaut1as</Text>
-                <TouchableOpacity activeOpacity={0.8} onPress={handleCopy}>
-                  <Icon name="copy" size={18} color="#ccc" style={{marginLeft: 10}} />
-                </TouchableOpacity>
-              </View>
+              {detail?.account && (
+                <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop]}>
+                  <Text style={[globalStyles.fontPrimary]}>发芽号：{detail?.account}</Text>
+                  <TouchableOpacity activeOpacity={0.8} onPress={handleCopy}>
+                    <Icon name="copy" size={18} color="#ccc" style={{marginLeft: 10}} />
+                  </TouchableOpacity>
+                </View>
+              )}
+
               <View style={globalStyles.halfModuleMarginTop}>
                 <Text style={globalStyles.fontSecondary} numberOfLines={1}>
-                  {'介绍内容'.repeat(20)}
+                  {detail?.say}
                 </Text>
               </View>
             </View>

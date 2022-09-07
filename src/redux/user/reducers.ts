@@ -2,7 +2,7 @@ import produce from 'immer';
 import {UserActions} from './actions';
 // import { ActionType } from './types';
 import {ActionType} from './types';
-import {CouponF, UserInfo, WalletInfo} from '../../models';
+import {CouponF, MineDetail, UserInfo, WalletInfo} from '../../models';
 
 export interface UserState {
   phone: string;
@@ -10,12 +10,27 @@ export interface UserState {
   userInfo?: UserInfo;
   walletInfo?: WalletInfo;
   couponList?: CouponF[];
+  myDetail?: MineDetail;
 }
 
 export const initialState: UserState = {
   phone: '',
   isLogout: false,
   couponList: [],
+  myDetail: {
+    account: '',
+    nickName: '游客',
+    age: '',
+    avatar: '',
+    backgroudPic: '',
+    level: '',
+    say: '什么都没有',
+    nums: {
+      fansNums: 0,
+      followNums: 0,
+      likeNums: 0,
+    },
+  },
 };
 
 export default (state = initialState, action: UserActions): UserState => {
@@ -43,6 +58,10 @@ export default (state = initialState, action: UserActions): UserState => {
     case ActionType.GET_COUPON_LIST_SUCCESS:
       return produce(state, draft => {
         draft.couponList = action.payload;
+      });
+    case ActionType.GET_MINE_DETAIL_SUCCESS:
+      return produce(state, draft => {
+        draft.myDetail = action.payload;
       });
     default:
       return state;

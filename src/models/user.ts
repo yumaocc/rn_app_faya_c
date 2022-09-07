@@ -44,3 +44,19 @@ export interface WalletInfo {
   moneyYuan: string;
   numberOfCards: number;
 }
+
+// 我的用户信息
+export interface MineDetail {
+  account: string;
+  nickName: string;
+  age: string;
+  avatar: string;
+  backgroudPic: string;
+  level: string;
+  say: string;
+  nums: {
+    fansNums: number;
+    followNums: number;
+    likeNums: number;
+  };
+}
