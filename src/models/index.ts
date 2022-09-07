@@ -7,5 +7,5 @@ export type {OrderF, OrderDetailF, OrderPackageSKU} from './order';
 
 export {UserState, CouponState, CouponType} from './user';
 export {WorkTabType, WorkType} from './work';
-export {SPUStatus, SPUType, BookingType, PayChannel} from './spu';
+export {SPUStatus, SPUType, BookingType, PayChannel, SKUSaleState} from './spu';
 export {OrderStatus} from './order';

@@ -46,7 +46,7 @@ const SPUDetail: React.FC = () => {
         {spu ? <SPUDetailView isPackage={isPackage} currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} /> : <Text>loading...</Text>}
       </ScrollView>
       <View style={[{paddingBottom: safeBottom, backgroundColor: '#fff'}]}>
-        <BuyBar onBuy={handleBuy} />
+        <BuyBar spu={spu} sku={currentSKU} onBuy={handleBuy} />
       </View>
     </View>
   );

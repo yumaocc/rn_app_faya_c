@@ -9,6 +9,7 @@ interface ButtonProps {
   disabled?: boolean;
   ghost?: boolean;
   textStyle?: StylePropText;
+  containerStyle?: StylePropView;
   onPress?: () => void;
 }
 
@@ -27,13 +28,13 @@ const Button: React.FC<ButtonProps> = props => {
   if (disabled) {
     containerStyle.push({opacity: 0.5});
     return (
-      <View style={containerStyle}>
+      <View style={[containerStyle, props.containerStyle]}>
         <Text style={textStyle}>{title}</Text>
       </View>
     );
   }
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={props.onPress}>
+    <TouchableOpacity activeOpacity={0.7} onPress={props.onPress} style={props.containerStyle}>
       <View style={containerStyle}>
         <Text style={textStyle}>{title}</Text>
       </View>

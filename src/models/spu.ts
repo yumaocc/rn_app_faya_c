@@ -35,6 +35,13 @@ export enum SPUType {
   Explosive = 0, // 爆款
 }
 
+// 0正常售卖，1已下架，2库存售罄
+export enum SKUSaleState {
+  ON_SALE = 0,
+  SOLD_OUT = 1,
+  SOLD_OUT_WITH_NO_STOCK = 2,
+}
+
 export interface SPUShop {
   id?: number;
   addressDetail: string;
@@ -52,6 +59,7 @@ export interface PackageDetail {
   packageOriginPriceYuan: string;
   saleAmount: number;
   stockAmount: number;
+  saleStatus: SKUSaleState;
   list: SKUDetail[];
 }
 
@@ -68,6 +76,7 @@ export interface SKUDetail {
   skuName: string;
   skuStockAmount: number;
   userCommission: number; // 用户佣金
+  saleStatus: SKUSaleState;
 }
 
 export interface SPUDetailF {
@@ -123,5 +132,5 @@ export interface SKUShowInfo {
   originPriceYuan: string;
   salePrice: number;
   salePriceYuan: string;
-  // remindDay: number;
+  // saleStatus: SKUSaleState;
 }

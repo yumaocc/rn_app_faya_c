@@ -3,7 +3,7 @@ import {PaginationProps} from '@ant-design/react-native/lib/carousel';
 import React, {useMemo} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {PackageDetail, SKUDetail, SKUShowInfo, SPUDetailF} from '../../models';
+import {PackageDetail, SKUDetail, SKUSaleState, SKUShowInfo, SPUDetailF} from '../../models';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 interface SPUDetailViewProps {
@@ -62,6 +62,41 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         </Text>
       </View>
     );
+  }
+
+  function renderSKUNode(skuName: string, isActive: boolean, disabled: boolean) {
+    return (
+      <View style={[styles.skuItem, isActive && styles.skuItemActive, disabled && styles.skuItemDisabled]}>
+        <Text style={[styles.skuText, isActive && styles.skuTextActive, disabled && styles.skuTextDisabled]}>{skuName}</Text>
+      </View>
+    );
+  }
+
+  function renderSKU(sku: SKUDetail) {
+    const isActive = (currentSelect as SKUDetail)?.id === sku.id;
+    const disabled = sku.saleStatus !== SKUSaleState.ON_SALE;
+    if (!disabled) {
+      return (
+        <TouchableOpacity activeOpacity={0.8} key={'sku_' + sku.id} onPress={() => handleClick(sku)}>
+          {renderSKUNode(sku.skuName, isActive, disabled)}
+        </TouchableOpacity>
+      );
+    } else {
+      return renderSKUNode(sku.skuName, isActive, disabled);
+    }
+  }
+  function renderPackage(pkg: PackageDetail) {
+    const isActive = (currentSelect as PackageDetail)?.packageId === pkg.packageId;
+    const disabled = pkg.saleStatus !== SKUSaleState.ON_SALE;
+    if (!disabled) {
+      return (
+        <TouchableOpacity activeOpacity={0.8} key={'pkg_' + pkg.packageId} onPress={() => handleClick(pkg, true)}>
+          {renderSKUNode(pkg.packageName, isActive, disabled)}
+        </TouchableOpacity>
+      );
+    } else {
+      return renderSKUNode(pkg.packageName, isActive, disabled);
+    }
   }
 
   return (
@@ -125,25 +160,27 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         <Text style={globalStyles.fontStrong}>套餐规格</Text>
         <View style={[{flexDirection: 'row', flexWrap: 'wrap', marginTop: globalStyleVariables.MODULE_SPACE}]}>
           {spu?.skuList?.map(sku => {
-            const isActive = (currentSelect as SKUDetail)?.id === sku.id;
-            return (
-              <TouchableOpacity activeOpacity={0.8} key={'sku_' + sku.id} onPress={() => handleClick(sku)}>
-                <View style={[styles.skuItem, isActive && styles.skuItemActive]}>
-                  <Text style={[styles.skuText, isActive && styles.skuTextActive]}>{sku.skuName}</Text>
-                </View>
-              </TouchableOpacity>
-            );
+            return renderSKU(sku);
+            // const isActive = (currentSelect as SKUDetail)?.id === sku.id;
+            // return (
+            //   <TouchableOpacity activeOpacity={0.8} key={'sku_' + sku.id} onPress={() => handleClick(sku)}>
+            //     <View style={[styles.skuItem, isActive && styles.skuItemActive]}>
+            //       <Text style={[styles.skuText, isActive && styles.skuTextActive]}>{sku.skuName}</Text>
+            //     </View>
+            //   </TouchableOpacity>
+            // );
           })}
 
           {spu?.packageDetailsList?.map(packageDetail => {
-            const isActive = (currentSelect as PackageDetail)?.packageId === packageDetail.packageId;
-            return (
-              <TouchableOpacity activeOpacity={0.8} key={'pkg_' + packageDetail.packageId} onPress={() => handleClick(packageDetail, true)}>
-                <View style={[styles.skuItem, isActive && styles.skuItemActive]}>
-                  <Text style={[styles.skuText, isActive && styles.skuTextActive]}>{packageDetail.packageName}</Text>
-                </View>
-              </TouchableOpacity>
-            );
+            return renderPackage(packageDetail);
+            // const isActive = (currentSelect as PackageDetail)?.packageId === packageDetail.packageId;
+            // return (
+            //   <TouchableOpacity activeOpacity={0.8} key={'pkg_' + packageDetail.packageId} onPress={() => handleClick(packageDetail, true)}>
+            //     <View style={[styles.skuItem, isActive && styles.skuItemActive]}>
+            //       <Text style={[styles.skuText, isActive && styles.skuTextActive]}>{packageDetail.packageName}</Text>
+            //     </View>
+            //   </TouchableOpacity>
+            // );
           })}
         </View>
       </View>
@@ -242,6 +279,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffeeeb',
     borderColor: globalStyleVariables.COLOR_PRIMARY,
   },
+  skuItemDisabled: {
+    backgroundColor: '#f2f2f2',
+    borderColor: '#f2f2f2',
+  },
   skuText: {
     fontSize: 15,
     fontWeight: 'bold',
@@ -249,6 +290,9 @@ const styles = StyleSheet.create({
   },
   skuTextActive: {
     color: globalStyleVariables.COLOR_PRIMARY,
+  },
+  skuTextDisabled: {
+    color: globalStyleVariables.TEXT_COLOR_TERTIARY,
   },
   shopAction: {
     width: 32,
