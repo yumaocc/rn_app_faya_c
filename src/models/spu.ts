@@ -48,8 +48,8 @@ export interface PackageDetail {
   packageName: string;
   packageSalePrice: number;
   packageSalePriceYuan: string;
-  // packageOriginPrice: number;
-  // packageOriginPriceYuan: string;
+  packageOriginPrice: number;
+  packageOriginPriceYuan: string;
   saleAmount: number;
   stockAmount: number;
   list: SKUDetail[];
@@ -113,3 +113,15 @@ export enum PayChannel {
   ALIPAY = 'ALIPAY',
 }
 export type PayWay = 'USER_SCAN' | 'MINI_PROGRAM' | 'WECHAT_OFFIACCOUNT' | 'ALIPAY_LIFE' | 'H5PAY' | 'JS_PAY' | 'SDK_PAY';
+
+export interface SKUShowInfo {
+  id: string;
+  saleAmount: number;
+  skuName: string;
+  stockAmount: number;
+  originPrice: number;
+  originPriceYuan: string;
+  salePrice: number;
+  salePriceYuan: string;
+  // remindDay: number;
+}

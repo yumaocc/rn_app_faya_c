@@ -15,6 +15,7 @@ const SPUDetail: React.FC = () => {
   const token = useSelector((state: RootState) => state.common.token);
   const spu: SPUDetailF = useSelector((state: RootState) => state.spu.currentSPU);
   const currentSKU: PackageDetail | SKUDetail = useSelector((state: RootState) => state.spu.currentSKU);
+  const isPackage: boolean = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
 
   const [spuDispatcher] = useSPUDispatcher();
 
@@ -41,7 +42,9 @@ const SPUDetail: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={{flex: 1}}>{spu ? <SPUDetailView currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} /> : <Text>loading...</Text>}</ScrollView>
+      <ScrollView style={{flex: 1}}>
+        {spu ? <SPUDetailView isPackage={isPackage} currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} /> : <Text>loading...</Text>}
+      </ScrollView>
       <View style={[{paddingBottom: safeBottom, backgroundColor: '#fff'}]}>
         <BuyBar onBuy={handleBuy} />
       </View>

@@ -1,19 +1,52 @@
 import {Carousel, Icon} from '@ant-design/react-native';
 import {PaginationProps} from '@ant-design/react-native/lib/carousel';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {PackageDetail, SKUDetail, SPUDetailF} from '../../models';
+import {PackageDetail, SKUDetail, SKUShowInfo, SPUDetailF} from '../../models';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 interface SPUDetailViewProps {
   spu: SPUDetailF;
   currentSelect: SKUDetail | PackageDetail;
+  isPackage: boolean;
   onChangeSelect: (sku: SKUDetail | PackageDetail, isPackage: boolean) => void;
 }
 
 const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
-  const {spu, currentSelect} = props;
+  const {spu, currentSelect, isPackage} = props;
+
+  const currentSKU: SKUShowInfo = useMemo(() => {
+    if (isPackage) {
+      const pkg = currentSelect as PackageDetail;
+      return {
+        id: 'pkg_' + pkg?.packageId,
+        saleAmount: pkg?.saleAmount,
+        skuName: pkg?.packageName,
+        stockAmount: pkg?.stockAmount,
+        originPrice: pkg?.packageOriginPrice,
+        originPriceYuan: pkg?.packageOriginPriceYuan,
+        salePrice: pkg?.packageSalePrice,
+        salePriceYuan: pkg?.packageSalePriceYuan,
+      };
+    } else {
+      const sku = currentSelect as SKUDetail;
+      return {
+        id: 'pkg_' + sku?.id,
+        saleAmount: sku?.saleAmount,
+        skuName: sku?.skuName,
+        stockAmount: sku?.skuStockAmount,
+        originPrice: sku?.originPrice,
+        originPriceYuan: sku?.originPriceYuan,
+        salePrice: sku?.salePrice,
+        salePriceYuan: sku?.salePriceYuan,
+      };
+    }
+  }, [currentSelect, isPackage]);
+
+  // const flatSKUList = useMemo(() => {
+  //   const skuList = spu?.skuList?.map({})
+  // }, []);
 
   console.log(currentSelect);
 
@@ -43,11 +76,11 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         <View style={styles.bannerBottom}>
           <View style={[globalStyles.containerRow, {backgroundColor: '#f92', height: 27, paddingLeft: 10}]}>
             <View style={{paddingHorizontal: 20}}>
-              <Text style={{color: '#fff'}}>库存: {currentSelect?.saleAmount || 9999}</Text>
+              <Text style={{color: '#fff'}}>库存: {currentSKU?.stockAmount}</Text>
             </View>
             <View style={[globalStyles.lineVertical, {height: 10, backgroundColor: '#ffffff80'}]} />
             <View style={{paddingHorizontal: 20}}>
-              <Text style={{color: '#fff'}}>还剩: {currentSelect?.saleAmount || '1'}天</Text>
+              <Text style={{color: '#fff'}}>还剩: {spu.theRemainingNumberOfDays || '-'}天</Text>
             </View>
           </View>
           <View style={styles.priceTag}>
@@ -55,8 +88,8 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
             <View style={[globalStyles.containerRow, {backgroundColor: globalStyleVariables.COLOR_PRIMARY, height: 45, paddingRight: 15}]}>
               <Text>
                 <Text style={[{color: '#fff', fontSize: 15}]}>¥</Text>
-                <Text style={[{color: '#fff', fontSize: 25}]}>39.9</Text>
-                <Text style={[globalStyles.fontTertiary, {textDecorationLine: 'line-through', color: '#ffffff80'}]}>¥99.9</Text>
+                <Text style={[{color: '#fff', fontSize: 25}]}>{currentSKU?.salePriceYuan}</Text>
+                <Text style={[globalStyles.fontTertiary, {textDecorationLine: 'line-through', color: '#ffffff80'}]}>¥{currentSKU?.originPriceYuan}</Text>
               </Text>
             </View>
           </View>
@@ -73,7 +106,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
           <View style={[globalStyles.containerRow]}>
             <Text>收藏{spu.collectAmount}</Text>
             <Text style={{marginHorizontal: globalStyleVariables.MODULE_SPACE}}>·</Text>
-            <Text>已售999</Text>
+            <Text>已售{currentSKU?.saleAmount}</Text>
           </View>
         </View>
         <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
@@ -94,7 +127,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
           {spu?.skuList?.map(sku => {
             const isActive = (currentSelect as SKUDetail)?.id === sku.id;
             return (
-              <TouchableOpacity activeOpacity={0.8} key={sku.id} onPress={() => handleClick(sku)}>
+              <TouchableOpacity activeOpacity={0.8} key={'sku_' + sku.id} onPress={() => handleClick(sku)}>
                 <View style={[styles.skuItem, isActive && styles.skuItemActive]}>
                   <Text style={[styles.skuText, isActive && styles.skuTextActive]}>{sku.skuName}</Text>
                 </View>
@@ -105,7 +138,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
           {spu?.packageDetailsList?.map(packageDetail => {
             const isActive = (currentSelect as PackageDetail)?.packageId === packageDetail.packageId;
             return (
-              <TouchableOpacity activeOpacity={0.8} key={packageDetail.packageId} onPress={() => handleClick(packageDetail, true)}>
+              <TouchableOpacity activeOpacity={0.8} key={'pkg_' + packageDetail.packageId} onPress={() => handleClick(packageDetail, true)}>
                 <View style={[styles.skuItem, isActive && styles.skuItemActive]}>
                   <Text style={[styles.skuText, isActive && styles.skuTextActive]}>{packageDetail.packageName}</Text>
                 </View>
