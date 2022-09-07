@@ -39,6 +39,7 @@ const Input: React.FC<InputItemProps> = props => {
       onChange={wrappedOnChange}
       styles={{
         container: {height: 40, margin: 0},
+        inputDisabled: {backgroundColor: '#fff'},
         ...styles,
       }}
     />

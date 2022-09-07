@@ -41,5 +41,6 @@ export interface CouponF {
 
 export interface WalletInfo {
   money: number;
+  moneyYuan: string;
   numberOfCards: number;
 }

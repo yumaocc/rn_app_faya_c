@@ -7,15 +7,17 @@ import {useSelector} from 'react-redux';
 import {Form, Input, InputNumber, NavigationBar, Select} from '../../component';
 import FormItem from '../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {moneyToYuan} from '../../fst/helper';
-import {useSPUDispatcher} from '../../helper/hooks';
-import {BookingType, PackageDetail, PayChannel, SKUDetail} from '../../models';
+import {findItem, moneyToYuan} from '../../fst/helper';
+import {useCoupons, useSPUDispatcher, useWallet} from '../../helper/hooks';
+import {BookingType, CouponState, PackageDetail, PayChannel, SKUDetail} from '../../models';
 import {RootState} from '../../redux/reducers';
 
 const Order: React.FC = () => {
   const spu = useSelector((state: RootState) => state.spu.currentSPU);
   const sku = useSelector((state: RootState) => state.spu.currentSKU);
-  const skuIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
+  const currentSkuIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
+  const [wallet] = useWallet();
+  const [couponList] = useCoupons();
   const [spuDispatcher] = useSPUDispatcher();
   const {bottom} = useSafeAreaInsets();
   const initForm = {
@@ -45,16 +47,61 @@ const Order: React.FC = () => {
   }, [spu]);
 
   const salePrice = useMemo(() => {
-    if (skuIsPackage) {
+    if (currentSkuIsPackage) {
       return (sku as PackageDetail)?.packageSalePrice;
     } else {
       return (sku as SKUDetail)?.salePrice;
     }
-  }, [sku, skuIsPackage]);
+  }, [sku, currentSkuIsPackage]);
 
   const totalPrice = useMemo(() => {
     return Math.round(salePrice) * form.getFieldValue('amount') || 0;
   }, [salePrice, form]);
+
+  const currentSelectedCoupon = useMemo(() => {
+    return couponList?.find(coupon => coupon.id === form.getFieldValue('couponId'));
+  }, [couponList, form]);
+
+  const totalSaved = useMemo(() => {
+    let saved = 0;
+    if (currentSelectedCoupon) {
+      saved = currentSelectedCoupon.money;
+    }
+    const integralMoney = form.getFieldValue('integralMoney');
+    if (integralMoney) {
+      saved += integralMoney;
+    }
+    return saved;
+  }, [currentSelectedCoupon, form]);
+
+  // 实际应付
+  const shouldPay = useMemo(() => totalPrice - totalSaved, [totalPrice, totalSaved]);
+  const minPurchaseAmount = useMemo(() => {
+    if (currentSkuIsPackage) {
+      return 1;
+    } else {
+      return (sku as SKUDetail).minPurchaseQuantity;
+    }
+  }, [currentSkuIsPackage, sku]);
+
+  const maxPurchaseAmount = useMemo(() => {
+    if (currentSkuIsPackage) {
+      return (sku as PackageDetail)?.stockAmount;
+    } else {
+      return (sku as SKUDetail)?.maxPurchaseQuantity;
+    }
+  }, [currentSkuIsPackage, sku]);
+
+  const canUseCoupons = useMemo(() => {
+    return couponList?.filter(coupon => coupon.status === CouponState.Unused && coupon.amountThreshold < totalPrice) || [];
+  }, [couponList, totalPrice]);
+
+  // 总金额变更导致当前优惠券不满足条件，则取消优惠券
+  useEffect(() => {
+    if (currentSelectedCoupon && currentSelectedCoupon.amountThreshold > totalPrice) {
+      form.setFieldsValue({couponId: null});
+    }
+  }, [currentSelectedCoupon, form, totalPrice]);
 
   const poster = useMemo(() => {
     if (spu.posters?.length) {
@@ -64,13 +111,13 @@ const Order: React.FC = () => {
 
   useEffect(() => {
     let id = '';
-    if (skuIsPackage) {
+    if (currentSkuIsPackage) {
       id = 'pkg_' + (sku as PackageDetail)?.packageId;
     } else {
       id = 'sku_' + (sku as SKUDetail)?.id;
     }
     form.setFieldValue('skuId', id);
-  }, [sku, skuIsPackage]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [sku, currentSkuIsPackage]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 用户换了套餐，这里同步到redux
   function handleSKUChange(e = '') {
@@ -89,6 +136,13 @@ const Order: React.FC = () => {
   }
   function check() {
     console.log(form.getFieldsValue());
+    // todo: 检查合法性
+    const {channel} = form.getFieldsValue();
+    if (channel === PayChannel.WECHAT) {
+      // todo: 微信支付
+    } else {
+      // todo: 支付宝支付
+    }
   }
 
   return (
@@ -124,7 +178,7 @@ const Order: React.FC = () => {
               <Select options={flatSKUList} placeholder="请选择规格" onChange={handleSKUChange} />
             </FormItem>
             <FormItem label="数量" name="amount">
-              <InputNumber />
+              <InputNumber min={minPurchaseAmount} max={maxPurchaseAmount} />
             </FormItem>
             <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
             <FormItem label="商品总价">
@@ -140,17 +194,41 @@ const Order: React.FC = () => {
             <FormItem label="手机号" name="telephone">
               <Input placeholder="用于接收订单短信" />
             </FormItem>
+            {spu?.needIdCard ? (
+              <FormItem label="身份证" name="idCard">
+                <Input placeholder="请输入使用人身份证号" />
+              </FormItem>
+            ) : null}
             <FormItem
+              name="integralMoney"
               label={
                 <View style={globalStyles.containerRow}>
                   <Text style={[globalStyles.fontPrimary, {fontSize: 16}]}>使用芽抵扣</Text>
                   <View style={[globalStyles.tagWrapper, {backgroundColor: '#0000001A', marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                    <Text style={[globalStyles.tag, {color: globalStyleVariables.TEXT_COLOR_PRIMARY}]}>可用1000, 余999</Text>
+                    <Text style={[globalStyles.tag, {color: globalStyleVariables.TEXT_COLOR_PRIMARY}]}>{wallet?.money ? wallet?.moneyYuan : '余额为0'}</Text>
                   </View>
                 </View>
-              }
-              name="integralMoney">
-              <Input type="number" />
+              }>
+              <Input disabled={!wallet?.money} type="number" placeholder={wallet?.money ? '请输入抵扣金额' : '无法抵扣'} />
+            </FormItem>
+            <FormItem label="优惠券" name="couponId">
+              <Select
+                disabled={canUseCoupons?.length === 0}
+                options={canUseCoupons?.map(coupon => ({value: coupon.id, label: `¥${moneyToYuan(coupon.money)}`})) || []}
+                placeholder="请选择优惠券">
+                {e => {
+                  if (!e) {
+                    if (canUseCoupons?.length) {
+                      return <Text>{canUseCoupons?.length}张可用</Text>;
+                    } else {
+                      return <Text>暂无可用优惠券</Text>;
+                    }
+                  }
+                  const foundCoupon = findItem(couponList, item => item.id === e.value);
+                  const couponMoney = moneyToYuan(foundCoupon?.money) || 0;
+                  return <Text>-¥{couponMoney}</Text>;
+                }}
+              </Select>
             </FormItem>
 
             <FormItem label="备注" name="memo">
@@ -196,9 +274,9 @@ const Order: React.FC = () => {
           <View>
             <Text style={[{color: globalStyleVariables.COLOR_PRIMARY}]}>
               <Text>¥</Text>
-              <Text style={[{fontSize: 30, lineHeight: 30}]}>19.00</Text>
+              <Text style={[{fontSize: 30, lineHeight: 30}]}>{moneyToYuan(shouldPay)}</Text>
             </Text>
-            <Text style={[globalStyles.fontTertiary]}>共优惠 ¥100.00元</Text>
+            <Text style={[globalStyles.fontTertiary]}>共优惠 ¥{moneyToYuan(totalSaved)}元</Text>
           </View>
           <Button type="primary" onPress={check} style={{flex: 1, height: 40, marginLeft: globalStyleVariables.MODULE_SPACE}}>
             提交订单
