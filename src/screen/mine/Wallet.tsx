@@ -6,14 +6,23 @@ import {NavigationBar} from '../../component';
 import {useWallet} from '../../helper/hooks';
 import {Icon} from '@ant-design/react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
+import {useNavigation} from '@react-navigation/native';
+import {FakeNavigation} from '../../models';
 
 const Wallet: React.FC = () => {
   const [wallet, updateWallet] = useWallet();
   const [showReal, setShowReal] = React.useState(false);
 
+  const navigation = useNavigation<FakeNavigation>();
+
   useEffect(() => {
     updateWallet();
   }, [updateWallet]);
+
+  function showSummary() {
+    // todo: 判断是否是代理
+    navigation.navigate('WalletSummary');
+  }
 
   return (
     <SafeAreaView edges={['top', 'bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
@@ -38,15 +47,11 @@ const Wallet: React.FC = () => {
                     setShowReal(!showReal);
                   }}>
                   <View>
-                    {showReal ? (
-                      <MaterialIcon name="visibility" size={24} color="#fff" style={{marginLeft: globalStyleVariables.MODULE_SPACE}} />
-                    ) : (
-                      <MaterialIcon name="visibility-off" size={24} color="#fff" style={{marginLeft: globalStyleVariables.MODULE_SPACE}} />
-                    )}
+                    <MaterialIcon name={showReal ? 'visibility' : 'visibility-off'} size={18} color="#c4c4c4" style={{marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}} />
                   </View>
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity activeOpacity={0.8} onPress={() => {}}>
+              <TouchableOpacity activeOpacity={0.8} onPress={showSummary}>
                 <MaterialIcon name="arrow-forward-ios" size={20} color="#fff" />
               </TouchableOpacity>
             </View>

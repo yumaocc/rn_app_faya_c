@@ -14,9 +14,9 @@ import Order from '../screen/spu/Order';
 import OrderList from '../screen/mine/OrderList';
 import OrderDetail from '../screen/mine/OrderDetail';
 import Wallet from '../screen/mine/Wallet';
-
-// import RouterSPU from './RouterSPU';
-// import RouterMerchant from './RouterMerchant';
+import WalletSummary from '../screen/mine/WalletSummary';
+import WalletSummaryAgent from '../screen/mine/WalletSummaryAgent';
+import Withdrawal from '../screen/mine/Withdrawal';
 
 const Navigator: React.FC = () => {
   const token = useSelector((state: RootState) => state.common.token);
@@ -31,6 +31,9 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="OrderList" component={OrderList} options={commonScreenOptions} />
           <Stack.Screen name="OrderDetail" component={OrderDetail} options={commonScreenOptions} />
           <Stack.Screen name="Wallet" component={Wallet} options={commonScreenOptions} />
+          <Stack.Screen name="WalletSummary" component={WalletSummary} options={commonScreenOptions} />
+          <Stack.Screen name="WalletSummaryAgent" component={WalletSummaryAgent} options={commonScreenOptions} />
+          <Stack.Screen name="Withdrawal" component={Withdrawal} options={commonScreenOptions} />
         </>
       ) : (
         <>

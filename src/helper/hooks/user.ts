@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {useForceUpdate} from '../../fst/hooks';
-import {CouponF, WalletInfo} from '../../models';
+import {CouponF, WalletInfo, WalletSummary} from '../../models';
 import {RootState} from '../../redux/reducers';
 import {useUserDispatcher} from './dispatchers';
 
@@ -27,4 +27,16 @@ export function useCoupons(): [CouponF[], () => void] {
   }, [signal, userDispatcher]);
 
   return [coupons, force];
+}
+
+export function useWalletSummary(): [WalletSummary, () => void] {
+  const [signal, force] = useForceUpdate();
+  const walletSummary: WalletSummary = useSelector((state: RootState) => state.user.walletSummary);
+  const [userDispatcher] = useUserDispatcher();
+
+  useEffect(() => {
+    userDispatcher.getWalletSummary();
+  }, [signal, userDispatcher]);
+
+  return [walletSummary, force];
 }

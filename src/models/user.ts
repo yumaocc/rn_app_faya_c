@@ -60,3 +60,19 @@ export interface MineDetail {
     likeNums: number;
   };
 }
+
+export enum UserLevel {
+  NORMAL = 0,
+}
+
+export interface WalletSummary {
+  level: UserLevel;
+  canWithdrawalMoney: number;
+  canWithdrawalMoneyYuan: string;
+  earningsToday: number;
+  earningsTodayYuan: string;
+  stagingMoney: number;
+  stagingMoneyYuan: string;
+  totalMoney: number;
+  totalMoneyYuan: string;
+}

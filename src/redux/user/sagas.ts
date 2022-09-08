@@ -51,6 +51,15 @@ function* getMyDetail(): any {
   }
 }
 
+function* getWalletSummary(): any {
+  try {
+    const summary = yield call(api.user.getWalletSummary);
+    yield put(Actions.getWalletSummarySuccess(summary));
+  } catch (error) {
+    yield put(CommonActions.error(error));
+  }
+}
+
 function* watchUserSagas() {
   yield takeLatest(ActionType.INIT, initUser);
   yield takeLatest(ActionType.LOGOUT, logout);
@@ -58,6 +67,7 @@ function* watchUserSagas() {
   yield takeLatest(ActionType.GET_WALLET_INFO, getWalletInfo);
   yield takeLatest(ActionType.GET_COUPON_LIST, getCouponList);
   yield takeLatest(ActionType.GET_MINE_DETAIL, getMyDetail);
+  yield takeLatest(ActionType.GET_WALLET_SUMMARY, getWalletSummary);
 }
 
 export default function* userSagas() {
