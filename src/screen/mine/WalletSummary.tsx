@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../component';
@@ -10,13 +10,9 @@ import {FakeNavigation} from '../../models';
 
 const WalletSummary: React.FC = () => {
   const [showReal, setShowReal] = React.useState(true);
-  const [walletSummary, updateWalletSummary] = useWalletSummary();
+  const [walletSummary] = useWalletSummary();
 
   const navigation = useNavigation<FakeNavigation>();
-
-  useEffect(() => {
-    updateWalletSummary();
-  }, [updateWalletSummary]);
 
   return (
     <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#fff'}}>

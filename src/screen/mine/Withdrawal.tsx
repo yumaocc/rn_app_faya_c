@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -11,11 +11,7 @@ const Withdrawal: React.FC = () => {
   const bankCard = [1];
   const [cashMoney, setCashMoney] = React.useState(0);
   const [showSelectBank, setShowSelectBank] = React.useState(false);
-  const [walletSummary, updateSummary] = useWalletSummary();
-
-  useEffect(() => {
-    updateSummary();
-  }, [updateSummary]);
+  const [walletSummary] = useWalletSummary();
 
   function addBankCard() {
     console.log('新建银行卡');

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -10,14 +10,10 @@ import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../models';
 
 const Wallet: React.FC = () => {
-  const [wallet, updateWallet] = useWallet();
-  const [showReal, setShowReal] = React.useState(false);
+  const [wallet] = useWallet();
+  const [showReal, setShowReal] = React.useState(true);
 
   const navigation = useNavigation<FakeNavigation>();
-
-  useEffect(() => {
-    updateWallet();
-  }, [updateWallet]);
 
   function showSummary() {
     // todo: 判断是否是代理

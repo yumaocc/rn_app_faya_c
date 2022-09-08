@@ -25,15 +25,17 @@ export function resetToken(token: string) {
   axios.defaults.headers.common.token = token;
 }
 
-axios.interceptors.request.use((config: AxiosRequestConfig) => {
-  const {baseURL, url, data} = config;
-  console.log('request', {baseURL, url, data});
-  return config;
-});
+// axios.interceptors.request.use((config: AxiosRequestConfig) => {
+//   const {baseURL, url, data} = config;
+//   console.log('request', {baseURL, url, data});
+//   return config;
+// });
 
 axios.interceptors.response.use((response: AxiosResponse) => {
   const {data} = response;
-  // console.log(response.data);
+  console.log(`接口： ${response.config.url}请求成功：`);
+  console.log('response', response.data?.data);
+
   switch (data.code) {
     case 8000:
       // fixme: 导航怎么办
