@@ -54,7 +54,7 @@ const Discover: React.FC = () => {
               </View>
             </View>
             <View style={[globalStyles.tagWrapper, globalStyles.moduleMarginLeft]}>
-              <Text style={[globalStyles.tag, {color: globalStyleVariables.COLOR_WARNING}]}>4.5折</Text>
+              <Text style={[globalStyles.tag, {color: globalStyleVariables.COLOR_WARNING_YELLOW}]}>4.5折</Text>
             </View>
           </View>
           <View style={[globalStyles.halfModuleMarginTop, globalStyles.containerLR]}>

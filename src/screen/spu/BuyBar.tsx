@@ -27,7 +27,7 @@ const BuyBar: React.FC<BuyBarProps> = props => {
           <View style={styles.action}>
             {collected ? (
               <>
-                <Icon name="star" size={24} color={globalStyleVariables.COLOR_WARNING} />
+                <Icon name="star" size={24} color={globalStyleVariables.COLOR_WARNING_YELLOW} />
                 <Text style={styles.actionText}>已收藏</Text>
               </>
             ) : (
@@ -60,7 +60,7 @@ const BuyBar: React.FC<BuyBarProps> = props => {
           onPress={onShare}
           style={[styles.button, {backgroundColor: globalStyleVariables.COLOR_BUD, borderColor: globalStyleVariables.COLOR_BUD, marginRight: globalStyleVariables.MODULE_SPACE}]}
         />
-        <Button disabled={sku.saleStatus !== SKUSaleState.ON_SALE} title="立即购买" style={[styles.button]} containerStyle={{flex: 1}} onPress={onBuy} />
+        <Button disabled={sku?.saleStatus !== SKUSaleState.ON_SALE} title="立即购买" style={[styles.button]} containerStyle={{flex: 1}} onPress={onBuy} />
       </View>
     </View>
   );

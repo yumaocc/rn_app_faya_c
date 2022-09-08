@@ -13,5 +13,8 @@ export interface AppHeader {
 }
 export type StylePropText = StyleProp<TextStyle>;
 export type StylePropView = StyleProp<ViewStyle>;
+export type StylesProp = {
+  [key: string]: StylePropText | StylePropView;
+};
 
 export type CacheKeys = 'token' | 'phone';

@@ -1,11 +1,14 @@
 import {StyleSheet} from 'react-native';
 
 export const globalStyleVariables = {
-  COLOR_PRIMARY: '#FF5934',
+  COLOR_PRIMARY: '#FF5934', // ST-橙
   COLOR_PRIMARY_TAP: '#FF593466',
   COLOR_WARNING: '#FF7715',
+  COLOR_WARNING_RED: '#FF6060', // 提醒-红
+  COLOR_WARNING_YELLOW: '#FF7715', // 提示的黄
   COLOR_DANGER: '#F44336',
-  COLOR_BUD: '#5FBC7F',
+  COLOR_BUD: '#5FBC7F', // 绿芽-绿
+  COLOR_CASH: '#4AB87D', // 绿
   TEXT_COLOR_PRIMARY: '#333',
   TEXT_COLOR_SECONDARY: '#666',
   TEXT_COLOR_TERTIARY: '#999',

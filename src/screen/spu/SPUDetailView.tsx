@@ -74,7 +74,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
 
   function renderSKU(sku: SKUDetail) {
     const isActive = (currentSelect as SKUDetail)?.id === sku.id;
-    const disabled = sku.saleStatus !== SKUSaleState.ON_SALE;
+    const disabled = sku?.saleStatus !== SKUSaleState.ON_SALE;
     if (!disabled) {
       return (
         <TouchableOpacity activeOpacity={0.8} key={'sku_' + sku.id} onPress={() => handleClick(sku)}>
@@ -87,7 +87,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
   }
   function renderPackage(pkg: PackageDetail) {
     const isActive = (currentSelect as PackageDetail)?.packageId === pkg.packageId;
-    const disabled = pkg.saleStatus !== SKUSaleState.ON_SALE;
+    const disabled = pkg?.saleStatus !== SKUSaleState.ON_SALE;
     if (!disabled) {
       return (
         <TouchableOpacity activeOpacity={0.8} key={'pkg_' + pkg.packageId} onPress={() => handleClick(pkg, true)}>

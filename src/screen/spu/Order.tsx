@@ -295,10 +295,4 @@ export const styles = StyleSheet.create({
   formItem: {
     paddingVertical: 7,
   },
-  t: {
-    backgroundColor: '#6cf',
-    padding: 0,
-    lineHeight: 30,
-    includeFontPadding: false,
-  },
 });
