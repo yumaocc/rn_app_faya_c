@@ -1,9 +1,10 @@
 import React from 'react';
 import {useCallback} from 'react';
 import {useEffect} from 'react';
-import {View, Modal, TouchableWithoutFeedback, StyleSheet, BackHandler} from 'react-native';
+import {View, StyleSheet, BackHandler} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StylePropView} from '../models';
+import Modal from 'react-native-modal';
 
 interface PopupProps {
   visible: boolean;
@@ -15,9 +16,6 @@ interface PopupProps {
 const Popup: React.FC<PopupProps> = props => {
   const {onClose} = props;
   const {bottom} = useSafeAreaInsets();
-  function handleClickMask() {
-    handleClose();
-  }
 
   const handleClose = useCallback(() => {
     onClose && onClose();
@@ -32,10 +30,7 @@ const Popup: React.FC<PopupProps> = props => {
   }, [handleClose]);
 
   return (
-    <Modal visible={props.visible} transparent animationType="slide">
-      <TouchableWithoutFeedback onPress={handleClickMask}>
-        <View style={[styles.container, props.maskStyle]} />
-      </TouchableWithoutFeedback>
+    <Modal isVisible={props.visible} style={styles.container} onBackdropPress={handleClose} onBackButtonPress={handleClose} useNativeDriver={true}>
       <View style={styles.body}>
         {React.Children.map(props.children, child => {
           const typedChild = child as React.ReactElement;
@@ -59,6 +54,8 @@ export default Popup;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    margin: 0,
+    justifyContent: 'flex-end',
   },
   body: {
     width: '100%',

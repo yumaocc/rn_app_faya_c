@@ -2,12 +2,13 @@ import React from 'react';
 import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {Button, InputNumber, NavigationBar} from '../../component';
+import {Button, InputNumber, NavigationBar, Select} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 
 const Withdrawal: React.FC = () => {
   const bankCard = [1];
   const [cashMoney, setCashMoney] = React.useState(0);
+  const [id, setId] = React.useState(1);
 
   return (
     <>
@@ -63,6 +64,14 @@ const Withdrawal: React.FC = () => {
                 </View>
               </View>
             )}
+            <Select
+              options={[
+                {label: '建行1', value: 1},
+                {label: '农行1', value: 2},
+              ]}
+              value={id}
+              onChange={setId}
+            />
           </View>
         </ScrollView>
       </SafeAreaView>
