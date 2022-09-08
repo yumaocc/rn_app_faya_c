@@ -8,7 +8,7 @@ import Modal from 'react-native-modal';
 
 interface PopupProps {
   visible: boolean;
-  maskStyle?: StylePropView;
+  style?: StylePropView;
   children?: React.ReactNode;
   onClose: () => void;
 }
@@ -31,19 +31,7 @@ const Popup: React.FC<PopupProps> = props => {
 
   return (
     <Modal isVisible={props.visible} style={styles.container} onBackdropPress={handleClose} onBackButtonPress={handleClose} useNativeDriver={true}>
-      <View style={styles.body}>
-        {React.Children.map(props.children, child => {
-          const typedChild = child as React.ReactElement;
-          const childStyle = typedChild?.props?.style || {};
-          const mergedStyle = {
-            ...childStyle,
-            paddingBottom: bottom,
-          };
-          return React.cloneElement(child as React.ReactElement, {
-            style: mergedStyle,
-          });
-        })}
-      </View>
+      <View style={[styles.body, {paddingBottom: bottom}, props.style]}>{props.children}</View>
     </Modal>
   );
 };
