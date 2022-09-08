@@ -6,12 +6,14 @@ import {Button, InputNumber, NavigationBar, Popup} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {stringToNumber} from '../../fst/helper';
 import {useWalletSummary} from '../../helper/hooks';
+import Popover from 'react-native-popover-view';
 
 const Withdrawal: React.FC = () => {
   const bankCard = [1];
   const [cashMoney, setCashMoney] = React.useState(0);
   const [showSelectBank, setShowSelectBank] = React.useState(false);
   const [walletSummary] = useWalletSummary();
+  const [showMenu, setShowMenu] = React.useState(false);
 
   function addBankCard() {
     console.log('新建银行卡');
@@ -29,9 +31,33 @@ const Withdrawal: React.FC = () => {
         <NavigationBar
           title="提现"
           headerRight={
-            <TouchableOpacity activeOpacity={0.8}>
-              <MaterialIcon name="more-horiz" size={24} color="#333" style={{marginRight: 20}} />
-            </TouchableOpacity>
+            <Popover
+              isVisible={showMenu}
+              onRequestClose={() => setShowMenu(false)}
+              animationConfig={{
+                delay: 0,
+                duration: 200,
+              }}
+              from={
+                <TouchableOpacity activeOpacity={0.8} onPress={() => setShowMenu(true)}>
+                  <MaterialIcon name="more-horiz" size={24} color="#333" style={{marginRight: 20}} />
+                </TouchableOpacity>
+              }
+              backgroundStyle={{backgroundColor: '#00000011'}}
+              arrowSize={{width: 0, height: 0}}>
+              <View style={styles.popoverMenu}>
+                <TouchableOpacity activeOpacity={0.8} onPress={() => setShowMenu(false)}>
+                  <View style={styles.popoverItem}>
+                    <Text style={styles.popoverText}>提现记录</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.8}>
+                  <View style={styles.popoverItem}>
+                    <Text style={styles.popoverText}>常见疑问</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </Popover>
           }
         />
         <ScrollView style={[{flex: 1}]}>
@@ -141,6 +167,23 @@ const styles = StyleSheet.create({
     height: 48,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: globalStyleVariables.BORDER_COLOR,
+  },
+  popoverMenu: {
+    padding: globalStyleVariables.MODULE_SPACE,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    width: 100,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: globalStyleVariables.BORDER_COLOR,
+  },
+  popoverItem: {
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  popoverText: {
+    fontSize: 15,
+    color: globalStyleVariables.TEXT_COLOR_PRIMARY,
   },
 });
 

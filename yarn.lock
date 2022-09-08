@@ -2887,7 +2887,7 @@ depd@2.0.0:
   resolved "https://registry.npmmirror.com/depd/-/depd-2.0.0.tgz#b696163cc757560d09cf22cc8fad1571b79e76df"
   integrity sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==
 
-deprecated-react-native-prop-types@^2.2.0:
+deprecated-react-native-prop-types@^2.2.0, deprecated-react-native-prop-types@^2.3.0:
   version "2.3.0"
   resolved "https://registry.npmmirror.com/deprecated-react-native-prop-types/-/deprecated-react-native-prop-types-2.3.0.tgz#c10c6ee75ff2b6de94bb127f142b814e6e08d9ab"
   integrity sha512-pWD0voFtNYxrVqvBMYf5gq3NA2GCpfodS1yNynTPc93AYA/KEMGeWDqqeUB6R2Z9ZofVhks2aeJXiuQqKNpesA==
@@ -6262,6 +6262,14 @@ react-native-pager-view@^5.4.25:
   version "5.4.25"
   resolved "https://registry.npmmirror.com/react-native-pager-view/-/react-native-pager-view-5.4.25.tgz#cd639d5387a7f3d5581b55a33c5faa1cbc200f97"
   integrity sha512-3drrYwaLat2fYszymZe3nHMPASJ4aJMaxiejfA1V5SK3OygYmdtmV2u5prX7TnjueJzGSyyaCYEr2JlrRt4YPg==
+
+react-native-popover-view@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.npmmirror.com/react-native-popover-view/-/react-native-popover-view-5.1.2.tgz#eb71571b26024dcf612111161fdd382f7a1acc4e"
+  integrity sha512-c6UAaBcG7hHABNPhWPbper5RkcR2YCYgvw2GS/+YNQ248qr+kCT4xaPy8Zh/Rca4Kn/7cQMc+rr3F4ppBVV8cA==
+  dependencies:
+    deprecated-react-native-prop-types "^2.3.0"
+    prop-types "^15.8.1"
 
 react-native-qrcode-svg@^6.1.2:
   version "6.1.2"

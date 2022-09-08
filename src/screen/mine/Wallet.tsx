@@ -53,7 +53,7 @@ const Wallet: React.FC = () => {
             </View>
             <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
               <Text>
-                <Text style={[globalStyles.fontPrimary, {color: '#fff', fontSize: 40}]}>{showReal ? wallet.moneyYuan : '******'}</Text>
+                <Text style={[globalStyles.fontPrimary, {color: '#fff', fontSize: 40}]}>{showReal ? wallet?.moneyYuan ?? '-' : '******'}</Text>
                 <Text style={[globalStyles.fontTertiary, {color: '#fff'}]}>{showReal ? '个' : ''}</Text>
               </Text>
             </View>
