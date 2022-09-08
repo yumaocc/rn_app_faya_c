@@ -7,6 +7,7 @@ import {useRefCallback} from '../../fst/hooks';
 import {useParams} from '../../helper/hooks';
 import QRCode from 'react-native-qrcode-svg';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import SwipeView, {SwipeDirection} from '../../component/SwipeView';
 
 const MyCode: React.FC = () => {
   const {type} = useParams<{type: 'friend' | 'share'}>();
@@ -28,6 +29,17 @@ const MyCode: React.FC = () => {
     }, 0);
   }, [currentType, isReady, ref, windowWidth]);
 
+  function handleSwipe(direction: SwipeDirection) {
+    switch (direction) {
+      case SwipeDirection.LEFT:
+        setCurrentType('share');
+        break;
+      case SwipeDirection.RIGHT:
+        setCurrentType('friend');
+        break;
+    }
+  }
+
   return (
     <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
       <NavigationBar
@@ -47,7 +59,7 @@ const MyCode: React.FC = () => {
         }
       />
       <ScrollView ref={setRef} horizontal style={{flex: 1}} snapToInterval={windowWidth} showsHorizontalScrollIndicator={false} scrollEnabled={false}>
-        <View style={[styles.codeContainer, {width: windowWidth}]}>
+        <SwipeView style={[styles.codeContainer, {width: windowWidth}]} onSwipe={handleSwipe}>
           <View style={styles.avatar} />
           <View style={{marginTop: 20}}>
             <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>成都美食xxx</Text>
@@ -64,8 +76,8 @@ const MyCode: React.FC = () => {
               <Text style={[globalStyles.fontPrimary]}>保存到本地</Text>
             </View>
           </TouchableOpacity>
-        </View>
-        <View style={[styles.codeContainer, {width: windowWidth}]}>
+        </SwipeView>
+        <SwipeView style={[styles.codeContainer, {width: windowWidth}]} onSwipe={handleSwipe}>
           <View style={styles.avatar} />
           <View style={{marginTop: 20}}>
             <Text style={[globalStyles.fontPrimary]}>成都250</Text>
@@ -85,7 +97,7 @@ const MyCode: React.FC = () => {
               <Text style={[globalStyles.fontPrimary]}>保存到本地</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </SwipeView>
       </ScrollView>
     </SafeAreaView>
   );
