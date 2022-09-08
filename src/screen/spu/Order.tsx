@@ -48,9 +48,9 @@ const Order: React.FC = () => {
 
   const salePrice = useMemo(() => {
     if (currentSkuIsPackage) {
-      return (sku as PackageDetail)?.packageSalePrice;
+      return (sku as PackageDetail)?.packageSalePrice || 0;
     } else {
-      return (sku as SKUDetail)?.salePrice;
+      return (sku as SKUDetail)?.salePrice || 0;
     }
   }, [sku, currentSkuIsPackage]);
 
@@ -104,7 +104,7 @@ const Order: React.FC = () => {
   }, [currentSelectedCoupon, form, totalPrice]);
 
   const poster = useMemo(() => {
-    if (spu.posters?.length) {
+    if (spu?.posters?.length) {
       return spu.posters[0];
     }
   }, [spu]);

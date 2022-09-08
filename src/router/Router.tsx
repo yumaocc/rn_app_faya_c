@@ -13,6 +13,7 @@ import SPUDetail from '../screen/spu/SPUDetail';
 import Order from '../screen/spu/Order';
 import OrderList from '../screen/mine/OrderList';
 import OrderDetail from '../screen/mine/OrderDetail';
+import Wallet from '../screen/mine/Wallet';
 
 // import RouterSPU from './RouterSPU';
 // import RouterMerchant from './RouterMerchant';
@@ -20,10 +21,17 @@ import OrderDetail from '../screen/mine/OrderDetail';
 const Navigator: React.FC = () => {
   const token = useSelector((state: RootState) => state.common.token);
   const isLogout = useSelector((state: RootState) => state.user.isLogout);
+  // 注意路由顺序
   return (
     <Stack.Navigator>
+      <Stack.Screen name="Tab" component={TabNavigator} options={commonScreenOptions} />
       {token ? (
-        <></>
+        <>
+          <Stack.Screen name="Order" component={Order} options={commonScreenOptions} />
+          <Stack.Screen name="OrderList" component={OrderList} options={commonScreenOptions} />
+          <Stack.Screen name="OrderDetail" component={OrderDetail} options={commonScreenOptions} />
+          <Stack.Screen name="Wallet" component={Wallet} options={commonScreenOptions} />
+        </>
       ) : (
         <>
           <Stack.Screen
@@ -36,12 +44,8 @@ const Navigator: React.FC = () => {
           />
         </>
       )}
-      <Stack.Screen name="Tab" component={TabNavigator} options={commonScreenOptions} />
       <Stack.Screen name="WorkDetail" component={WorkDetail} options={commonScreenOptions} />
       <Stack.Screen name="SPUDetail" component={SPUDetail} options={commonScreenOptions} />
-      <Stack.Screen name="Order" component={Order} options={commonScreenOptions} />
-      <Stack.Screen name="OrderList" component={OrderList} options={commonScreenOptions} />
-      <Stack.Screen name="OrderDetail" component={OrderDetail} options={commonScreenOptions} />
     </Stack.Navigator>
   );
 };

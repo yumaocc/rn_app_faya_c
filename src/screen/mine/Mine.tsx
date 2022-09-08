@@ -110,7 +110,7 @@ const Mine: React.FC = () => {
                   <Text>订单</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
+              <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={() => navigation.navigate('Wallet')}>
                 <View style={[globalStyles.containerRow]}>
                   <View style={[globalStyles.containerCenter, styles.entry]}>
                     <MaterialIcon name="account-balance-wallet" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />

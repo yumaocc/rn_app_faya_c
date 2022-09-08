@@ -17,6 +17,7 @@ export type RootStackParamList = {
   Order: IDBody;
   OrderList: {state?: OrderStatus};
   OrderDetail: IDBody;
+  Wallet: undefined;
 };
 
 export type Props = NativeStackScreenProps<RootStackParamList>;
