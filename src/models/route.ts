@@ -21,6 +21,7 @@ export type RootStackParamList = {
   WalletSummary: undefined;
   WalletSummaryAgent: undefined;
   Withdrawal: undefined;
+  MyCode: {type: 'friend' | 'share'};
 };
 
 export type Props = NativeStackScreenProps<RootStackParamList>;

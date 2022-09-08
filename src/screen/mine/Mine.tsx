@@ -55,8 +55,12 @@ const Mine: React.FC = () => {
           <View style={[globalStyles.containerLR, {position: 'absolute', top: top + 20, width: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             <Icon name="scan" size={24} color="#fff" />
             <View style={globalStyles.containerLR}>
-              <Icon name="qrcode" size={24} color="#fff" />
-              <Icon name="menu" size={24} color="#fff" style={{marginLeft: globalStyleVariables.MODULE_SPACE}} />
+              <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('MyCode')}>
+                <Icon name="qrcode" size={24} color="#fff" />
+              </TouchableOpacity>
+              <TouchableOpacity style={{marginLeft: globalStyleVariables.MODULE_SPACE}} activeOpacity={0.8}>
+                <Icon name="menu" size={24} color="#fff" />
+              </TouchableOpacity>
             </View>
           </View>
           <View style={{borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: '#fff'}}>

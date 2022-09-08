@@ -3,6 +3,7 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StylePropView} from '../models';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 interface NavigationBarProps {
   title?: string | React.ReactNode;
@@ -28,7 +29,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
     return (
       <TouchableOpacity activeOpacity={0.5} onPress={handleBack}>
         <View style={styles.defaultLeft}>
-          <View style={[styles.arrow, {borderColor: props.color}]} />
+          <MaterialIcon name="arrow-back-ios" size={24} color={props.color} />
         </View>
       </TouchableOpacity>
     );
@@ -93,7 +94,6 @@ const styles = StyleSheet.create({
     height: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingRight: 10,
   },
   title: {
     flex: 1,
@@ -102,20 +102,14 @@ const styles = StyleSheet.create({
   },
   defaultLeft: {
     alignItems: 'center',
-    flexDirection: 'row',
+    justifyContent: 'center',
     height: '100%',
-    paddingHorizontal: 10,
+    width: 24,
+    paddingLeft: 10,
+    // paddingHorizontal: 10,
   },
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  arrow: {
-    width: 12,
-    height: 12,
-    marginRight: 5,
-    borderTopWidth: 2,
-    borderLeftWidth: 2,
-    transform: [{rotate: '-45deg'}],
   },
 });
