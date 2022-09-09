@@ -1,19 +1,40 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {View, Text, TouchableOpacity, ScrollView, useWindowDimensions, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useRefCallback} from '../../fst/hooks';
-import {useParams} from '../../helper/hooks';
+import {useCommonDispatcher, useParams} from '../../helper/hooks';
 import QRCode from 'react-native-qrcode-svg';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import SwipeView, {SwipeDirection} from '../../component/SwipeView';
+import * as api from '../../apis';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../redux/reducers';
 
 const MyCode: React.FC = () => {
   const {type} = useParams<{type: 'friend' | 'share'}>();
   const [currentType, setCurrentType] = React.useState<'friend' | 'share'>(type || 'friend');
   const {width: windowWidth} = useWindowDimensions();
   const [ref, setRef, isReady] = useRefCallback();
+  const [codeInfo, setCodeInfo] = React.useState<{datingQrCodeUrl: string; shareQrCodeUrl: string}>();
+  const userInfo = useSelector((state: RootState) => state.user.myDetail);
+
+  const [commonDispatcher] = useCommonDispatcher();
+
+  const checkCode = useCallback(async () => {
+    try {
+      const res = await api.user.getCodeUrl();
+      // const {datingQrCodeUrl, shareQrCodeUrl} = res;
+      setCodeInfo(res);
+    } catch (error) {
+      commonDispatcher.error(error);
+    }
+  }, [commonDispatcher]);
+
+  useEffect(() => {
+    checkCode();
+  }, [checkCode]);
 
   useEffect(() => {
     if (!isReady) {
@@ -62,10 +83,10 @@ const MyCode: React.FC = () => {
         <SwipeView style={[styles.codeContainer, {width: windowWidth}]} onSwipe={handleSwipe}>
           <View style={styles.avatar} />
           <View style={{marginTop: 20}}>
-            <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>成都美食xxx</Text>
+            <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{userInfo?.nickName}</Text>
           </View>
           <View style={{marginTop: 30}}>
-            <QRCode value="https://www.baidu.com" size={250} />
+            <QRCode value={codeInfo?.datingQrCodeUrl} size={250} />
           </View>
           <View style={{marginTop: 20}}>
             <Text style={globalStyles.fontPrimary}>扫描二维码，立刻关注我</Text>
@@ -80,13 +101,13 @@ const MyCode: React.FC = () => {
         <SwipeView style={[styles.codeContainer, {width: windowWidth}]} onSwipe={handleSwipe}>
           <View style={styles.avatar} />
           <View style={{marginTop: 20}}>
-            <Text style={[globalStyles.fontPrimary]}>成都250</Text>
+            <Text style={[globalStyles.fontPrimary]}>{userInfo?.nickName}</Text>
           </View>
           <View style={{marginTop: 20}}>
             <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>邀请你注册发芽</Text>
           </View>
           <View style={{marginTop: 30}}>
-            <QRCode value="https://www.baidu.com" size={250} />
+            <QRCode value={codeInfo?.shareQrCodeUrl} size={250} />
           </View>
           <View style={{marginTop: 20}}>
             <Text style={globalStyles.fontPrimary}>扫描二维码，开启美好生活</Text>

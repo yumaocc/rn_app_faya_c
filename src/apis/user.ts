@@ -30,3 +30,7 @@ export async function getCouponList(): Promise<CouponF[]> {
 export async function getMineDetail(): Promise<MineDetail> {
   return await post('/user/mine/info');
 }
+
+export async function getCodeUrl(): Promise<{datingQrCodeUrl: string; shareQrCodeUrl: string}> {
+  return await post('/user/qr/result');
+}
