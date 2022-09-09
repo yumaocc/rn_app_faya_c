@@ -1,4 +1,10 @@
 PODS:
+  - AliyunOSSiOS (2.10.15)
+  - AliyunVideoSDKStd (3.33.0):
+    - AliyunVideoSDKStd/all (= 3.33.0)
+  - AliyunVideoSDKStd/all (3.33.0):
+    - QuCore-ThirdParty (~> 4.3.2)
+    - VODUpload (~> 1.6.6)
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -78,6 +84,7 @@ PODS:
   - PromisesObjC (2.1.1)
   - PromisesSwift (2.1.1):
     - PromisesObjC (= 2.1.1)
+  - QuCore-ThirdParty (4.3.2.1)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -287,6 +294,10 @@ PODS:
   - React-jsinspector (0.69.2)
   - React-logger (0.69.2):
     - glog
+  - react-native-aliyun-video (0.1.0):
+    - AliyunVideoSDKStd
+    - React-Core
+    - VODUpload
   - react-native-cameraroll (4.1.2):
     - React-Core
   - react-native-image-picker (4.8.4):
@@ -387,6 +398,8 @@ PODS:
   - RNSVG (13.1.0):
     - React-Core
   - SocketRocket (0.6.0)
+  - VODUpload (1.6.6):
+    - AliyunOSSiOS
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -435,6 +448,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-aliyun-video (from `../node_modules/react-native-aliyun-video`)
   - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -463,6 +477,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AliyunOSSiOS
+    - AliyunVideoSDKStd
     - CocoaAsyncSocket
     - Flipper
     - Flipper-Boost-iOSX
@@ -478,7 +494,9 @@ SPEC REPOS:
     - OpenSSL-Universal
     - PromisesObjC
     - PromisesSwift
+    - QuCore-ThirdParty
     - SocketRocket
+    - VODUpload
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -520,6 +538,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-aliyun-video:
+    :path: "../node_modules/react-native-aliyun-video"
   react-native-cameraroll:
     :path: "../node_modules/@react-native-community/cameraroll"
   react-native-image-picker:
@@ -572,6 +592,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  AliyunOSSiOS: 5d7c50ce7b39b2b0b10f603a5971cccb0f25eee2
+  AliyunVideoSDKStd: c5844820be52db40840abe84f030e93d2023fd6a
   boost: a7c83b31436843459a1961bfd74b96033dc77234
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
@@ -592,6 +614,7 @@ SPEC CHECKSUMS:
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   PromisesSwift: 99fddfe4a0ec88a56486644c0da106694c92a604
+  QuCore-ThirdParty: c94982b619c63f68c05b7778c5deb03127b4f954
   RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
   RCTRequired: b723d4d6da2795df58189a01f92856b6912cf256
   RCTTypeSafety: 3973d2fcf39f43f7819e840d56ea6b2fe45996a0
@@ -606,6 +629,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 7c23e92591431ac925f430b3118de934cb816ac0
   React-jsinspector: 31e53f048cc8f32605de36981903a7bbf9456892
   React-logger: 9a6c684d5cd56c4129e0c2842dba75c4bfb1e981
+  react-native-aliyun-video: f6137f18250978fe5d2f570e211a395c0f9d9495
   react-native-cameraroll: 2957f2bce63ae896a848fbe0d5352c1bd4d20866
   react-native-image-picker: cffb727cf2f59bd5c0408e30b3dbe0b935f88835
   react-native-pager-view: da490aa1f902c9a5aeecf0909cc975ad0e92e53e
@@ -631,9 +655,10 @@ SPEC CHECKSUMS:
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
   RNSVG: 1153e8eeb34c788841016c517dba9f57f20b762f
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
+  VODUpload: 57651539af6a40a5d74c3e1b26165251b670a388
   Yoga: 236056dd74cda4d9d76c20306fd8c20bb087614d
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: ede903d09cf53013e357834d2abf0a8f713a6e7f
+PODFILE CHECKSUM: 6e4780a3105217b874e2e35fa8ad2cca6b6ca967
 
 COCOAPODS: 1.11.3
