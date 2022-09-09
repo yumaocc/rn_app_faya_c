@@ -39,3 +39,8 @@ $ pod install
 yarn add @react-native-community/cameraroll @react-native-picker/picker @react-native-community/segmented-control @react-native-community/slider react-native-pager-view react-native-gesture-handler classnames fbjs rc-util
 
 ```
+
+```
+"react-native-aliyun-video": "git+ssh://git@e.coding.net:styy/app-for-user/react-native-aliyun-video.git#0.0.1",
+```
+

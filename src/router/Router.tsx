@@ -18,6 +18,7 @@ import WalletSummary from '../screen/mine/WalletSummary';
 import WalletSummaryAgent from '../screen/mine/WalletSummaryAgent';
 import Withdrawal from '../screen/mine/Withdrawal';
 import MyCode from '../screen/mine/MyCode';
+import ShootVideo from '../screen/home/ShootVideo';
 
 const Navigator: React.FC = () => {
   const token = useSelector((state: RootState) => state.common.token);
@@ -36,6 +37,7 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="WalletSummaryAgent" component={WalletSummaryAgent} options={commonScreenOptions} />
           <Stack.Screen name="Withdrawal" component={Withdrawal} options={commonScreenOptions} />
           <Stack.Screen name="MyCode" component={MyCode} options={commonScreenOptions} />
+          <Stack.Screen name="ShootVideo" component={ShootVideo} options={commonScreenOptions} />
         </>
       ) : (
         <>

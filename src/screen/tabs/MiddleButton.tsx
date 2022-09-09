@@ -1,11 +1,16 @@
 import {Icon} from '@ant-design/react-native';
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {globalStyleVariables} from '../../constants/styles';
+import {FakeNavigation} from '../../models';
 
 const MiddleButton: React.FC = () => {
+  const navigation = useNavigation<FakeNavigation>();
+
   function handleClick() {
     console.log('click');
+    navigation.navigate('ShootVideo');
   }
   return (
     <TouchableOpacity onPress={handleClick} style={styles.container} activeOpacity={0.9}>
