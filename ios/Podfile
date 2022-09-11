@@ -5,6 +5,7 @@ platform :ios, '12.4'
 install! 'cocoapods', :deterministic_uuids => false
 
 production = ENV["PRODUCTION"] == "1"
+pod 'AliyunVideoSDKStd', '~> 3.33.0'
 
 target 'faya' do
   config = use_native_modules!
@@ -37,4 +38,5 @@ target 'faya' do
       end
     end
   end
+  
 end

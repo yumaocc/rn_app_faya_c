@@ -42,5 +42,13 @@ yarn add @react-native-community/cameraroll @react-native-picker/picker @react-n
 
 ```
 "react-native-aliyun-video": "git+ssh://git@e.coding.net:styy/app-for-user/react-native-aliyun-video.git#0.0.1",
+
+
+yarn remove react-native-aliyun-video
+yarn add file:./../react-native-aliyun-video
+cd ios
+pod install
+cd ../
+yarn ios
 ```
 

@@ -11,11 +11,11 @@
   },
   "overrides": {
     "react-native": {
-      "react-devtools-core": "4.14.0"
+      "react-devtools-core": "4.25.0"
     }
   },
   "resolutions": {
-    "react-devtools-core": "4.14.0"
+    "react-devtools-core": "4.25.0"
   },
   "dependencies": {
     "@ant-design/react-native": "^5.0.0",
