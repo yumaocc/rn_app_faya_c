@@ -6,4 +6,5 @@ export const RecorderView: React.FC<RecorderViewProps> = Platform.select({
   ios: () => require('./RecorderViewIOS').default,
 })();
 
-export type {RecorderViewProps} from './types';
+export type {RecorderViewProps, RecorderErrorData, RecorderViewAction, RecorderViewRef, RecorderState, RecorderFinishData} from './types';
+export {RecorderViewActionType} from './types';

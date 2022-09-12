@@ -1,11 +1,12 @@
 import produce from 'immer';
-import {WorkTab, WorkTabType} from '../../models';
+import {VideoInfo, WorkTab, WorkTabType} from '../../models';
 import {WorkActions} from './actions';
 import {ActionType} from './types';
 
 export interface WorkState {
   tabs: WorkTab[];
   currentTab: WorkTab;
+  videoInfo?: VideoInfo;
 }
 
 export const initialState: WorkState = {
@@ -26,6 +27,10 @@ export default (state = initialState, action: WorkActions): WorkState => {
     case ActionType.CHANGE_TAB:
       return produce(state, draft => {
         draft.currentTab = action.payload;
+      });
+    case ActionType.SET_VIDEO_INFO:
+      return produce(state, draft => {
+        draft.videoInfo = action.payload;
       });
     default:
       return state;

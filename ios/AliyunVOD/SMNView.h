@@ -11,18 +11,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SMNView : UIView <AliyunIRecorderDelegate>
+@interface SMNView : UIView <AliyunIRecorderDelegate, AliyunVideoLicenseEventDelegate>
 
-@property (nonatomic, copy) RCTBubblingEventBlock onRecordReady;
-@property (nonatomic, copy) RCTBubblingEventBlock onRecordError;
-@property (nonatomic, copy) RCTBubblingEventBlock onRecordFinish;
-@property (nonatomic, copy) RCTBubblingEventBlock onRecordStop;
-
-@property (nonatomic, copy) RCTBubblingEventBlock onRecordProgress;
-@property (nonatomic, copy) RCTBubblingEventBlock onRecordFinishWithMaxDuration;
-
-@property (nonatomic, copy) RCTBubblingEventBlock onPreviewStop;
+@property (nonatomic, copy) RCTBubblingEventBlock onRecorderReady;
+@property (nonatomic, copy) RCTBubblingEventBlock onRecorderError;
 @property (nonatomic, copy) RCTBubblingEventBlock onPreviewStart;
+@property (nonatomic, copy) RCTBubblingEventBlock onPreviewStop;
+@property (nonatomic, copy) RCTBubblingEventBlock onRecordStart;
+@property (nonatomic, copy) RCTBubblingEventBlock onRecordProgress;
+@property (nonatomic, copy) RCTBubblingEventBlock onRecordStop;
+@property (nonatomic, copy) RCTBubblingEventBlock onRecordFinish;
+@property (nonatomic, copy) RCTBubblingEventBlock onRecordFinishWithMaxDuration;
+@property (nonatomic, copy) RCTBubblingEventBlock onRecorderStateChange;
+
+
 
 
 -(void) sentAction:(NSDictionary *) action;

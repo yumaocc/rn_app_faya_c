@@ -29,16 +29,26 @@
 
 @implementation RecordView
 
-RCT_EXPORT_MODULE(RecordView)
+RCT_EXPORT_MODULE(SMNRecordView)
 
-//RCT_EXPORT_VIEW_PROPERTY(type, NSString)
-RCT_EXPORT_VIEW_PROPERTY(onRecordError, RCTBubblingEventBlock)
+// 导出所有事件
+RCT_EXPORT_VIEW_PROPERTY(onRecorderError, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRecorderReady, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPreviewStart, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onPreviewStop, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRecordStart, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRecordProgress, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRecordStop, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRecordFinish, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRecordFinishWithMaxDuration, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onRecorderStateChange, RCTBubblingEventBlock)
+
 
 RCT_EXPORT_METHOD(sendAction: (nonnull NSNumber *)reactTag action:(NSDictionary *) action) {
   [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,SMNView *> *viewRegistry) {
     SMNView *view = viewRegistry[reactTag];
     if (!view || ![view isKindOfClass:[SMNView class]]) {
-      RCTLogError(@"类型错误， 请检查您的viewTag");
+      RCTLogError(@"类型错误， 请检查您的ref(reactTag)");
     } else {
       NSLog(@"去调用方法");
       dispatch_async(dispatch_get_main_queue(), ^{
@@ -47,6 +57,7 @@ RCT_EXPORT_METHOD(sendAction: (nonnull NSNumber *)reactTag action:(NSDictionary 
     }
   }];
 }
+
 //RCT_EXPORT_VIEW_PROPERTY(onHello, NSString)
 //RCT_EXPORT_VIEW_PROPERTY(onHello2, RCTBubblingEventBlock)
 //RCT_EXPORT_VIEW_PROPERTY(onRecordReady, RCTBubblingEventBlock)

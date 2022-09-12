@@ -10,6 +10,7 @@
 
 @interface SMNView()
 @property (nonatomic, strong) AliyunIRecorder *recorder;
+
 @end
 
 @implementation SMNView
@@ -30,18 +31,87 @@
 }
 
 -(void) setupSDK{
+  AliyunVideoLicenseManager.EventDelegate = self;
   [Util registerSDK:^(NSError * error) {
     if(error != nil) {
       NSLog(@"注册失败, %@", error.localizedDescription);
+      [self callbackError:error.localizedDescription withCode:0];
     } else {
       NSLog(@"注册成功！");
-//      [self.recorder startPreview];
+//      NSDictionary *state = [self checkRecorderState];
+      if (self.onRecorderReady) {
+        self.onRecorderReady(@{});
+      }
     }
   }];
 }
 
--(void) sentAction:(NSDictionary *) action {
-//  NSLog(@"call me start preview");
+// 检查状态，返回给前端的状态
+- (NSDictionary *) checkRecorderState {
+  AliyunIRecorderTorchMode torchMode = self.recorder.torchMode;
+  NSString * torchModeStr = torchMode == AliyunIRecorderTorchModeAuto ? @"auto" : torchMode == AliyunIRecorderTorchModeOn ? @"on" : @"off";
+  return @{
+    @"isRecording": @(self.recorder.isRecording),
+    @"torchMode": torchModeStr,
+  };
+}
+
+- (void) sentAction:(NSDictionary *) action {
+  NSLog(@"call action. %@", action);
+  NSString *type = action[@"type"];
+//  NSDictionary *payload = action[@"payload"];
+
+  if ([@"switchCamera" isEqualToString:type]) {
+    [self.recorder switchCameraPosition];
+  } else if ([@"startPreview" isEqualToString:type]) {
+    [self.recorder startPreview];
+  } else if ([@"stopPreview" isEqualToString:type]) {
+    [self.recorder stopPreview];
+  } else if ([@"startRecord" isEqualToString:type]) {
+    [self.recorder startRecording];
+  } else if ([@"pauseRecord" isEqualToString:type]) {
+    [self.recorder stopRecording];
+  } else if ([@"finishRecord" isEqualToString:type]) {
+    [self.recorder finishRecording];
+    // TODO: debug代码，请删除
+    if (self.onRecordFinish) {
+      self.onRecordFinish(@{
+        @"path": [[NSBundle mainBundle] pathForResource:@"moment" ofType:@"mp4"],
+      });
+    }
+  } else if ([@"torchOn" isEqualToString:type]) {
+    [self.recorder switchTorchWithMode:AliyunIRecorderTorchModeOn];
+  } else if ([@"torchOff" isEqualToString:type]) {
+    [self.recorder switchTorchWithMode:AliyunIRecorderTorchModeOff];
+  } else if ([@"muteOn" isEqualToString:type]) {
+    [self.recorder setMute:YES];
+  } else if ([@"muteOff" isEqualToString:type]) {
+    [self.recorder setMute:NO];
+  } else if ([@"checkState" isEqualToString:type]) {
+    NSDictionary * state = [self checkRecorderState];
+    NSLog(@"当前状态 = %@", state);
+    if (self.onRecorderStateChange) {
+      NSLog(@"有回调");
+      self.onRecorderStateChange(state);
+    } else {
+      NSLog(@"没有回调");
+    }
+  }
+//  else if ([@"focus" isEqualToString:type]) {
+//    [self.recorder focusAtPoint:CGPointMake(0.5, 0.5)];
+// } else if ([@"zoom" isEqualToString:type]) {
+//    [self.recorder zoom:action[@"payload"]];
+// } else if ([@"switchBeauty" isEqualToString:type]) {
+//    [self.recorder toggleBeauty];
+// } else if ([@"switchBeauty" isEqualToString:type]) {
+//    [self.recorder toggleBeauty];
+// } else if ([@"switchBeauty" isEqualToString:type]) {
+//    [self.recorder toggleBeauty];
+// } else if ([@"switchBeauty" isEqualToString:type]) {
+//    [self.recorder toggleBeauty];
+// } else if ([@"switchBeauty" isEqualToString:type]) {
+//    [self.recorder toggleBeauty];
+// }
 }
 
 - (AliyunIRecorder *)recorder {
@@ -78,17 +148,18 @@
             _recorder.clipManager.maxDuration = 15;
             _recorder.clipManager.minDuration = 1;
         }
+      NSLog(@"初始化成功");
     }
     return _recorder;
 }
 
 // 回调error
 - (void)callbackError:(NSString *)message withCode:(int)code {
-    if (self.onRecordError) {
-        self.onRecordError([Util generateDetail:@{
-            @"code": @(code),
-            @"message": message,
-        }]);
+    if (self.onRecorderError) {
+        self.onRecorderError(@{
+          @"code": @(code),
+          @"message": message,
+      });
     } else {
       NSLog(@"no error handle");
     }
@@ -118,25 +189,24 @@
 - (void)recorderVideoDuration:(CGFloat)duration {
     
     if (self.onRecordProgress) {
-        self.onRecordProgress([Util generateDetail:@{@"duration": @(duration)}]);
+      self.onRecordProgress(@{@"duration": @(duration)});
     }
 }
 // 录制停止
 - (void)recorderDidStopRecording{
     if (self.onRecordStop) {
-        self.onRecordStop([Util generateDetail:@{@"duration": @(self.recorder.clipManager.duration)}]);
+      self.onRecordStop(@{@"duration": @(self.recorder.clipManager.duration)});
     }
 }
 
 - (void)recorderDidFinishRecording {
-    //停止预览
     [self stopPreview];
     
     if (self.onRecordFinish) {
-        self.onRecordFinish([Util generateDetail:@{
-            @"duration": @(self.recorder.clipManager.duration),
-            @"path": self.recorder.outputPath,
-        }]);
+        self.onRecordFinish(@{
+          @"duration": @(self.recorder.clipManager.duration),
+          @"path": self.recorder.outputPath,
+      });
     }
 }
 
@@ -146,16 +216,16 @@
     NSLog(@"录制到最大时长");
 //    onRecordFinishWithMaxDuration
     if (self.onRecordFinishWithMaxDuration) {
-        self.onRecordFinishWithMaxDuration([Util generateDetail:@{
-            @"duration": @(self.recorder.clipManager.duration),
-            @"path": self.recorder.outputPath,
-        }]);
+        self.onRecordFinishWithMaxDuration(@{
+          @"duration": @(self.recorder.clipManager.duration),
+          @"path": self.recorder.outputPath,
+      });
     }
 }
 - (void)recorderDidStartPreview{
     NSLog(@"-------->开始预览");
     if (self.onPreviewStart) {
-        self.onPreviewStart([Util generateDetail:@{}]);
+      self.onPreviewStart(@{});
     }
 }
 // 录制异常
@@ -163,4 +233,32 @@
     NSLog(@"recoderError%@",error);
     [self callbackError:error.localizedDescription withCode:3];
 }
+
+# pragma mark - 证书回调
+- (void)onAliyunVideoLicenseCheckError:(AliyunVideoLicenseResultCode)errCode {
+  NSLog(@"证书回调code, %@", @(errCode));
+  switch (errCode) {
+    case AliyunVideoLicenseResultCodeSuccess:
+      NSLog(@"成功");
+      break;
+    case AliyunVideoLicenseResultCodeExpired:
+      [self callbackError:@"证书已失效" withCode:1];
+    default:
+      break;
+  }
+}
+
+- (void)onAliyunVideoLicenseFeatureCheck:(AliyunVideoFeatureType)featureType error:(AliyunVideoLicenseResultCode)errCode {
+  NSLog(@"增值服务回调错误");
+  switch (errCode) {
+    case AliyunVideoLicenseResultCodeSuccess:
+      NSLog(@"成功");
+      break;
+    case AliyunVideoLicenseResultCodeExpired:
+      [self callbackError:@"证书已失效" withCode:1];
+    default:
+      break;
+  }
+}
+
 @end

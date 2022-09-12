@@ -38,3 +38,8 @@ export interface WorkDetailF {
   // TODO: 缺了用户头像，不过不着急，暂时也没有头像
   content: string;
 }
+
+export interface VideoInfo {
+  duration: number;
+  path: string;
+}

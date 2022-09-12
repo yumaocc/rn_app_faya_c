@@ -23,6 +23,7 @@ export type RootStackParamList = {
   Withdrawal: undefined;
   MyCode: {type: 'friend' | 'share'};
   ShootVideo: undefined;
+  Publish: undefined;
 };
 
 export type Props = NativeStackScreenProps<RootStackParamList>;
