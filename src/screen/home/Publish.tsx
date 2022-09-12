@@ -26,6 +26,9 @@ const Publish: React.FC = () => {
     return WorkVisibleAuthOptions.find(item => item.value === visibleAuthType);
   }, [visibleAuthType]);
 
+  function handlePublish() {
+    console.log('准备发布');
+  }
   return (
     <>
       <SafeAreaView edges={['bottom']} style={{flex: 1}}>
@@ -80,7 +83,7 @@ const Publish: React.FC = () => {
           </View>
         </ScrollView>
         <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, paddingBottom: globalStyleVariables.MODULE_SPACE}}>
-          <Button title="发布" style={{height: 40}} />
+          <Button title="发布" style={{height: 40}} onPress={handlePublish} />
         </View>
       </SafeAreaView>
       {/* 选择可见范围 */}
