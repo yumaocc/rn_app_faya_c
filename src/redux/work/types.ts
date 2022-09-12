@@ -1,4 +1,5 @@
 export enum ActionType {
   CHANGE_TAB = 'WORK/CHANGE_TAB',
   SET_VIDEO_INFO = 'WORK/SET_VIDEO_INFO',
+  SET_WORK_SPU = 'WORK/SET_WORK_SPU',
 }

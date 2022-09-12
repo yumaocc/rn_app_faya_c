@@ -20,6 +20,7 @@ import Withdrawal from '../screen/mine/Withdrawal';
 import MyCode from '../screen/mine/MyCode';
 import ShootVideo from '../screen/home/ShootVideo';
 import Publish from '../screen/home/Publish';
+import SelectSPU from '../screen/home/SelectSPU';
 
 const Navigator: React.FC = () => {
   const token = useSelector((state: RootState) => state.common.token);
@@ -56,6 +57,7 @@ const Navigator: React.FC = () => {
       <Stack.Screen name="SPUDetail" component={SPUDetail} options={commonScreenOptions} />
       <Stack.Screen name="ShootVideo" component={ShootVideo} options={commonScreenOptions} />
       <Stack.Screen name="Publish" component={Publish} options={commonScreenOptions} />
+      <Stack.Screen name="SelectSPU" component={SelectSPU} options={commonScreenOptions} />
     </Stack.Navigator>
   );
 };

@@ -1,5 +1,5 @@
 import produce from 'immer';
-import {VideoInfo, WorkTab, WorkTabType} from '../../models';
+import {SPUF, VideoInfo, WorkTab, WorkTabType} from '../../models';
 import {WorkActions} from './actions';
 import {ActionType} from './types';
 
@@ -7,6 +7,7 @@ export interface WorkState {
   tabs: WorkTab[];
   currentTab: WorkTab;
   videoInfo?: VideoInfo;
+  bindSPU?: SPUF;
 }
 
 export const initialState: WorkState = {
@@ -31,6 +32,10 @@ export default (state = initialState, action: WorkActions): WorkState => {
     case ActionType.SET_VIDEO_INFO:
       return produce(state, draft => {
         draft.videoInfo = action.payload;
+      });
+    case ActionType.SET_WORK_SPU:
+      return produce(state, draft => {
+        draft.bindSPU = action.payload;
       });
     default:
       return state;

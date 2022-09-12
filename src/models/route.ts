@@ -24,6 +24,7 @@ export type RootStackParamList = {
   MyCode: {type: 'friend' | 'share'};
   ShootVideo: undefined;
   Publish: undefined;
+  SelectSPU: undefined;
 };
 
 export type Props = NativeStackScreenProps<RootStackParamList>;

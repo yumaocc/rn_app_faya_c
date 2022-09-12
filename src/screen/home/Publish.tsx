@@ -3,19 +3,24 @@ import {View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView} from 'r
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar, Popup, Switch} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {SPUF, WorkType, WorkVisibleAuth} from '../../models';
+import {FakeNavigation, WorkType, WorkVisibleAuth} from '../../models';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {WorkVisibleAuthOptions} from '../../constants';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../redux/reducers';
+import {useNavigation} from '@react-navigation/native';
 
 const Publish: React.FC = () => {
   const workType = WorkType.Video;
-  const [spu, setSpu] = useState<SPUF>(null);
+  const spu = useSelector((state: RootState) => state.work.bindSPU);
   const [visibleAuthType, setVisibleAuthType] = useState(WorkVisibleAuth.Public);
   const [showChangeVisibleAuthPopup, setShowChangeVisibleAuthPopup] = useState(false);
   const [showSettingPopup, setShowSettingPopup] = useState(false);
   const [allowDownload, setAllowDownload] = useState(true);
   const [allowForward, setAllowForward] = useState(true);
   const [autoSave, setAutoSave] = useState(false);
+
+  const navigation = useNavigation<FakeNavigation>();
 
   const currentVisibleAuthType = useMemo(() => {
     return WorkVisibleAuthOptions.find(item => item.value === visibleAuthType);
@@ -36,16 +41,21 @@ const Publish: React.FC = () => {
           </View>
           <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             <View style={globalStyles.lineHorizontal} />
-            <TouchableOpacity activeOpacity={0.8}>
+            <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('SelectSPU')}>
               <View style={styles.formItem}>
                 <View style={[globalStyles.containerRow]}>
                   <MaterialIcon name="shopping-cart" size={24} color={globalStyleVariables.COLOR_PRIMARY} />
                   <Text style={[globalStyles.fontPrimary, {marginHorizontal: globalStyleVariables.MODULE_SPACE}]}>添加商品</Text>
-                  <View style={[globalStyles.tagWrapper, {backgroundColor: '#0000000D'}]}>
-                    <Text style={[globalStyles.tag, {color: globalStyleVariables.TEXT_COLOR_PRIMARY}]}>添加与视频相关的商品链接</Text>
-                  </View>
+                  {!spu && (
+                    <View style={[globalStyles.tagWrapper, {backgroundColor: '#0000000D'}]}>
+                      <Text style={[globalStyles.tag, {color: globalStyleVariables.TEXT_COLOR_PRIMARY}]}>添加与视频相关的商品链接</Text>
+                    </View>
+                  )}
                 </View>
-                <MaterialIcon name="arrow-forward-ios" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+                <View style={globalStyles.containerRow}>
+                  {!!spu && <Text>{spu?.spuName}</Text>}
+                  <MaterialIcon name="arrow-forward-ios" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+                </View>
               </View>
             </TouchableOpacity>
             <View style={globalStyles.lineHorizontal} />
