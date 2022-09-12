@@ -1,3 +1,5 @@
+import {BoolEnum} from '../fst/models';
+
 export enum WorkTabType {
   Follow = 'Follow',
   Recommend = 'Recommend',
@@ -14,6 +16,27 @@ export enum WorkType {
   Video = 0,
   Photo = 1,
 }
+
+export enum WorkVisibleAuth {
+  Public = 0,
+  Private = 1,
+  Friend = 2,
+}
+
+export interface WorkPublishForm {
+  addressDetails?: string;
+  allowedDownload?: BoolEnum;
+  allowedForward?: BoolEnum;
+  bindSpuId?: number;
+  content?: string;
+  coverPic?: string;
+  hasPrivate?: WorkVisibleAuth;
+  latitude?: number;
+  longitude?: number;
+  mainId?: number;
+  type?: WorkType;
+}
+
 export interface WorkF {
   mainId: string;
   type: WorkType;

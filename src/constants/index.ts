@@ -1,4 +1,5 @@
 import {BoolEnum} from '../fst/models';
+import {WorkVisibleAuth} from '../models';
 
 export const ERROR_SHOW_TIME = 3e3; // 错误提示框显示时间
 export const REQUEST_TIMEOUT = 3 * 60 * 1e3; // 请求超时时间, 3分钟
@@ -15,6 +16,12 @@ export const noop = () => {}; // 空函数
 export const BoolOptions = [
   {label: '是', value: BoolEnum.TRUE},
   {label: '否', value: BoolEnum.FALSE},
+];
+
+export const WorkVisibleAuthOptions = [
+  {label: '公开·大家都可以看', value: WorkVisibleAuth.Public},
+  {label: '私密·仅自己可见', value: WorkVisibleAuth.Private},
+  {label: '朋友·互相关注可见', value: WorkVisibleAuth.Friend},
 ];
 
 export {getBaseURL} from './url';

@@ -9,8 +9,7 @@ const MiddleButton: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
 
   function handleClick() {
-    console.log('click');
-    navigation.navigate('ShootVideo');
+    navigation.navigate('Publish');
   }
   return (
     <TouchableOpacity onPress={handleClick} style={styles.container} activeOpacity={0.9}>
