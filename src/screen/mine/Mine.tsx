@@ -13,14 +13,17 @@ import {useUserDispatcher} from '../../helper/hooks';
 
 const Mine: React.FC = () => {
   const detail = useSelector((state: RootState) => state.user.myDetail);
+  const token = useSelector((state: RootState) => state.common.token);
   const {top} = useSafeAreaInsets();
   const navigation = useNavigation<FakeNavigation>();
   const isFocused = useIsFocused();
   const [userDispatcher] = useUserDispatcher();
 
   useEffect(() => {
-    userDispatcher.getMyDetail();
-  }, [userDispatcher]);
+    if (token) {
+      userDispatcher.getMyDetail();
+    }
+  }, [userDispatcher, token]);
 
   const items = [
     {
@@ -44,6 +47,9 @@ const Mine: React.FC = () => {
   function handleCopy() {
     console.log('copy');
   }
+  function goLogin() {
+    navigation.navigate('Login');
+  }
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
@@ -55,9 +61,11 @@ const Mine: React.FC = () => {
           <View style={[globalStyles.containerLR, {position: 'absolute', top: top + 20, width: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             <Icon name="scan" size={24} color="#fff" />
             <View style={globalStyles.containerLR}>
-              <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('MyCode')}>
-                <Icon name="qrcode" size={24} color="#fff" />
-              </TouchableOpacity>
+              {!!token && (
+                <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('MyCode')}>
+                  <Icon name="qrcode" size={24} color="#fff" />
+                </TouchableOpacity>
+              )}
               <TouchableOpacity style={{marginLeft: globalStyleVariables.MODULE_SPACE}} activeOpacity={0.8}>
                 <Icon name="menu" size={24} color="#fff" />
               </TouchableOpacity>
@@ -85,9 +93,16 @@ const Mine: React.FC = () => {
 
             {/* 用户基本信息栏 */}
             <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-              <Text style={styles.userName} numberOfLines={1}>
-                {detail?.nickName}
-              </Text>
+              <View style={globalStyles.containerRow}>
+                <Text style={styles.userName} numberOfLines={1}>
+                  {detail?.nickName}
+                </Text>
+                {!token && (
+                  <TouchableOpacity activeOpacity={0.8} onPress={goLogin}>
+                    <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_PRIMARY, marginLeft: globalStyleVariables.MODULE_SPACE}]}>立即登录</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
               {detail?.account && (
                 <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop]}>
                   <Text style={[globalStyles.fontPrimary]}>发芽号：{detail?.account}</Text>
@@ -96,7 +111,6 @@ const Mine: React.FC = () => {
                   </TouchableOpacity>
                 </View>
               )}
-
               <View style={globalStyles.halfModuleMarginTop}>
                 <Text style={globalStyles.fontSecondary} numberOfLines={1}>
                   {detail?.say}
@@ -104,36 +118,40 @@ const Mine: React.FC = () => {
               </View>
             </View>
 
-            {/* 订单入口栏 */}
-            <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE, paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-              <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={() => navigation.navigate('OrderList')}>
-                <View style={[globalStyles.containerRow]}>
-                  <View style={[globalStyles.containerCenter, styles.entry]}>
-                    <MaterialIcon name="assignment" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
-                  </View>
-                  <Text>订单</Text>
+            {!!token && (
+              <>
+                {/* 订单入口栏 */}
+                <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE, paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
+                  <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={() => navigation.navigate('OrderList')}>
+                    <View style={[globalStyles.containerRow]}>
+                      <View style={[globalStyles.containerCenter, styles.entry]}>
+                        <MaterialIcon name="assignment" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
+                      </View>
+                      <Text>订单</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={() => navigation.navigate('Wallet')}>
+                    <View style={[globalStyles.containerRow]}>
+                      <View style={[globalStyles.containerCenter, styles.entry]}>
+                        <MaterialIcon name="account-balance-wallet" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
+                      </View>
+                      <Text>钱包</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
+                    <View style={[globalStyles.containerRow]}>
+                      <View style={[globalStyles.containerCenter, styles.entry]}>
+                        <MaterialIcon name="store" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
+                      </View>
+                      <Text>橱窗</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={() => navigation.navigate('Wallet')}>
-                <View style={[globalStyles.containerRow]}>
-                  <View style={[globalStyles.containerCenter, styles.entry]}>
-                    <MaterialIcon name="account-balance-wallet" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
-                  </View>
-                  <Text>钱包</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
-                <View style={[globalStyles.containerRow]}>
-                  <View style={[globalStyles.containerCenter, styles.entry]}>
-                    <MaterialIcon name="store" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
-                  </View>
-                  <Text>橱窗</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
 
-            {/* 作品分类 */}
-            <Tabs tabs={items} showIndicator style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}} />
+                {/* 作品分类 */}
+                <Tabs tabs={items} showIndicator style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}} />
+              </>
+            )}
           </View>
         </View>
       </ScrollView>

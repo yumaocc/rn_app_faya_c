@@ -35,6 +35,9 @@ export type FakeNavigation = {
   navigate<Params = any>(options: {name: keyof RootStackParamList; params: Params}): void;
   canGoBack(): boolean;
   goBack(): void;
+  isFocused(): void;
+  replace<Params = any>(name: keyof RootStackParamList, params?: Params): void;
+  popToTop(): void;
 };
 
 export type FakeRoute<Params = any> = {

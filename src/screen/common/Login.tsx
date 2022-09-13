@@ -1,23 +1,27 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {InputItem, Button} from '@ant-design/react-native';
 import {useSelector} from 'react-redux';
-import {useCommonDispatcher, useUserDispatcher} from '../../helper/hooks';
+import {useCommonDispatcher, useParams, useUserDispatcher} from '../../helper/hooks';
 import {RootState} from '../../redux/reducers';
 import {LoginState} from '../../fst/models';
 import * as api from '../../apis';
+import {globalStyles, globalStyleVariables} from '../../constants/styles';
+import {useNavigation} from '@react-navigation/native';
+import {FakeNavigation, RootStackParamList} from '../../models';
 
 const Login: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState(''); // 验证码
-
   const [loginState, setLoginState] = useState<LoginState>(LoginState.None);
-
-  const suggestPhone = useSelector((state: RootState) => state.user.phone);
   const [verifyCodeSend, setVerifyCodeSend] = useState(false);
   const [resendAfter, setResendAfter] = useState(0);
+  const suggestPhone = useSelector((state: RootState) => state.user.phone);
+
   const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
+  const navigation = useNavigation<FakeNavigation>();
+  const params = useParams<{to?: keyof RootStackParamList; params?: any}>();
 
   useEffect(() => {
     if (suggestPhone) {
@@ -55,7 +59,17 @@ const Login: React.FC = () => {
     }
   }
 
+  function redirect() {
+    // console.log(navigation);
+    console.log(params);
+    if (!params.to) {
+      navigation.popToTop();
+    } else {
+      navigation.replace(params.to, params.params);
+    }
+  }
   function handleLogin() {
+    redirect();
     if (!phone) {
       return commonDispatcher.error('请输入手机号');
     }
@@ -77,6 +91,10 @@ const Login: React.FC = () => {
       commonDispatcher.error(error);
       setLoginState(LoginState.Error);
     }
+  }
+
+  function skipLogin() {
+    navigation.canGoBack() && navigation.goBack();
   }
 
   return (
@@ -112,6 +130,11 @@ const Login: React.FC = () => {
         <Button style={styles.login} type="primary" onPress={handleLogin} loading={loginState === LoginState.Loading}>
           登录
         </Button>
+        <View style={[globalStyles.containerCenter, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
+          <TouchableOpacity activeOpacity={0.7} onPress={skipLogin}>
+            <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.TEXT_COLOR_TERTIARY}]}>暂不登录</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

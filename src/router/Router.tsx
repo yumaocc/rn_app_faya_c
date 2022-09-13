@@ -29,6 +29,8 @@ const Navigator: React.FC = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Tab" component={TabNavigator} options={commonScreenOptions} />
+      <Stack.Screen name="SPUDetail" component={SPUDetail} options={commonScreenOptions} />
+      <Stack.Screen name="WorkDetail" component={WorkDetail} options={commonScreenOptions} />
       {token ? (
         <>
           <Stack.Screen name="Order" component={Order} options={commonScreenOptions} />
@@ -39,7 +41,9 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="WalletSummaryAgent" component={WalletSummaryAgent} options={commonScreenOptions} />
           <Stack.Screen name="Withdrawal" component={Withdrawal} options={commonScreenOptions} />
           <Stack.Screen name="MyCode" component={MyCode} options={commonScreenOptions} />
-          {/* <Stack.Screen name="ShootVideo" component={ShootVideo} options={commonScreenOptions} /> */}
+          <Stack.Screen name="ShootVideo" component={ShootVideo} options={commonScreenOptions} />
+          <Stack.Screen name="Publish" component={Publish} options={commonScreenOptions} />
+          <Stack.Screen name="SelectSPU" component={SelectSPU} options={commonScreenOptions} />
         </>
       ) : (
         <>
@@ -53,11 +57,6 @@ const Navigator: React.FC = () => {
           />
         </>
       )}
-      <Stack.Screen name="WorkDetail" component={WorkDetail} options={commonScreenOptions} />
-      <Stack.Screen name="SPUDetail" component={SPUDetail} options={commonScreenOptions} />
-      <Stack.Screen name="ShootVideo" component={ShootVideo} options={commonScreenOptions} />
-      <Stack.Screen name="Publish" component={Publish} options={commonScreenOptions} />
-      <Stack.Screen name="SelectSPU" component={SelectSPU} options={commonScreenOptions} />
     </Stack.Navigator>
   );
 };
