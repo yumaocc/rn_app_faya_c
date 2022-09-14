@@ -8,16 +8,21 @@ import {useCommonDispatcher, useParams} from '../../helper/hooks';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {WorkDetailF} from '../../models';
 import * as api from '../../apis';
-// import VideoPlayer from '../../component/VideoPlayer/index2';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../redux/reducers';
 
 const WorkDetail: React.FC = () => {
   const {id, videoUrl} = useParams<{id: string; videoUrl: string}>();
+  const token = useSelector((state: RootState) => state.common.token);
   const [error, setError] = React.useState('');
   const [resizeMode, setResizeMode] = React.useState<'none' | 'cover'>('cover');
   const [progress, setProgress] = React.useState<OnProgressData>(null);
   const [paused, setPaused] = React.useState(false);
   const [workDetail, setWorkDetail] = React.useState<WorkDetailF>();
   const hasSpu = useMemo(() => workDetail?.spuId && workDetail?.spuName, [workDetail]);
+  // const [showComment, setShowComment] = React.useState(false);
+  // const [newComment, setNewComment] = React.useState('');
+
   const seekedPercent = useMemo(() => {
     if (!progress) {
       return 0;
@@ -43,15 +48,7 @@ const WorkDetail: React.FC = () => {
   const [commonDispatcher] = useCommonDispatcher();
 
   useEffect(() => {
-    async function f() {
-      try {
-        const res = await api.work.getWorkDetail(id);
-        setWorkDetail(res);
-      } catch (error) {
-        commonDispatcher.error(error);
-      }
-    }
-    f();
+    api.work.getWorkDetail(id).then(setWorkDetail).catch(commonDispatcher.error);
   }, [id, commonDispatcher]);
 
   // const workDet
@@ -86,100 +83,128 @@ const WorkDetail: React.FC = () => {
     setPaused(!paused);
   }
 
+  function openComment() {
+    // setShowComment(true);
+  }
+
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#000'}}>
-      {videoUrl && (
-        <Video
-          onProgress={handleProgress}
-          onLoad={handleOnLoad}
-          paused={paused}
-          onError={handleError}
-          progressUpdateInterval={16}
-          ref={player}
-          source={{uri: videoUrl}}
-          style={styles.video}
-          repeat={true}
-          resizeMode={resizeMode}
-        />
-      )}
-      {error && (
-        <View style={[styles.video, globalStyles.containerCenter]}>
-          <View style={[globalStyles.containerCenter, {backgroundColor: '#f4f4f4', width: '100%', height: 180}]}>
-            <Text style={{fontSize: 18}}>{error}</Text>
+    <>
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#000'}}>
+        {videoUrl && (
+          <Video
+            onProgress={handleProgress}
+            onLoad={handleOnLoad}
+            paused={paused}
+            onError={handleError}
+            progressUpdateInterval={16}
+            ref={player}
+            source={{uri: videoUrl}}
+            style={styles.video}
+            muted
+            repeat={true}
+            resizeMode={resizeMode}
+          />
+        )}
+        {error && (
+          <View style={[styles.video, globalStyles.containerCenter]}>
+            <View style={[globalStyles.containerCenter, {backgroundColor: '#f4f4f4', width: '100%', height: 180}]}>
+              <Text style={{fontSize: 18}}>{error}</Text>
+            </View>
           </View>
-        </View>
-      )}
-      <View style={styles.cover}>
-        <SafeAreaView edges={['top']} style={styles.cover}>
-          <TouchableWithoutFeedback onPress={handleClick}>
-            <View style={[styles.cover]}>
-              <NavigationBar safeTop={false} color="#fff" />
-              {/* 暂停后的播放按钮 */}
-              {paused && !error ? (
-                <View style={[globalStyles.containerCenter, styles.video, {backgroundColor: '#00000044'}]}>
-                  <Icon name="play-arrow" color="#ddd" size={80} />
-                </View>
-              ) : null}
-              {workDetail && (
-                <View style={styles.side}>
-                  <View style={styles.sideItem}>
-                    <Image source={{uri: 'https://fakeimg.pl/30?text=loading'}} style={[styles.sideItem, styles.avatar]} />
+        )}
+        <View style={styles.cover}>
+          <SafeAreaView edges={['top']} style={styles.cover}>
+            <TouchableWithoutFeedback onPress={handleClick}>
+              <View style={[styles.cover]}>
+                <NavigationBar safeTop={false} color="#fff" />
+                {/* 暂停后的播放按钮 */}
+                {paused && !error ? (
+                  <View style={[globalStyles.containerCenter, styles.video, {backgroundColor: '#00000044'}]}>
+                    <Icon name="play-arrow" color="#ddd" size={80} />
                   </View>
-                  <View style={styles.sideItem}>
-                    <Icon name="favorite" size={50} color="#fff" />
-                    <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfLikes}</Text>
+                ) : null}
+                {workDetail && (
+                  <View style={styles.side}>
+                    <View style={styles.sideItem}>
+                      <Image source={{uri: 'https://fakeimg.pl/30?text=loading'}} style={[styles.sideItem, styles.avatar]} />
+                    </View>
+                    <View style={styles.sideItem}>
+                      <Icon name="favorite" size={50} color="#fff" />
+                      <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfLikes}</Text>
+                    </View>
+                    <View style={styles.sideItem}>
+                      <Icon name="pending" size={50} color="#fff" />
+                      <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfComments}</Text>
+                    </View>
+                    <View style={styles.sideItem}>
+                      <Icon name="grade" size={50} color="#fff" />
+                    </View>
+                    <View style={styles.sideItem}>
+                      <Icon name="share" size={40} color="#fff" />
+                    </View>
                   </View>
-                  <View style={styles.sideItem}>
-                    <Icon name="pending" size={50} color="#fff" />
-                    <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfComments}</Text>
+                )}
+                <View style={[styles.bottom]}>
+                  <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+                    {/* 发布人 */}
+                    {hasSpu && (
+                      <TouchableOpacity activeOpacity={0.8}>
+                        <View style={[globalStyles.containerRow, {width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}]}>
+                          <Icon name="shopping-cart" color={globalStyleVariables.COLOR_WARNING} size={24} />
+                          <Text style={[globalStyles.fontTertiary, {flex: 1, color: '#fff'}]} numberOfLines={1}>
+                            {workDetail?.spuName}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    )}
+                    {workDetail?.userName && (
+                      <TouchableOpacity activeOpacity={0.8}>
+                        <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@{workDetail.userName}</Text>
+                      </TouchableOpacity>
+                    )}
+                    <View style={{marginVertical: globalStyleVariables.MODULE_SPACE}}>
+                      <Text style={[globalStyles.fontPrimary, {color: '#fff'}]} numberOfLines={5}>
+                        {workDetail?.content}
+                      </Text>
+                    </View>
                   </View>
-                  <View style={styles.sideItem}>
-                    <Icon name="grade" size={50} color="#fff" />
+                  {/* 进度条 */}
+                  <View style={{backgroundColor: '#000', height: 2, position: 'relative'}}>
+                    <View style={[styles.progressBar, {backgroundColor: '#999', width: seekedPercent + '%'}]} />
+                    <View style={[styles.progressBar, {backgroundColor: '#fff', width: playPercent + '%'}]} />
                   </View>
-                  <View style={styles.sideItem}>
-                    <Icon name="share" size={40} color="#fff" />
-                  </View>
-                </View>
-              )}
-              <View style={[styles.bottom]}>
-                <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
-                  {/* 发布人 */}
-                  {hasSpu && (
-                    <TouchableOpacity activeOpacity={0.8}>
-                      <View style={[globalStyles.containerRow, {width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}]}>
-                        <Icon name="shopping-cart" color={globalStyleVariables.COLOR_WARNING} size={24} />
-                        <Text style={[globalStyles.fontTertiary, {flex: 1, color: '#fff'}]} numberOfLines={1}>
-                          {workDetail?.spuName}
-                        </Text>
+                  {/* 下面的框 */}
+                  {/* 登录后可见评论框 */}
+                  {!!token && (
+                    <TouchableOpacity activeOpacity={0.7} onPress={openComment}>
+                      <View style={{backgroundColor: '#000', padding: globalStyleVariables.MODULE_SPACE}}>
+                        <View style={[styles.fakeInputComment]}>
+                          <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.TEXT_COLOR_TERTIARY}]}>说点好听的</Text>
+                        </View>
                       </View>
                     </TouchableOpacity>
                   )}
-                  {workDetail?.userName && (
-                    <TouchableOpacity activeOpacity={0.8}>
-                      <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@{workDetail.userName}</Text>
-                    </TouchableOpacity>
-                  )}
-                  <View style={{marginVertical: globalStyleVariables.MODULE_SPACE}}>
-                    <Text style={[globalStyles.fontPrimary, {color: '#fff'}]} numberOfLines={5}>
-                      {workDetail?.content}
-                    </Text>
-                  </View>
+                  <View style={{backgroundColor: '#000', height: bottom}} />
                 </View>
-                {/* 进度条 */}
-                <View style={{backgroundColor: '#000', height: 2, position: 'relative'}}>
-                  <View style={[styles.progressBar, {backgroundColor: '#999', width: seekedPercent + '%'}]} />
-                  <View style={[styles.progressBar, {backgroundColor: '#fff', width: playPercent + '%'}]} />
-                </View>
-                {/* 下面的框 */}
-                {/* <View style={{height: 50, backgroundColor: '#000'}}>
-              </View> */}
-                <View style={{backgroundColor: '#000', height: bottom}} />
               </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </SafeAreaView>
+            </TouchableWithoutFeedback>
+          </SafeAreaView>
+        </View>
       </View>
-    </View>
+
+      {/* 评论弹窗 */}
+      {/* <Popup visible={showComment} onClose={() => setShowComment(false)} style={styles.commentModal} round={20}>
+        <View style={{height: 400}}>
+          <ScrollView style={{flex: 1}}>
+            <Text>111</Text>
+            <View style={{height: 200}} />
+          </ScrollView>
+          <View style={{position: 'absolute', width: '100%', bottom: 0, backgroundColor: '#ccc'}}>
+            <TextInput style={styles.commentInput} value={newComment} onChangeText={setNewComment} placeholder="说点好听的" />
+          </View>
+        </View>
+      </Popup> */}
+    </>
   );
 };
 export default WorkDetail;
@@ -233,5 +258,20 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     height: '100%',
+  },
+  fakeInputComment: {
+    height: 30,
+    backgroundColor: '#FFFFFF08',
+    borderRadius: 15,
+    justifyContent: 'center',
+    paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER,
+  },
+  commentModal: {
+    paddingTop: 15,
+    paddingHorizontal: 15,
+    position: 'relative',
+  },
+  commentInput: {
+    padding: 0,
   },
 });
