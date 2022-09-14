@@ -27,8 +27,17 @@ const Navigator: React.FC = () => {
   const isLogout = useSelector((state: RootState) => state.user.isLogout);
   // 注意路由顺序
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Tab">
       <Stack.Screen name="Tab" component={TabNavigator} options={commonScreenOptions} />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          headerShown: false,
+          animationTypeForReplace: isLogout ? 'pop' : 'push',
+          gestureEnabled: false,
+        }}
+      />
       <Stack.Screen name="SPUDetail" component={SPUDetail} options={commonScreenOptions} />
       <Stack.Screen name="WorkDetail" component={WorkDetail} options={commonScreenOptions} />
       {token ? (
@@ -46,16 +55,7 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="SelectSPU" component={SelectSPU} options={commonScreenOptions} />
         </>
       ) : (
-        <>
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{
-              headerShown: false,
-              animationTypeForReplace: isLogout ? 'pop' : 'push',
-            }}
-          />
-        </>
+        <></>
       )}
     </Stack.Navigator>
   );
@@ -65,8 +65,8 @@ export default Navigator;
 export const navigationRef = createNavigationContainerRef();
 
 // 编程式导航
-export function navigate<Params = any>(name: string, params?: Params) {
+export function goLogin() {
   if (navigationRef.isReady()) {
-    navigationRef.current?.navigate(name as unknown as never, params as unknown as never);
+    navigationRef?.navigate('Login' as unknown as never);
   }
 }

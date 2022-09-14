@@ -4,6 +4,7 @@ import {CustomError, PagedData, Response} from '../fst/models';
 import {AppHeader} from '../models';
 import {Platform} from 'react-native';
 import packageJSON from '../../package.json';
+import {goLogin} from '../router/Router';
 
 const currentHeader = axios.defaults.headers.common || {};
 const headers: AppHeader = {
@@ -34,12 +35,15 @@ export function resetToken(token: string) {
 axios.interceptors.response.use((response: AxiosResponse) => {
   const {data} = response;
   console.log(`接口： ${response.config.url}请求成功：`);
-  console.log('response', response.data?.data);
+  if (!response.data?.data?.content) {
+    console.log('response data:', response.data);
+  } else {
+    console.log('response content: ', response.data.data.content);
+  }
 
   switch (data.code) {
     case 8000:
-      // fixme: 导航怎么办
-      // location.href = '/#/login';
+      goLogin();
       return response;
     default:
       return response;

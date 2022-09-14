@@ -38,6 +38,7 @@ export type FakeNavigation = {
   isFocused(): void;
   replace<Params = any>(name: keyof RootStackParamList, params?: Params): void;
   popToTop(): void;
+  getState(): any;
 };
 
 export type FakeRoute<Params = any> = {
