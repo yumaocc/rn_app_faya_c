@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *) recordDir;
 + (NSError*) makeDir: (NSString *)dirPath;
 + (void)checkBundle;
++ (NSString *) defalutVideoCover: (NSString *)videoPath;
 @end
 
 NS_ASSUME_NONNULL_END

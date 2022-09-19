@@ -3,5 +3,6 @@
     "Cascader",
     "SPUF"
   ],
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "eslint.format.enable": true
 }

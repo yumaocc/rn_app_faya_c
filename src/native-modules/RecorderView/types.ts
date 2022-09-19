@@ -28,6 +28,7 @@ export interface RecorderErrorData {
 export interface RecorderFinishData {
   path: string;
   duration: number;
+  coverPath: string;
 }
 
 export interface RecorderProgressData {

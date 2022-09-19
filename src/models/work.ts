@@ -65,4 +65,5 @@ export interface WorkDetailF {
 export interface VideoInfo {
   duration: number;
   path: string;
+  coverPath: string;
 }

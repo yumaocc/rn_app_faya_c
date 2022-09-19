@@ -19,7 +19,6 @@
 //@end
 
 //@interface RecordVieW <>
-@property (nonatomic, strong) SMNView * preview;
 @property (nonatomic, strong) AliyunIRecorder *recorder;
 
 //@property (nonatomic, strong) NSDictionary* errorInfo;
@@ -48,6 +47,7 @@ RCT_EXPORT_METHOD(sendAction: (nonnull NSNumber *)reactTag action:(NSDictionary 
   [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,SMNView *> *viewRegistry) {
     SMNView *view = viewRegistry[reactTag];
     if (!view || ![view isKindOfClass:[SMNView class]]) {
+      NSLog(@"view类型：%@", view);
       RCTLogError(@"类型错误， 请检查您的ref(reactTag)");
     } else {
       NSLog(@"去调用方法");
@@ -106,14 +106,7 @@ RCT_EXPORT_METHOD(sendAction: (nonnull NSNumber *)reactTag action:(NSDictionary 
 
 - (UIView *)view
 {
-    return self.preview;
-}
-
-- (UIView *)preview {
-    if (!_preview) {
-        _preview = [SMNView new];
-    }
-    return _preview;
+  return [SMNView new];
 }
 
 @end

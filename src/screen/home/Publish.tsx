@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
+import {View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar, Popup, Switch} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -13,6 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 const Publish: React.FC = () => {
   const workType = WorkType.Video;
   const spu = useSelector((state: RootState) => state.work.bindSPU);
+  const videoInfo = useSelector((state: RootState) => state.work.videoInfo);
   const [visibleAuthType, setVisibleAuthType] = useState(WorkVisibleAuth.Public);
   const [showChangeVisibleAuthPopup, setShowChangeVisibleAuthPopup] = useState(false);
   const [showSettingPopup, setShowSettingPopup] = useState(false);
@@ -38,7 +39,7 @@ const Publish: React.FC = () => {
             {workType === WorkType.Video && (
               <View style={styles.videoContainer}>
                 <TextInput multiline={true} style={styles.videoInput} placeholder="写标题并使用合适的话题，能让更多人看到~" />
-                <View style={styles.videoCover} />
+                <Image style={styles.videoCover} source={{uri: videoInfo?.coverPath ? 'file://' + videoInfo.coverPath : 'https://fakeimg.pl/100?text=loading'}} />
               </View>
             )}
           </View>
@@ -151,7 +152,6 @@ const styles = StyleSheet.create({
     height: 140,
     position: 'relative',
     borderRadius: 5,
-    backgroundColor: '#ccc',
   },
   formItem: {
     // marginBottom: globalStyleVariables.MODULE_SPACE,
