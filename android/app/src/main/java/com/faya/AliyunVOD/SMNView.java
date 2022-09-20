@@ -35,7 +35,10 @@ public class SMNView extends SurfaceView {
     public  void sendAction(ReadableMap action) {
 
         String type = action.getString("type");
+        if ("finishRecord".endsWith(type)) {
+            sendEvent();
+        }
         Log.e("SMNView", "get action from js, argument: " + action.toString() + ", type = " + type);
-        sendEvent();
+
     }
 }

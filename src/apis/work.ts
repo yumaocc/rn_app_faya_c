@@ -1,5 +1,5 @@
 import {SearchParam} from '../fst/models';
-import {WorkDetailF} from '../models';
+import {PhotoUploadAuth, PhotoUploadAuthParams, VideoUploadAuth, VideoUploadAuthParams, WorkDetailF, WorkPublishForm, WorkType} from '../models';
 import {post} from './helper';
 
 export async function getRecommendWorks(params: SearchParam) {
@@ -15,4 +15,19 @@ export async function likeWork(id: string): Promise<boolean> {
 
 export async function collectWork(id: string): Promise<boolean> {
   return await post('/video/collect/one', {id});
+}
+
+export async function getPublishMainID(type: WorkType): Promise<string> {
+  return await post('/video/main/vod/init/main/id', {type});
+}
+
+export async function getUploadVideoAuth(params: VideoUploadAuthParams): Promise<VideoUploadAuth> {
+  return await post('/video/main/vod/get/pass', params);
+}
+export async function getUploadPhotoAuth(params: PhotoUploadAuthParams): Promise<PhotoUploadAuth> {
+  return await post('/video/main/vod/get/photo/pass', params);
+}
+
+export async function realPublish(params: WorkPublishForm): Promise<boolean> {
+  return await post('/video/main/vod/content/add', params);
 }

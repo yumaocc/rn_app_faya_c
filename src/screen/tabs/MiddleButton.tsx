@@ -16,6 +16,7 @@ const MiddleButton: React.FC = () => {
       navigation.navigate('Login', {to: 'ShootVideo'});
     } else {
       navigation.navigate('ShootVideo');
+      // navigation.navigate('Publish');
     }
   }
   return (

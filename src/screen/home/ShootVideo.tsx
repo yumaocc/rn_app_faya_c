@@ -50,19 +50,16 @@ const ShootVideo: React.FC = () => {
     setDuration(secondToMinute(e.nativeEvent.duration));
   }
   function onFinish(e: NativeSyntheticEvent<RecorderFinishData>) {
-    setVideoInfo({
-      path: e.nativeEvent.path,
-      duration: e.nativeEvent.duration,
-      coverPath: e.nativeEvent.coverPath,
-    });
+    const info = e.nativeEvent;
+    setVideoInfo(info);
     if (readyRef.current) {
-      jumpToNext();
+      jumpToNext(info);
     } else {
       readyRef.current = true;
     }
   }
 
-  function jumpToNext() {
+  function jumpToNext(videoInfo: VideoInfo) {
     workDispatcher.setVideoInfo(videoInfo);
     navigation.navigate('Publish');
   }
@@ -70,7 +67,7 @@ const ShootVideo: React.FC = () => {
   function onNext() {
     if (readyRef.current) {
       if (videoInfo) {
-        jumpToNext();
+        jumpToNext(videoInfo);
       }
     } else {
       readyRef.current = true;

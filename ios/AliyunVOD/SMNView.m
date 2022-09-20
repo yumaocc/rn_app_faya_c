@@ -87,9 +87,15 @@
     [self.recorder stopRecording];
   } else if ([@"finishRecord" isEqualToString:type]) {
     [self.recorder finishRecording];
+    
+    // TODO: fake
 //    if (self.onRecordFinish) {
+//      NSString * path = [[NSBundle mainBundle] pathForResource:@"moment" ofType:@"mp4"];
+//      NSString * coverPath = [Util defalutVideoCover: path];
 //      self.onRecordFinish(@{
-//        @"path": [[NSBundle mainBundle] pathForResource:@"moment" ofType:@"mp4"],
+//        @"path": path,
+//        @"duration": @15,
+//        @"coverPath": coverPath,
 //      });
 //    }
   } else if ([@"torchOn" isEqualToString:type]) {

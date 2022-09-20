@@ -22,6 +22,7 @@ public class RecorderView extends SimpleViewManager<SMNView> {
 
     public RecorderView(ReactApplicationContext context) {
         mCallerContext = context;
+//        boolean result =
     }
 
     @NonNull
@@ -39,7 +40,7 @@ public class RecorderView extends SimpleViewManager<SMNView> {
     @Nullable
     @Override
     public Map<String, Integer> getCommandsMap() {
-        return MapBuilder.of("create", COMMAND_CREATE, "sendAction", COMMAND_SEND_ACTION);
+        return MapBuilder.of("sendAction", COMMAND_SEND_ACTION);
     }
 
     // 用于重新映射事件名称  topChange => onChange

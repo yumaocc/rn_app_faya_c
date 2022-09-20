@@ -22,6 +22,7 @@
 		F49777F728C23058007EE7E6 /* antoutline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F49777F528C23058007EE7E6 /* antoutline.ttf */; };
 		F49777F828C23058007EE7E6 /* antfill.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F49777F628C23058007EE7E6 /* antfill.ttf */; };
 		F49777FA28C3B241007EE7E6 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F49777F928C3B241007EE7E6 /* MaterialIcons.ttf */; };
+		F4ECFC7B28D86DFA000017F0 /* PublishManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F4ECFC7A28D86DFA000017F0 /* PublishManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,8 @@
 		F49777F528C23058007EE7E6 /* antoutline.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = antoutline.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"; sourceTree = "<group>"; };
 		F49777F628C23058007EE7E6 /* antfill.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = antfill.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antfill.ttf"; sourceTree = "<group>"; };
 		F49777F928C3B241007EE7E6 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		F4ECFC7928D86DFA000017F0 /* PublishManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PublishManager.h; sourceTree = "<group>"; };
+		F4ECFC7A28D86DFA000017F0 /* PublishManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PublishManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +183,8 @@
 				F4925E9B28CB42AB00F2B607 /* Util.m */,
 				F4925E9D28CBA47700F2B607 /* SMNView.h */,
 				F4925E9E28CBA47700F2B607 /* SMNView.m */,
+				F4ECFC7928D86DFA000017F0 /* PublishManager.h */,
+				F4ECFC7A28D86DFA000017F0 /* PublishManager.m */,
 			);
 			path = AliyunVOD;
 			sourceTree = "<group>";
@@ -454,6 +459,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4925E9F28CBA47700F2B607 /* SMNView.m in Sources */,
+				F4ECFC7B28D86DFA000017F0 /* PublishManager.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				F4925E9828CB410200F2B607 /* RecordView.m in Sources */,

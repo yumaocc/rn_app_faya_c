@@ -24,6 +24,8 @@ export type RootStackParamList = {
   MyCode: {type: 'friend' | 'share'};
   ShootVideo: undefined;
   Publish: undefined;
+  PublishVideo: undefined;
+  PublishPhoto: undefined;
   SelectSPU: undefined;
 };
 

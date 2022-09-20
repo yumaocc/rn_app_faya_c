@@ -21,6 +21,8 @@ import MyCode from '../screen/mine/MyCode';
 import ShootVideo from '../screen/home/ShootVideo';
 import Publish from '../screen/home/Publish';
 import SelectSPU from '../screen/home/SelectSPU';
+import PublishPhoto from '../screen/home/PublishPhoto';
+import PublishVideo from '../screen/home/PublishVideo';
 
 const Navigator: React.FC = () => {
   const token = useSelector((state: RootState) => state.common.token);
@@ -53,6 +55,8 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="ShootVideo" component={ShootVideo} options={commonScreenOptions} />
           <Stack.Screen name="Publish" component={Publish} options={commonScreenOptions} />
           <Stack.Screen name="SelectSPU" component={SelectSPU} options={commonScreenOptions} />
+          <Stack.Screen name="PublishPhoto" component={PublishPhoto} options={commonScreenOptions} />
+          <Stack.Screen name="PublishVideo" component={PublishVideo} options={commonScreenOptions} />
         </>
       ) : (
         <></>
