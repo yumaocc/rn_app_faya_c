@@ -56,7 +56,7 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="Publish" component={Publish} options={commonScreenOptions} />
           <Stack.Screen name="SelectSPU" component={SelectSPU} options={commonScreenOptions} />
           <Stack.Screen name="PublishPhoto" component={PublishPhoto} options={commonScreenOptions} />
-          <Stack.Screen name="PublishVideo" component={PublishVideo} options={commonScreenOptions} />
+          <Stack.Screen name="PublishVideo" component={PublishVideo} options={{...commonScreenOptions, gestureEnabled: false}} />
         </>
       ) : (
         <></>

@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View, StyleSheet, Image, Text, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Video, {LoadError, OnLoadData, OnProgressData} from 'react-native-video';
@@ -20,8 +20,6 @@ const WorkDetail: React.FC = () => {
   const [paused, setPaused] = React.useState(false);
   const [workDetail, setWorkDetail] = React.useState<WorkDetailF>();
   const hasSpu = useMemo(() => workDetail?.spuId && workDetail?.spuName, [workDetail]);
-  // const [showComment, setShowComment] = React.useState(false);
-  // const [newComment, setNewComment] = React.useState('');
 
   const seekedPercent = useMemo(() => {
     if (!progress) {
@@ -72,9 +70,14 @@ const WorkDetail: React.FC = () => {
     console.log(e);
     setError('呀，视频加载失败～');
   }
-  function handleProgress(e: OnProgressData) {
+  // function handleProgress(e: OnProgressData) {
+  //   setProgress(e);
+  // }
+
+  const handleProgress = useCallback((e: OnProgressData) => {
     setProgress(e);
-  }
+  }, []);
+
   // function togglePlay() {
   //   // player.current
   // }
