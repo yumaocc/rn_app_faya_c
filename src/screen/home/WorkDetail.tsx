@@ -117,9 +117,9 @@ const WorkDetail: React.FC = () => {
         )}
         <View style={styles.cover}>
           <SafeAreaView edges={['top']} style={styles.cover}>
+            <NavigationBar safeTop={false} color="#fff" />
             <TouchableWithoutFeedback onPress={handleClick}>
               <View style={[styles.cover]}>
-                <NavigationBar safeTop={false} color="#fff" />
                 {/* 暂停后的播放按钮 */}
                 {paused && !error ? (
                   <View style={[globalStyles.containerCenter, styles.video, {backgroundColor: '#00000044'}]}>
