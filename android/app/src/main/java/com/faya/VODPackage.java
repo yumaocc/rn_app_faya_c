@@ -6,6 +6,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
+import com.faya.AliyunVOD.PublishManager;
 import com.faya.AliyunVOD.RecorderView;
 
 import java.util.Arrays;
@@ -25,6 +26,9 @@ public class VODPackage implements ReactPackage {
     @NonNull
     @Override
     public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactApplicationContext) {
-        return Collections.emptyList();
+
+        return Arrays.asList(
+                new PublishManager(reactApplicationContext)
+        );
     }
 }

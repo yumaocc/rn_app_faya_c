@@ -15,7 +15,6 @@
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
-      android:allowBackup="false"
       android:theme="@style/AppTheme">
       <activity
         android:name=".MainActivity"
@@ -29,5 +28,11 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+      <meta-data
+        android:name="com.aliyun.alivc_license.licensekey"
+        android:value="zobVj4U4Eo0gm5B1I3372f0c7b5e2414090e86094149b240f"/>
+      <meta-data
+        android:name="com.aliyun.alivc_license.licensefile"
+        android:value="assets/AlivcCert.crt"/>
     </application>
 </manifest>

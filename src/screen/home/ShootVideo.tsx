@@ -1,5 +1,5 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import React, {useMemo, useRef} from 'react';
+import React, {useCallback, useMemo, useRef} from 'react';
 import {View, StyleSheet, NativeSyntheticEvent, Text, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar} from '../../component';
@@ -46,11 +46,16 @@ const ShootVideo: React.FC = () => {
   function finishRecord() {
     recorder.current?.sendAction(RecorderViewActionType.FinishRecord);
   }
-  function handleProgress(e: NativeSyntheticEvent<RecorderProgressData>) {
+  const handleProgress = useCallback((e: NativeSyntheticEvent<RecorderProgressData>) => {
     setDuration(secondToMinute(e.nativeEvent.duration));
-  }
+  }, []);
+  // function handleProgress(e: NativeSyntheticEvent<RecorderProgressData>) {
+  //   setDuration(secondToMinute(e.nativeEvent.duration));
+  // }
   function onFinish(e: NativeSyntheticEvent<RecorderFinishData>) {
     const info = e.nativeEvent;
+    console.log('完成录制');
+    console.log(info);
     setVideoInfo(info);
     if (readyRef.current) {
       jumpToNext(info);
@@ -158,7 +163,7 @@ const styles = StyleSheet.create({
   },
   record: {
     flex: 1,
-    backgroundColor: '#6cf',
+    // backgroundColor: '#6cf',
   },
   coverContainer: {
     position: 'absolute',
