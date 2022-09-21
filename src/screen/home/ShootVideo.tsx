@@ -104,7 +104,17 @@ const ShootVideo: React.FC = () => {
           onRecordProgress={handleProgress}
         />
         <SafeAreaView style={styles.coverContainer}>
-          {!isRecording && <NavigationBar safeTop={false} color="#fff" headerRight={<Button title="下一步" onPress={onNext} />} />}
+          {!isRecording && (
+            <NavigationBar
+              safeTop={false}
+              color="#fff"
+              headerRight={
+                <View style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
+                  <Button title="下一步" onPress={onNext} style={{height: 25, paddingVertical: 0}} />
+                </View>
+              }
+            />
+          )}
           {/* <View style={[globalStyles.containerRow, {flexWrap: 'wrap'}]}>
           </View> */}
           {!isRecording && (

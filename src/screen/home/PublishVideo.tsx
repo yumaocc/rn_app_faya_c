@@ -83,21 +83,13 @@ const PublishVideo: React.FC = () => {
     startUpload();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // useEffect(() => {
-  //   if (percent < 100) {
-  //     setTimeout(() => {
-  //       setPercent(getValidPercent(percent + 10));
-  //     }, 100);
-  //   }
-  // }, [percent]);
-
   function back() {
     navigation.popToTop();
   }
 
   return (
     <View style={styles.container}>
-      <NavigationBar title="发布" />
+      <NavigationBar title="发布" headerLeft={null} />
       <View style={styles.progressContainer}>
         {percent < 100 ? (
           <>
