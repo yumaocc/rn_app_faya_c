@@ -15,8 +15,8 @@ const MiddleButton: React.FC = () => {
     if (!token) {
       navigation.navigate('Login', {to: 'ShootVideo'});
     } else {
-      // navigation.navigate('ShootVideo');
-      navigation.navigate('WaitPay');
+      navigation.navigate('ShootVideo');
+      // navigation.navigate('WaitPay');
     }
   }
   return (

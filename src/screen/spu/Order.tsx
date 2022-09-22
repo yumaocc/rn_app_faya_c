@@ -9,11 +9,12 @@ import FormItem from '../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {findItem, moneyToYuan} from '../../fst/helper';
 import {useAppState, useCommonDispatcher, useCoupons, useSPUDispatcher, useWallet} from '../../helper/hooks';
-import {BookingType, CouponState, OrderPayState, PackageDetail, PayChannel, SKUDetail} from '../../models';
+import {BookingType, CouponState, FakeNavigation, OrderPayState, PackageDetail, PayChannel, SKUDetail} from '../../models';
 import {RootState} from '../../redux/reducers';
 import * as api from '../../apis';
 import {cleanOrderForm} from '../../helper/order';
 import {useOrderDispatcher} from '../../helper/hooks/dispatchers';
+import {useNavigation} from '@react-navigation/native';
 
 const Order: React.FC = () => {
   const spu = useSelector((state: RootState) => state.spu.currentSPU);
@@ -21,8 +22,9 @@ const Order: React.FC = () => {
   const currentSkuIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
   const payOrder = useSelector((state: RootState) => state.order.payOrder);
   const [isPaying, setIsPaying] = React.useState(false);
-  const appState = useAppState();
 
+  const appState = useAppState();
+  const navigation = useNavigation<FakeNavigation>();
   const [wallet] = useWallet();
   const [couponList] = useCoupons();
   const [spuDispatcher] = useSPUDispatcher();
@@ -136,18 +138,16 @@ const Order: React.FC = () => {
         .checkOrderPayState(payOrder?.orderId)
         .then(res => {
           if (res === OrderPayState.PAYED) {
-            console.log('支付完成');
-            // todo: 支付完成
+            navigation.navigate('PaySuccess');
           } else {
-            console.log('支付未完成');
-            // todo: 支付未完成
+            navigation.navigate('WaitPay');
           }
         })
         .catch(e => {
           commonDispatcher.error(e);
         });
     }
-  }, [appState, isPaying, payOrder, commonDispatcher]);
+  }, [appState, isPaying, payOrder, commonDispatcher, navigation]);
 
   // 用户换了套餐，这里同步到redux
   function handleSKUChange(e = '') {
