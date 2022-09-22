@@ -23,6 +23,8 @@ import Publish from '../screen/home/Publish';
 import SelectSPU from '../screen/home/SelectSPU';
 import PublishPhoto from '../screen/home/PublishPhoto';
 import PublishVideo from '../screen/home/PublishVideo';
+import PaySuccess from '../screen/spu/PaySuccess';
+import WaitPay from '../screen/mine/WaitPay';
 
 const Navigator: React.FC = () => {
   const token = useSelector((state: RootState) => state.common.token);
@@ -57,6 +59,8 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="SelectSPU" component={SelectSPU} options={commonScreenOptions} />
           <Stack.Screen name="PublishPhoto" component={PublishPhoto} options={commonScreenOptions} />
           <Stack.Screen name="PublishVideo" component={PublishVideo} options={{...commonScreenOptions, gestureEnabled: false}} />
+          <Stack.Screen name="PaySuccess" component={PaySuccess} options={commonScreenOptions} />
+          <Stack.Screen name="WaitPay" component={WaitPay} options={commonScreenOptions} />
         </>
       ) : (
         <></>

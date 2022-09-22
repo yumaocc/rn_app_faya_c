@@ -27,6 +27,8 @@ export type RootStackParamList = {
   PublishVideo: undefined;
   PublishPhoto: undefined;
   SelectSPU: undefined;
+  PaySuccess: undefined;
+  WaitPay: undefined;
 };
 
 export type Props = NativeStackScreenProps<RootStackParamList>;
@@ -34,7 +36,7 @@ export type Props = NativeStackScreenProps<RootStackParamList>;
 // navigation的类型有问题，一堆类型。用这个类型代替
 export type FakeNavigation = {
   navigate<Params = any>(name: keyof RootStackParamList, params?: Params): void;
-  navigate<Params = any>(options: {name: keyof RootStackParamList; params: Params}): void;
+  navigate<Params = any>(options: {name?: keyof RootStackParamList; params?: Params; key?: keyof RootStackParamList}): void;
   canGoBack(): boolean;
   goBack(): void;
   isFocused(): void;
