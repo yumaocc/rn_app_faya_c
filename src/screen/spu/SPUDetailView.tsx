@@ -152,7 +152,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
             <Text style={[globalStyles.tag, {color: '#FF5934'}]}>限时抢购</Text>
           </View>
         </View>
-        <Text style={[globalStyles.fontStrong, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER, fontSize: 24}]}>{spu.name}</Text>
+        <Text style={[globalStyles.fontStrong, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER, fontSize: 18}]}>{spu.name}</Text>
       </View>
 
       {/* 选择套餐 */}
