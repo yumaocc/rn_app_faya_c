@@ -1,25 +1,39 @@
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {View, StyleSheet, Image, Text, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {View, StyleSheet, Image, Text, TouchableOpacity, TouchableWithoutFeedback, ScrollView, useWindowDimensions} from 'react-native';
+import {useSelector} from 'react-redux';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Video, {LoadError, OnLoadData, OnProgressData} from 'react-native-video';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {NavigationBar} from '../../component';
-import {useCommonDispatcher, useParams} from '../../helper/hooks';
+import {NavigationBar, Popup} from '../../component';
+import {useCommonDispatcher, useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {WorkDetailF} from '../../models';
+import {FakeNavigation, PackageDetail, SKUDetail, WorkDetailF} from '../../models';
 import * as api from '../../apis';
-import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
+import SPUDetailView from '../spu/SPUDetailView';
+import BuyBar from '../spu/BuyBar';
+import {useNavigation} from '@react-navigation/native';
 
 const WorkDetail: React.FC = () => {
   const {id, videoUrl} = useParams<{id: string; videoUrl: string}>();
   const token = useSelector((state: RootState) => state.common.token);
-  const [error, setError] = React.useState('');
-  const [resizeMode, setResizeMode] = React.useState<'none' | 'cover'>('cover');
-  const [progress, setProgress] = React.useState<OnProgressData>(null);
-  const [paused, setPaused] = React.useState(false);
-  const [workDetail, setWorkDetail] = React.useState<WorkDetailF>();
+  const [error, setError] = useState('');
+  const [resizeMode, setResizeMode] = useState<'none' | 'cover'>('cover');
+  const [progress, setProgress] = useState<OnProgressData>(null);
+  const [paused, setPaused] = useState(false);
+  const [workDetail, setWorkDetail] = useState<WorkDetailF>();
   const hasSpu = useMemo(() => workDetail?.spuId && workDetail?.spuName, [workDetail]);
+  const [showSPU, setShowSPU] = useState(false);
+  const currentSPU = useSelector((state: RootState) => state.spu.currentSPU);
+  const currentSKU = useSelector((state: RootState) => state.spu.currentSKU);
+  const currentSKUIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
+  const player = useRef<Video>(null);
+  const {bottom} = useSafeAreaInsets();
+  const [commonDispatcher] = useCommonDispatcher();
+  const [spuDispatcher] = useSPUDispatcher();
+  const [userDispatcher] = useUserDispatcher();
+  const navigation = useNavigation<FakeNavigation>();
+  const {height} = useWindowDimensions();
 
   const seekedPercent = useMemo(() => {
     if (!progress) {
@@ -40,10 +54,6 @@ const WorkDetail: React.FC = () => {
     val = Math.min(100, val);
     return val;
   }, [progress]);
-
-  const player = useRef<Video>(null);
-  const {bottom} = useSafeAreaInsets();
-  const [commonDispatcher] = useCommonDispatcher();
 
   useEffect(() => {
     api.work.getWorkDetail(id).then(setWorkDetail).catch(commonDispatcher.error);
@@ -89,6 +99,33 @@ const WorkDetail: React.FC = () => {
   function openComment() {
     // setShowComment(true);
   }
+
+  function openSPU() {
+    if (currentSPU?.id && workDetail?.spuId && currentSPU.id !== workDetail?.spuId) {
+      spuDispatcher.viewSPU(workDetail?.spuId);
+    }
+    setShowSPU(true);
+  }
+
+  const handleChangeSKU = useCallback(
+    (sku: SKUDetail | PackageDetail, isPackage: boolean) => {
+      spuDispatcher.changeSKU(sku, isPackage);
+    },
+    [spuDispatcher],
+  );
+
+  const handleBuy = useCallback(() => {
+    setShowSPU(false);
+    if (!token) {
+      userDispatcher.login({
+        to: 'Order',
+        params: {id},
+        redirect: true,
+      });
+    } else {
+      navigation.navigate('Order', {id});
+    }
+  }, [userDispatcher, navigation, token, id]);
 
   return (
     <>
@@ -151,7 +188,7 @@ const WorkDetail: React.FC = () => {
                   <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
                     {/* 发布人 */}
                     {hasSpu && (
-                      <TouchableOpacity activeOpacity={0.8}>
+                      <TouchableOpacity activeOpacity={0.5} onPress={openSPU}>
                         <View style={[globalStyles.containerRow, {width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}]}>
                           <Icon name="shopping-cart" color={globalStyleVariables.COLOR_WARNING} size={24} />
                           <Text style={[globalStyles.fontTertiary, {flex: 1, color: '#fff'}]} numberOfLines={1}>
@@ -194,6 +231,15 @@ const WorkDetail: React.FC = () => {
           </SafeAreaView>
         </View>
       </View>
+
+      <Popup visible={showSPU} onClose={() => setShowSPU(false)} style={[styles.spuModel, {height: height * 0.7}]}>
+        <View style={{flex: 1}}>
+          <ScrollView style={{flex: 1}}>
+            <SPUDetailView currentSelect={currentSKU} spu={currentSPU} isPackage={currentSKUIsPackage} onChangeSelect={handleChangeSKU} />
+          </ScrollView>
+          <BuyBar sku={currentSKU} onBuy={handleBuy} />
+        </View>
+      </Popup>
 
       {/* 评论弹窗 */}
       {/* <Popup visible={showComment} onClose={() => setShowComment(false)} style={styles.commentModal} round={20}>
@@ -276,5 +322,8 @@ const styles = StyleSheet.create({
   },
   commentInput: {
     padding: 0,
+  },
+  spuModel: {
+    // height: 500,
   },
 });

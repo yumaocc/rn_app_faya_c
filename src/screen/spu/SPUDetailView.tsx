@@ -5,6 +5,7 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {PackageDetail, SKUDetail, SKUSaleState, SKUShowInfo, SPUDetailF} from '../../models';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import {useWhyDidYouUpdate} from '../../fst/hooks';
 
 interface SPUDetailViewProps {
   spu: SPUDetailF;
@@ -44,11 +45,13 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
     }
   }, [currentSelect, isPackage]);
 
+  useWhyDidYouUpdate('SPUDetailView', {...props, currentSKU});
+
   // const flatSKUList = useMemo(() => {
   //   const skuList = spu?.skuList?.map({})
   // }, []);
 
-  console.log(currentSelect);
+  // console.log(currentSelect);
 
   function handleClick(select: SKUDetail | PackageDetail, isPackage = false) {
     props.onChangeSelect(select, isPackage);
