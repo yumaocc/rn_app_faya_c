@@ -21,6 +21,7 @@ const SPUDetail: React.FC = () => {
 
   const [spuDispatcher] = useSPUDispatcher();
 
+  // 如果有其他页面修改了redux中的spu，返回该页面时需要重新加载spu
   useEffect(() => {
     if (!isFocused) {
       return;
