@@ -9,6 +9,7 @@ import * as api from '../../apis';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../models';
+import {PRIVACY_POLICY_URL, USER_AGREEMENT_URL} from '../../constants';
 
 const Login: React.FC = () => {
   const [phone, setPhone] = useState('');
@@ -96,6 +97,17 @@ const Login: React.FC = () => {
     navigation.canGoBack() && navigation.goBack();
   }
 
+  function openUserProtocol() {
+    loadUrl(USER_AGREEMENT_URL);
+  }
+  function openPrivacyPolicy() {
+    loadUrl(PRIVACY_POLICY_URL);
+  }
+
+  function loadUrl(url: string) {
+    navigation.navigate('Browser', {url});
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>登录/注册</Text>
@@ -125,6 +137,18 @@ const Login: React.FC = () => {
             }
             placeholder="请输入验证码"
           />
+        </View>
+        <View>
+          <Text style={[globalStyles.fontTertiary, globalStyles.moduleMarginTop]}>
+            <Text>登录即代表同意</Text>
+            <Text onPress={openUserProtocol} style={[globalStyles.fontTertiary, {color: globalStyleVariables.COLOR_LINK}]}>
+              用户协议
+            </Text>
+            <Text>和</Text>
+            <Text onPress={openPrivacyPolicy} style={[globalStyles.fontTertiary, {color: globalStyleVariables.COLOR_LINK}]}>
+              隐私政策
+            </Text>
+          </Text>
         </View>
         <Button style={styles.login} type="primary" onPress={handleLogin} loading={loginState === LoginState.Loading}>
           登录

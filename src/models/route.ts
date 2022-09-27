@@ -29,6 +29,7 @@ export type RootStackParamList = {
   SelectSPU: undefined;
   PaySuccess: undefined;
   WaitPay: undefined;
+  Browser: {url: string};
 };
 
 export type ValidRoute = keyof RootStackParamList;

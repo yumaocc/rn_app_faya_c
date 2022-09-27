@@ -9,6 +9,7 @@ export const globalStyleVariables = {
   COLOR_DANGER: '#F44336',
   COLOR_BUD: '#5FBC7F', // 绿芽-绿
   COLOR_CASH: '#4AB87D', // 绿
+  COLOR_LINK: '#546DAD', // 链接 蓝
   TEXT_COLOR_PRIMARY: '#333',
   TEXT_COLOR_SECONDARY: '#666',
   TEXT_COLOR_TERTIARY: '#999',
