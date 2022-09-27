@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {View, Text, TouchableOpacity, ScrollView, useWindowDimensions, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView, useWindowDimensions, StyleSheet, Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -81,7 +81,7 @@ const MyCode: React.FC = () => {
       />
       <ScrollView ref={setRef} horizontal style={{flex: 1}} snapToInterval={windowWidth} showsHorizontalScrollIndicator={false} scrollEnabled={false}>
         <SwipeView style={[styles.codeContainer, {width: windowWidth}]} onSwipe={handleSwipe}>
-          <View style={styles.avatar} />
+          {!userInfo?.avatar ? <Image style={styles.avatar} source={require('../../assets/avatar_def.png')} /> : <Image style={styles.avatar} source={{uri: userInfo.avatar}} />}
           <View style={{marginTop: 20}}>
             <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{userInfo?.nickName}</Text>
           </View>
@@ -99,7 +99,7 @@ const MyCode: React.FC = () => {
           </TouchableOpacity>
         </SwipeView>
         <SwipeView style={[styles.codeContainer, {width: windowWidth}]} onSwipe={handleSwipe}>
-          <View style={styles.avatar} />
+          {!userInfo?.avatar ? <Image style={styles.avatar} source={require('../../assets/avatar_def.png')} /> : <Image style={styles.avatar} source={{uri: userInfo.avatar}} />}
           <View style={{marginTop: 20}}>
             <Text style={[globalStyles.fontPrimary]}>{userInfo?.nickName}</Text>
           </View>
