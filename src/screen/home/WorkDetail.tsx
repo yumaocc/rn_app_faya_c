@@ -69,6 +69,12 @@ const WorkDetail: React.FC = () => {
     }
   }, [videoUrl]);
 
+  useEffect(() => {
+    return () => {
+      spuDispatcher.closeViewSPU();
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   function handleOnLoad(e: OnLoadData) {
     const {naturalSize} = e;
     if (naturalSize.orientation === 'landscape') {

@@ -24,6 +24,12 @@ const SPUDetail: React.FC = () => {
     spuDispatcher.viewSPU(id);
   }, [id, spuDispatcher]);
 
+  useEffect(() => {
+    return () => {
+      spuDispatcher.closeViewSPU();
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   console.log(spu);
 
   const {bottom: safeBottom} = useSafeAreaInsets();
