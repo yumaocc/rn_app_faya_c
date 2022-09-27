@@ -2,13 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {InputItem, Button} from '@ant-design/react-native';
 import {useSelector} from 'react-redux';
-import {useCommonDispatcher, useParams, useUserDispatcher} from '../../helper/hooks';
+import {useCommonDispatcher, useUserDispatcher} from '../../helper/hooks';
 import {RootState} from '../../redux/reducers';
 import {LoginState} from '../../fst/models';
 import * as api from '../../apis';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useNavigation} from '@react-navigation/native';
-import {FakeNavigation, RootStackParamList} from '../../models';
+import {FakeNavigation} from '../../models';
 
 const Login: React.FC = () => {
   const [phone, setPhone] = useState('');
@@ -21,7 +21,6 @@ const Login: React.FC = () => {
   const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
   const navigation = useNavigation<FakeNavigation>();
-  const params = useParams<{to?: keyof RootStackParamList; params?: any}>();
 
   useEffect(() => {
     if (suggestPhone) {
@@ -59,17 +58,16 @@ const Login: React.FC = () => {
     }
   }
 
-  function redirect() {
-    // console.log(navigation);
-    console.log(params);
-    if (!params.to) {
-      navigation.popToTop();
-    } else {
-      navigation.replace(params.to, params.params);
-    }
-  }
+  // function redirect() {
+  //   // console.log(navigation);
+  //   console.log(params);
+  //   if (!params.to) {
+  //     navigation.popToTop();
+  //   } else {
+  //     navigation.replace(params.to, params.params);
+  //   }
+  // }
   function handleLogin() {
-    redirect();
     if (!phone) {
       return commonDispatcher.error('请输入手机号');
     }
@@ -85,7 +83,7 @@ const Login: React.FC = () => {
       const res = await api.user.userLogin(phone, code);
       if (res) {
         setLoginState(LoginState.Success);
-        userDispatcher.setUserInfo(res);
+        userDispatcher.loginSuccess(res?.token);
       }
     } catch (error) {
       commonDispatcher.error(error);
@@ -94,6 +92,7 @@ const Login: React.FC = () => {
   }
 
   function skipLogin() {
+    userDispatcher.clearLoginInfo();
     navigation.canGoBack() && navigation.goBack();
   }
 

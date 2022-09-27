@@ -42,6 +42,8 @@ export default (state = initialState, action: WorkActions): WorkState => {
       return produce(state, draft => {
         draft.publishConfig = action.payload;
       });
+    case ActionType.RESET:
+      return initialState;
     default:
       return state;
   }

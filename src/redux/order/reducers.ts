@@ -15,6 +15,8 @@ export default (state = initialState, action: OrderActions): OrderState => {
       return produce(state, draft => {
         draft.payOrder = action.payload;
       });
+    case ActionType.RESET:
+      return initialState;
     default:
       return state;
   }

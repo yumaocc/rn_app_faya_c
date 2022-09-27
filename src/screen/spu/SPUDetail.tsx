@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useParams, useSPUDispatcher} from '../../helper/hooks';
+import {useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
 import {FakeNavigation, PackageDetail, SKUDetail, SPUDetailF} from '../../models';
 
 import SPUDetailView from './SPUDetailView';
@@ -16,6 +16,7 @@ const SPUDetail: React.FC = () => {
   const spu: SPUDetailF = useSelector((state: RootState) => state.spu.currentSPU);
   const currentSKU: PackageDetail | SKUDetail = useSelector((state: RootState) => state.spu.currentSKU);
   const isPackage: boolean = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
+  const [userDispatcher] = useUserDispatcher();
 
   const [spuDispatcher] = useSPUDispatcher();
 
@@ -30,7 +31,11 @@ const SPUDetail: React.FC = () => {
 
   function handleBuy() {
     if (!token) {
-      navigation.navigate('Login', {to: 'Order', params: {id}});
+      userDispatcher.login({
+        to: 'Order',
+        params: {id},
+        redirect: true,
+      });
     } else {
       navigation.navigate('Order', {id});
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {createNavigationContainerRef} from '@react-navigation/native';
+import {createNavigationContainerRef, StackActions} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 
 import {RootState} from '../redux/reducers';
@@ -25,6 +25,7 @@ import PublishPhoto from '../screen/home/PublishPhoto';
 import PublishVideo from '../screen/home/PublishVideo';
 import PaySuccess from '../screen/spu/PaySuccess';
 import WaitPay from '../screen/mine/WaitPay';
+import {RootStackParamList, ValidRoute} from '../models';
 
 const Navigator: React.FC = () => {
   const token = useSelector((state: RootState) => state.common.token);
@@ -74,7 +75,28 @@ export const navigationRef = createNavigationContainerRef();
 
 // 编程式导航
 export function goLogin() {
+  navigateTo('Login', null, true);
+}
+
+export function relaunch() {
   if (navigationRef.isReady()) {
-    navigationRef?.navigate('Login' as unknown as never);
+    navigationRef.dispatch(StackActions.popToTop());
+  }
+}
+
+export function relaunchTo(url: ValidRoute, params?: any) {
+  if (navigationRef.isReady()) {
+    navigationRef.dispatch(StackActions.popToTop());
+    navigationRef.dispatch(StackActions.push(url, params));
+  }
+}
+
+export function navigateTo(url: keyof RootStackParamList, params?: any, redirect = false) {
+  if (navigationRef.isReady()) {
+    if (redirect) {
+      navigationRef.dispatch(StackActions.replace(url, params));
+    } else {
+      navigationRef.dispatch(StackActions.push(url, params));
+    }
   }
 }

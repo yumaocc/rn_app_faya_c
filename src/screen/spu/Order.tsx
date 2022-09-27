@@ -68,7 +68,7 @@ const Order: React.FC = () => {
   }, [sku, currentSkuIsPackage]);
 
   const totalPrice = useMemo(() => {
-    return Math.round(salePrice) * form.getFieldValue('amount') || 0;
+    return Math.round(salePrice * form.getFieldValue('amount') || 0);
   }, [salePrice, form]);
 
   const currentSelectedCoupon = useMemo(() => {

@@ -31,6 +31,8 @@ export type RootStackParamList = {
   WaitPay: undefined;
 };
 
+export type ValidRoute = keyof RootStackParamList;
+
 export type Props = NativeStackScreenProps<RootStackParamList>;
 
 // navigation的类型有问题，一堆类型。用这个类型代替

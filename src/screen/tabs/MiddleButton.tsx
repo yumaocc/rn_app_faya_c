@@ -4,19 +4,22 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import {globalStyleVariables} from '../../constants/styles';
+import {useUserDispatcher} from '../../helper/hooks';
 import {FakeNavigation} from '../../models';
 import {RootState} from '../../redux/reducers';
 
 const MiddleButton: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
   const token = useSelector((state: RootState) => state.common.token);
+  const [userDispatcher] = useUserDispatcher();
 
   function handleClick() {
     if (!token) {
-      navigation.navigate('Login', {to: 'ShootVideo'});
+      userDispatcher.login({
+        to: 'ShootVideo',
+      });
     } else {
       navigation.navigate('ShootVideo');
-      // navigation.navigate('WaitPay');
     }
   }
   return (

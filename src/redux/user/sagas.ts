@@ -1,12 +1,15 @@
-import {all, call, fork, put, takeLatest} from 'redux-saga/effects';
+import {all, call, fork, put, select, takeLatest} from 'redux-saga/effects';
 
 import {Actions as CommonActions} from '../common/actions';
 import {Actions} from './actions';
 import {ActionType} from './types';
 import {cache} from '../../helper/cache';
 import {ActionWithPayload} from '../types';
-import {UserInfo} from '../../models';
+import {GoLoginParams} from '../../models';
 import * as api from '../../apis';
+import {navigateTo, relaunch} from '../../router/Router';
+import {RootState} from '../reducers';
+import {OrderActions, SPUActions, WorkActions} from '../actions';
 
 function* initUser(): any {
   const phone = yield cache.user.getPhone();
@@ -15,12 +18,27 @@ function* initUser(): any {
 
 function* logout(): any {
   yield put(CommonActions.setToken(''));
+  yield put(CommonActions.reset());
+  yield put(Actions.reset());
+  yield put(WorkActions.reset());
+  yield put(OrderActions.reset());
+  yield put(SPUActions.reset());
 }
-function* setUserInfo(action: ActionWithPayload<ActionType, UserInfo>) {
+
+function login() {
+  navigateTo('Login');
+}
+
+function* loginSuccess(action: ActionWithPayload<ActionType, string>): any {
   // yield cache.user.setUserInfo(userInfo);
-  const token = action.payload?.token;
-  if (token) {
-    yield put(CommonActions.setToken(token));
+  const token = action.payload;
+  yield put(CommonActions.setToken(token));
+  const params: GoLoginParams = yield select((state: RootState) => state.user.login);
+  if (!params) {
+    relaunch();
+  } else {
+    navigateTo(params?.to || 'Tab', params?.params, params?.redirect);
+    yield put(Actions.clearLoginInfo());
   }
 }
 
@@ -63,7 +81,9 @@ function* getWalletSummary(): any {
 function* watchUserSagas() {
   yield takeLatest(ActionType.INIT, initUser);
   yield takeLatest(ActionType.LOGOUT, logout);
-  yield takeLatest(ActionType.SET_USER_INFO, setUserInfo);
+  yield takeLatest(ActionType.LOGIN, login);
+  yield takeLatest(ActionType.LOGIN_SUCCESS, loginSuccess);
+  // yield takeLatest(ActionType.SET_USER_INFO, setUserInfo);
   yield takeLatest(ActionType.GET_WALLET_INFO, getWalletInfo);
   yield takeLatest(ActionType.GET_COUPON_LIST, getCouponList);
   yield takeLatest(ActionType.GET_MINE_DETAIL, getMyDetail);

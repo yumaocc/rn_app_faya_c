@@ -24,6 +24,8 @@ export default (state: SPUState = initialState, action: SPUActions) => {
         draft.currentSKU = action.payload.sku;
         draft.currentSKUIsPackage = action.payload.isPackage;
       });
+    case ActionType.RESET:
+      return initialState;
     default:
       return state;
   }

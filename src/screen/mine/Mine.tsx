@@ -48,7 +48,12 @@ const Mine: React.FC = () => {
     console.log('copy');
   }
   function goLogin() {
+    // userDispatcher.login({to: 'Tab'});
     navigation.navigate('Login');
+  }
+
+  function logout() {
+    userDispatcher.logout();
   }
 
   return (
@@ -66,7 +71,7 @@ const Mine: React.FC = () => {
                   <Icon name="qrcode" size={24} color="#fff" />
                 </TouchableOpacity>
               )}
-              <TouchableOpacity style={{marginLeft: globalStyleVariables.MODULE_SPACE}} activeOpacity={0.8}>
+              <TouchableOpacity style={{marginLeft: globalStyleVariables.MODULE_SPACE}} activeOpacity={0.8} onPress={logout}>
                 <Icon name="menu" size={24} color="#fff" />
               </TouchableOpacity>
             </View>

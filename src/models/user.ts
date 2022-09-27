@@ -1,3 +1,5 @@
+import {ValidRoute} from './route';
+
 export enum UserState {
   NORMAL = 0,
   BLOCKED = 1, // 禁止登录
@@ -8,6 +10,12 @@ export interface UserInfo {
   telephone: string;
   status: UserState;
   token: string;
+}
+
+export interface GoLoginParams {
+  to: ValidRoute;
+  params?: any;
+  redirect?: boolean;
 }
 
 export enum CouponState {
