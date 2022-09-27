@@ -8,7 +8,7 @@ import SPUDetailView from './SPUDetailView';
 import BuyBar from './BuyBar';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 const SPUDetail: React.FC = () => {
   const {id} = useParams<{id: number}>();
@@ -17,12 +17,18 @@ const SPUDetail: React.FC = () => {
   const currentSKU: PackageDetail | SKUDetail = useSelector((state: RootState) => state.spu.currentSKU);
   const isPackage: boolean = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
   const [userDispatcher] = useUserDispatcher();
+  const isFocused = useIsFocused();
 
   const [spuDispatcher] = useSPUDispatcher();
 
   useEffect(() => {
-    spuDispatcher.viewSPU(id);
-  }, [id, spuDispatcher]);
+    if (!isFocused) {
+      return;
+    }
+    if (!spu || spu.id !== id) {
+      spuDispatcher.viewSPU(id);
+    }
+  }, [id, spuDispatcher, spu, isFocused]);
 
   useEffect(() => {
     return () => {
