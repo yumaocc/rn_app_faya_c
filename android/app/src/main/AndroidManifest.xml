@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.faya">
+  package="com.faya" android:versionName="1.0.0" android:versionCode="2">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -15,6 +15,7 @@
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
+      android:usesCleartextTraffic="true"
       android:theme="@style/AppTheme">
       <activity
         android:name=".MainActivity"
