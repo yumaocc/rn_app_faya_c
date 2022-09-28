@@ -146,7 +146,6 @@ const WorkDetail: React.FC = () => {
             ref={player}
             source={{uri: videoUrl}}
             style={styles.video}
-            muted
             repeat={true}
             resizeMode={resizeMode}
           />
