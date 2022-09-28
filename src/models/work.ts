@@ -66,6 +66,7 @@ export interface VideoInfo {
   duration: number;
   path: string;
   coverPath: string;
+  fileName: string;
 }
 
 export interface PublishConfig {

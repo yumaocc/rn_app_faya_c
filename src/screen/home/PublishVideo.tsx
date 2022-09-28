@@ -40,10 +40,11 @@ const PublishVideo: React.FC = () => {
   async function startUpload() {
     try {
       const mainId = await api.work.getPublishMainID(publishConfig.publishType);
+      console.log(videoInfo);
       const auth = await api.work.getUploadVideoAuth({
         mainId,
         title: 'video',
-        fileName: videoInfo?.path.split('/').pop() || '',
+        fileName: videoInfo?.fileName || 'upload.mp4',
       });
       // console.log('video auth', auth);
       currentUpload.current = 'video';

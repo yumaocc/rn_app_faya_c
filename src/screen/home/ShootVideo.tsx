@@ -12,6 +12,7 @@ import {secondToMinute} from '../../fst/helper';
 import {launchImageLibrary} from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 import PublishManager from '../../native-modules/PublishManager';
+import {getVideoNameByPath} from '../../helper/system';
 
 const ShootVideo: React.FC = () => {
   const recorder = useRef<RecorderViewRef>(null);
@@ -56,7 +57,7 @@ const ShootVideo: React.FC = () => {
   //   setDuration(secondToMinute(e.nativeEvent.duration));
   // }
   function onFinish(e: NativeSyntheticEvent<RecorderFinishData>) {
-    const info = e.nativeEvent;
+    const info: VideoInfo = {...e.nativeEvent, fileName: getVideoNameByPath(e.nativeEvent.path)};
     console.log('完成录制');
     console.log(info);
     setVideoInfo(info);
@@ -100,17 +101,22 @@ const ShootVideo: React.FC = () => {
         videoQuality: 'high',
         selectionLimit: 1,
       });
+      console.log('result');
+      console.log(result);
       if (result?.assets?.length) {
         const video = result.assets[0];
         let uri = video.uri;
         if (Platform.OS === 'android') {
           uri = await videoUrlCopy(video.uri, video.fileName);
         }
+        console.log('replaced_uri', uri);
         const info: VideoInfo = {
-          path: uri,
+          path: uri.replace(/^file:\/\//, ''),
           coverPath: await PublishManager.getVideoCover({path: uri}),
           duration: video.duration,
+          fileName: getVideoNameByPath(uri),
         };
+        console.log(info);
         jumpToNext(info);
       }
     } catch (error) {
