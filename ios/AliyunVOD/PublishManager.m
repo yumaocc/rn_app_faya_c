@@ -7,6 +7,7 @@
 
 #import "PublishManager.h"
 #import <VODUpload/VODUploadClient.h>
+#import "Util.h"
 
 
 @interface PublishManager()
@@ -63,6 +64,23 @@ RCT_REMAP_METHOD(uploadPhoto,
   VodInfo * info = [VodInfo new];
   [self.uploader addFile:option[@"path"] vodInfo:info];
   [self.uploader start];
+}
+
+RCT_REMAP_METHOD(getVideoCover,
+                 getVideoCover:(NSDictionary *) option
+                 withResolver: (RCTPromiseResolveBlock) resolve
+                 andRejecter:(RCTPromiseRejectBlock)reject) {
+  NSString * videoPath = option[@"path"];
+  if (!videoPath) {
+    reject(@"error", @"参数错误", nil);
+    return;
+  }
+  NSString * coverPath = [Util defalutVideoCover:videoPath];
+  if(!coverPath) {
+    reject(@"error", @"生成封面失败", nil);
+    return;
+  }
+  resolve(coverPath);
 }
 
 -(void) setup {

@@ -100,6 +100,9 @@ const ShootVideo: React.FC = () => {
         videoQuality: 'high',
         selectionLimit: 1,
       });
+      console.log(result);
+      console.log(result.errorCode);
+      console.log(result.errorMessage);
       const video = result.assets[0];
       let uri = video.uri;
       if (Platform.OS === 'android') {
@@ -110,6 +113,8 @@ const ShootVideo: React.FC = () => {
         coverPath: await PublishManager.getVideoCover({path: uri}),
         duration: video.duration,
       };
+      console.log('info');
+      console.log(info);
       jumpToNext(info);
     } catch (error) {
       console.log(error);
@@ -181,10 +186,10 @@ const ShootVideo: React.FC = () => {
                   </TouchableOpacity>
                 )}
               </View>
-              <View style={[styles.bottomControl, {marginLeft: 30}, globalStyles.containerCenter]}>
+              <View style={[styles.bottomControl, {marginLeft: 30}]}>
                 {!isRecording && (
                   <TouchableOpacity onPress={selectVideo}>
-                    <View>
+                    <View style={[globalStyles.containerCenter]}>
                       <MaterialIcon name="photo" size={40} color="#fff" />
                       <Text style={[globalStyles.fontPrimary, {color: '#fff', fontSize: 12, marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>相册</Text>
                     </View>
