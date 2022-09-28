@@ -98,10 +98,10 @@ const Login: React.FC = () => {
   }
 
   function openUserProtocol() {
-    loadUrl(USER_AGREEMENT_URL);
+    loadUrl(USER_AGREEMENT_URL + '?_r=' + Math.random());
   }
   function openPrivacyPolicy() {
-    loadUrl(PRIVACY_POLICY_URL);
+    loadUrl(PRIVACY_POLICY_URL + '?_r=' + Math.random());
   }
 
   function loadUrl(url: string) {
