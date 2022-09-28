@@ -30,6 +30,7 @@ export type RootStackParamList = {
   PaySuccess: undefined;
   WaitPay: undefined;
   Browser: {url: string};
+  TestPage: undefined;
 };
 
 export type ValidRoute = keyof RootStackParamList;

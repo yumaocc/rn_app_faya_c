@@ -142,7 +142,7 @@ const WorkDetail: React.FC = () => {
             onLoad={handleOnLoad}
             paused={paused}
             onError={handleError}
-            progressUpdateInterval={16}
+            progressUpdateInterval={1000}
             ref={player}
             source={{uri: videoUrl}}
             style={styles.video}

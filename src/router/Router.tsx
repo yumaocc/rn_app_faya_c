@@ -26,6 +26,7 @@ import PublishVideo from '../screen/home/PublishVideo';
 import PaySuccess from '../screen/spu/PaySuccess';
 import WaitPay from '../screen/mine/WaitPay';
 import Browser from '../screen/common/Browser';
+import TestPage from '../screen/common/TestPage';
 
 import {RootStackParamList, ValidRoute} from '../models';
 
@@ -48,6 +49,7 @@ const Navigator: React.FC = () => {
       <Stack.Screen name="SPUDetail" component={SPUDetail} options={commonScreenOptions} />
       <Stack.Screen name="WorkDetail" component={WorkDetail} options={commonScreenOptions} />
       <Stack.Screen name="Browser" component={Browser} options={commonScreenOptions} />
+      <Stack.Screen name="TestPage" component={TestPage} options={commonScreenOptions} />
       {token ? (
         <>
           <Stack.Screen name="Order" component={Order} options={commonScreenOptions} />
