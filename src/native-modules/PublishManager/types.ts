@@ -20,4 +20,5 @@ export interface VODPublishManager {
   removeProgressListener: () => void;
   uploadVideo: (config: PublishVideoConfig) => Promise<boolean>;
   uploadPhoto: (config: PublishPhotoConfig) => Promise<boolean>;
+  getVideoCover: (config: {path: string}) => Promise<string>;
 }

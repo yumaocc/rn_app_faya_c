@@ -1,6 +1,6 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useMemo, useRef} from 'react';
-import {View, StyleSheet, NativeSyntheticEvent, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, NativeSyntheticEvent, Text, TouchableOpacity, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -9,6 +9,9 @@ import {FakeNavigation, VideoInfo} from '../../models';
 import {RecorderFinishData, RecorderView, RecorderViewRef, RecorderViewActionType, RecorderErrorData, RecorderState, RecorderProgressData} from '../../native-modules/RecorderView';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {secondToMinute} from '../../fst/helper';
+import {launchImageLibrary} from 'react-native-image-picker';
+import RNFS from 'react-native-fs';
+import PublishManager from '../../native-modules/PublishManager';
 
 const ShootVideo: React.FC = () => {
   const recorder = useRef<RecorderViewRef>(null);
@@ -90,6 +93,36 @@ const ShootVideo: React.FC = () => {
     }, []),
   );
 
+  async function selectVideo() {
+    try {
+      const result = await launchImageLibrary({
+        mediaType: 'video',
+        videoQuality: 'high',
+        selectionLimit: 1,
+      });
+      const video = result.assets[0];
+      let uri = video.uri;
+      if (Platform.OS === 'android') {
+        uri = await videoUrlCopy(video.uri, video.fileName);
+      }
+      const info: VideoInfo = {
+        path: uri,
+        coverPath: await PublishManager.getVideoCover({path: uri}),
+        duration: video.duration,
+      };
+      jumpToNext(info);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function videoUrlCopy(uri: string, fileName: string) {
+    const destPath = `${RNFS.TemporaryDirectoryPath}/${fileName}`;
+    await RNFS.copyFile(uri, destPath);
+    await RNFS.stat(destPath);
+    return destPath;
+  }
+
   return (
     <>
       <View style={styles.container}>
@@ -150,10 +183,12 @@ const ShootVideo: React.FC = () => {
               </View>
               <View style={[styles.bottomControl, {marginLeft: 30}, globalStyles.containerCenter]}>
                 {!isRecording && (
-                  <>
-                    <MaterialIcon name="photo" size={40} color="#fff" />
-                    <Text style={[globalStyles.fontPrimary, {color: '#fff', fontSize: 12, marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>相册</Text>
-                  </>
+                  <TouchableOpacity onPress={selectVideo}>
+                    <View>
+                      <MaterialIcon name="photo" size={40} color="#fff" />
+                      <Text style={[globalStyles.fontPrimary, {color: '#fff', fontSize: 12, marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>相册</Text>
+                    </View>
+                  </TouchableOpacity>
                 )}
               </View>
             </View>

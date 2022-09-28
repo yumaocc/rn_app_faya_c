@@ -16,6 +16,7 @@ const PublishManager: VODPublishManager = {
   },
   uploadVideo: config => NativePublishManager.uploadVideo(config),
   uploadPhoto: config => NativePublishManager.uploadPhoto(config),
+  getVideoCover: config => NativePublishManager.getVideoCover(config),
 };
 
 export default PublishManager;

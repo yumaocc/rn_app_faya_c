@@ -1,5 +1,6 @@
 package com.faya.AliyunVOD;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,9 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.faya.utils.VideoUtils;
 
+import java.io.File;
 import java.util.HashMap;
 
 public class PublishManager extends ReactContextBaseJavaModule {
@@ -126,6 +129,21 @@ public class PublishManager extends ReactContextBaseJavaModule {
     @ReactMethod
     public void uploadPhoto(ReadableMap option, Promise promise) {
         uploadFile(option, promise);
+    }
+
+    @ReactMethod
+    public void getVideoCover(ReadableMap option, Promise promise) {
+        String videoPath = option.getString("path");
+        if (videoPath == null) {
+            promise.reject("error", "参数错误");
+            return;
+        }
+        String coverPath = VideoUtils.getVideoCover(reactContext, videoPath);
+        if (coverPath == null) {
+            promise.reject("error", "生成封面失败");
+            return;
+        }
+        promise.resolve(coverPath);
     }
 
     private void sendEvent(ReactContext reactContext,
