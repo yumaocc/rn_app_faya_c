@@ -100,22 +100,19 @@ const ShootVideo: React.FC = () => {
         videoQuality: 'high',
         selectionLimit: 1,
       });
-      console.log(result);
-      console.log(result.errorCode);
-      console.log(result.errorMessage);
-      const video = result.assets[0];
-      let uri = video.uri;
-      if (Platform.OS === 'android') {
-        uri = await videoUrlCopy(video.uri, video.fileName);
+      if (result?.assets?.length) {
+        const video = result.assets[0];
+        let uri = video.uri;
+        if (Platform.OS === 'android') {
+          uri = await videoUrlCopy(video.uri, video.fileName);
+        }
+        const info: VideoInfo = {
+          path: uri,
+          coverPath: await PublishManager.getVideoCover({path: uri}),
+          duration: video.duration,
+        };
+        jumpToNext(info);
       }
-      const info: VideoInfo = {
-        path: uri,
-        coverPath: await PublishManager.getVideoCover({path: uri}),
-        duration: video.duration,
-      };
-      console.log('info');
-      console.log(info);
-      jumpToNext(info);
     } catch (error) {
       console.log(error);
     }
