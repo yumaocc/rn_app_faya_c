@@ -64,6 +64,7 @@
 		F49777F528C23058007EE7E6 /* antoutline.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = antoutline.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"; sourceTree = "<group>"; };
 		F49777F628C23058007EE7E6 /* antfill.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = antfill.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antfill.ttf"; sourceTree = "<group>"; };
 		F49777F928C3B241007EE7E6 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		F4DBA10F28E5A28600ADF4D5 /* faya.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = faya.entitlements; path = faya/faya.entitlements; sourceTree = "<group>"; };
 		F4ECFC7928D86DFA000017F0 /* PublishManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PublishManager.h; sourceTree = "<group>"; };
 		F4ECFC7A28D86DFA000017F0 /* PublishManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PublishManager.m; sourceTree = "<group>"; };
 		F4ECFC7C28D9BA07000017F0 /* slogan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slogan.png; sourceTree = "<group>"; };
@@ -109,6 +110,7 @@
 		13B07FAE1A68108700A75B9A /* faya */ = {
 			isa = PBXGroup;
 			children = (
+				F4DBA10F28E5A28600ADF4D5 /* faya.entitlements */,
 				F4925E9528CB40C400F2B607 /* AliyunVOD */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -539,6 +541,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = faya/faya.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 5Q64234526;
@@ -569,6 +572,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = faya/faya.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2;
