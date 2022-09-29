@@ -21,6 +21,10 @@ export const globalStyleVariables = {
 };
 
 export const globalStyles = StyleSheet.create({
+  debug: {
+    // 调试用，不要用于生产
+    backgroundColor: '#6cf',
+  },
   containerForTmp: {
     // 调试用，不要用于生产
     flex: 1,
@@ -41,6 +45,10 @@ export const globalStyles = StyleSheet.create({
   containerRow: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  containerCol: {
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
   flexCenter: {
     alignContent: 'center',
