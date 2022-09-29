@@ -22,6 +22,18 @@ export interface OrderForm {
   wxOpenId?: string;
 }
 
+export interface PayOrder {
+  orderId: string;
+  prePayTn: string;
+  uniqueOrderNo: string;
+}
+export enum OrderPayState {
+  UNPAY = 0,
+  PAYED = 1,
+  CANCEL = 2,
+  TIMEOUT = 3,
+}
+
 export enum OrderStatus {
   All = -1,
   WaitPay = 0,

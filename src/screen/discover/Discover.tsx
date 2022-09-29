@@ -9,9 +9,12 @@ import {FakeNavigation, SPUF} from '../../models';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
+import {getLocation} from '../../helper/system';
+
 const Discover: React.FC = () => {
   const [spuList, setSpuList] = React.useState([]);
   const [left, right] = useDivideData<SPUF>(spuList);
+  const [location] = React.useState('定位中');
 
   const navigation = useNavigation<FakeNavigation>();
 
@@ -22,6 +25,19 @@ const Discover: React.FC = () => {
       setSpuList(res || []);
     }
     f();
+  }, []);
+
+  async function getCurrentLocation() {
+    try {
+      const location = await getLocation();
+      console.log(location);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getCurrentLocation();
   }, []);
 
   function renderSPU(spu: SPUF) {
@@ -83,7 +99,7 @@ const Discover: React.FC = () => {
           <View style={[globalStyles.containerLR, {paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             <View style={globalStyles.containerRow}>
               <Icon name="location-on" size={24} color="#333" />
-              <Text>成都</Text>
+              <Text>{location}</Text>
               <Icon name="arrow-drop-down" size={20} color="#333" />
             </View>
             <View style={styles.searchContainer}>
@@ -91,6 +107,9 @@ const Discover: React.FC = () => {
                 火锅
               </Text>
             </View>
+          </View>
+          <View>
+            <Text>{location}</Text>
           </View>
           <ScrollView style={{flex: 1}}>
             <View style={styles.spuContainer}>

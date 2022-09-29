@@ -3,6 +3,7 @@ import {ActionType} from './types';
 import {ErrorType, PreviewConfig} from '../../fst/models';
 
 export const Actions = {
+  reset: (): Action<ActionType.RESET> => createAction(ActionType.RESET),
   initApp: (): Action<ActionType.INIT_APP> => createAction(ActionType.INIT_APP),
   initAppSuccess: (): Action<ActionType.INIT_APP_SUCCESS> => createAction(ActionType.INIT_APP_SUCCESS),
   error: (error: ErrorType | string | any): ActionWithPayload<ActionType.ERROR, ErrorType | string> => createAction(ActionType.ERROR, error),

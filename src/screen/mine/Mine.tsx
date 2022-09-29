@@ -48,7 +48,12 @@ const Mine: React.FC = () => {
     console.log('copy');
   }
   function goLogin() {
+    // userDispatcher.login({to: 'Tab'});
     navigation.navigate('Login');
+  }
+
+  function logout() {
+    userDispatcher.logout();
   }
 
   return (
@@ -66,7 +71,7 @@ const Mine: React.FC = () => {
                   <Icon name="qrcode" size={24} color="#fff" />
                 </TouchableOpacity>
               )}
-              <TouchableOpacity style={{marginLeft: globalStyleVariables.MODULE_SPACE}} activeOpacity={0.8}>
+              <TouchableOpacity style={{marginLeft: globalStyleVariables.MODULE_SPACE}} activeOpacity={0.8} onPress={logout}>
                 <Icon name="menu" size={24} color="#fff" />
               </TouchableOpacity>
             </View>
@@ -74,7 +79,8 @@ const Mine: React.FC = () => {
           <View style={{borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: '#fff'}}>
             {/* 头像栏 */}
             <View style={[styles.userData]}>
-              <View style={[styles.avatar]} />
+              {!!detail.avatar && <Image style={[styles.avatar]} source={{uri: detail.avatar}} />}
+              {!detail.avatar && <Image style={[styles.avatar]} source={require('../../assets/avatar_def.png')} />}
               <View style={[globalStyles.containerRow, {justifyContent: 'space-around', flex: 1, height: 62}]}>
                 <View style={{alignItems: 'center', flex: 1}}>
                   <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{detail?.nums?.fansNums}</Text>
@@ -184,7 +190,6 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#6cf',
     overflow: 'hidden',
     borderWidth: 2,
     borderColor: '#fff',

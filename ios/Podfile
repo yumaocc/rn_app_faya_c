@@ -6,6 +6,7 @@ install! 'cocoapods', :deterministic_uuids => false
 
 production = ENV["PRODUCTION"] == "1"
 pod 'AliyunVideoSDKStd', '~> 3.33.0'
+pod 'VODUpload'
 
 target 'faya' do
   config = use_native_modules!

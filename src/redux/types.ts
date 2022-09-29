@@ -2,8 +2,9 @@ import {ActionType as UserActionType} from './user/types';
 import {ActionType as CommonActionType} from './common/types';
 import {ActionType as WorkActionType} from './work/types';
 import {ActionType as SPUActionType} from './spu/types';
+import {ActionType as OrderActionType} from './order/types';
 
-export type ActionType = UserActionType | CommonActionType | WorkActionType | SPUActionType;
+export type ActionType = UserActionType | CommonActionType | WorkActionType | SPUActionType | OrderActionType;
 
 export interface Action<T extends ActionType> {
   type: T;

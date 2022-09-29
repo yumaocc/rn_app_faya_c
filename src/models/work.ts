@@ -33,7 +33,7 @@ export interface WorkPublishForm {
   hasPrivate?: WorkVisibleAuth;
   latitude?: number;
   longitude?: number;
-  mainId?: number;
+  mainId?: string;
   type?: WorkType;
 }
 
@@ -65,4 +65,42 @@ export interface WorkDetailF {
 export interface VideoInfo {
   duration: number;
   path: string;
+  coverPath: string;
+  fileName: string;
+}
+
+export interface PublishConfig {
+  allowDownload: BoolEnum;
+  allowForward: BoolEnum;
+  hasPrivate: WorkVisibleAuth;
+  autoSaveAfterPublish: boolean;
+  addressName?: string;
+  latitude?: number;
+  longitude?: number;
+  content: string;
+  publishType: WorkType;
+}
+
+export interface VideoUploadAuthParams {
+  description?: string;
+  fileName: string;
+  mainId: string;
+  tags?: string;
+  title: string;
+}
+
+export interface VideoUploadAuth {
+  uploadAddress: string;
+  uploadAuth: string;
+}
+
+export interface PhotoUploadAuthParams {
+  imageExt?: string;
+  imageType?: 'cover' | 'default';
+  mainId: string;
+}
+
+export interface PhotoUploadAuth {
+  uploadAddress: string;
+  uploadAuth: string;
 }

@@ -72,4 +72,30 @@
     NSLog(@"check bundle");
     NSLog(@"%@", arr);
 }
+
++ (NSString *) defalutVideoCover: (NSString *)videoPath {
+  NSURL *path = [NSURL fileURLWithPath:videoPath];
+  
+  // 获取图片
+  AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:path options:nil];
+  AVAssetImageGenerator *assetGen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+  assetGen.appliesPreferredTrackTransform = YES;
+  CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+  NSError *error = nil;
+  CMTime actualTime;
+  CGImageRef image = [assetGen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+  UIImage *videoImage = [[UIImage alloc] initWithCGImage:image];
+  CGImageRelease(image);
+  
+  NSString * cache = [NSTemporaryDirectory() stringByAppendingPathComponent:[Util UUIDString]];
+  [Util makeDir:cache];
+  NSString * imagePath = [[cache stringByAppendingPathComponent:[Util UUIDString]] stringByAppendingPathExtension:@"png"];
+  NSLog(@"路径, %@", imagePath);
+  NSLog(@"videoImage, %@", videoImage);
+  BOOL result = [UIImagePNGRepresentation(videoImage) writeToFile:imagePath atomically:YES];
+  if (result) {
+    return imagePath;
+  }
+  return @"";
+}
 @end

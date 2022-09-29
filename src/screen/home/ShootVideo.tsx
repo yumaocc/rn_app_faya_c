@@ -1,23 +1,33 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useRef} from 'react';
-import {View, StyleSheet, NativeSyntheticEvent} from 'react-native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import React, {useCallback, useMemo, useRef} from 'react';
+import {View, StyleSheet, NativeSyntheticEvent, Text, TouchableOpacity, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
 import {Button, NavigationBar} from '../../component';
-import {globalStyles} from '../../constants/styles';
+import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useWorkDispatcher} from '../../helper/hooks';
-import {FakeNavigation} from '../../models';
-import {RecorderFinishData, RecorderView, RecorderViewRef, RecorderViewActionType, RecorderErrorData, RecorderState} from '../../native-modules/RecorderView';
-import {RootState} from '../../redux/reducers';
+import {FakeNavigation, VideoInfo} from '../../models';
+import {RecorderFinishData, RecorderView, RecorderViewRef, RecorderViewActionType, RecorderErrorData, RecorderState, RecorderProgressData} from '../../native-modules/RecorderView';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import {secondToMinute} from '../../fst/helper';
+import {launchImageLibrary} from 'react-native-image-picker';
+import RNFS from 'react-native-fs';
+import PublishManager from '../../native-modules/PublishManager';
+import {getVideoNameByPath} from '../../helper/system';
 
 const ShootVideo: React.FC = () => {
   const recorder = useRef<RecorderViewRef>(null);
-  // const [videoPath, setVideoPath] = React.useState('');
-  const videoInfo = useSelector((state: RootState) => state.work.videoInfo);
+  const [recorderState, setRecorderState] = React.useState<RecorderState>({
+    isRecording: false,
+    torchMode: 'off',
+  });
+  const isRecording = useMemo(() => recorderState.isRecording, [recorderState.isRecording]);
+  const [duration, setDuration] = React.useState('');
+  const readyRef = useRef(false); // 用于检测是否需要自动跳转下一步
+
   const [workDispatcher] = useWorkDispatcher();
+  const [videoInfo, setVideoInfo] = React.useState<VideoInfo>(null);
 
   const navigation = useNavigation<FakeNavigation>();
-  // const [isRecording, setIsRecording] = React.useState(false);
 
   function handleReady() {
     console.log('recorder ready');
@@ -27,38 +37,100 @@ const ShootVideo: React.FC = () => {
     console.log('error:', e);
     console.log(e.nativeEvent);
   }
-  function handleClick() {
-    recorder.current?.sendAction(RecorderViewActionType.StartPreview);
-  }
-  function getState() {
-    recorder.current?.sendAction(RecorderViewActionType.CheckState);
-  }
   function handleStateChange(e: NativeSyntheticEvent<RecorderState>) {
-    console.log('state change:', e.nativeEvent);
+    setRecorderState(e.nativeEvent);
   }
-  function handleStartRecording() {
+  function startRecord() {
+    readyRef.current = false; // 不再自动跳转下一步
     recorder.current?.sendAction(RecorderViewActionType.StartRecord);
   }
-  function handlePauseRecording() {
+  function pauseRecord() {
     recorder.current?.sendAction(RecorderViewActionType.PauseRecord);
   }
-  function handleFinishRecording() {
+  function finishRecord() {
     recorder.current?.sendAction(RecorderViewActionType.FinishRecord);
   }
+  const handleProgress = useCallback((e: NativeSyntheticEvent<RecorderProgressData>) => {
+    setDuration(secondToMinute(e.nativeEvent.duration));
+  }, []);
+  // function handleProgress(e: NativeSyntheticEvent<RecorderProgressData>) {
+  //   setDuration(secondToMinute(e.nativeEvent.duration));
+  // }
   function onFinish(e: NativeSyntheticEvent<RecorderFinishData>) {
-    console.log('结束录制');
-    console.log(e.nativeEvent);
-    workDispatcher.setVideoInfo({
-      path: e.nativeEvent.path,
-      duration: e.nativeEvent.duration,
-    });
+    const info: VideoInfo = {...e.nativeEvent, fileName: getVideoNameByPath(e.nativeEvent.path)};
+    console.log('完成录制');
+    console.log(info);
+    setVideoInfo(info);
+    if (readyRef.current) {
+      jumpToNext(info);
+    } else {
+      readyRef.current = true;
+    }
+  }
+
+  function jumpToNext(videoInfo: VideoInfo) {
+    workDispatcher.setVideoInfo(videoInfo);
+    navigation.navigate('Publish');
   }
 
   function onNext() {
-    if (videoInfo) {
-      navigation.navigate('Publish');
+    if (readyRef.current) {
+      if (videoInfo) {
+        jumpToNext(videoInfo);
+      }
+    } else {
+      readyRef.current = true;
+      finishRecord();
     }
   }
+
+  // 处理后台任务
+  useFocusEffect(
+    React.useCallback(() => {
+      recorder.current?.sendAction(RecorderViewActionType.StartPreview);
+      return () => {
+        recorder.current?.sendAction(RecorderViewActionType.StopPreview);
+      };
+    }, []),
+  );
+
+  async function selectVideo() {
+    try {
+      const result = await launchImageLibrary({
+        mediaType: 'video',
+        videoQuality: 'high',
+        selectionLimit: 1,
+      });
+      console.log('result');
+      console.log(result);
+      if (result?.assets?.length) {
+        const video = result.assets[0];
+        let uri = video.uri;
+        if (Platform.OS === 'android') {
+          uri = await videoUrlCopy(video.uri, video.fileName);
+        }
+        console.log('replaced_uri', uri);
+        const info: VideoInfo = {
+          path: uri.replace(/^file:\/\//, ''),
+          coverPath: await PublishManager.getVideoCover({path: uri}),
+          duration: video.duration,
+          fileName: getVideoNameByPath(uri),
+        };
+        console.log(info);
+        jumpToNext(info);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function videoUrlCopy(uri: string, fileName: string) {
+    const destPath = `${RNFS.TemporaryDirectoryPath}/${fileName}`;
+    await RNFS.copyFile(uri, destPath);
+    await RNFS.stat(destPath);
+    return destPath;
+  }
+
   return (
     <>
       <View style={styles.container}>
@@ -70,15 +142,64 @@ const ShootVideo: React.FC = () => {
           onRecorderStateChange={handleStateChange}
           onRecordFinish={onFinish}
           onRecordFinishWithMaxDuration={onFinish}
+          onRecordProgress={handleProgress}
         />
         <SafeAreaView style={styles.coverContainer}>
-          <NavigationBar safeTop={false} color="#fff" headerRight={<Button title="下一步" onPress={onNext} />} />
-          <View style={[globalStyles.containerRow, {flexWrap: 'wrap'}]}>
-            <Button style={styles.button} title="开始预览" onPress={handleClick} />
-            <Button style={styles.button} title="获取录制状态" onPress={getState} />
-            <Button style={styles.button} title="开始录制" onPress={handleStartRecording} />
-            <Button style={styles.button} title="暂停录制" onPress={handlePauseRecording} />
-            <Button style={styles.button} title="结束录制" onPress={handleFinishRecording} />
+          {!isRecording && (
+            <NavigationBar
+              safeTop={false}
+              color="#fff"
+              headerRight={
+                <View style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
+                  <Button title="下一步" onPress={onNext} style={{height: 25, paddingVertical: 0}} />
+                </View>
+              }
+            />
+          )}
+          {/* <View style={[globalStyles.containerRow, {flexWrap: 'wrap'}]}>
+          </View> */}
+          {!isRecording && (
+            <View style={styles.side}>
+              <TouchableOpacity activeOpacity={0.6} onPress={() => recorder.current?.sendAction(RecorderViewActionType.SwitchCamera)}>
+                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                  <MaterialIcon name="cached" size={30} color="#fff" />
+                  <Text style={[globalStyles.fontPrimary, {color: '#fff', fontSize: 12}]}>翻转</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          )}
+          <View style={styles.bottom}>
+            <View style={[globalStyles.containerCenter, {marginBottom: globalStyleVariables.MODULE_SPACE}]}>
+              <Text style={[globalStyles.fontPrimary, {color: '#fff', fontSize: 14}]}>{duration}</Text>
+            </View>
+            <View style={[{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
+              <View style={styles.bottomControl} />
+              <View style={[styles.bottomControl, {marginLeft: 30}]}>
+                {!isRecording ? (
+                  <TouchableOpacity activeOpacity={0.8} onPress={startRecord}>
+                    <View style={[globalStyles.containerCenter, {width: 78, height: 78, borderRadius: 78, borderColor: '#fff', borderWidth: 4}]}>
+                      <View style={{width: 67, height: 67, borderRadius: 67, backgroundColor: globalStyleVariables.COLOR_PRIMARY}} />
+                    </View>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity activeOpacity={0.8} onPress={pauseRecord}>
+                    <View style={[globalStyles.containerCenter, {width: 78, height: 78, borderRadius: 78, borderColor: '#909292', borderWidth: 4, backgroundColor: '#909292'}]}>
+                      <View style={{width: 24, height: 24, borderRadius: 5, backgroundColor: '#fff'}} />
+                    </View>
+                  </TouchableOpacity>
+                )}
+              </View>
+              <View style={[styles.bottomControl, {marginLeft: 30}]}>
+                {!isRecording && (
+                  <TouchableOpacity onPress={selectVideo}>
+                    <View style={[globalStyles.containerCenter]}>
+                      <MaterialIcon name="photo" size={40} color="#fff" />
+                      <Text style={[globalStyles.fontPrimary, {color: '#fff', fontSize: 12, marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>相册</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
           </View>
         </SafeAreaView>
       </View>
@@ -95,7 +216,7 @@ const styles = StyleSheet.create({
   },
   record: {
     flex: 1,
-    backgroundColor: '#6cf',
+    // backgroundColor: '#6cf',
   },
   coverContainer: {
     position: 'absolute',
@@ -104,9 +225,20 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  button: {
-    // width: 100,
-    marginRight: 10,
-    marginBottom: 10,
+  side: {
+    position: 'absolute',
+    right: globalStyleVariables.MODULE_SPACE,
+    top: 100,
+  },
+  bottom: {
+    position: 'absolute',
+    bottom: 20,
+    width: '100%',
+    height: 100,
+  },
+  bottomControl: {
+    width: 78,
+    height: 78,
+    // backgroundColor: '#6cf',
   },
 });

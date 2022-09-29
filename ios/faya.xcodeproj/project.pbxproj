@@ -22,6 +22,8 @@
 		F49777F728C23058007EE7E6 /* antoutline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F49777F528C23058007EE7E6 /* antoutline.ttf */; };
 		F49777F828C23058007EE7E6 /* antfill.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F49777F628C23058007EE7E6 /* antfill.ttf */; };
 		F49777FA28C3B241007EE7E6 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F49777F928C3B241007EE7E6 /* MaterialIcons.ttf */; };
+		F4ECFC7B28D86DFA000017F0 /* PublishManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F4ECFC7A28D86DFA000017F0 /* PublishManager.m */; };
+		F4ECFC7D28D9BA07000017F0 /* slogan.png in Resources */ = {isa = PBXBuildFile; fileRef = F4ECFC7C28D9BA07000017F0 /* slogan.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,10 @@
 		F49777F528C23058007EE7E6 /* antoutline.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = antoutline.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"; sourceTree = "<group>"; };
 		F49777F628C23058007EE7E6 /* antfill.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = antfill.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antfill.ttf"; sourceTree = "<group>"; };
 		F49777F928C3B241007EE7E6 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		F4DBA10F28E5A28600ADF4D5 /* faya.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = faya.entitlements; path = faya/faya.entitlements; sourceTree = "<group>"; };
+		F4ECFC7928D86DFA000017F0 /* PublishManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PublishManager.h; sourceTree = "<group>"; };
+		F4ECFC7A28D86DFA000017F0 /* PublishManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PublishManager.m; sourceTree = "<group>"; };
+		F4ECFC7C28D9BA07000017F0 /* slogan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slogan.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +110,7 @@
 		13B07FAE1A68108700A75B9A /* faya */ = {
 			isa = PBXGroup;
 			children = (
+				F4DBA10F28E5A28600ADF4D5 /* faya.entitlements */,
 				F4925E9528CB40C400F2B607 /* AliyunVOD */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -140,6 +147,7 @@
 				F49777F928C3B241007EE7E6 /* MaterialIcons.ttf */,
 				F49777F628C23058007EE7E6 /* antfill.ttf */,
 				F49777F528C23058007EE7E6 /* antoutline.ttf */,
+				F4ECFC7C28D9BA07000017F0 /* slogan.png */,
 				13B07FAE1A68108700A75B9A /* faya */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* fayaTests */,
@@ -180,6 +188,8 @@
 				F4925E9B28CB42AB00F2B607 /* Util.m */,
 				F4925E9D28CBA47700F2B607 /* SMNView.h */,
 				F4925E9E28CBA47700F2B607 /* SMNView.m */,
+				F4ECFC7928D86DFA000017F0 /* PublishManager.h */,
+				F4ECFC7A28D86DFA000017F0 /* PublishManager.m */,
 			);
 			path = AliyunVOD;
 			sourceTree = "<group>";
@@ -279,6 +289,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F49777FA28C3B241007EE7E6 /* MaterialIcons.ttf in Resources */,
+				F4ECFC7D28D9BA07000017F0 /* slogan.png in Resources */,
 				F49777F728C23058007EE7E6 /* antoutline.ttf in Resources */,
 				F4934A4428CB22CF007F46EF /* moment.mp4 in Resources */,
 				F49777F828C23058007EE7E6 /* antfill.ttf in Resources */,
@@ -454,6 +465,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4925E9F28CBA47700F2B607 /* SMNView.m in Sources */,
+				F4ECFC7B28D86DFA000017F0 /* PublishManager.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				F4925E9828CB410200F2B607 /* RecordView.m in Sources */,
@@ -529,15 +541,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = faya/faya.entitlements;
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 5Q64234526;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = faya/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -545,7 +559,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fylife.app;
 				PRODUCT_NAME = faya;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "faya main APP profile(dev)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -558,14 +572,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = faya/faya.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = 5Q64234526;
 				INFOPLIST_FILE = faya/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -573,7 +590,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fylife.app;
 				PRODUCT_NAME = faya;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "faya main APP profile(distribution)";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

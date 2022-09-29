@@ -81,6 +81,8 @@ export default (state = initialState, action: CommonActions): CommonState => {
         const {payload} = action;
         draft.token = payload;
       });
+    case ActionType.RESET:
+      return initialState;
     default:
       return state;
   }

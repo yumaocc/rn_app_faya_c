@@ -1,14 +1,14 @@
 import React, {useEffect} from 'react';
 import {View, StyleSheet, Text, ScrollView} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useParams, useSPUDispatcher} from '../../helper/hooks';
+import {useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
 import {FakeNavigation, PackageDetail, SKUDetail, SPUDetailF} from '../../models';
 
 import SPUDetailView from './SPUDetailView';
 import BuyBar from './BuyBar';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 
 const SPUDetail: React.FC = () => {
   const {id} = useParams<{id: number}>();
@@ -16,12 +16,26 @@ const SPUDetail: React.FC = () => {
   const spu: SPUDetailF = useSelector((state: RootState) => state.spu.currentSPU);
   const currentSKU: PackageDetail | SKUDetail = useSelector((state: RootState) => state.spu.currentSKU);
   const isPackage: boolean = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
+  const [userDispatcher] = useUserDispatcher();
+  const isFocused = useIsFocused();
 
   const [spuDispatcher] = useSPUDispatcher();
 
+  // 如果有其他页面修改了redux中的spu，返回该页面时需要重新加载spu
   useEffect(() => {
-    spuDispatcher.viewSPU(id);
-  }, [id, spuDispatcher]);
+    if (!isFocused) {
+      return;
+    }
+    if (!spu || spu.id !== id) {
+      spuDispatcher.viewSPU(id);
+    }
+  }, [id, spuDispatcher, spu, isFocused]);
+
+  useEffect(() => {
+    return () => {
+      spuDispatcher.closeViewSPU();
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   console.log(spu);
 
@@ -30,7 +44,11 @@ const SPUDetail: React.FC = () => {
 
   function handleBuy() {
     if (!token) {
-      navigation.navigate('Login', {to: 'Order', params: {id}});
+      userDispatcher.login({
+        to: 'Order',
+        params: {id},
+        redirect: true,
+      });
     } else {
       navigation.navigate('Order', {id});
     }

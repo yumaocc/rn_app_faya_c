@@ -24,15 +24,24 @@ export type RootStackParamList = {
   MyCode: {type: 'friend' | 'share'};
   ShootVideo: undefined;
   Publish: undefined;
+  PublishVideo: undefined;
+  PublishPhoto: undefined;
   SelectSPU: undefined;
+  PaySuccess: undefined;
+  WaitPay: undefined;
+  Browser: {url: string};
+  TestPage: undefined;
+  User: {id: number};
 };
+
+export type ValidRoute = keyof RootStackParamList;
 
 export type Props = NativeStackScreenProps<RootStackParamList>;
 
 // navigation的类型有问题，一堆类型。用这个类型代替
 export type FakeNavigation = {
   navigate<Params = any>(name: keyof RootStackParamList, params?: Params): void;
-  navigate<Params = any>(options: {name: keyof RootStackParamList; params: Params}): void;
+  navigate<Params = any>(options: {name?: keyof RootStackParamList; params?: Params; key?: keyof RootStackParamList}): void;
   canGoBack(): boolean;
   goBack(): void;
   isFocused(): void;

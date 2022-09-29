@@ -1,6 +1,6 @@
 import {Button} from '@ant-design/react-native';
 import React, {useEffect, useMemo} from 'react';
-import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
@@ -8,17 +8,28 @@ import {Form, Input, InputNumber, NavigationBar, Select} from '../../component';
 import FormItem from '../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {findItem, moneyToYuan} from '../../fst/helper';
-import {useCoupons, useSPUDispatcher, useWallet} from '../../helper/hooks';
-import {BookingType, CouponState, PackageDetail, PayChannel, SKUDetail} from '../../models';
+import {useAppState, useCommonDispatcher, useCoupons, useSPUDispatcher, useWallet} from '../../helper/hooks';
+import {BookingType, CouponState, FakeNavigation, OrderPayState, PackageDetail, PayChannel, SKUDetail} from '../../models';
 import {RootState} from '../../redux/reducers';
+import * as api from '../../apis';
+import {cleanOrderForm} from '../../helper/order';
+import {useOrderDispatcher} from '../../helper/hooks/dispatchers';
+import {useNavigation} from '@react-navigation/native';
 
 const Order: React.FC = () => {
   const spu = useSelector((state: RootState) => state.spu.currentSPU);
   const sku = useSelector((state: RootState) => state.spu.currentSKU);
   const currentSkuIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
+  const payOrder = useSelector((state: RootState) => state.order.payOrder);
+  const [isPaying, setIsPaying] = React.useState(false);
+
+  const appState = useAppState();
+  const navigation = useNavigation<FakeNavigation>();
   const [wallet] = useWallet();
   const [couponList] = useCoupons();
   const [spuDispatcher] = useSPUDispatcher();
+  const [commonDispatcher] = useCommonDispatcher();
+  const [orderDispatcher] = useOrderDispatcher();
   const {bottom} = useSafeAreaInsets();
   const initForm = {
     amount: 1,
@@ -29,20 +40,22 @@ const Order: React.FC = () => {
 
   // 可以切换的sku
   const flatSKUList = useMemo(() => {
-    const skuList = spu?.skuList?.map(e => {
-      return {
-        value: 'sku_' + e.id,
-        label: e.skuName,
-        isPackage: false,
-      };
-    });
-    const packages = spu?.packageDetailsList?.map(e => {
-      return {
-        value: 'pkg_' + e.packageId,
-        label: e.packageName,
-        isPackage: true,
-      };
-    });
+    const skuList =
+      spu?.skuList?.map(e => {
+        return {
+          value: 'sku_' + e.id,
+          label: e.skuName,
+          isPackage: false,
+        };
+      }) || [];
+    const packages =
+      spu?.packageDetailsList?.map(e => {
+        return {
+          value: 'pkg_' + e.packageId,
+          label: e.packageName,
+          isPackage: true,
+        };
+      }) || [];
     return [...skuList, ...packages];
   }, [spu]);
 
@@ -55,7 +68,7 @@ const Order: React.FC = () => {
   }, [sku, currentSkuIsPackage]);
 
   const totalPrice = useMemo(() => {
-    return Math.round(salePrice) * form.getFieldValue('amount') || 0;
+    return Math.round(salePrice * form.getFieldValue('amount') || 0);
   }, [salePrice, form]);
 
   const currentSelectedCoupon = useMemo(() => {
@@ -119,6 +132,23 @@ const Order: React.FC = () => {
     form.setFieldValue('skuId', id);
   }, [sku, currentSkuIsPackage]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (appState === 'active' && isPaying) {
+      api.order
+        .checkOrderPayState(payOrder?.orderId)
+        .then(res => {
+          if (res === OrderPayState.PAYED) {
+            navigation.navigate('PaySuccess');
+          } else {
+            navigation.navigate('WaitPay');
+          }
+        })
+        .catch(e => {
+          commonDispatcher.error(e);
+        });
+    }
+  }, [appState, isPaying, payOrder, commonDispatcher, navigation]);
+
   // 用户换了套餐，这里同步到redux
   function handleSKUChange(e = '') {
     const id = e.split('_')[1];
@@ -134,19 +164,30 @@ const Order: React.FC = () => {
       }
     }
   }
-  function check() {
-    console.log(form.getFieldsValue());
+  async function check() {
     // todo: 检查合法性
-    const {channel} = form.getFieldsValue();
-    if (channel === PayChannel.WECHAT) {
-      // todo: 微信支付
-    } else {
-      // todo: 支付宝支付
+    const formData = cleanOrderForm(form.getFieldsValue());
+    const {channel} = formData;
+    let link = '';
+    try {
+      if (channel === PayChannel.WECHAT) {
+        // todo: 微信支付链接
+        link = 'https://baidu.com';
+      } else {
+        const res = await api.order.makeOrder(formData);
+        orderDispatcher.setPayOrder(res);
+        link = `alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=${res.prePayTn}&_s=web-other`;
+      }
+
+      Linking.openURL(link);
+      setIsPaying(true);
+    } catch (error) {
+      commonDispatcher.error(error);
     }
   }
 
   return (
-    <View style={{flex: 1, backgroundColor: '#f4f4f4'}}>
+    <View style={{flex: 1, backgroundColor: '#f4f4f4', position: 'relative'}}>
       <NavigationBar title="确认订单" style={{backgroundColor: '#fff'}} />
       <ScrollView style={{flex: 1}}>
         <Form form={form} itemStyle={{children: styles.formChildren, container: styles.formItem}} hiddenLine>
@@ -283,6 +324,13 @@ const Order: React.FC = () => {
           </Button>
         </View>
       </View>
+      <Modal visible={isPaying} transparent animationType="fade">
+        <View style={[globalStyles.containerCenter, {flex: 1, backgroundColor: '#00000033'}]}>
+          <View style={[globalStyles.containerCenter, {backgroundColor: '#fff', paddingHorizontal: 30, paddingVertical: 40, borderRadius: 5}]}>
+            <Text style={[globalStyles.fontPrimary]}>正在支付</Text>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

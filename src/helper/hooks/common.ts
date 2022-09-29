@@ -1,6 +1,6 @@
 import {useRoute} from '@react-navigation/native';
 import {useRef, useEffect, useCallback, useState, useMemo} from 'react';
-import {Animated, Easing} from 'react-native';
+import {Animated, AppState, Easing} from 'react-native';
 import {ImageLibraryOptions, Asset, launchImageLibrary} from 'react-native-image-picker';
 import {FakeRoute} from '../../models/route';
 
@@ -66,4 +66,20 @@ export function useParams<T = any>(): T {
   const route = useRoute() as FakeRoute;
   const param = useMemo(() => route.params || {}, [route]);
   return param;
+}
+
+export function useAppState() {
+  const appStateRef = useRef(AppState.currentState);
+  const [appState, setAppState] = useState(appStateRef.current);
+  useEffect(() => {
+    const subscribe = AppState.addEventListener('change', nextState => {
+      appStateRef.current = nextState;
+      setAppState(nextState);
+    });
+    return () => {
+      subscribe.remove();
+    };
+  }, []);
+
+  return appState;
 }

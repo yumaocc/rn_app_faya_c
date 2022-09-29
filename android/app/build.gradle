@@ -134,7 +134,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.faya"
+        applicationId "com.fylife.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -219,10 +219,12 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
+            keyAlias 'styy'
+            keyPassword 'styybeginnice'
+            storeFile file('styy.keystore')
+            storePassword 'styybeginnice'
+            v1SigningEnabled true
+            v2SigningEnabled true
         }
         release {
              if (project.hasProperty("MYAPP_RELEASE_STORE_FILE")) {
@@ -292,6 +294,15 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+    implementation 'com.aliyun.video.android:svideostandard:3.34.0'//标准版短视频SDK必须依赖。
+    implementation 'com.aliyun.video.android:core:1.2.2' //核心库必须依赖。
+    //AlivcFFmpeg必须依赖,且版本需要在4.3.0及以上，在以下两个版本中选择一个版本进行依赖。
+    // implementation 'com.aliyun.video.android:AlivcFFmpeg:4.3.2.0-part' // 短视频SDK专用，包size较小。
+    implementation 'com.aliyun.video.android:AlivcFFmpeg:4.3.2' //短视频SDK与播放器SDK共用。两个SDK同时接入时，请用该版本。
+    implementation 'com.aliyun.video.android:upload:1.6.6'// 上传库，如不需要上传可不依赖。
+    implementation 'com.google.code.gson:gson:2.8.0'//第三方依赖库。
+    implementation 'com.squareup.okhttp3:okhttp:3.2.0'//第三方依赖库。
+    implementation 'com.aliyun.dpa:oss-android-sdk:+'//短视频上传需要依赖上传SDK及OSS，如果不需要上传可不依赖。
 }
 
 if (isNewArchitectureEnabled()) {

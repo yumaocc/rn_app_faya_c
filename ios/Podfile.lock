@@ -296,7 +296,9 @@ PODS:
     - glog
   - react-native-cameraroll (4.1.2):
     - React-Core
-  - react-native-image-picker (4.8.4):
+  - react-native-geolocation-service (5.3.1):
+    - React
+  - react-native-image-picker (4.10.0):
     - React-Core
   - react-native-pager-view (5.4.25):
     - React-Core
@@ -315,6 +317,8 @@ PODS:
     - react-native-video/Video (= 6.0.0-alpha.1)
   - react-native-video/Video (6.0.0-alpha.1):
     - PromisesSwift
+    - React-Core
+  - react-native-webview (11.23.1):
     - React-Core
   - React-perflogger (0.69.2)
   - React-RCTActionSheet (0.69.2):
@@ -386,6 +390,8 @@ PODS:
     - React-Core
   - RNCPicker (2.4.2):
     - React-Core
+  - RNFS (2.20.0):
+    - React-Core
   - RNGestureHandler (2.5.0):
     - React-Core
   - RNScreens (3.15.0):
@@ -446,12 +452,14 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
+  - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-segmented-control (from `../node_modules/@react-native-community/segmented-control`)"
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-video (from `../node_modules/react-native-video`)
+  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -466,9 +474,11 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - VODUpload
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -536,6 +546,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-cameraroll:
     :path: "../node_modules/@react-native-community/cameraroll"
+  react-native-geolocation-service:
+    :path: "../node_modules/react-native-geolocation-service"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-pager-view:
@@ -548,6 +560,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/slider"
   react-native-video:
     :path: "../node_modules/react-native-video"
+  react-native-webview:
+    :path: "../node_modules/react-native-webview"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -576,6 +590,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNScreens:
@@ -603,7 +619,7 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
@@ -624,12 +640,14 @@ SPEC CHECKSUMS:
   React-jsinspector: 31e53f048cc8f32605de36981903a7bbf9456892
   React-logger: 9a6c684d5cd56c4129e0c2842dba75c4bfb1e981
   react-native-cameraroll: 2957f2bce63ae896a848fbe0d5352c1bd4d20866
-  react-native-image-picker: cffb727cf2f59bd5c0408e30b3dbe0b935f88835
+  react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
+  react-native-image-picker: 4bc9ed38c8be255b515d8c88babbaf74973f91a8
   react-native-pager-view: da490aa1f902c9a5aeecf0909cc975ad0e92e53e
   react-native-safe-area-context: 6c12e3859b6f27b25de4fee8201cfb858432d8de
   react-native-segmented-control: 65df6cd0619b780b3843d574a72d4c7cec396097
   react-native-slider: cecabb58ecffad671d2ad3ccc58c7f4d2d029e95
   react-native-video: bb6f12a7198db53b261fefb5d609dc77417acc8b
+  react-native-webview: d33e2db8925d090871ffeb232dfa50cb3a727581
   React-perflogger: 281c34e42f13245c7a4d6932364d9182f8655e1a
   React-RCTActionSheet: 92f4292754a1b4a0e42bf9b1489206a06f878929
   React-RCTAnimation: 2a5bb5549758e4e594481633f3db649d11519f75
@@ -644,6 +662,7 @@ SPEC CHECKSUMS:
   ReactCommon: a9414b91f0d19de002b55d9f4f6cb176d6dd8452
   RNCAsyncStorage: d81ee5c3db1060afd49ea7045ad460eff82d2b7d
   RNCPicker: 0250e95ad170569a96f5b0555cdd5e65b9084dca
+  RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
   RNSVG: 1153e8eeb34c788841016c517dba9f57f20b762f
@@ -652,6 +671,6 @@ SPEC CHECKSUMS:
   Yoga: 236056dd74cda4d9d76c20306fd8c20bb087614d
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 88bdc6f1cb1cb5e57d6bc8722cd8e18cbfac50fd
+PODFILE CHECKSUM: 696908e9c8e26e733aa54e35d29d661e13d7efb5
 
 COCOAPODS: 1.11.3

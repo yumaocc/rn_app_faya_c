@@ -9,6 +9,8 @@ import {
   getWorkDispatcher,
   SPUDispatcher,
   getSPUDispatcher,
+  OrderDispatcher,
+  getOrderDispatcher,
 } from '../../redux/dispatchers';
 
 export function useCommonDispatcher(): [CommonDispatcher] {
@@ -29,5 +31,10 @@ export function useWorkDispatcher(): [WorkDispatcher] {
 export function useSPUDispatcher(): [SPUDispatcher] {
   const dispatch = useDispatch();
   const dispatcher = useMemo(() => getSPUDispatcher(dispatch), [dispatch]);
+  return [dispatcher];
+}
+export function useOrderDispatcher(): [OrderDispatcher] {
+  const dispatch = useDispatch();
+  const dispatcher = useMemo(() => getOrderDispatcher(dispatch), [dispatch]);
   return [dispatcher];
 }

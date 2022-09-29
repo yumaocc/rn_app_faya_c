@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
+import {View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar, Popup, Switch} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -9,36 +9,52 @@ import {WorkVisibleAuthOptions} from '../../constants';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import {useNavigation} from '@react-navigation/native';
+import {useWorkDispatcher} from '../../helper/hooks';
+import {BoolEnum} from '../../fst/models';
 
 const Publish: React.FC = () => {
   const workType = WorkType.Video;
   const spu = useSelector((state: RootState) => state.work.bindSPU);
+  const videoInfo = useSelector((state: RootState) => state.work.videoInfo);
   const [visibleAuthType, setVisibleAuthType] = useState(WorkVisibleAuth.Public);
   const [showChangeVisibleAuthPopup, setShowChangeVisibleAuthPopup] = useState(false);
   const [showSettingPopup, setShowSettingPopup] = useState(false);
   const [allowDownload, setAllowDownload] = useState(true);
   const [allowForward, setAllowForward] = useState(true);
   const [autoSave, setAutoSave] = useState(false);
+  const [content, setContent] = useState('');
 
   const navigation = useNavigation<FakeNavigation>();
+  const [workDispatcher] = useWorkDispatcher();
 
   const currentVisibleAuthType = useMemo(() => {
     return WorkVisibleAuthOptions.find(item => item.value === visibleAuthType);
   }, [visibleAuthType]);
 
   function handlePublish() {
-    console.log('准备发布');
+    // TODO: 检查必填项
+    workDispatcher.setPublishConfig({
+      content: content,
+      hasPrivate: visibleAuthType,
+      allowDownload: allowDownload ? BoolEnum.TRUE : BoolEnum.FALSE,
+      allowForward: allowForward ? BoolEnum.TRUE : BoolEnum.FALSE,
+      autoSaveAfterPublish: autoSave,
+      addressName: '',
+      publishType: WorkType.Video,
+    });
+    navigation.navigate('PublishVideo');
   }
   return (
     <>
       <SafeAreaView edges={['bottom']} style={{flex: 1}}>
         <NavigationBar title="发布" />
-        <ScrollView style={{flex: 1}} keyboardShouldPersistTaps="handled">
+        <ScrollView style={{flex: 1}} keyboardShouldPersistTaps="never">
           <View>
             {workType === WorkType.Video && (
               <View style={styles.videoContainer}>
-                <TextInput multiline={true} style={styles.videoInput} placeholder="写标题并使用合适的话题，能让更多人看到~" />
-                <View style={styles.videoCover} />
+                <TextInput value={content} onChangeText={setContent} multiline={true} style={styles.videoInput} placeholder="写标题并使用合适的话题，能让更多人看到~" />
+                {!!videoInfo?.coverPath && <Image style={styles.videoCover} source={{uri: 'file://' + videoInfo.coverPath}} />}
+                {!videoInfo?.coverPath && <Image style={styles.videoCover} source={{uri: 'https://fakeimg.pl/100?text=loading'}} />}
               </View>
             )}
           </View>
@@ -151,7 +167,6 @@ const styles = StyleSheet.create({
     height: 140,
     position: 'relative',
     borderRadius: 5,
-    backgroundColor: '#ccc',
   },
   formItem: {
     // marginBottom: globalStyleVariables.MODULE_SPACE,

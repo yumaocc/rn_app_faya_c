@@ -24,6 +24,14 @@ export default (state: SPUState = initialState, action: SPUActions) => {
         draft.currentSKU = action.payload.sku;
         draft.currentSKUIsPackage = action.payload.isPackage;
       });
+    case ActionType.CLOSE_VIEW_SPU:
+      return produce(state, draft => {
+        draft.currentSPU = undefined;
+        draft.currentSKU = undefined;
+        draft.currentSKUIsPackage = false;
+      });
+    case ActionType.RESET:
+      return initialState;
     default:
       return state;
   }
