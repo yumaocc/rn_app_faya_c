@@ -19,8 +19,8 @@ const MiddleButton: React.FC = () => {
         to: 'ShootVideo',
       });
     } else {
-      navigation.navigate('ShootVideo');
-      // navigation.navigate('PublishVideo');
+      // navigation.navigate('ShootVideo');
+      navigation.navigate('User', {id: 2});
     }
   }
   return (
