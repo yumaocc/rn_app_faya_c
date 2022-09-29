@@ -296,6 +296,8 @@ PODS:
     - glog
   - react-native-cameraroll (4.1.2):
     - React-Core
+  - react-native-geolocation-service (5.3.1):
+    - React
   - react-native-image-picker (4.10.0):
     - React-Core
   - react-native-pager-view (5.4.25):
@@ -450,6 +452,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
+  - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -543,6 +546,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-cameraroll:
     :path: "../node_modules/@react-native-community/cameraroll"
+  react-native-geolocation-service:
+    :path: "../node_modules/react-native-geolocation-service"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-pager-view:
@@ -635,6 +640,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 31e53f048cc8f32605de36981903a7bbf9456892
   React-logger: 9a6c684d5cd56c4129e0c2842dba75c4bfb1e981
   react-native-cameraroll: 2957f2bce63ae896a848fbe0d5352c1bd4d20866
+  react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-image-picker: 4bc9ed38c8be255b515d8c88babbaf74973f91a8
   react-native-pager-view: da490aa1f902c9a5aeecf0909cc975ad0e92e53e
   react-native-safe-area-context: 6c12e3859b6f27b25de4fee8201cfb858432d8de
