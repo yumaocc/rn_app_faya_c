@@ -18,6 +18,7 @@ const PublishVideo: React.FC = () => {
   const [percent, setPercent] = React.useState(0);
   const currentUpload = React.useRef('none');
   const navigation = useNavigation<FakeNavigation>();
+  const [hasError, setHasError] = React.useState(false);
 
   const [commonDispatcher] = useCommonDispatcher();
 
@@ -76,6 +77,7 @@ const PublishVideo: React.FC = () => {
       // console.log('success');
       setPercent(100);
     } catch (error) {
+      setHasError(true);
       commonDispatcher.error(error);
     }
   }
@@ -97,7 +99,14 @@ const PublishVideo: React.FC = () => {
             <View style={styles.progress}>
               <View style={[styles.bar, {width: `${percent}%`}]} />
             </View>
-            <Text style={{marginTop: globalStyleVariables.MODULE_SPACE}}>发布中{percent}%</Text>
+            {hasError ? (
+              <>
+                <Text style={{marginTop: globalStyleVariables.MODULE_SPACE}}>发布失败</Text>
+                <Button style={{marginTop: 20}} title="返回首页" onPress={back} />
+              </>
+            ) : (
+              <Text style={{marginTop: globalStyleVariables.MODULE_SPACE}}>发布中{percent}%</Text>
+            )}
           </>
         ) : (
           <View style={{alignItems: 'center'}}>

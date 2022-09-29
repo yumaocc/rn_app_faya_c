@@ -20,6 +20,7 @@ const MiddleButton: React.FC = () => {
       });
     } else {
       navigation.navigate('ShootVideo');
+      // navigation.navigate('PublishVideo');
     }
   }
   return (
