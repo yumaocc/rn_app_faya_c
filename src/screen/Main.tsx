@@ -7,6 +7,7 @@ import Loading from './common/Loading';
 
 const Main: React.FC = () => {
   const isLoading = useSelector((state: RootState) => state.common.isLoading);
+  // return <Loading />;
   if (isLoading) {
     return <Loading />;
   }

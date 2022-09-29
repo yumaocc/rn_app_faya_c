@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {View, Image, StyleSheet} from 'react-native';
 import {useCommonDispatcher} from '../../helper/hooks';
 
 const Loading: React.FC = () => {
@@ -10,9 +10,23 @@ const Loading: React.FC = () => {
   }, [commonDispatcher]);
 
   return (
-    <View style={{paddingTop: 300, alignItems: 'center'}}>
-      <Text style={{textAlign: 'center'}}>faya is loading...</Text>
+    <View style={styles.container}>
+      <Image source={require('../../assets/slogan_white.png')} style={styles.slogan} />
     </View>
   );
 };
 export default Loading;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FF7F63',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  slogan: {
+    marginTop: -240,
+    width: 290,
+    height: 130,
+  },
+});
