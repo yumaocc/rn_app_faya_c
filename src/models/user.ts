@@ -1,3 +1,4 @@
+import {BoolEnum} from '../fst/models';
 import {ValidRoute} from './route';
 
 export enum UserState {
@@ -13,7 +14,8 @@ export interface UserInfo {
 }
 
 export interface GoLoginParams {
-  to: ValidRoute;
+  to?: ValidRoute;
+  back?: boolean;
   params?: any;
   redirect?: boolean;
 }
@@ -67,6 +69,10 @@ export interface MineDetail {
     followNums: number;
     likeNums: number;
   };
+}
+
+export interface OtherUserDetail extends MineDetail {
+  hasCare: BoolEnum;
 }
 
 export enum UserLevel {

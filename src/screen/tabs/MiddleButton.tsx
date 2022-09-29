@@ -17,6 +17,7 @@ const MiddleButton: React.FC = () => {
     if (!token) {
       userDispatcher.login({
         to: 'ShootVideo',
+        redirect: true,
       });
     } else {
       // navigation.navigate('ShootVideo');

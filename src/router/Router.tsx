@@ -107,3 +107,9 @@ export function navigateTo(url: keyof RootStackParamList, params?: any, redirect
     }
   }
 }
+
+export function navigateBack() {
+  if (navigationRef.isReady()) {
+    navigationRef.dispatch(StackActions.pop());
+  }
+}

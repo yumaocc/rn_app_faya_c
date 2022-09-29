@@ -7,7 +7,7 @@ import {cache} from '../../helper/cache';
 import {ActionWithPayload} from '../types';
 import {GoLoginParams} from '../../models';
 import * as api from '../../apis';
-import {navigateTo, relaunch} from '../../router/Router';
+import {navigateBack, navigateTo, relaunch} from '../../router/Router';
 import {RootState} from '../reducers';
 import {OrderActions, SPUActions, WorkActions} from '../actions';
 
@@ -37,7 +37,11 @@ function* loginSuccess(action: ActionWithPayload<ActionType, string>): any {
   if (!params) {
     relaunch();
   } else {
-    navigateTo(params?.to || 'Tab', params?.params, params?.redirect);
+    if (params?.back) {
+      navigateBack();
+    } else {
+      navigateTo(params?.to || 'Tab', params?.params, params?.redirect);
+    }
     yield put(Actions.clearLoginInfo());
   }
 }

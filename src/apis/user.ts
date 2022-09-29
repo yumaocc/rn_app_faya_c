@@ -1,5 +1,5 @@
 import {post} from './helper';
-import {CouponF, MineDetail, UserInfo, WalletInfo, WalletSummary} from '../models';
+import {CouponF, MineDetail, OtherUserDetail, UserInfo, WalletInfo, WalletSummary} from '../models';
 
 export async function userLogin(phone: string, code: string): Promise<UserInfo> {
   return await post<UserInfo, {code: string; telephone: string}>('/user/login', {
@@ -33,4 +33,12 @@ export async function getMineDetail(): Promise<MineDetail> {
 
 export async function getCodeUrl(): Promise<{datingQrCodeUrl: string; shareQrCodeUrl: string}> {
   return await post('/user/qr/result');
+}
+
+export async function getOtherUserInfo(id: number): Promise<OtherUserDetail> {
+  return await post('/user/other/user/info', {id});
+}
+
+export async function followUser(id: number): Promise<boolean> {
+  return await post('/user/fans/follow/one', {id});
 }

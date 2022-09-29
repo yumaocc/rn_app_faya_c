@@ -1,5 +1,5 @@
 export type {RootStackParamList, Props, FakeNavigation, ValidRoute} from './route';
-export type {UserInfo, CouponF, WalletInfo, WalletSummary, MineDetail, GoLoginParams} from './user';
+export type {UserInfo, CouponF, WalletInfo, WalletSummary, MineDetail, GoLoginParams, OtherUserDetail} from './user';
 export type {AppHeader, StylePropText, StylePropView, StylesProp, CacheKeys} from './common';
 export type {WorkTab, WorkF, WorkDetailF, VideoInfo, WorkPublishForm, PublishConfig, VideoUploadAuthParams, VideoUploadAuth, PhotoUploadAuthParams, PhotoUploadAuth} from './work';
 export type {SPUF, SPUShop, PackageDetail, SKUDetail, SPUDetailF, SKUShowInfo, PayWay} from './spu';
