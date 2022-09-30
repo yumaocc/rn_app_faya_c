@@ -59,11 +59,9 @@ const WorkList: React.FC<WorkListProps> = () => {
     }
   }
 
-  function renderWorkItem(work: WorkF, index: number, isLeft = false) {
+  function renderWorkItem(work: WorkF) {
     // const isFirst = index === 0;
     // const normal = isLeft ? cicadaBool(index) && !isFirst : cicadaBool(index) || isFirst;
-    console.log(isLeft);
-
     return (
       <View style={styles.item} key={work.mainId}>
         <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetail', {id: work.mainId, videoUrl: work.videoUrl})}>
@@ -101,8 +99,8 @@ const WorkList: React.FC<WorkListProps> = () => {
     <View style={styles.container}>
       <ScrollView style={styles.scrollContainer} ref={scroll} onMomentumScrollEnd={handleScrollEnd}>
         <View style={styles.itemContainer}>
-          <View style={styles.left}>{l.map((work, index) => renderWorkItem(work, index, true))}</View>
-          <View style={styles.right}>{r.map((work, index) => renderWorkItem(work, index))}</View>
+          <View style={styles.left}>{l.map(renderWorkItem)}</View>
+          <View style={styles.right}>{r.map(renderWorkItem)}</View>
         </View>
       </ScrollView>
     </View>
