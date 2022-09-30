@@ -18,3 +18,5 @@ export type StylesProp = {
 };
 
 export type CacheKeys = 'token' | 'phone';
+
+export type LoadingState = 'none' | 'noMore' | 'loading';

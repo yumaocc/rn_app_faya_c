@@ -1,4 +1,5 @@
 import {BoolEnum} from '../fst/models';
+import {LoadingState} from './common';
 
 export enum WorkTabType {
   Follow = 'Follow',
@@ -46,6 +47,12 @@ export interface WorkF {
   userAvatar: string;
   numberOfLikes: number;
   content: string;
+}
+
+export interface WorkList {
+  list: WorkF[];
+  index: number;
+  status: LoadingState;
 }
 export interface WorkDetailF {
   mainId: string;

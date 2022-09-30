@@ -1,61 +1,40 @@
-// import {Button} from '@ant-design/react-native';
 import {Icon} from '@ant-design/react-native';
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {View, StyleSheet, ScrollView, NativeSyntheticEvent, NativeScrollEvent, Image, Text, TouchableOpacity} from 'react-native';
-import * as api from '../../apis';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-// import {cicadaBool} from '../../fst/helper';
-import {SearchParam} from '../../fst/models';
-import {useCommonDispatcher, useDivideData} from '../../helper/hooks';
-import {FakeNavigation, WorkF, WorkType} from '../../models';
+import {useDivideData} from '../../helper/hooks';
+import {FakeNavigation, WorkF, WorkList as IWorkList, WorkType} from '../../models';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import {dictLoadingState} from '../../helper/dictionary';
 
 interface WorkListProps {
-  // title?: string;
+  list: IWorkList;
+  onLoadMore?: () => void;
+  onRefresh?: () => void;
 }
 
-const WorkList: React.FC<WorkListProps> = () => {
-  const [works, setWorks] = useState<WorkF[]>([]);
-  const [l, r] = useDivideData(works);
-  const [pageIndex, setPageIndex] = useState(1);
+const WorkList: React.FC<WorkListProps> = props => {
+  const {list, status} = props.list;
+
+  const [l, r] = useDivideData(list);
 
   const scroll = useRef<ScrollView>(null);
-  const [commonDispatcher] = useCommonDispatcher();
   const navigation = useNavigation<FakeNavigation>();
 
-  const fetchData = useCallback(
-    async (params: SearchParam) => {
-      try {
-        return await api.work.getRecommendWorks(params);
-      } catch (error) {
-        commonDispatcher.error(error);
-      }
-    },
-    [commonDispatcher],
-  );
-
-  useEffect(() => {
-    async function f() {
-      const res = await fetchData({pageIndex, pageSize: 10});
-      console.log(res);
-      setWorks((res as WorkF[]) || []);
-    }
-    if (!fetchData) {
-      return;
-    }
-    f();
-  }, [pageIndex, fetchData]);
+  function emitLoadMore() {
+    console.log('去加载');
+    props.onLoadMore && props.onLoadMore();
+  }
 
   function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
-    // console.log(e.nativeEvent);
     var offsetY = e.nativeEvent.contentOffset.y; //滑动距离
     var contentSizeHeight = e.nativeEvent.contentSize.height; //scrollView contentSize高度
     var scrollViewHeight = e.nativeEvent.layoutMeasurement.height; //scrollView高度
     const offset = 50;
     const isReachBottom = offsetY + scrollViewHeight + offset >= contentSizeHeight;
     if (isReachBottom) {
-      console.log('滑动到底部');
+      emitLoadMore();
     }
   }
 
@@ -80,7 +59,7 @@ const WorkList: React.FC<WorkListProps> = () => {
           </Text>
           <View style={[globalStyles.containerLR, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
             <View style={[globalStyles.containerRow, {flex: 1}]}>
-              <Image source={{uri: 'https://fakeimg.pl/100?text=l'}} style={styles.avatar} />
+              {work?.userAvatar ? <Image source={{uri: work.userAvatar}} style={styles.avatar} /> : <Image source={require('../../assets/avatar_def.png')} style={styles.avatar} />}
               <Text style={[globalStyles.fontPrimary, {marginLeft: 3, flex: 1}]} numberOfLines={1}>
                 {work.userName}
               </Text>
@@ -102,12 +81,15 @@ const WorkList: React.FC<WorkListProps> = () => {
           <View style={styles.left}>{l.map(renderWorkItem)}</View>
           <View style={styles.right}>{r.map(renderWorkItem)}</View>
         </View>
+        <View style={globalStyles.containerCenter}>
+          <Text>{dictLoadingState(status)}</Text>
+        </View>
       </ScrollView>
     </View>
   );
 };
 WorkList.defaultProps = {
-  title: 'WorkList',
+  // title: 'WorkList',
 };
 export default WorkList;
 const styles = StyleSheet.create({

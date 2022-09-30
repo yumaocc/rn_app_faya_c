@@ -1,15 +1,23 @@
-import {SearchParam} from '../fst/models';
-import {PhotoUploadAuth, PhotoUploadAuthParams, VideoUploadAuth, VideoUploadAuthParams, WorkDetailF, WorkPublishForm, WorkType} from '../models';
-import {post} from './helper';
+import {PagedData, SearchParam} from '../fst/models';
+import {PhotoUploadAuth, PhotoUploadAuthParams, VideoUploadAuth, VideoUploadAuthParams, WorkDetailF, WorkF, WorkPublishForm, WorkTabType, WorkType} from '../models';
+import {post, postPaged} from './helper';
 
-// 推荐视频列表
-export async function getRecommendWorks(params: SearchParam) {
-  return await post('/video/main/newest/list', params);
-}
-
-// 关注的视频列表
-export async function getFollowWorks(params: SearchParam) {
-  return await post('/video/main/care/page', params);
+export async function getWorkList(type: WorkTabType, params: SearchParam): Promise<PagedData<WorkF[]>> {
+  let url = '';
+  switch (type) {
+    case WorkTabType.Follow:
+      url = '/video/main/care/page';
+      break;
+    case WorkTabType.Recommend:
+      url = '/video/main/newest/list';
+      break;
+    case WorkTabType.Nearby:
+      url = '/video/main/newest/list';
+      break;
+  }
+  if (url) {
+    return await postPaged(url, params);
+  }
 }
 
 export async function getWorkDetail(id: string): Promise<WorkDetailF> {

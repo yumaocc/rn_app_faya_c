@@ -1,4 +1,4 @@
-import {OrderStatus} from '../../models';
+import {LoadingState, OrderStatus} from '../../models';
 
 export function dictOrderState(state: OrderStatus): string {
   switch (state) {
@@ -24,5 +24,16 @@ export function dictOrderState(state: OrderStatus): string {
       return '已预约';
     default:
       return '';
+  }
+}
+
+export function dictLoadingState(state: LoadingState) {
+  switch (state) {
+    case 'loading':
+      return '正在加载';
+    case 'noMore':
+      return '没有更多啦';
+    case 'none':
+      return '滑动加载';
   }
 }
