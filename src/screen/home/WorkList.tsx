@@ -5,7 +5,7 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View, StyleSheet, ScrollView, NativeSyntheticEvent, NativeScrollEvent, Image, Text, TouchableOpacity} from 'react-native';
 import * as api from '../../apis';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {cicadaBool} from '../../fst/helper';
+// import {cicadaBool} from '../../fst/helper';
 import {SearchParam} from '../../fst/models';
 import {useCommonDispatcher, useDivideData} from '../../helper/hooks';
 import {FakeNavigation, WorkF, WorkType} from '../../models';
@@ -60,13 +60,15 @@ const WorkList: React.FC<WorkListProps> = () => {
   }
 
   function renderWorkItem(work: WorkF, index: number, isLeft = false) {
-    const isFirst = index === 0;
-    const normal = isLeft ? cicadaBool(index) && !isFirst : cicadaBool(index) || isFirst;
+    // const isFirst = index === 0;
+    // const normal = isLeft ? cicadaBool(index) && !isFirst : cicadaBool(index) || isFirst;
+    console.log(isLeft);
+
     return (
       <View style={styles.item} key={work.mainId}>
         <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetail', {id: work.mainId, videoUrl: work.videoUrl})}>
           <View style={{width: '100%', position: 'relative'}}>
-            <Image source={{uri: work?.coverImage || 'https://fakeimg.pl/100?text=l'}} style={normal ? styles.cover : styles.smallCover} />
+            <Image source={{uri: work?.coverImage || 'https://fakeimg.pl/100?text=l'}} style={true ? styles.cover : styles.smallCover} />
             {work.type === WorkType.Video && (
               <View style={[styles.playIcon]}>
                 <MaterialIcon name="play-circle-filled" size={33} />

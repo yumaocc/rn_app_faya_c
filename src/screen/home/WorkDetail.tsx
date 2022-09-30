@@ -107,7 +107,7 @@ const WorkDetail: React.FC = () => {
   }
 
   function openSPU() {
-    if (currentSPU?.id && workDetail?.spuId && currentSPU.id !== workDetail?.spuId) {
+    if (workDetail?.spuId && currentSPU?.id !== workDetail?.spuId) {
       spuDispatcher.viewSPU(workDetail?.spuId);
     }
     setShowSPU(true);
