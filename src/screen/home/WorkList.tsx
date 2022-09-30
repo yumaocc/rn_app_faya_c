@@ -16,6 +16,8 @@ interface WorkListProps {
 
 const WorkList: React.FC<WorkListProps> = props => {
   const {list, status} = props.list;
+  const [refreshState, setRefreshState] = React.useState<'none' | 'release' | 'refreshing'>('none');
+  // const [isScroll, setIsScroll] = React.useState(false);
 
   const [l, r] = useDivideData(list);
 
@@ -23,16 +25,41 @@ const WorkList: React.FC<WorkListProps> = props => {
   const navigation = useNavigation<FakeNavigation>();
 
   function emitLoadMore() {
-    console.log('去加载');
     props.onLoadMore && props.onLoadMore();
   }
 
-  function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
+  function emitRefresh() {
+    props.onRefresh && props.onRefresh();
+  }
+
+  function endDrag(e: NativeSyntheticEvent<NativeScrollEvent>) {
+    const offsetY = e.nativeEvent.contentOffset.y;
+    if (offsetY < -50) {
+      emitRefresh();
+    }
+  }
+
+  function checkPullToRefresh(offsetY: number) {
+    if (refreshState === 'refreshing') {
+      return;
+    }
+    if (offsetY < -50 && refreshState !== 'release') {
+      setRefreshState('release');
+    } else if (offsetY >= -50) {
+      if (refreshState !== 'none') {
+        setRefreshState('none');
+      }
+    }
+  }
+
+  function handleScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
     var offsetY = e.nativeEvent.contentOffset.y; //滑动距离
     var contentSizeHeight = e.nativeEvent.contentSize.height; //scrollView contentSize高度
     var scrollViewHeight = e.nativeEvent.layoutMeasurement.height; //scrollView高度
     const offset = 50;
+    console.log(e.nativeEvent);
     const isReachBottom = offsetY + scrollViewHeight + offset >= contentSizeHeight;
+    checkPullToRefresh(offsetY);
     if (isReachBottom) {
       emitLoadMore();
     }
@@ -76,7 +103,10 @@ const WorkList: React.FC<WorkListProps> = props => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollContainer} ref={scroll} onMomentumScrollEnd={handleScrollEnd}>
+      <ScrollView style={styles.scrollContainer} ref={scroll} onScroll={handleScroll} scrollEventThrottle={100} onScrollEndDrag={endDrag}>
+        <View style={[globalStyles.containerCenter, {marginTop: -50, height: 50}]}>
+          <Text>{refreshState}</Text>
+        </View>
         <View style={styles.itemContainer}>
           <View style={styles.left}>{l.map(renderWorkItem)}</View>
           <View style={styles.right}>{r.map(renderWorkItem)}</View>
@@ -97,7 +127,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f4f4f4',
+    backgroundColor: '#fff',
   },
   scrollContainer: {
     flex: 1,

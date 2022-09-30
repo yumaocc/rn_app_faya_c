@@ -60,6 +60,9 @@ const Home: React.FC = () => {
   function loadWork(type: WorkTabType) {
     workDispatcher.loadWork(type);
   }
+  function refreshWork(type: WorkTabType) {
+    workDispatcher.loadWork(type, true);
+  }
 
   return (
     <SafeAreaView edges={['top']} style={{flex: 1}}>
@@ -74,13 +77,13 @@ const Home: React.FC = () => {
         </View>
         <ScrollView ref={setRef} horizontal style={{flex: 1}} snapToInterval={width} showsHorizontalScrollIndicator={false} scrollEnabled={false}>
           <View style={{width}}>
-            <WorkList list={followWorks} onLoadMore={() => loadWork(WorkTabType.Follow)} />
+            <WorkList list={followWorks} onRefresh={() => refreshWork(WorkTabType.Follow)} onLoadMore={() => loadWork(WorkTabType.Follow)} />
           </View>
           <View style={{width}}>
-            <WorkList list={recommendWorks} onLoadMore={() => loadWork(WorkTabType.Recommend)} />
+            <WorkList list={recommendWorks} onRefresh={() => refreshWork(WorkTabType.Recommend)} onLoadMore={() => loadWork(WorkTabType.Recommend)} />
           </View>
           <View style={{width}}>
-            <WorkList list={nearbyWorks} onLoadMore={() => loadWork(WorkTabType.Nearby)} />
+            <WorkList list={nearbyWorks} onRefresh={() => refreshWork(WorkTabType.Nearby)} onLoadMore={() => loadWork(WorkTabType.Nearby)} />
           </View>
         </ScrollView>
       </View>
