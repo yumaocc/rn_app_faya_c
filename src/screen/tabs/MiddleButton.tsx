@@ -21,6 +21,7 @@ const MiddleButton: React.FC = () => {
       });
     } else {
       navigation.navigate('ShootVideo');
+      // navigation.navigate('TestPage');
       // navigation.navigate('User', {id: 2});
     }
   }

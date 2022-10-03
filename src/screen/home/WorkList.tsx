@@ -1,7 +1,7 @@
 import {Icon} from '@ant-design/react-native';
 import {useNavigation} from '@react-navigation/native';
 import React, {useRef} from 'react';
-import {View, StyleSheet, ScrollView, NativeSyntheticEvent, NativeScrollEvent, Image, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, ScrollView, NativeSyntheticEvent, NativeScrollEvent, Image, Text, TouchableOpacity, RefreshControl} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useDivideData} from '../../helper/hooks';
 import {FakeNavigation, WorkF, WorkList as IWorkList, WorkType} from '../../models';
@@ -11,13 +11,12 @@ import {dictLoadingState} from '../../helper/dictionary';
 interface WorkListProps {
   list: IWorkList;
   onLoadMore?: () => void;
-  onRefresh?: () => void;
+  onRefresh?: () => Promise<void>;
 }
 
 const WorkList: React.FC<WorkListProps> = props => {
   const {list, status} = props.list;
-  const [refreshState, setRefreshState] = React.useState<'none' | 'release' | 'refreshing'>('none');
-  // const [isScroll, setIsScroll] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const [l, r] = useDivideData(list);
 
@@ -38,18 +37,10 @@ const WorkList: React.FC<WorkListProps> = props => {
       emitRefresh();
     }
   }
-
-  function checkPullToRefresh(offsetY: number) {
-    if (refreshState === 'refreshing') {
-      return;
-    }
-    if (offsetY < -50 && refreshState !== 'release') {
-      setRefreshState('release');
-    } else if (offsetY >= -50) {
-      if (refreshState !== 'none') {
-        setRefreshState('none');
-      }
-    }
+  async function handleRefresh() {
+    setRefreshing(true);
+    await emitRefresh();
+    setRefreshing(false);
   }
 
   function handleScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
@@ -59,15 +50,13 @@ const WorkList: React.FC<WorkListProps> = props => {
     const offset = 50;
     console.log(e.nativeEvent);
     const isReachBottom = offsetY + scrollViewHeight + offset >= contentSizeHeight;
-    checkPullToRefresh(offsetY);
+    // checkPullToRefresh(offsetY);
     if (isReachBottom) {
       emitLoadMore();
     }
   }
 
   function renderWorkItem(work: WorkF) {
-    // const isFirst = index === 0;
-    // const normal = isLeft ? cicadaBool(index) && !isFirst : cicadaBool(index) || isFirst;
     return (
       <View style={styles.item} key={work.mainId}>
         <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetail', {id: work.mainId, videoUrl: work.videoUrl})}>
@@ -103,10 +92,22 @@ const WorkList: React.FC<WorkListProps> = props => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollContainer} ref={scroll} onScroll={handleScroll} scrollEventThrottle={100} onScrollEndDrag={endDrag}>
-        <View style={[globalStyles.containerCenter, {marginTop: -50, height: 50}]}>
-          <Text>{refreshState}</Text>
-        </View>
+      <ScrollView
+        style={styles.scrollContainer}
+        ref={scroll}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            title="下拉刷新"
+            colors={[globalStyleVariables.COLOR_PRIMARY]}
+            titleColor={globalStyleVariables.COLOR_PRIMARY}
+            tintColor={globalStyleVariables.COLOR_PRIMARY}
+          />
+        }
+        onScroll={handleScroll}
+        scrollEventThrottle={100}
+        onScrollEndDrag={endDrag}>
         <View style={styles.itemContainer}>
           <View style={styles.left}>{l.map(renderWorkItem)}</View>
           <View style={styles.right}>{r.map(renderWorkItem)}</View>

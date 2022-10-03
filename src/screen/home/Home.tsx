@@ -62,6 +62,7 @@ const Home: React.FC = () => {
   }
   function refreshWork(type: WorkTabType) {
     workDispatcher.loadWork(type, true);
+    return Promise.resolve();
   }
 
   return (
