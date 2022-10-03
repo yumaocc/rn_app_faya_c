@@ -59,7 +59,7 @@ const WorkList: React.FC<WorkListProps> = props => {
   function renderWorkItem(work: WorkF) {
     return (
       <View style={styles.item} key={work.mainId}>
-        <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetail', {id: work.mainId, videoUrl: work.videoUrl})}>
+        <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetailList', {id: work.mainId, videoUrl: work.videoUrl})}>
           <View style={{width: '100%', position: 'relative'}}>
             <Image source={{uri: work?.coverImage || 'https://fakeimg.pl/100?text=l'}} style={true ? styles.cover : styles.smallCover} />
             {work.type === WorkType.Video && (

@@ -28,6 +28,7 @@ import WaitPay from '../screen/mine/WaitPay';
 import Browser from '../screen/common/Browser';
 import TestPage from '../screen/common/TestPage'; // 测试页面
 import User from '../screen/mine/User';
+import WorkDetailList from '../screen/home/WorkDetailList';
 
 import {RootStackParamList, ValidRoute} from '../models';
 
@@ -52,6 +53,7 @@ const Navigator: React.FC = () => {
       <Stack.Screen name="Browser" component={Browser} options={commonScreenOptions} />
       <Stack.Screen name="TestPage" component={TestPage} options={commonScreenOptions} />
       <Stack.Screen name="User" component={User} options={commonScreenOptions} />
+      <Stack.Screen name="WorkDetailList" component={WorkDetailList} options={commonScreenOptions} />
       {token ? (
         <>
           <Stack.Screen name="Order" component={Order} options={commonScreenOptions} />

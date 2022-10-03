@@ -3,6 +3,7 @@ import {IDBody} from '../fst/models';
 import {OrderStatus} from './order';
 
 export type RootStackParamList = {
+  TestPage: undefined;
   Login: {to: keyof RootStackParamList; params: any};
   Tab: undefined;
   Home: undefined;
@@ -13,6 +14,7 @@ export type RootStackParamList = {
     id: string;
     videoUrl: string;
   };
+  WorkDetailList: {index: number};
   SPUDetail: IDBody;
   Order: IDBody;
   OrderList: {state?: OrderStatus};
@@ -30,7 +32,6 @@ export type RootStackParamList = {
   PaySuccess: undefined;
   WaitPay: undefined;
   Browser: {url: string};
-  TestPage: undefined;
   User: {id: number};
 };
 
