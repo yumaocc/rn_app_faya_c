@@ -1,3 +1,4 @@
+import {BoolEnum} from '../fst/models';
 import {PayChannel, PayWay} from './spu';
 
 export interface OrderForm {
@@ -50,6 +51,8 @@ export interface OrderF {
   id: number;
   bizName: string;
   orderBigId: number;
+  canGetCommentPackage: BoolEnum;
+  evaluated: BoolEnum;
   orderBigIdStr: string;
   orderMiddleId: number;
   orderSmallId: number;

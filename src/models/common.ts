@@ -20,3 +20,9 @@ export type StylesProp = {
 export type CacheKeys = 'token' | 'phone';
 
 export type LoadingState = 'none' | 'noMore' | 'loading';
+
+export type LoadListState<T> = {
+  list: T[];
+  index: number;
+  status: LoadingState;
+};

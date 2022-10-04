@@ -7,7 +7,7 @@ import {FakeRoute} from '../../models/route';
 export function useInfinityRotate() {
   const rotateAnim = useRef(new Animated.Value(0)).current; // 初始角度
   useEffect(() => {
-    const duration = 30000;
+    const duration = 150000;
     const animate = Animated.sequence([
       Animated.timing(rotateAnim, {
         toValue: 180,
