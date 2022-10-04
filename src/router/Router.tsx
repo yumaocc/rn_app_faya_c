@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../redux/reducers';
 import {Stack, commonScreenOptions} from './config';
 
-import WorkDetail from '../screen/home/WorkDetail';
+// import WorkDetail from '../screen/home/WorkDetail';
 import TabNavigator from '../screen/tabs/TabNavigator';
 import Login from '../screen/common/Login';
 
@@ -49,7 +49,7 @@ const Navigator: React.FC = () => {
         }}
       />
       <Stack.Screen name="SPUDetail" component={SPUDetail} options={commonScreenOptions} />
-      <Stack.Screen name="WorkDetail" component={WorkDetail} options={commonScreenOptions} />
+      {/* <Stack.Screen name="WorkDetail" component={WorkDetail} options={commonScreenOptions} /> */}
       <Stack.Screen name="Browser" component={Browser} options={commonScreenOptions} />
       <Stack.Screen name="TestPage" component={TestPage} options={commonScreenOptions} />
       <Stack.Screen name="User" component={User} options={commonScreenOptions} />
