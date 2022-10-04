@@ -112,7 +112,7 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
 
       <View style={styles.cover}>
         <SafeAreaView edges={['top']} style={styles.cover}>
-          <TouchableWithoutFeedback onPressOut={handleClickCover} style={[styles.cover]}>
+          <TouchableWithoutFeedback onPress={handleClickCover} style={[styles.cover]}>
             <View style={[styles.cover]}>
               {/* 暂停后的播放按钮 */}
               {paused && !error ? (
