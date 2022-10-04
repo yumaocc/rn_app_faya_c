@@ -141,8 +141,8 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
                 <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
                   {/* 发布人 */}
                   {hasSpu && (
-                    <TouchableOpacity activeOpacity={0.5} onPress={openSPU}>
-                      <View style={[globalStyles.containerRow, {width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}]}>
+                    <TouchableOpacity activeOpacity={0.5} onPress={openSPU} style={{width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}}>
+                      <View style={[globalStyles.containerRow]}>
                         <Icon name="shopping-cart" color={globalStyleVariables.COLOR_WARNING} size={24} />
                         <Text style={[globalStyles.fontTertiary, {flex: 1, color: '#fff'}]} numberOfLines={1}>
                           {workDetail?.spuName}
