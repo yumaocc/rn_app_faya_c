@@ -75,7 +75,16 @@ const OrderList: React.FC = () => {
           {/* 搜索框 */}
           <View style={[styles.searchBar]}>
             <MaterialIcon name="search" size={20} color="#999" style={{marginRight: globalStyleVariables.MODULE_SPACE}} />
-            <TextInput style={styles.inputCore} placeholder="搜索订单号/商品名称" value={searchName} onChangeText={setSearchName} onSubmitEditing={searchOrder} />
+            <TextInput
+              style={styles.inputCore}
+              placeholder="搜索订单号/商品名称"
+              value={searchName}
+              onChangeText={setSearchName}
+              onSubmitEditing={searchOrder}
+              returnKeyType="search"
+              returnKeyLabel="搜索"
+              clearButtonMode="while-editing"
+            />
             {/* <InputItem style={styles.inputCore} placeholder="搜索订单号/商品名称" /> */}
           </View>
           <TouchableOpacity activeOpacity={0.5} onPress={searchOrder}>
