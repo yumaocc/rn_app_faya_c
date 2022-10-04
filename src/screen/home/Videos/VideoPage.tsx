@@ -1,6 +1,7 @@
 import {useIsFocused} from '@react-navigation/native';
-import React, {useEffect, useImperativeHandle, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useImperativeHandle, useMemo, useState} from 'react';
 import {View, Text, StyleSheet, useWindowDimensions, Image, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
+// import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Video, {OnLoadData} from 'react-native-video';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
@@ -69,9 +70,11 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
   function handleError() {
     setError('呀，视频加载失败～');
   }
-  function handleClick() {
+  const handleClickCover = useCallback(() => {
     setPaused(!paused);
-  }
+  }, [paused]);
+
+  console.log('render');
 
   function openSPU() {
     console.log(1);
@@ -108,7 +111,7 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
 
       <View style={styles.cover}>
         <SafeAreaView edges={['top']} style={styles.cover}>
-          <TouchableWithoutFeedback onPress={handleClick}>
+          <TouchableWithoutFeedback onPressOut={handleClickCover} style={[styles.cover]}>
             <View style={[styles.cover]}>
               {/* 暂停后的播放按钮 */}
               {paused && !error ? (
