@@ -90,3 +90,10 @@ export interface WalletSummary {
   totalMoney: number;
   totalMoneyYuan: string;
 }
+
+// export interface SystemNotifySummary {
+//   interactiveMessageCount: number;
+//   newestFriendCount: number;
+//   systemNotificationCount: number;
+//   windowMessageCount: number;
+// }

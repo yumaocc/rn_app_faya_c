@@ -42,3 +42,12 @@ export async function getOtherUserInfo(id: number): Promise<OtherUserDetail> {
 export async function followUser(id: number): Promise<boolean> {
   return await post('/user/fans/follow/one', {id});
 }
+
+// // 通知
+// export async function systemNotifyCount(): Promise<boolean> {
+//   return await post('/user/msg/official/notice/count');
+// }
+
+// export async function userMessageList(): Promise<boolean> {
+//   return await post('/user/msg/list');
+// }
