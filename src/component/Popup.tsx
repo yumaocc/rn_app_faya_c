@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   body: {
     width: '100%',
     backgroundColor: '#fff',
-    borderTopColor: '#e5e5e5',
-    borderTopWidth: StyleSheet.hairlineWidth,
+    // borderTopColor: '#e5e5e5',
+    // borderTopWidth: StyleSheet.hairlineWidth,
   },
 });

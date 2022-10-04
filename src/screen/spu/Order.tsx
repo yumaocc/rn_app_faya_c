@@ -1,6 +1,6 @@
 import {Button} from '@ant-design/react-native';
 import React, {useEffect, useMemo} from 'react';
-import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal} from 'react-native';
+import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
@@ -188,6 +188,7 @@ const Order: React.FC = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#f4f4f4', position: 'relative'}}>
+      <StatusBar barStyle="dark-content" />
       <NavigationBar title="确认订单" style={{backgroundColor: '#fff'}} />
       <ScrollView style={{flex: 1}}>
         <Form form={form} itemStyle={{children: styles.formChildren, container: styles.formItem}} hiddenLine>

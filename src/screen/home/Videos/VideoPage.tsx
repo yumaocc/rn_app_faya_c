@@ -10,13 +10,14 @@ import {VideoPlayerRef} from './types';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WorkDetailF, WorkF} from '../../../models';
 import * as api from '../../../apis';
-import {useLog} from '../../../fst/hooks';
+// import {useLog} from '../../../fst/hooks';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/reducers';
 
 interface VideoPageProps {
   item: WorkF;
   paused: boolean;
+  onShowSPU: (id: number) => void;
 }
 
 const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) => {
@@ -34,7 +35,7 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
   const {bottom} = useSafeAreaInsets();
   const [commonDispatcher] = useCommonDispatcher();
 
-  useLog('detail', workDetail);
+  // useLog('detail', workDetail);
 
   useEffect(() => {
     if (isFocused && appState === 'active' && !props.paused) {
@@ -74,10 +75,10 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
     setPaused(!paused);
   }, [paused]);
 
-  console.log('render');
-
   function openSPU() {
-    console.log(1);
+    if (workDetail?.spuId) {
+      props.onShowSPU(workDetail.spuId);
+    }
   }
 
   function openComment() {
