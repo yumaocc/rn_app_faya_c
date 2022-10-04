@@ -11,6 +11,7 @@ interface PopupProps {
   style?: StylePropView;
   children?: React.ReactNode;
   round?: number;
+  useNativeDrive?: boolean;
   onClose: () => void;
 }
 
@@ -31,13 +32,14 @@ const Popup: React.FC<PopupProps> = props => {
   }, [handleClose]);
 
   return (
-    <Modal isVisible={props.visible} style={styles.container} onBackdropPress={handleClose} onBackButtonPress={handleClose} useNativeDriver={true}>
+    <Modal isVisible={props.visible} style={styles.container} onBackdropPress={handleClose} onBackButtonPress={handleClose} useNativeDriver={props.useNativeDrive}>
       <View style={[styles.body, {paddingBottom: bottom, borderTopLeftRadius: round, borderTopRightRadius: round}, props.style]}>{props.children}</View>
     </Modal>
   );
 };
 Popup.defaultProps = {
   round: 0,
+  useNativeDrive: true,
 };
 export default Popup;
 

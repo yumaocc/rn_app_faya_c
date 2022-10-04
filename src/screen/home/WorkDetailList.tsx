@@ -108,7 +108,7 @@ const WorkDetailList: React.FC = () => {
         }}
         refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={refreshing} colors={['#fff']} tintColor="#fff" title="正在刷新" titleColor="#fff" />}
       />
-      <Popup visible={showSPU} onClose={() => setShowSPU(false)} style={[styles.spuModel, {height: height * 0.7}]}>
+      <Popup visible={showSPU} onClose={() => setShowSPU(false)} style={[styles.spuModel, {height: height * 0.7}]} useNativeDrive={false}>
         <View style={{flex: 1}}>
           <ScrollView style={{flex: 1}} bounces={false}>
             <SPUDetailView currentSelect={currentSKU} spu={currentSPU} isPackage={currentSKUIsPackage} onChangeSelect={handleChangeSKU} />
