@@ -1,10 +1,10 @@
 import {Button} from '@ant-design/react-native';
 import React, {useEffect, useMemo} from 'react';
-import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal, StatusBar} from 'react-native';
+import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal, StatusBar, TextInput, KeyboardAvoidingView, Platform, TextInputProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
-import {Form, Input, InputNumber, NavigationBar, Select} from '../../component';
+import {InputNumber, NavigationBar, Select} from '../../component';
 import FormItem from '../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {findItem, moneyToYuan} from '../../fst/helper';
@@ -13,15 +13,22 @@ import {BookingType, CouponState, FakeNavigation, OrderPayState, PackageDetail, 
 import {RootState} from '../../redux/reducers';
 import * as api from '../../apis';
 import {cleanOrderForm} from '../../helper/order';
-import {useOrderDispatcher} from '../../helper/hooks/dispatchers';
+// import {useOrderDispatcher} from '../../helper/hooks/dispatchers';
 import {useNavigation} from '@react-navigation/native';
+import {useSearch} from '../../fst/hooks';
+import {OrderForm} from '../../models/order';
+import {BoolEnum} from '../../fst/models';
 
 const Order: React.FC = () => {
   const spu = useSelector((state: RootState) => state.spu.currentSPU);
   const sku = useSelector((state: RootState) => state.spu.currentSKU);
   const currentSkuIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
-  const payOrder = useSelector((state: RootState) => state.order.payOrder);
+  // const payOrder = useSelector((state: RootState) => state.order.payOrder);
+  const token = useSelector((state: RootState) => state.common.token);
+
   const [isPaying, setIsPaying] = React.useState(false);
+  const [checkOrderId, setCheckOrderId] = React.useState<string>('');
+  const [checkOrderType, setCheckOrderType] = React.useState<number>(0); // 0 订单id，1tempId;
 
   const appState = useAppState();
   const navigation = useNavigation<FakeNavigation>();
@@ -29,14 +36,14 @@ const Order: React.FC = () => {
   const [couponList] = useCoupons();
   const [spuDispatcher] = useSPUDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
-  const [orderDispatcher] = useOrderDispatcher();
+  // const [orderDispatcher] = useOrderDispatcher();
   const {bottom} = useSafeAreaInsets();
-  const initForm = {
-    amount: 1,
-    channel: PayChannel.WECHAT,
-  };
-  const [form] = Form.useForm(initForm);
-  const payChannel = useMemo(() => form.getFieldValue('channel'), [form]);
+
+  const initForm: OrderForm = {amount: 1, channel: PayChannel.WECHAT, name: '', payWay: 'MINI_PROGRAM', telephone: ''};
+
+  const [form, setFormField] = useSearch<OrderForm>(initForm);
+  // const [form] = Form.useForm(initForm);
+  const payChannel = useMemo(() => form.channel, [form]);
 
   // 可以切换的sku
   const flatSKUList = useMemo(() => {
@@ -68,24 +75,24 @@ const Order: React.FC = () => {
   }, [sku, currentSkuIsPackage]);
 
   const totalPrice = useMemo(() => {
-    return Math.round(salePrice * form.getFieldValue('amount') || 0);
-  }, [salePrice, form]);
+    return Math.round(salePrice * form.amount || 0);
+  }, [salePrice, form.amount]);
 
   const currentSelectedCoupon = useMemo(() => {
-    return couponList?.find(coupon => coupon.id === form.getFieldValue('couponId'));
-  }, [couponList, form]);
+    return couponList?.find(coupon => coupon.id === form.couponId);
+  }, [couponList, form.couponId]);
 
   const totalSaved = useMemo(() => {
     let saved = 0;
     if (currentSelectedCoupon) {
       saved = currentSelectedCoupon.money;
     }
-    const integralMoney = form.getFieldValue('integralMoney');
+    const integralMoney = form.integralMoney;
     if (integralMoney) {
       saved += integralMoney;
     }
     return saved;
-  }, [currentSelectedCoupon, form]);
+  }, [currentSelectedCoupon, form.integralMoney]);
 
   // 实际应付
   const shouldPay = useMemo(() => totalPrice - totalSaved, [totalPrice, totalSaved]);
@@ -109,12 +116,16 @@ const Order: React.FC = () => {
     return couponList?.filter(coupon => coupon.status === CouponState.Unused && coupon.amountThreshold < totalPrice) || [];
   }, [couponList, totalPrice]);
 
+  const commission = useMemo(() => {
+    return sku?.userCommissionYuan || '';
+  }, [sku]);
+
   // 总金额变更导致当前优惠券不满足条件，则取消优惠券
   useEffect(() => {
     if (currentSelectedCoupon && currentSelectedCoupon.amountThreshold > totalPrice) {
-      form.setFieldsValue({couponId: null});
+      setFormField('couponId', null);
     }
-  }, [currentSelectedCoupon, form, totalPrice]);
+  }, [currentSelectedCoupon, form, setFormField, totalPrice]);
 
   const poster = useMemo(() => {
     if (spu?.posters?.length) {
@@ -129,25 +140,42 @@ const Order: React.FC = () => {
     } else {
       id = 'sku_' + (sku as SKUDetail)?.id;
     }
-    form.setFieldValue('skuId', id);
-  }, [sku, currentSkuIsPackage]); // eslint-disable-line react-hooks/exhaustive-deps
+    setFormField('skuId', id);
+    // form.setFieldValue('skuId', id);
+  }, [sku, currentSkuIsPackage, setFormField]);
+
+  // useEffect(() => {
+  //   const subs = AppState.addEventListener('change', nextState => {
+  //     if (nextState === 'active') {
+  //       if (isPaying) {}
+  //       // setIsPaying(false);
+  //     }
+  //   });
+
+  //   return subs.remove();
+  // }, []);
 
   useEffect(() => {
     if (appState === 'active' && isPaying) {
       api.order
-        .checkOrderPayState(payOrder?.orderId)
+        .checkOrderPayState(checkOrderId, checkOrderType)
         .then(res => {
-          if (res === OrderPayState.PAYED) {
-            navigation.navigate('PaySuccess');
-          } else {
-            navigation.navigate('WaitPay');
+          const {status, id} = res;
+          console.log(res);
+          if (status === OrderPayState.PAYED) {
+            navigation.replace('PaySuccess');
+          } else if (status === OrderPayState.UNPAY) {
+            navigation.replace('WaitPay', {id});
           }
         })
         .catch(e => {
           commonDispatcher.error(e);
+        })
+        .finally(() => {
+          // setIsPaying(false);
         });
     }
-  }, [appState, isPaying, payOrder, commonDispatcher, navigation]);
+  }, [appState, isPaying, commonDispatcher, navigation, checkOrderId, checkOrderType]);
 
   // 用户换了套餐，这里同步到redux
   function handleSKUChange(e = '') {
@@ -163,24 +191,38 @@ const Order: React.FC = () => {
         spuDispatcher.changeSKU(foundPackage, true);
       }
     }
+    setFormField('skuId', e);
   }
   async function check() {
     // todo: 检查合法性
-    const formData = cleanOrderForm(form.getFieldsValue());
+    const formData = cleanOrderForm(form);
     const {channel} = formData;
     let link = '';
     try {
       if (channel === PayChannel.WECHAT) {
-        // todo: 微信支付链接
-        link = 'https://baidu.com';
+        const tempOrderId = await api.order.getOrderTempId();
+        setCheckOrderType(1);
+        setCheckOrderId(tempOrderId);
+        const orderInfo = encodeURIComponent(
+          JSON.stringify({
+            skuName: (sku as SKUDetail).skuName || (sku as PackageDetail).packageName,
+            skuAmount: moneyToYuan(shouldPay),
+            amount: form.amount,
+          }),
+        );
+        const payInfo = encodeURIComponent(JSON.stringify({...formData, tempId: tempOrderId}));
+
+        link = `https://cloud1-5gcdmvry620ba3e9-1313439264.tcloudbaseapp.com/jump.html?token=${encodeURIComponent(token)}&o=${orderInfo}&p=${payInfo}`;
       } else {
         const res = await api.order.makeOrder(formData);
-        orderDispatcher.setPayOrder(res);
+        // orderDispatcher.setPayOrder(res);
+        setCheckOrderId(res.orderId);
         link = `alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=${res.prePayTn}&_s=web-other`;
       }
-
       Linking.openURL(link);
-      setIsPaying(true);
+      setTimeout(() => {
+        setIsPaying(true);
+      }, 1000);
     } catch (error) {
       commonDispatcher.error(error);
     }
@@ -190,11 +232,13 @@ const Order: React.FC = () => {
     <View style={{flex: 1, backgroundColor: '#f4f4f4', position: 'relative'}}>
       <StatusBar barStyle="dark-content" />
       <NavigationBar title="确认订单" style={{backgroundColor: '#fff'}} />
-      <ScrollView style={{flex: 1}}>
-        <Form form={form} itemStyle={{children: styles.formChildren, container: styles.formItem}} hiddenLine>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{flex: 1}}>
+        <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">
+          {/* <Form form={form} itemStyle={{children: styles.formChildren, container: styles.formItem}} hiddenLine> */}
+
           <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}}>
             <View style={[{flexDirection: 'row'}]}>
-              <Image source={{uri: poster || 'https://fakeimg.pl/30?text=loading'}} style={{width: 60, height: 60, borderRadius: 5}} />
+              <Image source={poster ? {uri: poster} : require('../../assets/sku_def_1_1.png')} style={{width: 60, height: 60, borderRadius: 5}} />
               <View style={{flex: 1, marginLeft: globalStyleVariables.MODULE_SPACE}}>
                 <View style={globalStyles.containerRow}>
                   <Icon name="store" size={20} />
@@ -216,33 +260,52 @@ const Order: React.FC = () => {
             </View>
             <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
 
-            <FormItem label="规格" name="skuId">
-              <Select options={flatSKUList} placeholder="请选择规格" onChange={handleSKUChange} />
+            {/* <FormItem label="规格" name="skuId">
+            <Select options={flatSKUList} placeholder="请选择规格" onChange={handleSKUChange} />
+          </FormItem> */}
+            <FormItem label="规格" {...formItemProps}>
+              <Select value={form.skuId} options={flatSKUList} placeholder="请选择规格" onChange={handleSKUChange} />
             </FormItem>
-            <FormItem label="数量" name="amount">
-              <InputNumber min={minPurchaseAmount} max={maxPurchaseAmount} />
+            <FormItem label="数量" {...formItemProps}>
+              <InputNumber value={form.amount} onChange={val => setFormField('amount', val)} min={minPurchaseAmount} max={maxPurchaseAmount} />
             </FormItem>
             <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
-            <FormItem label="商品总价">
+            <FormItem label="商品总价" {...formItemProps}>
               <Text style={globalStyles.fontPrimary}>¥{moneyToYuan(totalPrice)}</Text>
             </FormItem>
-            <FormItem label="返芽">
-              <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_BUD}]}>订单完成可返xx芽</Text>
-            </FormItem>
-            <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
-            <FormItem label="姓名" name="name">
-              <Input placeholder="请输入使用人姓名" />
-            </FormItem>
-            <FormItem label="手机号" name="telephone">
-              <Input placeholder="用于接收订单短信" />
-            </FormItem>
-            {spu?.needIdCard ? (
-              <FormItem label="身份证" name="idCard">
-                <Input placeholder="请输入使用人身份证号" />
+            {!!commission && (
+              <FormItem label="返芽" {...formItemProps}>
+                <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_BUD}]}>订单完成可返{commission}芽</Text>
               </FormItem>
-            ) : null}
+            )}
+            <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
+            <FormItem label="姓名" {...formItemProps}>
+              <TextInput value={form.name} onChangeText={val => setFormField('name', val)} placeholder="请输入使用人姓名" {...formItemInputProps} style={styles.formItemInput} />
+              {/* <Input placeholder="请输入使用人姓名" /> */}
+            </FormItem>
+            <FormItem label="手机号" {...formItemProps}>
+              <TextInput
+                value={form.telephone}
+                keyboardType="phone-pad"
+                onChangeText={val => setFormField('telephone', val)}
+                placeholder="用于接收订单短信"
+                {...formItemInputProps}
+                style={styles.formItemInput}
+              />
+            </FormItem>
+            {spu?.needIdCard === BoolEnum.TRUE && (
+              <FormItem label="身份证" {...formItemProps}>
+                <TextInput
+                  value={form.idCard}
+                  onChangeText={val => setFormField('idCard', val)}
+                  placeholder="请输入使用人身份证号"
+                  {...formItemInputProps}
+                  style={styles.formItemInput}
+                />
+              </FormItem>
+            )}
             <FormItem
-              name="integralMoney"
+              {...formItemProps}
               label={
                 <View style={globalStyles.containerRow}>
                   <Text style={[globalStyles.fontPrimary, {fontSize: 16}]}>使用芽抵扣</Text>
@@ -251,9 +314,18 @@ const Order: React.FC = () => {
                   </View>
                 </View>
               }>
-              <Input disabled={!wallet?.money} type="number" placeholder={wallet?.money ? '请输入抵扣金额' : '无法抵扣'} />
+              <InputNumber
+                styles={{container: {flex: 1, paddingRight: globalStyleVariables.MODULE_SPACE}, inputContainer: {flex: 1}, input: {textAlign: 'right', width: '100%'}}}
+                controls={false}
+                min={0}
+                max={wallet?.money}
+                value={form.integralMoney}
+                disabled={!wallet?.money}
+                onChange={val => setFormField('integralMoney', val)}
+                placeholder={wallet?.money ? '请输入抵扣金额' : '无法抵扣'}
+              />
             </FormItem>
-            <FormItem label="优惠券" name="couponId">
+            <FormItem label="优惠券" {...formItemProps}>
               <Select
                 disabled={canUseCoupons?.length === 0}
                 options={canUseCoupons?.map(coupon => ({value: coupon.id, label: `¥${moneyToYuan(coupon.money)}`})) || []}
@@ -273,14 +345,21 @@ const Order: React.FC = () => {
               </Select>
             </FormItem>
 
-            <FormItem label="备注" name="memo">
-              <Input placeholder="请输入备注（非必填）" />
+            <FormItem label="备注" {...formItemProps}>
+              <TextInput
+                value={form.memo}
+                onChangeText={val => setFormField('memo', val)}
+                placeholder="请输入备注（非必填）"
+                {...formItemInputProps}
+                style={styles.formItemInput}
+              />
+              {/* <Input placeholder="请输入备注（非必填）" /> */}
             </FormItem>
           </View>
           {/* 支付方式 */}
           <View style={[globalStyles.moduleMarginTop, {backgroundColor: '#fff', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             {/* 微信 */}
-            <TouchableOpacity activeOpacity={0.8} onPress={() => form.setFieldValue('channel', PayChannel.WECHAT)}>
+            <TouchableOpacity activeOpacity={0.8} onPress={() => setFormField('channel', PayChannel.WECHAT)}>
               <View style={[globalStyles.containerLR]}>
                 <View style={[globalStyles.containerRow, {height: 50}]}>
                   <Image source={require('../../assets/icon-wx-pay.png')} style={{width: 24, height: 24, marginRight: 15}} />
@@ -295,7 +374,7 @@ const Order: React.FC = () => {
               </View>
             </TouchableOpacity>
             {/* 支付宝 */}
-            <TouchableOpacity activeOpacity={0.8} onPress={() => form.setFieldValue('channel', PayChannel.ALIPAY)}>
+            <TouchableOpacity activeOpacity={0.8} onPress={() => setFormField('channel', PayChannel.ALIPAY)}>
               <View style={[globalStyles.containerLR]}>
                 <View style={[globalStyles.containerRow, {height: 50}]}>
                   <Image source={require('../../assets/icon-ali-pay.png')} style={{width: 24, height: 24, marginRight: 15}} />
@@ -309,8 +388,10 @@ const Order: React.FC = () => {
               </View>
             </TouchableOpacity>
           </View>
-        </Form>
-      </ScrollView>
+          {/* </Form> */}
+        </ScrollView>
+      </KeyboardAvoidingView>
+
       <View style={{backgroundColor: '#fff', paddingBottom: bottom}}>
         <View style={[globalStyles.containerRow, {padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
           <View>
@@ -344,4 +425,21 @@ export const styles = StyleSheet.create({
   formItem: {
     paddingVertical: 7,
   },
+  formItemInput: {
+    fontSize: 15,
+    paddingRight: globalStyleVariables.MODULE_SPACE,
+    textAlign: 'right',
+    width: '100%',
+  },
 });
+
+const formItemProps = {
+  hiddenBorderBottom: true,
+  hiddenBorderTop: true,
+  styles: {container: styles.formItem, children: styles.formChildren},
+};
+
+const formItemInputProps: TextInputProps = {
+  placeholderTextColor: globalStyleVariables.TEXT_COLOR_TERTIARY,
+  clearButtonMode: 'while-editing',
+};

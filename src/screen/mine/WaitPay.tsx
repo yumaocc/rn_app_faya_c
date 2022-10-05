@@ -5,13 +5,13 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyleVariables} from '../../constants/styles';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../models';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../redux/reducers';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useParams} from '../../helper/hooks';
 
 const WaitPay: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
-  const order = useSelector((state: RootState) => state.order.payOrder);
+  const {id} = useParams<{id: string}>();
+  // const order = useSelector((state: RootState) => state.order.payOrder);
   function backToTab() {
     navigation.navigate('Tab'); // 返回Tab页
   }
@@ -34,7 +34,7 @@ const WaitPay: React.FC = () => {
       <SafeAreaView style={{flex: 1}} edges={['bottom']}>
         <ScrollView style={{flex: 1}}>
           <View>
-            <Text>订单编号: {order?.orderId}</Text>
+            <Text>订单编号: {id}</Text>
           </View>
         </ScrollView>
         <Button title="立即支付" onPress={payNow} style={{height: 40, marginBottom: 10}} />

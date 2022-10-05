@@ -61,6 +61,8 @@ export interface PackageDetail {
   stockAmount: number;
   saleStatus: SKUSaleState;
   list: SKUDetail[];
+  userCommission: number;
+  userCommissionYuan: string;
 }
 
 export interface SKUDetail {
@@ -76,6 +78,7 @@ export interface SKUDetail {
   skuName: string;
   skuStockAmount: number;
   userCommission: number; // 用户佣金
+  userCommissionYuan: string;
   saleStatus: SKUSaleState;
 }
 

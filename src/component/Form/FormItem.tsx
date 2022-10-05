@@ -1,9 +1,13 @@
 import React, {useContext} from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View, TextStyle, ViewStyle} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {StylePropView} from '../../models';
 import {FormConfigContext} from './Context';
 import {useFormInstance} from './hooks';
+
+export type FormItemStyles = {
+  [key in keyof typeof styles]: ViewStyle | TextStyle;
+};
 
 export interface FormItemProps {
   children: React.ReactNode;
@@ -18,6 +22,7 @@ export interface FormItemProps {
   vertical?: boolean;
   noStyle?: boolean;
   style?: StylePropView;
+  styles?: Partial<FormItemStyles>;
 }
 
 const FormItem: React.FC<FormItemProps> = props => {
@@ -55,7 +60,14 @@ const FormItem: React.FC<FormItemProps> = props => {
   const showTopLine = !hiddenBorderTop && !config.hiddenLine;
   const showBottomLine = !hiddenBorderBottom && !config.hiddenLine;
 
-  const containerStyle = [showBottomLine && globalStyles.borderBottom, showTopLine && globalStyles.borderTop, styles.container, config.itemStyle?.container, props.style];
+  const containerStyle = [
+    showBottomLine && globalStyles.borderBottom,
+    showTopLine && globalStyles.borderTop,
+    styles.container,
+    config.itemStyle?.container,
+    props.style,
+    props.styles?.container,
+  ];
 
   function renderLabel() {
     if (typeof label === 'string') {
@@ -97,7 +109,7 @@ const FormItem: React.FC<FormItemProps> = props => {
             </View>
           )}
         </View>
-        <View style={[styles.children, config?.itemStyle?.children]}>{renderChildren()}</View>
+        <View style={[{marginLeft: globalStyleVariables.MODULE_SPACE}, styles.children, config?.itemStyle?.children, props.styles?.children]}>{renderChildren()}</View>
       </View>
       {props.extra && <View style={styles.extra}>{props.extra}</View>}
     </View>
@@ -112,6 +124,7 @@ FormItem.defaultProps = {
   vertical: false,
   noStyle: false,
   style: {},
+  styles: {},
 };
 export default FormItem;
 

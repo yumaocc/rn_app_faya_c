@@ -9,7 +9,7 @@ export interface OrderForm {
   channel: PayChannel;
   couponId?: number; // 优惠券id
   idCard?: string;
-  integralMoney?: string; // 代币抵扣
+  integralMoney?: number; // 代币抵扣
   memo?: string;
   name: string;
   packageId?: number;

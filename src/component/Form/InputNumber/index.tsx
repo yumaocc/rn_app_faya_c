@@ -1,9 +1,12 @@
 import React, {useEffect, useMemo} from 'react';
-import {View, StyleSheet, TouchableOpacity, TextInput, NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, TextInput, NativeSyntheticEvent, TextInputChangeEventData, TextStyle, ViewStyle} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyleVariables} from '../../../constants/styles';
 import {numberToString, stringToNumber} from '../../../fst/helper';
-import {StylesProp} from '../../../models';
+
+export type InputNumberStyles = {
+  [key in keyof typeof styles]: ViewStyle | TextStyle;
+};
 
 interface InputNumberProps {
   value?: number;
@@ -15,7 +18,7 @@ interface InputNumberProps {
   placeholder?: string;
   digit?: number;
   onChange?: (value: number) => void;
-  styles?: StylesProp;
+  styles?: Partial<InputNumberStyles>;
 }
 
 const InputNumber: React.FC<InputNumberProps> = props => {
@@ -119,7 +122,14 @@ const InputNumber: React.FC<InputNumberProps> = props => {
     <View style={[styles.container, props.styles?.container]}>
       {renderSubtractControl()}
       <View style={props.styles?.inputContainer}>
-        <TextInput placeholder={props.placeholder} keyboardType="numeric" value={showValue} onChange={handleNativeChange} style={[styles.input, props.styles?.input]} />
+        <TextInput
+          editable={!disabled}
+          placeholder={props.placeholder}
+          keyboardType="numeric"
+          value={showValue}
+          onChange={handleNativeChange}
+          style={[styles.input, props.styles?.input]}
+        />
       </View>
       {renderAddControl()}
     </View>
@@ -137,6 +147,7 @@ InputNumber.defaultProps = {
 };
 export default InputNumber;
 const styles = StyleSheet.create({
+  inputContainer: {},
   container: {
     flexDirection: 'row',
     alignItems: 'center',
