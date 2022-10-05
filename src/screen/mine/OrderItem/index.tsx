@@ -56,6 +56,7 @@ const OrderItem: React.FC<OrderItemProps> = props => {
             </View>
             {order.status === OrderStatus.Paid && <Button onPress={handleGoDetail} title="立即使用" />}
             {order.status === OrderStatus.WaitPay && <Button onPress={handlePay} title="立即支付" />}
+            {order.needBooking === BoolEnum.TRUE && <Button onPress={handleGoDetail} title="立即预约" />}
             {canComment && (
               <Button
                 onPress={() => {

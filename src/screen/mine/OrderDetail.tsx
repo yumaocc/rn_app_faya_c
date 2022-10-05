@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Icon} from '@ant-design/react-native';
 import QRCode from 'react-native-qrcode-svg';
+import Popover from 'react-native-popover-view';
 
 import {Button, Modal, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -11,6 +12,7 @@ import {OrderDetailF, OrderPackageSKU} from '../../models';
 import * as api from '../../apis';
 import {StylePropView} from '../../models';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {navigateTo} from '../../router/Router';
 
 const OrderDetail: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -18,6 +20,8 @@ const OrderDetail: React.FC = () => {
   const [showBatch, setShowBatch] = React.useState(false);
   const [showCode, setShowCode] = React.useState(false);
   const [currentCode, setCurrentCode] = React.useState<OrderPackageSKU>();
+  const [showMenu, setShowMenu] = React.useState(false);
+
   const {bottom} = useSafeAreaInsets();
 
   useEffect(() => {
@@ -36,10 +40,52 @@ const OrderDetail: React.FC = () => {
     }
   }
 
+  async function handleRefund() {
+    // const {orderBigId} = orderDetail;
+    // try {
+    //   await api.order.orderRefund({orderBigId});
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    setShowMenu(false);
+    navigateTo('Refund');
+  }
+
   return (
     <>
       <View style={styles.container}>
-        <NavigationBar title="订单详情" />
+        <NavigationBar
+          title="订单详情"
+          headerRight={
+            <Popover
+              isVisible={showMenu}
+              onRequestClose={() => setShowMenu(false)}
+              animationConfig={{
+                delay: 0,
+                duration: 200,
+              }}
+              from={
+                <TouchableOpacity activeOpacity={0.8} onPress={() => setShowMenu(true)}>
+                  <MaterialIcon name="more-horiz" size={24} color="#333" style={{marginRight: 20}} />
+                </TouchableOpacity>
+              }
+              backgroundStyle={{backgroundColor: '#00000011'}}
+              arrowSize={{width: 0, height: 0}}>
+              <View style={styles.popoverMenu}>
+                <TouchableOpacity activeOpacity={0.8} onPress={handleRefund}>
+                  <View style={styles.popoverItem}>
+                    <Text style={styles.popoverText}>申请退款</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.8}>
+                  <View style={styles.popoverItem}>
+                    <Text style={styles.popoverText}>联系客服</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </Popover>
+          }
+        />
         {!orderDetail && <Text>loading...</Text>}
         {orderDetail && (
           <>
@@ -270,5 +316,22 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     backgroundColor: '#000',
+  },
+  popoverMenu: {
+    padding: globalStyleVariables.MODULE_SPACE,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    width: 100,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: globalStyleVariables.BORDER_COLOR,
+  },
+  popoverItem: {
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  popoverText: {
+    fontSize: 15,
+    color: globalStyleVariables.TEXT_COLOR_PRIMARY,
   },
 });

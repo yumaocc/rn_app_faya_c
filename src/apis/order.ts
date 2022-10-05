@@ -1,4 +1,4 @@
-import {SearchParam} from '../fst/models';
+import {SearchForm, SearchParam} from '../fst/models';
 import {OrderF} from '../models';
 import {OrderDetailF} from '../models';
 import {OrderForm, OrderPayState, PayOrder} from '../models/order';
@@ -17,4 +17,8 @@ export async function makeOrder(params: OrderForm): Promise<PayOrder> {
 
 export async function checkOrderPayState(orderId: string): Promise<OrderPayState> {
   return await post('/order/paid/result', {id: orderId});
+}
+
+export async function orderRefund(params: SearchForm): Promise<boolean> {
+  return await post('/order/refund', params);
 }

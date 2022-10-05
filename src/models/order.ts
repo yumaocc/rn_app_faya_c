@@ -52,6 +52,7 @@ export interface OrderF {
   bizName: string;
   orderBigId: number;
   canGetCommentPackage: BoolEnum;
+  needBooking: BoolEnum;
   evaluated: BoolEnum;
   orderBigIdStr: string;
   orderMiddleId: number;

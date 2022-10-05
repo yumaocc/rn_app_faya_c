@@ -29,6 +29,7 @@ import Browser from '../screen/common/Browser';
 import TestPage from '../screen/common/TestPage'; // 测试页面
 import User from '../screen/mine/User';
 import WorkDetailList from '../screen/home/WorkDetailList';
+import Refund from '../screen/mine/Refund';
 
 import {RootStackParamList, ValidRoute} from '../models';
 
@@ -71,6 +72,7 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="PublishVideo" component={PublishVideo} options={{...commonScreenOptions, gestureEnabled: false}} />
           <Stack.Screen name="PaySuccess" component={PaySuccess} options={commonScreenOptions} />
           <Stack.Screen name="WaitPay" component={WaitPay} options={commonScreenOptions} />
+          <Stack.Screen name="Refund" component={Refund} options={commonScreenOptions} />
         </>
       ) : (
         <></>
