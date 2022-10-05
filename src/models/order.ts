@@ -1,4 +1,4 @@
-import {BoolEnum} from '../fst/models';
+import {BoolEnum, DateTimeString} from '../fst/models';
 import {PayChannel, PayWay} from './spu';
 
 export interface OrderForm {
@@ -80,6 +80,16 @@ export interface OrderDetailF {
   orderMiddleId: string;
   orderBigId: string;
   list: OrderPackage[];
+  paidName: string;
+  paidPhone: string;
+  canPayAgainTimeEnd: DateTimeString;
+  spuName: string;
+  usedCouponMoney: number;
+  usedCouponMoneyYuan: string;
+  usedIntegralMoney: number;
+  usedIntegralMoneyYuan: string;
+  willReturnUserCommission: number;
+  willReturnUserCommissionYuan: string;
 }
 
 export interface OrderPackage {

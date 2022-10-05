@@ -166,14 +166,15 @@ const Order: React.FC = () => {
             navigation.replace('PaySuccess');
           } else if (status === OrderPayState.UNPAY) {
             navigation.replace('WaitPay', {id});
+          } else {
+            setIsPaying(false);
           }
         })
         .catch(e => {
           commonDispatcher.error(e);
+          setIsPaying(false);
         })
-        .finally(() => {
-          // setIsPaying(false);
-        });
+        .finally(() => {});
     }
   }, [appState, isPaying, commonDispatcher, navigation, checkOrderId, checkOrderType]);
 
