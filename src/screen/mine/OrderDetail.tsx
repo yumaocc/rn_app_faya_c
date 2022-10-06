@@ -41,14 +41,8 @@ const OrderDetail: React.FC = () => {
   }
 
   async function handleRefund() {
-    // const {orderBigId} = orderDetail;
-    // try {
-    //   await api.order.orderRefund({orderBigId});
-    // } catch (error) {
-    //   console.log(error);
-    // }
     setShowMenu(false);
-    navigateTo('Refund');
+    navigateTo('Refund', {id});
   }
 
   return (

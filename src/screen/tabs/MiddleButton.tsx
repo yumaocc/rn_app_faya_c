@@ -20,9 +20,9 @@ const MiddleButton: React.FC = () => {
         redirect: true,
       });
     } else {
-      // navigation.navigate('ShootVideo');
+      navigation.navigate('ShootVideo');
       // navigation.navigate('WaitPay');
-      navigation.navigate('OrderComment', {id: '1564079749252501504'});
+      // navigation.navigate('Refund', {id: '1564079749252501504'});
     }
   }
   return (

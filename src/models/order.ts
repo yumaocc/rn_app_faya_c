@@ -95,11 +95,14 @@ export interface OrderDetailF {
   paidAllMoney: number;
   paidAllMoneyYuan: string;
   numberOfProducts: number;
+  canRefundNumberOfProducts: number;
 }
 
 export interface OrderPackage {
   packageName: string;
   packageId: number;
+  onePackageMoney: number;
+  onePackageMoneyYuan: string;
   list: OrderPackageSKU[];
 }
 export interface OrderPackageSKU {
@@ -134,4 +137,12 @@ export interface OrderCommentForm {
   syncToVideo: BoolEnum;
   fileList: string[];
   _fileList: any[];
+}
+
+export interface OrderRefundForm {
+  fileList: string[];
+  _fileList: any[];
+  orderBigId: string;
+  quantity: number;
+  reason: string;
 }

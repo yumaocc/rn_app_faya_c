@@ -33,7 +33,7 @@ export type RootStackParamList = {
   WaitPay: undefined;
   Browser: {url: string};
   User: {id: number};
-  Refund: undefined;
+  Refund: {id: string};
   OrderComment: IDBody;
 };
 

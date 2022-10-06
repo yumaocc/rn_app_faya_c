@@ -15,7 +15,7 @@ export type {
   WorkList,
 } from './work';
 export type {SPUF, SPUShop, PackageDetail, SKUDetail, SPUDetailF, SKUShowInfo, PayWay} from './spu';
-export type {OrderF, OrderDetailF, OrderPackageSKU, PayOrder, OrderCommentForm} from './order';
+export type {OrderF, OrderDetailF, OrderPackageSKU, PayOrder, OrderCommentForm, OrderRefundForm} from './order';
 export type {CameraType, AppInstallCheckType} from './device';
 
 export {UserState, CouponState, CouponType, UserLevel} from './user';

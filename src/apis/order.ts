@@ -1,7 +1,7 @@
-import {SearchForm, SearchParam} from '../fst/models';
+import {SearchParam} from '../fst/models';
 import {OrderF} from '../models';
 import {OrderDetailF} from '../models';
-import {OrderCommentForm, OrderForm, OrderPayState, PayOrder} from '../models/order';
+import {OrderCommentForm, OrderForm, OrderPayState, OrderRefundForm, PayOrder} from '../models/order';
 import {post} from './helper';
 
 export async function getOrderList(params: SearchParam): Promise<OrderF[]> {
@@ -19,7 +19,7 @@ export async function checkOrderPayState(id: string, type = 0): Promise<{status:
   return await post('/order/paid/result', {id, type});
 }
 
-export async function orderRefund(params: SearchForm): Promise<boolean> {
+export async function orderRefund(params: OrderRefundForm): Promise<boolean> {
   return await post('/order/refund', params);
 }
 export async function getOrderTempId(): Promise<string> {
