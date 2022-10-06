@@ -26,14 +26,22 @@ const WaitPay: React.FC = () => {
   const [expired, setExpired] = React.useState(false);
   const showTime = useMemo(() => {
     if (restSeconds <= 0) {
-      return '';
+      return <Text />;
     }
     const minutes = Math.floor(restSeconds / 60);
     const seconds = restSeconds % 60;
     const minutesStr = minutes < 10 ? `0${minutes}` : `${minutes}`;
     const secondsStr = seconds < 10 ? `0${seconds}` : `${seconds}`;
     const showSep = restSeconds % 2 === 0;
-    return `${minutesStr}${showSep ? ':' : ' '}${secondsStr}`;
+    return (
+      <Text>
+        <Text>剩{minutesStr}</Text>
+        {/* <View style={{width: 10, alignItems: 'center'}}>
+        </View> */}
+        <Text>{showSep ? ':' : ' '}</Text>
+        <Text>{secondsStr}自动关闭</Text>
+      </Text>
+    );
   }, [restSeconds]);
 
   // console.log(orderInfo);
@@ -66,11 +74,11 @@ const WaitPay: React.FC = () => {
     }
     const {canPayAgainTimeEnd} = orderInfo;
     const now = moment();
-    // const end = moment('2022-10-06 11:59:00', 'YYYY-MM-DD HH:mm:ss');
+    // const end = moment('2022-10-06 11:42:30', 'YYYY-MM-DD HH:mm:ss');
     const end = moment(canPayAgainTimeEnd, 'YYYY-MM-DD HH:mm:ss');
     const rest = end.diff(now, 'seconds');
-    console.log(rest);
-    if (rest <= 0) {
+    if (rest <= 1) {
+      // 最后一秒就要过期了
       setExpired(true);
     } else {
       setRestSeconds(rest);
@@ -78,9 +86,8 @@ const WaitPay: React.FC = () => {
   }, [orderInfo]);
 
   useEffect(() => {
-    // console.log('rest change', restSeconds);
     const timer = setTimeout(() => {
-      if (restSeconds > 0) {
+      if (restSeconds > 1) {
         setRestSeconds(x => x - 1);
       } else {
         setExpired(true);
@@ -103,7 +110,7 @@ const WaitPay: React.FC = () => {
     navigation.navigate('Tab'); // 返回Tab页
   }
   async function payNow() {
-    console.log('立即支付');
+    // console.log('立即支付');
     try {
       let link = '';
       if (orderInfo?.ypPayChannel === PayChannel.WECHAT) {
@@ -144,11 +151,11 @@ const WaitPay: React.FC = () => {
             </TouchableOpacity>
             <View style={globalStyles.moduleMarginLeft}>
               <View>
-                <Text style={[{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 20}]}>{expired ? '订单已过期' : '待支付'}</Text>
+                <Text style={[{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 18}]}>{expired ? '订单已过期' : '待支付'}</Text>
               </View>
               {!expired && (
                 <View>
-                  <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_PRIMARY}]}>剩{showTime}自动关闭</Text>
+                  <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_PRIMARY, fontSize: 12, lineHeight: 15}]}>{showTime}</Text>
                 </View>
               )}
             </View>
