@@ -1,5 +1,5 @@
 import {Button} from '@ant-design/react-native';
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo, useRef} from 'react';
 import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal, StatusBar, TextInput, KeyboardAvoidingView, Platform, TextInputProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -38,6 +38,8 @@ const Order: React.FC = () => {
   const [commonDispatcher] = useCommonDispatcher();
   // const [orderDispatcher] = useOrderDispatcher();
   const {bottom} = useSafeAreaInsets();
+
+  const phoneRef = useRef<TextInput>();
 
   const initForm: OrderForm = {amount: 1, channel: PayChannel.WECHAT, name: '', payWay: 'MINI_PROGRAM', telephone: ''};
 
@@ -281,7 +283,14 @@ const Order: React.FC = () => {
             )}
             <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
             <FormItem label="姓名" {...formItemProps}>
-              <TextInput value={form.name} onChangeText={val => setFormField('name', val)} placeholder="请输入使用人姓名" {...formItemInputProps} style={styles.formItemInput} />
+              <TextInput
+                onSubmitEditing={() => phoneRef.current.focus()}
+                value={form.name}
+                onChangeText={val => setFormField('name', val)}
+                placeholder="请输入使用人姓名"
+                {...formItemInputProps}
+                style={styles.formItemInput}
+              />
               {/* <Input placeholder="请输入使用人姓名" /> */}
             </FormItem>
             <FormItem label="手机号" {...formItemProps}>
@@ -290,6 +299,7 @@ const Order: React.FC = () => {
                 keyboardType="phone-pad"
                 onChangeText={val => setFormField('telephone', val)}
                 placeholder="用于接收订单短信"
+                ref={phoneRef}
                 {...formItemInputProps}
                 style={styles.formItemInput}
               />

@@ -15,7 +15,7 @@ export async function makeOrder(params: OrderForm): Promise<PayOrder> {
   return await post('/order/pay', params);
 }
 
-export async function checkOrderPayState(id: string, type: number): Promise<{status: OrderPayState; id: string}> {
+export async function checkOrderPayState(id: string, type = 0): Promise<{status: OrderPayState; id: string}> {
   return await post('/order/paid/result', {id, type});
 }
 
@@ -24,4 +24,8 @@ export async function orderRefund(params: SearchForm): Promise<boolean> {
 }
 export async function getOrderTempId(): Promise<string> {
   return await post('/order/paid/temp/id');
+}
+
+export async function payAgain(id: string): Promise<string> {
+  return await post('/order/pay/again', {id});
 }

@@ -24,4 +24,4 @@ export const WorkVisibleAuthOptions = [
   {label: '朋友·互相关注可见', value: WorkVisibleAuth.Friend},
 ];
 
-export {getBaseURL, USER_AGREEMENT_URL, PRIVACY_POLICY_URL} from './url';
+export {getBaseURL, getAliPayUrl, getWechatPayUrl, USER_AGREEMENT_URL, PRIVACY_POLICY_URL} from './url';

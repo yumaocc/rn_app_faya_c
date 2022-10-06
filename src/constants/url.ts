@@ -7,3 +7,12 @@ export const PRIVACY_POLICY_URL = 'https://manually-file-prod.faya.life/privacy.
 
 // 用户协议
 export const USER_AGREEMENT_URL = 'https://manually-file-prod.faya.life/user-agreement.html';
+
+export function getAliPayUrl(code: string) {
+  return `alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=${code}&_s=web-other`;
+}
+// https://cloud1-5gcdmvry620ba3e9-1313439264.tcloudbaseapp.com/jump.html
+
+export function getWechatPayUrl(params: string) {
+  return 'https://cloud1-5gcdmvry620ba3e9-1313439264.tcloudbaseapp.com/jump.html?' + params;
+}

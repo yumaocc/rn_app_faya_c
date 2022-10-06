@@ -90,6 +90,11 @@ export interface OrderDetailF {
   usedIntegralMoneyYuan: string;
   willReturnUserCommission: number;
   willReturnUserCommissionYuan: string;
+  ypPayChannel: PayChannel;
+  ypPayWay: PayWay;
+  paidAllMoney: number;
+  paidAllMoneyYuan: string;
+  numberOfProducts: number;
 }
 
 export interface OrderPackage {
