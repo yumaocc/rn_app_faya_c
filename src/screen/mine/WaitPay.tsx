@@ -205,10 +205,6 @@ const WaitPay: React.FC = () => {
               <Text style={globalStyles.fontSecondary}>x{orderInfo?.numberOfProducts || 0}</Text>
             </View>
             <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE}]} />
-            {/* <View style={[globalStyles.containerLR, {height: 30}]}>
-              <Text style={globalStyles.fontPrimary}>商品金额</Text>
-              <Text style={globalStyles.fontSecondary}>暂无字段</Text>
-            </View> */}
             {!!orderInfo?.willReturnUserCommission && (
               <View style={[globalStyles.containerLR, {height: 30}]}>
                 <Text style={globalStyles.fontPrimary}>返芽</Text>

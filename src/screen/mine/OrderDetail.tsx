@@ -2,13 +2,14 @@ import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Icon} from '@ant-design/react-native';
+
 import QRCode from 'react-native-qrcode-svg';
 import Popover from 'react-native-popover-view';
 
 import {Button, Modal, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useParams} from '../../helper/hooks';
-import {OrderDetailF, OrderPackageSKU} from '../../models';
+import {OrderDetailF, OrderPackageSKU, PayChannel} from '../../models';
 import * as api from '../../apis';
 import {StylePropView} from '../../models';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -93,11 +94,11 @@ const OrderDetail: React.FC = () => {
                 <Image source={{uri: orderDetail?.spuCoverImage}} style={styles.orderCover} />
                 <View>
                   <View style={globalStyles.containerRow}>
-                    <Icon name="shop" />
-                    <Text>{orderDetail?.bizName}</Text>
+                    <MaterialIcon name="storefront" size={15} />
+                    <Text style={globalStyles.fontPrimary}>{orderDetail?.bizName}</Text>
                   </View>
                   <Text style={[globalStyles.fontPrimary]} numberOfLines={2}>
-                    {orderDetail.skuName}
+                    {orderDetail.spuName}
                   </Text>
                 </View>
               </View>
@@ -209,31 +210,52 @@ const OrderDetail: React.FC = () => {
                 <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
                   <Text style={[globalStyles.fontStrong]}>订单信息</Text>
                   <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
-                  <View style={[globalStyles.containerLR, {marginBottom: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
-                    <Text style={globalStyles.fontPrimary}>用户姓名</Text>
-                    <Text style={globalStyles.fontSecondary}>暂无字段</Text>
+                  <View style={[globalStyles.containerLR, {height: 30}]}>
+                    <Text style={[globalStyles.fontPrimary]}>用户姓名</Text>
+                    <Text style={globalStyles.fontSecondary}>{orderDetail?.paidName}</Text>
                   </View>
-                  <View style={[globalStyles.containerLR]}>
+                  <View style={[globalStyles.containerLR, {height: 30}]}>
                     <Text style={globalStyles.fontPrimary}>联系电话</Text>
-                    <Text style={globalStyles.fontSecondary}>暂无字段</Text>
+                    <Text style={globalStyles.fontSecondary}>{orderDetail?.paidPhone}</Text>
                   </View>
                   <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
-                  <View style={[globalStyles.containerLR, {marginBottom: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
-                    <Text style={globalStyles.fontPrimary}>订单号</Text>
-                    {/* todo: 这里是要哪个ID */}
-                    <Text style={globalStyles.fontSecondary}>{orderDetail.orderBigId}</Text>
+                  <View style={[globalStyles.containerLR, {height: 30}]}>
+                    <Text style={globalStyles.fontPrimary}>订单编号</Text>
+                    <Text style={globalStyles.fontSecondary}>{orderDetail?.orderBigId}</Text>
                   </View>
-                  <View style={[globalStyles.containerLR, {marginBottom: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
+                  <View style={[globalStyles.containerLR, {height: 30}]}>
+                    <Text style={globalStyles.fontPrimary}>套餐名称</Text>
+                    <Text style={globalStyles.fontSecondary}>{orderDetail?.skuName}</Text>
+                  </View>
+                  <View style={[globalStyles.containerLR, {height: 30}]}>
                     <Text style={globalStyles.fontPrimary}>购买数量</Text>
-                    <Text style={globalStyles.fontSecondary}>暂无字段</Text>
+                    <Text style={globalStyles.fontSecondary}>x{orderDetail?.numberOfProducts || 0}</Text>
                   </View>
-                  <View style={[globalStyles.containerLR, {marginBottom: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
+                  <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE}]} />
+                  {!!orderDetail?.willReturnUserCommission && (
+                    <View style={[globalStyles.containerLR, {height: 30}]}>
+                      <Text style={globalStyles.fontPrimary}>返芽</Text>
+                      <Text style={globalStyles.fontSecondary}>{orderDetail?.willReturnUserCommissionYuan}</Text>
+                    </View>
+                  )}
+                  <View style={[globalStyles.containerLR, {height: 30}]}>
                     <Text style={globalStyles.fontPrimary}>支付方式</Text>
-                    <Text style={globalStyles.fontSecondary}>暂无字段</Text>
+                    <Text style={globalStyles.fontSecondary}>{orderDetail?.ypPayChannel === PayChannel.ALIPAY ? '支付宝' : '微信'}</Text>
                   </View>
-                  <View style={[globalStyles.containerLR]}>
-                    <Text style={globalStyles.fontPrimary}>开始预约时间</Text>
-                    <Text style={globalStyles.fontSecondary}>暂无字段</Text>
+                  <View style={[globalStyles.containerLR, {height: 30}]}>
+                    <Text style={globalStyles.fontPrimary}>优惠券</Text>
+                    <Text style={globalStyles.fontSecondary}>-¥{orderDetail?.usedCouponMoneyYuan}</Text>
+                  </View>
+                  <View style={[globalStyles.containerLR, {height: 30}]}>
+                    <Text style={globalStyles.fontPrimary}>使用芽</Text>
+                    <Text style={globalStyles.fontSecondary}>-¥{orderDetail?.usedIntegralMoneyYuan}</Text>
+                  </View>
+                  <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE}]} />
+                  <View>
+                    <Text style={[globalStyles.fontPrimary, {textAlign: 'right'}]}>
+                      <Text>实际支付：</Text>
+                      <Text style={{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 18}}>¥{orderDetail?.paidAllMoneyYuan}</Text>
+                    </Text>
                   </View>
                 </View>
               </View>
