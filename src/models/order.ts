@@ -121,3 +121,17 @@ export interface OrderShop {
   shopAddress: string;
   shopContactPhone: string;
 }
+
+export interface OrderCommentForm {
+  content: string;
+  descriptionMatchesScore: number;
+  // diningEnvironmentScore: number;
+  // diningExperienceScore: number;
+  businessEnvironmentScore: number;
+  useExperienceScore: number;
+  orderBigId: string;
+  serviceAttitudeScore: number;
+  syncToVideo: BoolEnum;
+  fileList: string[];
+  _fileList: any[];
+}

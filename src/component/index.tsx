@@ -22,6 +22,7 @@ import Switch from './Form/Switch';
 import Checkbox from './Form/Checkbox';
 import DatePicker from './Form/DatePicker';
 import InputNumber from './Form/InputNumber';
+import Rate from './Form/Rate';
 export {
   UnitNumber,
   GlobalToast,
@@ -46,4 +47,5 @@ export {
   Checkbox,
   InputNumber,
   Button,
+  Rate,
 };

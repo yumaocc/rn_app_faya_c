@@ -10,9 +10,8 @@ import {RecorderFinishData, RecorderView, RecorderViewRef, RecorderViewActionTyp
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {secondToMinute} from '../../fst/helper';
 import {launchImageLibrary} from 'react-native-image-picker';
-import RNFS from 'react-native-fs';
 import PublishManager from '../../native-modules/PublishManager';
-import {getVideoNameByPath} from '../../helper/system';
+import {copyFileUrl, getVideoNameByPath} from '../../helper/system';
 
 const ShootVideo: React.FC = () => {
   const recorder = useRef<RecorderViewRef>(null);
@@ -107,7 +106,7 @@ const ShootVideo: React.FC = () => {
         const video = result.assets[0];
         let uri = video.uri;
         if (Platform.OS === 'android') {
-          uri = await videoUrlCopy(video.uri, video.fileName);
+          uri = await copyFileUrl(video.uri, video.fileName);
         }
         console.log('replaced_uri', uri);
         const info: VideoInfo = {
@@ -122,13 +121,6 @@ const ShootVideo: React.FC = () => {
     } catch (error) {
       console.log(error);
     }
-  }
-
-  async function videoUrlCopy(uri: string, fileName: string) {
-    const destPath = `${RNFS.TemporaryDirectoryPath}/${fileName}`;
-    await RNFS.copyFile(uri, destPath);
-    await RNFS.stat(destPath);
-    return destPath;
   }
 
   return (

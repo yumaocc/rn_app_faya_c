@@ -1,7 +1,7 @@
 import {SearchForm, SearchParam} from '../fst/models';
 import {OrderF} from '../models';
 import {OrderDetailF} from '../models';
-import {OrderForm, OrderPayState, PayOrder} from '../models/order';
+import {OrderCommentForm, OrderForm, OrderPayState, PayOrder} from '../models/order';
 import {post} from './helper';
 
 export async function getOrderList(params: SearchParam): Promise<OrderF[]> {
@@ -28,4 +28,7 @@ export async function getOrderTempId(): Promise<string> {
 
 export async function payAgain(id: string): Promise<string> {
   return await post('/order/pay/again', {id});
+}
+export async function commentOrder(params: OrderCommentForm): Promise<boolean> {
+  return await post('/order/comment/add/one', params);
 }

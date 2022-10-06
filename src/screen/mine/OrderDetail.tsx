@@ -27,7 +27,6 @@ const OrderDetail: React.FC = () => {
   useEffect(() => {
     async function f() {
       const res = await api.order.getOrderDetail(id);
-      console.log(res);
       setOrderDetail(res);
     }
     id && f();

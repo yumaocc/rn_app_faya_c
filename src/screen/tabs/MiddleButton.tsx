@@ -21,8 +21,8 @@ const MiddleButton: React.FC = () => {
       });
     } else {
       // navigation.navigate('ShootVideo');
-      navigation.navigate('WaitPay');
-      // navigation.navigate('User', {id: 2});
+      // navigation.navigate('WaitPay');
+      navigation.navigate('OrderComment', {id: '1564079749252501504'});
     }
   }
   return (

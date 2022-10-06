@@ -1,14 +1,20 @@
 import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
+import RNFS from 'react-native-fs';
 import {displayName} from '../../../app.json';
 import {APP_SCHEMES} from '../../constants';
 import {AppInstallCheckType} from '../../models';
 
 export function getVideoNameByPath(videPath: string) {
-  const shortName = videPath.split('/').pop();
+  return getFileNameByPath(videPath, 'upload.mp4');
+}
+
+export function getFileNameByPath(filePath: string, defaultName = 'file.png') {
+  // return filePath.split('/').pop();
+  const shortName = filePath.split('/').pop();
   const extName = shortName.split('.').pop();
   if (!extName) {
-    return 'upload.mp4';
+    return defaultName;
   }
   return shortName;
 }
@@ -94,10 +100,16 @@ export async function getLocation(): Promise<Geolocation.GeoPosition> {
 
 export async function checkAppInstall(appType: AppInstallCheckType): Promise<boolean> {
   const scheme = APP_SCHEMES[appType];
-  console.log(scheme);
   if (!scheme) {
     return false;
   } else {
     return await Linking.canOpenURL(scheme);
   }
+}
+
+export async function copyFileUrl(uri: string, fileName: string) {
+  const destPath = `${RNFS.TemporaryDirectoryPath}/${fileName}`;
+  await RNFS.copyFile(uri, destPath);
+  await RNFS.stat(destPath);
+  return destPath;
 }
