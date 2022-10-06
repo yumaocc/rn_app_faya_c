@@ -1,5 +1,6 @@
+import {Platform} from 'react-native';
 import {BoolEnum} from '../fst/models';
-import {WorkVisibleAuth} from '../models';
+import {AppInstallCheckType, WorkVisibleAuth} from '../models';
 
 export const ERROR_SHOW_TIME = 3e3; // 错误提示框显示时间
 export const REQUEST_TIMEOUT = 3 * 60 * 1e3; // 请求超时时间, 3分钟
@@ -10,6 +11,18 @@ export const MOCK_API_DELAY = 500; // mock api延迟时间
 export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss'; // 统一的时间格式
 export const DEFAULT_START_DATE = '1970-01-01 00:00:00'; // 默认的开始时间
 export const DEFAULT_END_DATE = '2099-12-31 23:59:59'; // 默认的结束时间
+
+export const APP_SCHEMES: {[key in AppInstallCheckType]: string} = {
+  // 添加这个scheme，iOS需要在info.plist中添加LSApplicationQueriesSchemes
+  alipay: 'alipays://',
+  wechat: 'weixin://',
+  baidumap: 'baidumap://',
+  qqmap: 'qqmap://',
+  amap: Platform.select({
+    ios: 'iosamap://',
+    android: 'androidamap://',
+  }),
+};
 
 export const noop = () => {}; // 空函数
 

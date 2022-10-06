@@ -10,10 +10,11 @@ import {BoolEnum} from '../../../fst/models';
 interface OrderItemProps {
   order: OrderF;
   onGoDetail?: (id: string) => void;
+  onPayAgain?: (id: string) => void;
 }
 
 const OrderItem: React.FC<OrderItemProps> = props => {
-  const {order, onGoDetail} = props;
+  const {order, onGoDetail, onPayAgain} = props;
   const canComment = useMemo(() => order.status === OrderStatus.Completed && order.evaluated === BoolEnum.FALSE, [order]);
   const commentText = useMemo(() => (order.canGetCommentPackage === BoolEnum.TRUE ? '评价拿红包' : '去评价'), [order]);
 
@@ -22,7 +23,7 @@ const OrderItem: React.FC<OrderItemProps> = props => {
   }
 
   function handlePay() {
-    console.log('pay');
+    onPayAgain && onPayAgain(order.orderBigIdStr);
   }
 
   return (

@@ -15,7 +15,9 @@ import moment from 'moment';
 
 const WaitPay: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
-  const id = useParams<{id: string}>().id || '1577839589884637184';
+  const params = useParams<{id: string; canBack?: boolean}>();
+  const id = useMemo(() => params.id, [params]);
+  const canBack = useMemo(() => !!params?.canBack, [params]);
   const [orderInfo, setOrderInfo] = React.useState<OrderDetailF>(null);
   const [, setLoading] = React.useState(true);
   const [isPaying, setIsPaying] = React.useState(false);
@@ -36,15 +38,11 @@ const WaitPay: React.FC = () => {
     return (
       <Text>
         <Text>剩{minutesStr}</Text>
-        {/* <View style={{width: 10, alignItems: 'center'}}>
-        </View> */}
         <Text>{showSep ? ':' : ' '}</Text>
         <Text>{secondsStr}自动关闭</Text>
       </Text>
     );
   }, [restSeconds]);
-
-  // console.log(orderInfo);
 
   const [commonDispatcher] = useCommonDispatcher();
 
@@ -105,12 +103,15 @@ const WaitPay: React.FC = () => {
       .catch(commonDispatcher.error)
       .finally(() => setLoading(false));
   }, [commonDispatcher.error, id]);
-  // const order = useSelector((state: RootState) => state.order.payOrder);
-  function backToTab() {
-    navigation.navigate('Tab'); // 返回Tab页
+
+  function handleBack() {
+    if (canBack) {
+      navigation.canGoBack() && navigation.goBack();
+    } else {
+      navigation.navigate('Tab'); // 支付完返回Tab页
+    }
   }
   async function payNow() {
-    // console.log('立即支付');
     try {
       let link = '';
       if (orderInfo?.ypPayChannel === PayChannel.WECHAT) {
@@ -144,7 +145,7 @@ const WaitPay: React.FC = () => {
         title=""
         headerLeft={
           <View style={globalStyles.containerRow}>
-            <TouchableOpacity activeOpacity={0.6} onPress={backToTab}>
+            <TouchableOpacity activeOpacity={0.6} onPress={handleBack}>
               <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
                 <MaterialIcon name="arrow-back-ios" size={24} color="#333" />
               </View>

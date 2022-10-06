@@ -101,7 +101,16 @@ const OrderList: React.FC = () => {
               </View>
             )}
             {orderList.map(order => {
-              return <OrderItem key={order.id} order={order} onGoDetail={goDetail} />;
+              return (
+                <OrderItem
+                  key={order.id}
+                  order={order}
+                  onGoDetail={goDetail}
+                  onPayAgain={orderId => {
+                    navigation.navigate('WaitPay', {id: orderId, canBack: true});
+                  }}
+                />
+              );
             })}
             {orders.status === 'loading' && (
               <View style={[globalStyles.containerCenter]}>

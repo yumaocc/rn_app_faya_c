@@ -1,6 +1,8 @@
 import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {displayName} from '../../../app.json';
+import {APP_SCHEMES} from '../../constants';
+import {AppInstallCheckType} from '../../models';
 
 export function getVideoNameByPath(videPath: string) {
   const shortName = videPath.split('/').pop();
@@ -88,4 +90,14 @@ export async function getLocation(): Promise<Geolocation.GeoPosition> {
       {timeout: 15000, forceLocationManager: true},
     );
   });
+}
+
+export async function checkAppInstall(appType: AppInstallCheckType): Promise<boolean> {
+  const scheme = APP_SCHEMES[appType];
+  console.log(scheme);
+  if (!scheme) {
+    return false;
+  } else {
+    return await Linking.canOpenURL(scheme);
+  }
 }

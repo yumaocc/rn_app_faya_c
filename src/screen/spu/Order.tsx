@@ -18,6 +18,8 @@ import {useNavigation} from '@react-navigation/native';
 import {useSearch} from '../../fst/hooks';
 import {OrderForm} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
+import {getAliPayUrl, getWechatPayUrl} from '../../constants';
+import {checkAppInstall} from '../../helper/system';
 
 const Order: React.FC = () => {
   const spu = useSelector((state: RootState) => state.spu.currentSPU);
@@ -29,6 +31,7 @@ const Order: React.FC = () => {
   const [isPaying, setIsPaying] = React.useState(false);
   const [checkOrderId, setCheckOrderId] = React.useState<string>('');
   const [checkOrderType, setCheckOrderType] = React.useState<number>(0); // 0 订单id，1tempId;
+  const [canUseAlipay, setCanUseAlipay] = React.useState(false);
 
   const appState = useAppState();
   const navigation = useNavigation<FakeNavigation>();
@@ -129,6 +132,7 @@ const Order: React.FC = () => {
     }
   }, [currentSelectedCoupon, form, setFormField, totalPrice]);
 
+  // 获取封面
   const poster = useMemo(() => {
     if (spu?.posters?.length) {
       return spu.posters[0];
@@ -146,16 +150,17 @@ const Order: React.FC = () => {
     // form.setFieldValue('skuId', id);
   }, [sku, currentSkuIsPackage, setFormField]);
 
-  // useEffect(() => {
-  //   const subs = AppState.addEventListener('change', nextState => {
-  //     if (nextState === 'active') {
-  //       if (isPaying) {}
-  //       // setIsPaying(false);
-  //     }
-  //   });
-
-  //   return subs.remove();
-  // }, []);
+  useEffect(() => {
+    async function f() {
+      try {
+        const aliPayInstalled = await checkAppInstall('alipay');
+        setCanUseAlipay(aliPayInstalled);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    f();
+  }, []);
 
   useEffect(() => {
     if (appState === 'active' && isPaying) {
@@ -214,13 +219,11 @@ const Order: React.FC = () => {
           }),
         );
         const payInfo = encodeURIComponent(JSON.stringify({...formData, tempId: tempOrderId}));
-
-        link = `https://cloud1-5gcdmvry620ba3e9-1313439264.tcloudbaseapp.com/jump.html?token=${encodeURIComponent(token)}&o=${orderInfo}&p=${payInfo}`;
+        link = getWechatPayUrl(`token=${encodeURIComponent(token)}&o=${orderInfo}&p=${payInfo}`);
       } else {
         const res = await api.order.makeOrder(formData);
-        // orderDispatcher.setPayOrder(res);
         setCheckOrderId(res.orderId);
-        link = `alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=${res.prePayTn}&_s=web-other`;
+        link = getAliPayUrl(res.prePayTn);
       }
       Linking.openURL(link);
       setTimeout(() => {
@@ -385,19 +388,21 @@ const Order: React.FC = () => {
               </View>
             </TouchableOpacity>
             {/* 支付宝 */}
-            <TouchableOpacity activeOpacity={0.8} onPress={() => setFormField('channel', PayChannel.ALIPAY)}>
-              <View style={[globalStyles.containerLR]}>
-                <View style={[globalStyles.containerRow, {height: 50}]}>
-                  <Image source={require('../../assets/icon-ali-pay.png')} style={{width: 24, height: 24, marginRight: 15}} />
-                  <Text>支付宝</Text>
+            {canUseAlipay && (
+              <TouchableOpacity activeOpacity={0.8} onPress={() => setFormField('channel', PayChannel.ALIPAY)}>
+                <View style={[globalStyles.containerLR]}>
+                  <View style={[globalStyles.containerRow, {height: 50}]}>
+                    <Image source={require('../../assets/icon-ali-pay.png')} style={{width: 24, height: 24, marginRight: 15}} />
+                    <Text>支付宝</Text>
+                  </View>
+                  {payChannel === PayChannel.ALIPAY ? (
+                    <Image source={require('../../assets/select-true.png')} style={{width: 18, height: 18}} />
+                  ) : (
+                    <Image source={require('../../assets/select-false.png')} style={{width: 18, height: 18}} />
+                  )}
                 </View>
-                {payChannel === PayChannel.ALIPAY ? (
-                  <Image source={require('../../assets/select-true.png')} style={{width: 18, height: 18}} />
-                ) : (
-                  <Image source={require('../../assets/select-false.png')} style={{width: 18, height: 18}} />
-                )}
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            )}
           </View>
           {/* </Form> */}
         </ScrollView>
