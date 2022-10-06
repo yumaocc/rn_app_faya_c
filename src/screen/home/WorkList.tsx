@@ -61,7 +61,7 @@ const WorkList: React.FC<WorkListProps> = props => {
       <View style={styles.item} key={work.mainId}>
         <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetailList', {id: work.mainId, videoUrl: work.videoUrl})}>
           <View style={{width: '100%', position: 'relative'}}>
-            <Image source={{uri: work?.coverImage || 'https://fakeimg.pl/100?text=l'}} style={true ? styles.cover : styles.smallCover} />
+            <Image source={{uri: work?.coverImage}} defaultSource={require('../../assets/sku_def_1_1.png')} style={true ? styles.cover : styles.smallCover} />
             {work.type === WorkType.Video && (
               <View style={[styles.playIcon]}>
                 <MaterialIcon name="play-circle-filled" size={33} />

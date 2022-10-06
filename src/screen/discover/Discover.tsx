@@ -49,7 +49,7 @@ const Discover: React.FC = () => {
             navigation.navigate('SPUDetail', {id: spu.spuId});
           }}>
           <View style={styles.spuCoverContainer}>
-            <Image source={{uri: spu.poster}} style={styles.spuCover} />
+            <Image source={{uri: spu.poster}} defaultSource={require('../../assets/sku_def_1_1.png')} style={styles.spuCover} />
           </View>
         </TouchableOpacity>
         <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE}}>

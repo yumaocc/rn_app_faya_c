@@ -29,7 +29,7 @@ const OrderItem: React.FC<OrderItemProps> = props => {
   return (
     <View style={styles.order}>
       <View style={[globalStyles.containerRow, {alignItems: 'flex-start'}]}>
-        <Image source={{uri: order.spuCoverImage}} style={styles.orderCover} />
+        <Image source={{uri: order.spuCoverImage}} defaultSource={require('../../../assets/sku_def_1_1.png')} style={styles.orderCover} />
         <View style={{flex: 1}}>
           <View style={[globalStyles.containerLR]}>
             <View style={globalStyles.containerRow}>
