@@ -34,6 +34,7 @@ export type RootStackParamList = {
   Browser: {url: string};
   User: {id: number};
   Refund: undefined;
+  OrderComment: IDBody;
 };
 
 export type ValidRoute = keyof RootStackParamList;

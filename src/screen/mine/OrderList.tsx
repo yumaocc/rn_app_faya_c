@@ -62,6 +62,9 @@ const OrderList: React.FC = () => {
   function goDetail(id: string) {
     navigation.navigate('OrderDetail', {id});
   }
+  function goComment(id: string) {
+    navigation.navigate('OrderComment', {id});
+  }
 
   return (
     <>
@@ -106,6 +109,7 @@ const OrderList: React.FC = () => {
                   key={order.id}
                   order={order}
                   onGoDetail={goDetail}
+                  onGoComment={goComment}
                   onPayAgain={orderId => {
                     navigation.navigate('WaitPay', {id: orderId, canBack: true});
                   }}
