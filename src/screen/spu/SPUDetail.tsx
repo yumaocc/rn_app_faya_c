@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, Text, ScrollView} from 'react-native';
+import {View, StyleSheet, Text, ScrollView, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
 import {FakeNavigation, PackageDetail, SKUDetail, SPUDetailF} from '../../models';
@@ -37,8 +37,6 @@ const SPUDetail: React.FC = () => {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  console.log(spu);
-
   const {bottom: safeBottom} = useSafeAreaInsets();
   const navigation = useNavigation<FakeNavigation>();
 
@@ -60,6 +58,7 @@ const SPUDetail: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
       <ScrollView style={{flex: 1}}>
         {spu ? <SPUDetailView isPackage={isPackage} currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} /> : <Text>loading...</Text>}
       </ScrollView>
