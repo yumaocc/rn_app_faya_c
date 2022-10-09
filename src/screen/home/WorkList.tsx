@@ -48,7 +48,6 @@ const WorkList: React.FC<WorkListProps> = props => {
     var contentSizeHeight = e.nativeEvent.contentSize.height; //scrollView contentSize高度
     var scrollViewHeight = e.nativeEvent.layoutMeasurement.height; //scrollView高度
     const offset = 50;
-    console.log(e.nativeEvent);
     const isReachBottom = offsetY + scrollViewHeight + offset >= contentSizeHeight;
     // checkPullToRefresh(offsetY);
     if (isReachBottom) {

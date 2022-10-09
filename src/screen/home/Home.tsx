@@ -78,13 +78,37 @@ const Home: React.FC = () => {
         </View>
         <ScrollView ref={setRef} horizontal style={{flex: 1}} snapToInterval={width} showsHorizontalScrollIndicator={false} scrollEnabled={false}>
           <View style={{width}}>
-            <WorkList list={followWorks} onRefresh={() => refreshWork(WorkTabType.Follow)} onLoadMore={() => loadWork(WorkTabType.Follow)} />
+            <WorkList
+              list={followWorks}
+              onRefresh={() => refreshWork(WorkTabType.Follow)}
+              onLoadMore={() => {
+                if (currentTab.type === WorkTabType.Follow) {
+                  loadWork(WorkTabType.Follow);
+                }
+              }}
+            />
           </View>
           <View style={{width}}>
-            <WorkList list={recommendWorks} onRefresh={() => refreshWork(WorkTabType.Recommend)} onLoadMore={() => loadWork(WorkTabType.Recommend)} />
+            <WorkList
+              list={recommendWorks}
+              onRefresh={() => refreshWork(WorkTabType.Recommend)}
+              onLoadMore={() => {
+                if (currentTab.type === WorkTabType.Recommend) {
+                  loadWork(WorkTabType.Recommend);
+                }
+              }}
+            />
           </View>
           <View style={{width}}>
-            <WorkList list={nearbyWorks} onRefresh={() => refreshWork(WorkTabType.Nearby)} onLoadMore={() => loadWork(WorkTabType.Nearby)} />
+            <WorkList
+              list={nearbyWorks}
+              onRefresh={() => refreshWork(WorkTabType.Nearby)}
+              onLoadMore={() => {
+                if (currentTab.type === WorkTabType.Nearby) {
+                  loadWork(WorkTabType.Nearby);
+                }
+              }}
+            />
           </View>
         </ScrollView>
       </View>
