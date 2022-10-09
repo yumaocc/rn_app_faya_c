@@ -56,10 +56,15 @@ const WorkList: React.FC<WorkListProps> = props => {
     }
   }
 
-  function renderWorkItem(work: WorkF) {
+  function renderWorkItem(work: WorkF, index: number, left = false) {
+    if (left) {
+      index = index * 2;
+    } else {
+      index = index * 2 + 1;
+    }
     return (
       <View style={styles.item} key={work.mainId}>
-        <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetailList', {id: work.mainId, videoUrl: work.videoUrl})}>
+        <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetailList', {index})}>
           <View style={{width: '100%', position: 'relative'}}>
             <Image source={{uri: work?.coverImage}} defaultSource={require('../../assets/sku_def_1_1.png')} style={true ? styles.cover : styles.smallCover} />
             {work.type === WorkType.Video && (
@@ -109,8 +114,8 @@ const WorkList: React.FC<WorkListProps> = props => {
         scrollEventThrottle={100}
         onScrollEndDrag={endDrag}>
         <View style={styles.itemContainer}>
-          <View style={styles.left}>{l.map(renderWorkItem)}</View>
-          <View style={styles.right}>{r.map(renderWorkItem)}</View>
+          <View style={styles.left}>{l.map((v, i) => renderWorkItem(v, i, true))}</View>
+          <View style={styles.right}>{r.map((v, i) => renderWorkItem(v, i))}</View>
         </View>
         <View style={globalStyles.containerCenter}>
           <Text>{dictLoadingState(status)}</Text>
