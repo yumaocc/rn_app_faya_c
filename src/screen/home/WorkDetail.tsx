@@ -1,3 +1,6 @@
+/**
+ * @deprecated 页面已废弃
+ */
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View, StyleSheet, Image, Text, TouchableOpacity, TouchableWithoutFeedback, ScrollView, useWindowDimensions} from 'react-native';
 import {useSelector} from 'react-redux';
@@ -59,7 +62,6 @@ const WorkDetail: React.FC = () => {
     api.work.getWorkDetail(id).then(setWorkDetail).catch(commonDispatcher.error);
   }, [id, commonDispatcher]);
 
-  // const workDet
   // console.log(id, videoUrl);
   useEffect(() => {
     if (!videoUrl) {

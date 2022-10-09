@@ -51,20 +51,25 @@ const WorkDetailList: React.FC = () => {
   async function handleRefresh() {
     workDispatcher.loadWork(currentTabType, true);
   }
-
-  function openSPU(id: number) {
-    if (currentSPU?.id !== id) {
-      spuDispatcher.viewSPU(id);
-    }
-    setShowSPU(true);
-  }
+  const openSPU = useCallback(
+    (id: number) => {
+      console.log(111, id);
+      if (currentSPU?.id !== id) {
+        spuDispatcher.viewSPU(id);
+      }
+      setShowSPU(true);
+    },
+    [currentSPU?.id, spuDispatcher],
+  );
 
   const handleChangViewableItems = React.useCallback(({viewableItems}: {viewableItems: any[]}) => {
     if (viewableItems.length === 1) {
       const i = viewableItems[0].index;
+      console.log('set index', i);
       setCurrentIndex(i);
     }
   }, []);
+
   const handleBuy = useCallback(() => {
     setShowSPU(false);
     if (!token) {
@@ -86,7 +91,9 @@ const WorkDetailList: React.FC = () => {
   );
 
   function renderVideoPage(info: ListRenderItemInfo<WorkF>) {
-    return <VideoPage item={info.item} paused={currentIndex !== info.index} onShowSPU={openSPU} />;
+    const {item, index} = info;
+    const shouldLoad = index === currentIndex || index === currentIndex + 1 || index === currentIndex - 1;
+    return <VideoPage item={item} paused={currentIndex !== index} shouldLoad={shouldLoad} onShowSPU={openSPU} />;
   }
 
   return (

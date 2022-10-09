@@ -1,7 +1,6 @@
 import {useIsFocused} from '@react-navigation/native';
-import React, {useCallback, useEffect, useImperativeHandle, useMemo, useState} from 'react';
-import {View, Text, StyleSheet, useWindowDimensions, Image, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
-// import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import React, {useCallback, useEffect, useImperativeHandle, useMemo, useState, memo} from 'react';
+import {View, Text, StyleSheet, useWindowDimensions, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Video, {OnLoadData} from 'react-native-video';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
@@ -10,22 +9,25 @@ import {VideoPlayerRef} from './types';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WorkDetailF, WorkF} from '../../../models';
 import * as api from '../../../apis';
-// import {useLog} from '../../../fst/hooks';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/reducers';
+import CustomTouchable from '../../../component/CustomTouchable';
 
 interface VideoPageProps {
   item: WorkF;
   paused: boolean;
+  shouldLoad?: boolean;
   onShowSPU: (id: number) => void;
 }
 
 const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) => {
+  const {shouldLoad} = props;
   const [paused, setPaused] = useState(props.paused);
   const [resizeMode, setResizeMode] = useState<'none' | 'cover'>('cover');
   const [error, setError] = useState('');
   const [workDetail, setWorkDetail] = useState<WorkDetailF>();
   const hasSpu = useMemo(() => workDetail?.spuId && workDetail?.spuName, [workDetail]);
+  const [videoUrl, setVideoUrl] = useState(''); // 控制视频地址已达到懒加载效果
 
   const token = useSelector((state: RootState) => state.common.token);
 
@@ -34,6 +36,16 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
   const appState = useAppState();
   const {bottom} = useSafeAreaInsets();
   const [commonDispatcher] = useCommonDispatcher();
+
+  useEffect(() => {
+    if (shouldLoad) {
+      if (videoUrl !== props.item.videoUrl) {
+        setVideoUrl(props.item.videoUrl);
+      }
+    } else {
+      // setVideoUrl('');
+    }
+  }, [shouldLoad, props.item.videoUrl, videoUrl]);
 
   // useLog('detail', workDetail);
 
@@ -93,7 +105,7 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
           disableFocus={true}
           onLoad={handleOnLoad}
           onError={handleError}
-          source={{uri: props.item.videoUrl}}
+          source={{uri: videoUrl}}
           paused={paused}
           repeat={true}
           resizeMode={resizeMode}
@@ -112,7 +124,7 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
 
       <View style={styles.cover}>
         <SafeAreaView edges={['top']} style={styles.cover}>
-          <TouchableWithoutFeedback onPress={handleClickCover} style={[styles.cover]}>
+          <CustomTouchable activeOpacity={1} onPress={handleClickCover} style={[styles.cover]}>
             <View style={[styles.cover]}>
               {/* 暂停后的播放按钮 */}
               {paused && !error ? (
@@ -145,19 +157,22 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
                 <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
                   {/* 发布人 */}
                   {hasSpu && (
-                    <TouchableOpacity activeOpacity={0.5} onPress={openSPU} style={{width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}}>
+                    // <CustomTouchable>
+
+                    // </CustomTouchable>
+                    <CustomTouchable activeOpacity={0.5} onPress={openSPU} style={{width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}}>
                       <View style={[globalStyles.containerRow]}>
                         <Icon name="shopping-cart" color={globalStyleVariables.COLOR_WARNING} size={24} />
                         <Text style={[globalStyles.fontTertiary, {flex: 1, color: '#fff'}]} numberOfLines={1}>
                           {workDetail?.spuName}
                         </Text>
                       </View>
-                    </TouchableOpacity>
+                    </CustomTouchable>
                   )}
                   {workDetail?.userName && (
-                    <TouchableOpacity activeOpacity={0.8}>
+                    <CustomTouchable activeOpacity={0.8}>
                       <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@{workDetail?.userName}</Text>
-                    </TouchableOpacity>
+                    </CustomTouchable>
                   )}
                   <View style={{marginVertical: globalStyleVariables.MODULE_SPACE}}>
                     <Text style={[globalStyles.fontPrimary, {color: '#fff'}]} numberOfLines={5}>
@@ -173,25 +188,31 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
                 {/* 下面的框 */}
                 {/* 登录后可见评论框 */}
                 {!!token && (
-                  <TouchableOpacity activeOpacity={0.7} onPress={openComment}>
+                  <CustomTouchable activeOpacity={0.7} onPress={openComment}>
                     <View style={{backgroundColor: '#000', padding: globalStyleVariables.MODULE_SPACE}}>
                       <View style={[styles.fakeInputComment]}>
                         <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.TEXT_COLOR_TERTIARY}]}>说点好听的</Text>
                       </View>
                     </View>
-                  </TouchableOpacity>
+                  </CustomTouchable>
                 )}
                 <View style={{backgroundColor: '#000', height: bottom}} />
               </View>
             </View>
-          </TouchableWithoutFeedback>
+          </CustomTouchable>
         </SafeAreaView>
       </View>
     </View>
   );
 });
 
-export default VideoPage;
+export default memo(VideoPage, (prev: VideoPageProps, next: VideoPageProps) => {
+  return prev.item.mainId === next.item.mainId && prev.paused === next.paused && prev.shouldLoad === next.shouldLoad && prev.onShowSPU === next.onShowSPU;
+});
+
+VideoPage.defaultProps = {
+  shouldLoad: false,
+};
 
 const styles = StyleSheet.create({
   container: {
