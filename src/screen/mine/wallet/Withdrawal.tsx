@@ -2,10 +2,10 @@ import React from 'react';
 import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {Button, InputNumber, NavigationBar, Popup} from '../../component';
-import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {stringToNumber} from '../../fst/helper';
-import {useWalletSummary} from '../../helper/hooks';
+import {Button, InputNumber, NavigationBar, Popup} from '../../../component';
+import {globalStyles, globalStyleVariables} from '../../../constants/styles';
+import {stringToNumber} from '../../../fst/helper';
+import {useWalletSummary} from '../../../helper/hooks';
 import Popover from 'react-native-popover-view';
 
 const Withdrawal: React.FC = () => {

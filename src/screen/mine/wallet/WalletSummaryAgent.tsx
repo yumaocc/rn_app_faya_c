@@ -1,14 +1,14 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {NavigationBar} from '../../component';
-import {globalStyles, globalStyleVariables} from '../../constants/styles';
+import {NavigationBar} from '../../../component';
+import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
-import {useWalletSummary} from '../../helper/hooks';
-import {FakeNavigation} from '../../models';
+import {useWalletSummary} from '../../../helper/hooks';
+import {FakeNavigation} from '../../../models';
 
-const WalletSummary: React.FC = () => {
+const WalletSummaryAgent: React.FC = () => {
   const [showReal, setShowReal] = React.useState(true);
   const [walletSummary] = useWalletSummary();
 
@@ -64,4 +64,4 @@ const WalletSummary: React.FC = () => {
     </SafeAreaView>
   );
 };
-export default WalletSummary;
+export default WalletSummaryAgent;

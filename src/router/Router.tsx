@@ -13,10 +13,10 @@ import SPUDetail from '../screen/spu/SPUDetail';
 import Order from '../screen/spu/Order';
 import OrderList from '../screen/mine/OrderList';
 import OrderDetail from '../screen/mine/OrderDetail';
-import Wallet from '../screen/mine/Wallet';
-import WalletSummary from '../screen/mine/WalletSummary';
-import WalletSummaryAgent from '../screen/mine/WalletSummaryAgent';
-import Withdrawal from '../screen/mine/Withdrawal';
+import Wallet from '../screen/mine/wallet/Wallet';
+import WalletSummary from '../screen/mine/wallet/WalletSummary';
+import WalletSummaryAgent from '../screen/mine/wallet/WalletSummaryAgent';
+import Withdrawal from '../screen/mine/wallet/Withdrawal';
 import MyCode from '../screen/mine/MyCode';
 import ShootVideo from '../screen/home/ShootVideo';
 import Publish from '../screen/home/Publish';
@@ -31,7 +31,7 @@ import User from '../screen/mine/User';
 import WorkDetailList from '../screen/home/WorkDetailList';
 import Refund from '../screen/mine/Refund';
 import OrderComment from '../screen/mine/OrderComment';
-import CouponList from '../screen/mine/CouponList';
+import CouponList from '../screen/mine/wallet/CouponList';
 
 import {RootStackParamList, ValidRoute} from '../models';
 

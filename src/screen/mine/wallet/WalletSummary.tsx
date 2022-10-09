@@ -1,14 +1,14 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {NavigationBar} from '../../component';
-import {globalStyles, globalStyleVariables} from '../../constants/styles';
+import {NavigationBar} from '../../../component';
+import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
-import {useWalletSummary} from '../../helper/hooks';
-import {FakeNavigation} from '../../models';
+import {useWalletSummary} from '../../../helper/hooks';
+import {FakeNavigation} from '../../../models';
 
-const WalletSummaryAgent: React.FC = () => {
+const WalletSummary: React.FC = () => {
   const [showReal, setShowReal] = React.useState(true);
   const [walletSummary] = useWalletSummary();
 
@@ -21,6 +21,7 @@ const WalletSummaryAgent: React.FC = () => {
         headerRight={
           <TouchableOpacity
             activeOpacity={0.8}
+            style={{paddingRight: globalStyleVariables.MODULE_SPACE}}
             onPress={() => {
               navigation.navigate('Withdrawal');
             }}>
@@ -64,4 +65,4 @@ const WalletSummaryAgent: React.FC = () => {
     </SafeAreaView>
   );
 };
-export default WalletSummaryAgent;
+export default WalletSummary;

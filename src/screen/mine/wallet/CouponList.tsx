@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {NavigationBar} from '../../component';
-import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {moneyToYuan} from '../../fst/helper';
-import {useCoupons, useInvalidCoupons, useUsedCoupons} from '../../helper/hooks';
-import {CouponF, CouponState} from '../../models';
+import {NavigationBar} from '../../../component';
+import {globalStyles, globalStyleVariables} from '../../../constants/styles';
+import {moneyToYuan} from '../../../fst/helper';
+import {useCoupons, useInvalidCoupons, useUsedCoupons} from '../../../helper/hooks';
+import {CouponF, CouponState} from '../../../models';
 
 const CouponList: React.FC = () => {
   const [couponList] = useCoupons();

@@ -2,12 +2,12 @@ import React from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {NavigationBar} from '../../component';
-import {useWallet} from '../../helper/hooks';
+import {NavigationBar} from '../../../component';
+import {useWallet} from '../../../helper/hooks';
 import {Icon} from '@ant-design/react-native';
-import {globalStyles, globalStyleVariables} from '../../constants/styles';
+import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useNavigation} from '@react-navigation/native';
-import {FakeNavigation} from '../../models';
+import {FakeNavigation} from '../../../models';
 
 const Wallet: React.FC = () => {
   const [wallet] = useWallet();
