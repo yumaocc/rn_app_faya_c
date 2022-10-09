@@ -10,6 +10,7 @@ import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../models';
 import {PRIVACY_POLICY_URL, USER_AGREEMENT_URL} from '../../constants';
+import {cache} from '../../helper/cache';
 
 const Login: React.FC = () => {
   const [phone, setPhone] = useState('');
@@ -82,6 +83,7 @@ const Login: React.FC = () => {
     setLoginState(LoginState.Loading);
     try {
       const res = await api.user.userLogin(phone, code);
+      cache.user.setPhone(phone);
       if (res) {
         setLoginState(LoginState.Success);
         userDispatcher.loginSuccess(res?.token);
