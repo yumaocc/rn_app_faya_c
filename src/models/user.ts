@@ -27,6 +27,12 @@ export enum CouponState {
   InvalidByDirect = 3,
 }
 
+export enum CouponFilterState {
+  Unused = 0,
+  Used = 1,
+  Invalid = 2,
+}
+
 export enum CouponType {
   NoLimit = 0,
 }

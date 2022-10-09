@@ -59,7 +59,11 @@ const Wallet: React.FC = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity activeOpacity={0.8} onPress={() => {}}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              navigation.navigate('CouponList');
+            }}>
             <View style={[styles.card, styles.coupon]}>
               <View style={[globalStyles.containerLR]}>
                 <Text style={[globalStyles.fontPrimary, {color: '#726140'}]}>卡券</Text>

@@ -18,7 +18,7 @@ export type {SPUF, SPUShop, PackageDetail, SKUDetail, SPUDetailF, SKUShowInfo, P
 export type {OrderF, OrderDetailF, OrderPackageSKU, PayOrder, OrderCommentForm, OrderRefundForm} from './order';
 export type {CameraType, AppInstallCheckType} from './device';
 
-export {UserState, CouponState, CouponType, UserLevel} from './user';
+export {UserState, CouponState, CouponType, UserLevel, CouponFilterState} from './user';
 export {WorkTabType, WorkType, WorkVisibleAuth} from './work';
 export {SPUStatus, SPUType, BookingType, PayChannel, SKUSaleState} from './spu';
 export {OrderStatus, OrderPayState} from './order';

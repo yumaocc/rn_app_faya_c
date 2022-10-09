@@ -1,5 +1,5 @@
 import {post} from './helper';
-import {CouponF, MineDetail, OtherUserDetail, UserInfo, WalletInfo, WalletSummary} from '../models';
+import {CouponF, CouponFilterState, MineDetail, OtherUserDetail, UserInfo, WalletInfo, WalletSummary} from '../models';
 
 export async function userLogin(phone: string, code: string): Promise<UserInfo> {
   return await post<UserInfo, {code: string; telephone: string}>('/user/login', {
@@ -23,8 +23,8 @@ export async function getWalletSummary(): Promise<WalletSummary> {
   return await post('/user/wallet/mine/info/with/bean/sprouts');
 }
 
-export async function getCouponList(): Promise<CouponF[]> {
-  return await post('/coupon/main/mine/can/use/list');
+export async function getCouponList(status: CouponFilterState = 0): Promise<CouponF[]> {
+  return await post('/coupon/main/mine/can/use/list', {status});
 }
 
 export async function getMineDetail(): Promise<MineDetail> {
