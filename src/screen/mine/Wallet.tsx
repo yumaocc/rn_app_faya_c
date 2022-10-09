@@ -26,52 +26,53 @@ const Wallet: React.FC = () => {
         title="我的钱包"
         safeTop={false}
         headerRight={
-          <TouchableOpacity activeOpacity={0.8} onPress={() => {}}>
+          <TouchableOpacity activeOpacity={0.8} onPress={() => {}} style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
             <Icon name="setting" size={24} color="#333" />
           </TouchableOpacity>
         }
       />
       <ScrollView style={{flex: 1}}>
         <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
-          <View style={[styles.card, styles.balance]}>
-            <View style={[globalStyles.containerLR]}>
-              <View style={[globalStyles.containerRow]}>
-                <Text style={[globalStyles.fontPrimary, {color: '#fff'}]}>我的芽</Text>
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => {
-                    setShowReal(!showReal);
-                  }}>
-                  <View>
-                    <MaterialIcon name={showReal ? 'visibility' : 'visibility-off'} size={18} color="#c4c4c4" style={{marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}} />
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity activeOpacity={0.8} onPress={showSummary}>
+          <TouchableOpacity activeOpacity={0.8} onPress={showSummary}>
+            <View style={[styles.card, styles.balance]}>
+              <View style={[globalStyles.containerLR]}>
+                <View style={[globalStyles.containerRow]}>
+                  <Text style={[globalStyles.fontPrimary, {color: '#fff'}]}>我的芽</Text>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => {
+                      setShowReal(!showReal);
+                    }}>
+                    <View>
+                      <MaterialIcon name={showReal ? 'visibility' : 'visibility-off'} size={18} color="#c4c4c4" style={{marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}} />
+                    </View>
+                  </TouchableOpacity>
+                </View>
                 <MaterialIcon name="arrow-forward-ios" size={20} color="#fff" />
-              </TouchableOpacity>
+              </View>
+              <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+                <Text>
+                  <Text style={[globalStyles.fontPrimary, {color: '#fff', fontSize: 40}]}>{showReal ? wallet?.moneyYuan ?? '-' : '******'}</Text>
+                  <Text style={[globalStyles.fontTertiary, {color: '#fff'}]}>{showReal ? '个' : ''}</Text>
+                </Text>
+              </View>
             </View>
-            <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
-              <Text>
-                <Text style={[globalStyles.fontPrimary, {color: '#fff', fontSize: 40}]}>{showReal ? wallet?.moneyYuan ?? '-' : '******'}</Text>
-                <Text style={[globalStyles.fontTertiary, {color: '#fff'}]}>{showReal ? '个' : ''}</Text>
-              </Text>
-            </View>
-          </View>
-          <View style={[styles.card, styles.coupon]}>
-            <View style={[globalStyles.containerLR]}>
-              <Text style={[globalStyles.fontPrimary, {color: '#726140'}]}>卡券</Text>
-              <TouchableOpacity activeOpacity={0.8} onPress={() => {}}>
+          </TouchableOpacity>
+
+          <TouchableOpacity activeOpacity={0.8} onPress={() => {}}>
+            <View style={[styles.card, styles.coupon]}>
+              <View style={[globalStyles.containerLR]}>
+                <Text style={[globalStyles.fontPrimary, {color: '#726140'}]}>卡券</Text>
                 <MaterialIcon name="arrow-forward-ios" size={20} color="#726140" />
-              </TouchableOpacity>
+              </View>
+              <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+                <Text>
+                  <Text style={[globalStyles.fontPrimary, {color: '#726140', fontSize: 40}]}>{wallet?.numberOfCards || 0}</Text>
+                  <Text style={[globalStyles.fontTertiary, {color: '#726140'}]}>张</Text>
+                </Text>
+              </View>
             </View>
-            <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
-              <Text>
-                <Text style={[globalStyles.fontPrimary, {color: '#726140', fontSize: 40}]}>{wallet?.numberOfCards || 0}</Text>
-                <Text style={[globalStyles.fontTertiary, {color: '#726140'}]}>张</Text>
-              </Text>
-            </View>
-          </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
       <View />
