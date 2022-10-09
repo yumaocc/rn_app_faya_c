@@ -143,6 +143,7 @@ const WaitPay: React.FC = () => {
     <View style={styles.container}>
       <NavigationBar
         title=""
+        canBack={false}
         headerLeft={
           <View style={globalStyles.containerRow}>
             <TouchableOpacity activeOpacity={0.6} onPress={handleBack}>

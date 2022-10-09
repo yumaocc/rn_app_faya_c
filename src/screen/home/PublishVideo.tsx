@@ -92,7 +92,7 @@ const PublishVideo: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <NavigationBar title="发布" headerLeft={<View />} />
+      <NavigationBar title="发布" headerLeft={<View />} canBack={false} />
       <View style={styles.progressContainer}>
         {percent < 100 ? (
           <>

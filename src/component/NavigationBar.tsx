@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, BackHandler} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StylePropView} from '../models';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -12,11 +12,22 @@ interface NavigationBarProps {
   safeTop?: boolean;
   style?: StylePropView;
   color?: string;
+  canBack?: boolean; // 安卓是否响应默认的返回按钮
 }
 
 const NavigationBar: React.FC<NavigationBarProps> = props => {
   const navigation = useNavigation();
   const safeArea = useSafeAreaInsets();
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (props.canBack) {
+        navigation.goBack();
+      }
+      return true;
+    });
+    return () => backHandler.remove();
+  }, [navigation, props.canBack]);
 
   function handleBack() {
     navigation.canGoBack() && navigation.goBack();
@@ -71,6 +82,7 @@ NavigationBar.defaultProps = {
   title: '',
   safeTop: true,
   color: '#333',
+  canBack: true,
 };
 export default NavigationBar;
 const styles = StyleSheet.create({

@@ -137,6 +137,7 @@ const Notify: React.FC = () => {
     <View style={styles.container}>
       <NavigationBar
         title="消息"
+        canBack={false}
         headerLeft={<View />}
         headerRight={
           <TouchableOpacity activeOpacity={0.8}>

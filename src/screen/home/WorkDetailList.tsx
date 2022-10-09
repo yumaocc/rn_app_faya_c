@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, StyleSheet, FlatList, ListRenderItemInfo, useWindowDimensions, StatusBar, RefreshControl, ScrollView} from 'react-native';
 import {useSelector} from 'react-redux';
-import {Popup} from '../../component';
+import {NavigationBar, Popup} from '../../component';
 import {useRefCallback} from '../../fst/hooks';
 import {useParams, useSPUDispatcher, useUserDispatcher, useWorkDispatcher} from '../../helper/hooks';
 import {FakeNavigation, PackageDetail, SKUDetail, WorkF} from '../../models';
@@ -92,8 +92,9 @@ const WorkDetailList: React.FC = () => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
+      <NavigationBar canBack={true} style={styles.nav} color="#fff" />
       <FlatList
-        style={{backgroundColor: '#000'}}
+        style={{backgroundColor: '#000', flex: 1}}
         data={videos}
         ref={setRef}
         renderItem={renderVideoPage}
@@ -108,14 +109,16 @@ const WorkDetailList: React.FC = () => {
         }}
         refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={refreshing} colors={['#fff']} tintColor="#fff" title="正在刷新" titleColor="#fff" />}
       />
-      <Popup visible={showSPU} onClose={() => setShowSPU(false)} style={[styles.spuModel, {height: height * 0.7}]} useNativeDrive={false}>
-        <View style={{flex: 1}}>
-          <ScrollView style={{flex: 1}} bounces={false}>
-            <SPUDetailView currentSelect={currentSKU} spu={currentSPU} isPackage={currentSKUIsPackage} onChangeSelect={handleChangeSKU} />
-          </ScrollView>
-          <BuyBar sku={currentSKU} onBuy={handleBuy} />
-        </View>
-      </Popup>
+      {showSPU && (
+        <Popup visible={true} onClose={() => setShowSPU(false)} style={[styles.spuModel, {height: height * 0.7}]} useNativeDrive={false}>
+          <View style={{flex: 1}}>
+            <ScrollView style={{flex: 1}} bounces={false}>
+              <SPUDetailView currentSelect={currentSKU} spu={currentSPU} isPackage={currentSKUIsPackage} onChangeSelect={handleChangeSKU} />
+            </ScrollView>
+            <BuyBar sku={currentSKU} onBuy={handleBuy} />
+          </View>
+        </Popup>
+      )}
     </View>
   );
 };
@@ -125,6 +128,12 @@ export default WorkDetailList;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  nav: {
+    width: '100%',
+    position: 'absolute',
+    top: 0,
+    zIndex: 2,
   },
   spuModel: {},
 });

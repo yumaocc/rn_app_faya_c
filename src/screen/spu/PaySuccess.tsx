@@ -15,6 +15,7 @@ const PaySuccess: React.FC = () => {
     <View style={styles.container}>
       <NavigationBar
         title="支付结果"
+        canBack={false}
         headerLeft={
           <TouchableOpacity activeOpacity={0.6} onPress={backToTab}>
             <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
