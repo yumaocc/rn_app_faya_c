@@ -19,11 +19,11 @@ function* initApp(): any {
 
   const token = (yield cache.config.getToken()) || '';
   resetToken(token);
-  try {
-    // const userInfo = (yield call(api.user.getUserInfo)) as UserInfo;
-    yield put(Actions.setToken(token));
-    // yield put(UserActions.setUserInfo(userInfo));
-  } catch (error) {}
+  yield put(Actions.setToken(token));
+
+  if (token) {
+    yield put(UserActions.getMyDetail());
+  }
   yield put(Actions.initAppSuccess());
 }
 

@@ -30,9 +30,9 @@ function login() {
 }
 
 function* loginSuccess(action: ActionWithPayload<ActionType, string>): any {
-  // yield cache.user.setUserInfo(userInfo);
   const token = action.payload;
   yield put(CommonActions.setToken(token));
+  yield put(Actions.getMyDetail());
   const params: GoLoginParams = yield select((state: RootState) => state.user.login);
   if (!params) {
     relaunch();
