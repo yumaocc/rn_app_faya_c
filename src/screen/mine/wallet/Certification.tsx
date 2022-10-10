@@ -245,7 +245,7 @@ const Certification: React.FC = () => {
                 ) : (
                   <MaterialIcon name="radio-button-unchecked" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
                 )}
-
+                {/* todo: 协议内容和链接 */}
                 <Text style={{marginLeft: globalStyleVariables.MODULE_SPACE}}>已阅读并同意《实名认证服务协议》</Text>
               </View>
             </TouchableOpacity>
