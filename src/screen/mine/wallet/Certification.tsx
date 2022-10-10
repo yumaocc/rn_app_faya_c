@@ -166,7 +166,7 @@ const Certification: React.FC = () => {
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{flex: 1}}>
         <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">
           <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
-            <Text style={[globalStyles.fontTertiary]}>首次添加银行卡需要实名认证，认证信息将用户收益提现，与账号唯一绑定，我们会对信息进行严格保密，认证后不可解绑</Text>
+            <Text style={[globalStyles.fontTertiary]}>首次添加银行卡需要实名认证。认证信息将用于收益提现，与账号唯一绑定。我们会对信息进行严格保密，认证后不可解绑</Text>
             <FormItem label="真实姓名" {...formItemProps}>
               <TextInput value={form.name} onChangeText={val => setFormField('name', val)} placeholder="请输入您的真实姓名" {...formItemInputProps} style={styles.formItemInput} />
             </FormItem>
