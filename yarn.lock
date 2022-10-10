@@ -778,6 +778,11 @@
     "@babel/helper-validator-identifier" "^7.18.6"
     to-fast-properties "^2.0.0"
 
+"@bam.tech/react-native-image-resizer@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.npmmirror.com/@bam.tech/react-native-image-resizer/-/react-native-image-resizer-3.0.2.tgz#bf45835f76e27407f93a57401e8c2fcd078edb33"
+  integrity sha512-UN0DqOHZUD+hmu0jZ5XGfLidqPaDHusRm3PD7bKOtcF/FbTZBL7ABICp3BqUT/R/Rd3m76WaYKg2p6DSfXPqfQ==
+
 "@bang88/react-native-ultimate-listview@^4.1.0":
   version "4.1.0"
   resolved "https://registry.npmmirror.com/@bang88/react-native-ultimate-listview/-/react-native-ultimate-listview-4.1.0.tgz#efff14ce5a09e8c52116580cdfa17f253faffde2"

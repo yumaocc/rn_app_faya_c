@@ -36,6 +36,7 @@ export type RootStackParamList = {
   Refund: {id: string};
   OrderComment: IDBody;
   CouponList: undefined;
+  Certification: undefined;
 };
 
 export type ValidRoute = keyof RootStackParamList;

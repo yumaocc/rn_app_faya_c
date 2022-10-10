@@ -1,3 +1,4 @@
+import {Asset} from 'react-native-image-picker';
 import {BoolEnum} from '../fst/models';
 import {ValidRoute} from './route';
 
@@ -103,3 +104,17 @@ export interface WalletSummary {
 //   systemNotificationCount: number;
 //   windowMessageCount: number;
 // }
+
+export interface UserCertificationForm {
+  cardNo: string; // 银行卡号
+  code: string; // 验证码
+  idCardBack: string;
+  _idCardBack: Asset;
+  idCardBackOss: string;
+  idCardFront: string;
+  _idCardFront: Asset;
+  idCardFrontOss: string;
+  idNo: string; // 身份证号
+  mobileNo: string; // 手机号
+  name: string; // 姓名
+}

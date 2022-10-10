@@ -27,8 +27,8 @@ export function resetToken(token: string) {
 }
 
 // axios.interceptors.request.use((config: AxiosRequestConfig) => {
-//   const {baseURL, url, data} = config;
-//   console.log('request', {baseURL, url, data});
+//   // const {baseURL, url, data} = config;
+//   console.log(config);
 //   return config;
 // });
 

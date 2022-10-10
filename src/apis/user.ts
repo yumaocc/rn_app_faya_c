@@ -1,5 +1,7 @@
+import RNFS from 'react-native-fs';
 import {post} from './helper';
-import {CouponF, CouponFilterState, MineDetail, OtherUserDetail, UserInfo, WalletInfo, WalletSummary} from '../models';
+import {CouponF, CouponFilterState, MineDetail, OtherUserDetail, UserCertificationForm, UserInfo, WalletInfo, WalletSummary} from '../models';
+import {Platform} from 'react-native';
 
 export async function userLogin(phone: string, code: string): Promise<UserInfo> {
   return await post<UserInfo, {code: string; telephone: string}>('/user/login', {
@@ -51,3 +53,29 @@ export async function followUser(id: number): Promise<boolean> {
 // export async function userMessageList(): Promise<boolean> {
 //   return await post('/user/msg/list');
 // }
+
+// 上传实名认证信息
+// type: 0 普通, 1 营业执照, 2 身份证正面, 3 身份证反面, 4 银行卡
+export async function uploadCertificationFile(uri: string, fileName: string, type: number): Promise<any> {
+  const formData = new FormData();
+  let newUri = uri;
+  if (Platform.OS === 'ios') {
+    // ios上后缀名称为jpg会导致上传的图片尺寸变大。见： https://github.com/facebook/react-native/issues/27099
+    newUri = uri + '.upload';
+    await RNFS.copyFile(uri, newUri);
+  }
+  const file = {uri: newUri, type: 'image/jpeg', name: fileName};
+  formData.append('file', file);
+  formData.append('type', type);
+  formData.append('withWho', 'consumer');
+  return await post('/yeepay/file/upload', formData, {headers: {'Content-Type': 'multipart/form-data'}});
+}
+
+export async function userCertification(form: UserCertificationForm): Promise<boolean> {
+  return await post('/yeepay/create/personal', form);
+}
+
+// type: 9个人实名认证
+export async function sendMainVerifyCode(phone: string, type = 0): Promise<boolean> {
+  return await post('/msg/main/verify/code', {telephone: phone, type});
+}

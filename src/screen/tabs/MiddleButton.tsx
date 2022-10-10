@@ -21,7 +21,7 @@ const MiddleButton: React.FC = () => {
       });
     } else {
       // navigation.navigate('ShootVideo');
-      navigation.navigate('CouponList');
+      navigation.navigate('Certification');
       // navigation.navigate('Refund', {id: '1564079749252501504'});
     }
   }

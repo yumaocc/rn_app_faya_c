@@ -1,9 +1,10 @@
 import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 import RNFS from 'react-native-fs';
 import {displayName} from '../../../app.json';
 import {APP_SCHEMES} from '../../constants';
-import {AppInstallCheckType} from '../../models';
+import {AppInstallCheckType, ImageCompressOptions, ImageCompressResult} from '../../models';
 
 export function getVideoNameByPath(videPath: string) {
   return getFileNameByPath(videPath, 'upload.mp4');
@@ -112,4 +113,37 @@ export async function copyFileUrl(uri: string, fileName: string) {
   await RNFS.copyFile(uri, destPath);
   await RNFS.stat(destPath);
   return destPath;
+}
+
+export async function compressImage(config: ImageCompressOptions): Promise<ImageCompressResult> {
+  let defaultOptions: ImageCompressOptions = {
+    path: '',
+    quality: 100,
+    width: undefined,
+    height: undefined,
+    compressFormat: 'JPEG',
+    outputPath: undefined,
+    keepMeta: false,
+    rotation: 0,
+    options: {
+      mode: 'contain',
+      onlyScaleDown: true,
+    },
+  };
+  const {path, width, height, compressFormat, quality, rotation, outputPath, keepMeta, options} = Object.assign(defaultOptions, config);
+
+  return await ImageResizer.createResizedImage(path, width, height, compressFormat, quality, rotation, outputPath, keepMeta, options);
+}
+
+export async function compressImageUntil(config: ImageCompressOptions, size: number): Promise<ImageCompressResult> {
+  const res = await compressImage(config);
+  if (res.size > size) {
+    const quality = config.quality - 10;
+    if (quality <= 0) {
+      return Promise.reject(new Error('图片压缩失败'));
+    }
+    return await compressImageUntil({...config, quality}, size);
+  } else {
+    return res;
+  }
 }
