@@ -26,7 +26,12 @@ const Wallet: React.FC = () => {
         title="我的钱包"
         safeTop={false}
         headerRight={
-          <TouchableOpacity activeOpacity={0.8} onPress={() => {}} style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              navigation.navigate('WalletSettings');
+            }}
+            style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
             <Icon name="setting" size={24} color="#333" />
           </TouchableOpacity>
         }

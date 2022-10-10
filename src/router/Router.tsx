@@ -33,6 +33,7 @@ import Refund from '../screen/mine/Refund';
 import OrderComment from '../screen/mine/OrderComment';
 import CouponList from '../screen/mine/wallet/CouponList';
 import Certification from '../screen/mine/wallet/Certification';
+import Settings from '../screen/mine/wallet/Settings';
 
 import {RootStackParamList, ValidRoute} from '../models';
 
@@ -79,6 +80,7 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="OrderComment" component={OrderComment} options={commonScreenOptions} />
           <Stack.Screen name="CouponList" component={CouponList} options={commonScreenOptions} />
           <Stack.Screen name="Certification" component={Certification} options={commonScreenOptions} />
+          <Stack.Screen name="WalletSettings" component={Settings} options={commonScreenOptions} />
         </>
       ) : (
         <></>

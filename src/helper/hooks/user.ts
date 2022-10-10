@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useForceUpdate} from '../../fst/hooks';
-import {CouponF, CouponFilterState, WalletInfo, WalletSummary} from '../../models';
+import {BankCardF, CouponF, CouponFilterState, WalletInfo, WalletSummary} from '../../models';
 import {RootState} from '../../redux/reducers';
 import {useCommonDispatcher, useUserDispatcher} from './dispatchers';
 import * as api from '../../apis';
@@ -66,4 +66,15 @@ export function useWalletSummary(): [WalletSummary, () => void] {
   }, [signal, userDispatcher]);
 
   return [walletSummary, force];
+}
+
+export function useBankCards(): [BankCardF[], () => void] {
+  const [signal, force] = useForceUpdate();
+  const [bankList, setBankList] = useState<BankCardF[]>([]);
+  const [commonDispatcher] = useCommonDispatcher();
+  useEffect(() => {
+    api.user.getMyBankCardList().then(setBankList).catch(commonDispatcher.error);
+  }, [signal, commonDispatcher]);
+
+  return [bankList, force];
 }

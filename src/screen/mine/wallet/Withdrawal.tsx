@@ -5,15 +5,16 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Button, InputNumber, NavigationBar, Popup} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {stringToNumber} from '../../../fst/helper';
-import {useWalletSummary} from '../../../helper/hooks';
+import {useWalletSummary, useBankCards} from '../../../helper/hooks';
 import Popover from 'react-native-popover-view';
 
 const Withdrawal: React.FC = () => {
-  const bankCard = [1];
   const [cashMoney, setCashMoney] = React.useState(0);
   const [showSelectBank, setShowSelectBank] = React.useState(false);
   const [walletSummary] = useWalletSummary();
   const [showMenu, setShowMenu] = React.useState(false);
+
+  const [bankCards] = useBankCards();
 
   function addBankCard() {
     console.log('新建银行卡');
@@ -62,7 +63,7 @@ const Withdrawal: React.FC = () => {
         />
         <ScrollView style={[{flex: 1}]}>
           <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
-            {!bankCard?.length && (
+            {!bankCards?.length && (
               <View>
                 <Text style={globalStyles.fontPrimary}>到账银行卡</Text>
                 <TouchableOpacity activeOpacity={0.8} onPress={addBankCard}>
@@ -73,7 +74,7 @@ const Withdrawal: React.FC = () => {
                 </TouchableOpacity>
               </View>
             )}
-            {!!bankCard?.length && (
+            {!!bankCards?.length && (
               <View>
                 <Text style={globalStyles.fontPrimary}>到账银行卡</Text>
                 <TouchableOpacity activeOpacity={0.5} onPress={() => setShowSelectBank(true)}>

@@ -37,6 +37,7 @@ export type RootStackParamList = {
   OrderComment: IDBody;
   CouponList: undefined;
   Certification: undefined;
+  WalletSettings: undefined;
 };
 
 export type ValidRoute = keyof RootStackParamList;

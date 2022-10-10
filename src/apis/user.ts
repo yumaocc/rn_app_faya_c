@@ -1,6 +1,6 @@
 import RNFS from 'react-native-fs';
 import {post} from './helper';
-import {CouponF, CouponFilterState, MineDetail, OtherUserDetail, UserCertificationForm, UserInfo, WalletInfo, WalletSummary} from '../models';
+import {BankCardF, CouponF, CouponFilterState, MineDetail, OtherUserDetail, UserCertificationForm, UserInfo, WalletInfo, WalletSummary} from '../models';
 import {Platform} from 'react-native';
 
 export async function userLogin(phone: string, code: string): Promise<UserInfo> {
@@ -78,4 +78,8 @@ export async function userCertification(form: UserCertificationForm): Promise<bo
 // type: 9个人实名认证
 export async function sendMainVerifyCode(phone: string, type = 0): Promise<boolean> {
   return await post('/msg/main/verify/code', {telephone: phone, type});
+}
+
+export async function getMyBankCardList(): Promise<BankCardF[]> {
+  return await post('/user/wallet/bank/card/list');
 }

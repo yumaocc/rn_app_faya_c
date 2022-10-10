@@ -21,7 +21,9 @@ const MiddleButton: React.FC = () => {
       });
     } else {
       // navigation.navigate('ShootVideo');
-      navigation.navigate('Certification');
+      // navigation.navigate('Certification');
+      // navigation.navigate('Withdrawal');
+      navigation.navigate('WalletSettings');
       // navigation.navigate('Refund', {id: '1564079749252501504'});
     }
   }

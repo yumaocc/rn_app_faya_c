@@ -118,3 +118,10 @@ export interface UserCertificationForm {
   mobileNo: string; // 手机号
   name: string; // 姓名
 }
+
+export interface BankCardF {
+  id: number;
+  accountNo: string;
+  bankCode: string; // 银行代码
+  bankCodeName: string; // 银行名称
+}
