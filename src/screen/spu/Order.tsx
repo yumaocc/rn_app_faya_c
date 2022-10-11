@@ -50,6 +50,9 @@ const Order: React.FC = () => {
   const initForm: OrderForm = {amount: 1, channel: PayChannel.WECHAT, name: '', payWay: 'MINI_PROGRAM', telephone: ''};
 
   const [form, setFormField] = useSearch<OrderForm>(initForm);
+  // 当前是sku，且购买数量为1时才显示提前预约
+  const canBooking = useMemo(() => !currentSkuIsPackage && form.amount === 1 && spu.bookingType === BookingType.URL, [currentSkuIsPackage, form.amount, spu.bookingType]);
+
   // const [form] = Form.useForm(initForm);
   const payChannel = useMemo(() => form.channel, [form]);
 
@@ -226,11 +229,10 @@ const Order: React.FC = () => {
     }
   }
   async function submit() {
-    // todo: 检查合法性
     const formData = cleanOrderForm(form);
     const {channel} = formData;
     const errorMsg = check(formData);
-    if (bookingModel) {
+    if (bookingModel && canBooking) {
       // 如果填写了预约信息
       formData.bizShopId = bookingModel?.shopId;
       formData.skuModelId = bookingModel?.id;
@@ -410,14 +412,25 @@ const Order: React.FC = () => {
           </View>
 
           {/* 预约信息 */}
-          <View style={[globalStyles.moduleMarginTop, {backgroundColor: '#fff', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-            <TouchableOpacity activeOpacity={0.8} onPress={openBooking}>
-              <View style={[globalStyles.containerLR, {height: 50, paddingHorizontal: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}]}>
-                <Text>预约信息{bookingModel ? `${bookingModel?.stockDateInt} ${bookingModel?.shopName} ${bookingModel?.name}` : ''}</Text>
-                <MaterialIcon name="chevron-right" size={20} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-              </View>
-            </TouchableOpacity>
-          </View>
+          {canBooking && (
+            <View style={[globalStyles.moduleMarginTop, {backgroundColor: '#fff', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
+              <TouchableOpacity activeOpacity={0.8} onPress={openBooking}>
+                <View style={[globalStyles.containerLR, {height: 50, paddingHorizontal: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}]}>
+                  <Text>预约信息</Text>
+                  <View style={[globalStyles.containerRow, {flex: 1, justifyContent: 'flex-end', marginLeft: 10}]}>
+                    {!bookingModel ? (
+                      <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>非必填</Text>
+                    ) : (
+                      <Text numberOfLines={2} style={[globalStyles.fontPrimary, {flex: 1, fontSize: 15, textAlign: 'right'}]}>
+                        {`${bookingModel?.stockDateInt} ${bookingModel?.name} ${bookingModel?.shopName}`}
+                      </Text>
+                    )}
+                    <MaterialIcon name="chevron-right" size={20} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
+          )}
 
           {/* 支付方式 */}
           <View style={[globalStyles.moduleMarginTop, {backgroundColor: '#fff', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
@@ -478,7 +491,7 @@ const Order: React.FC = () => {
           </View>
         </View>
       </Modal>
-      <BookingModal visible={showBooking} skuId={70} onClose={() => setShowBooking(false)} onSelect={setBookingModel} />
+      <BookingModal visible={showBooking} skuId={spu?.id} onClose={() => setShowBooking(false)} onSelect={setBookingModel} />
     </View>
   );
 };

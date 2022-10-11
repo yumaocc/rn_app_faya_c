@@ -283,6 +283,7 @@ const styles = StyleSheet.create({
   modelItemContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    paddingHorizontal: globalStyleVariables.MODULE_SPACE,
   },
   modelItem: {
     padding: 10,
