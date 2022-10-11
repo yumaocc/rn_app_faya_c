@@ -20,7 +20,7 @@ const Button: React.FC<ButtonProps> = props => {
   const {title, disabled, ghost} = props;
 
   const containerStyle: StylePropView[] = [styles.container];
-  let textStyle: TextStyle = styles.text;
+  let textStyle: TextStyle = {...styles.text};
   const rotate = useInfinityRotate();
   if (ghost) {
     containerStyle.push(styles.ghostContainer);

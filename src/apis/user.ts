@@ -83,3 +83,7 @@ export async function sendMainVerifyCode(phone: string, type = 0): Promise<boole
 export async function getMyBankCardList(): Promise<BankCardF[]> {
   return await post('/user/wallet/bank/card/list');
 }
+
+export async function addNewBankCard(bankCard: string): Promise<boolean> {
+  return await post('/user/wallet/add/bank/card', {bankCard});
+}
