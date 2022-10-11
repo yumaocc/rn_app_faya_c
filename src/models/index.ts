@@ -14,7 +14,7 @@ export type {
   PhotoUploadAuth,
   WorkList,
 } from './work';
-export type {SPUF, SPUShop, PackageDetail, SKUDetail, SPUDetailF, SKUShowInfo, PayWay} from './spu';
+export type {SPUF, SPUShop, PackageDetail, SKUDetail, SPUDetailF, SKUShowInfo, PayWay, DayBookingModelF, BookingModelF, GroupedShopBookingModel} from './spu';
 export type {OrderF, OrderDetailF, OrderPackageSKU, PayOrder, OrderCommentForm, OrderRefundForm} from './order';
 export type {CameraType, AppInstallCheckType, ImageCompressOptions, ImageCompressResult} from './device';
 

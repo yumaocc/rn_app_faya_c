@@ -1,5 +1,5 @@
 import {Platform} from 'react-native';
-import {BoolEnum} from '../fst/models';
+import {BoolEnum, WeekDay} from '../fst/models';
 import {AppInstallCheckType, WorkVisibleAuth} from '../models';
 
 export const ERROR_SHOW_TIME = 1500; // 错误提示框显示时间
@@ -35,6 +35,26 @@ export const WorkVisibleAuthOptions = [
   {label: '公开·大家都可以看', value: WorkVisibleAuth.Public},
   {label: '私密·仅自己可见', value: WorkVisibleAuth.Private},
   {label: '朋友·互相关注可见', value: WorkVisibleAuth.Friend},
+];
+
+export const ALL_WEEK_START_WITH_SUNDAY = [
+  {label: '周日', labelSimple: '日', value: WeekDay.Sunday},
+  {label: '周一', labelSimple: '一', value: WeekDay.Monday},
+  {label: '周二', labelSimple: '二', value: WeekDay.Tuesday},
+  {label: '周三', labelSimple: '三', value: WeekDay.Wednesday},
+  {label: '周四', labelSimple: '四', value: WeekDay.Thursday},
+  {label: '周五', labelSimple: '五', value: WeekDay.Friday},
+  {label: '周六', labelSimple: '六', value: WeekDay.Saturday},
+];
+
+export const ALL_WEEK_START_WITH_MONDAY = [
+  {label: '周一', labelSimple: '一', value: WeekDay.Monday},
+  {label: '周二', labelSimple: '二', value: WeekDay.Tuesday},
+  {label: '周三', labelSimple: '三', value: WeekDay.Wednesday},
+  {label: '周四', labelSimple: '四', value: WeekDay.Thursday},
+  {label: '周五', labelSimple: '五', value: WeekDay.Friday},
+  {label: '周六', labelSimple: '六', value: WeekDay.Saturday},
+  {label: '周日', labelSimple: '日', value: WeekDay.Sunday},
 ];
 
 export {getBaseURL, getAliPayUrl, getWechatPayUrl, USER_AGREEMENT_URL, PRIVACY_POLICY_URL} from './url';

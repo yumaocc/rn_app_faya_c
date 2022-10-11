@@ -2,7 +2,7 @@ import {Button} from '@ant-design/react-native';
 import React, {useEffect, useMemo, useRef} from 'react';
 import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal, StatusBar, TextInput, KeyboardAvoidingView, Platform, TextInputProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import {InputNumber, NavigationBar, Select} from '../../component';
 import FormItem from '../../component/Form/FormItem';
@@ -20,6 +20,7 @@ import {OrderForm} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
 import {getAliPayUrl, getWechatPayUrl} from '../../constants';
 import {checkAppInstall} from '../../helper/system';
+import BookingModal from '../../component/BookingModal';
 
 const Order: React.FC = () => {
   const spu = useSelector((state: RootState) => state.spu.currentSPU);
@@ -32,6 +33,7 @@ const Order: React.FC = () => {
   const [checkOrderId, setCheckOrderId] = React.useState<string>('');
   const [checkOrderType, setCheckOrderType] = React.useState<number>(0); // 0 订单id，1tempId;
   const [canUseAlipay, setCanUseAlipay] = React.useState(false);
+  const [showBooking, setShowBooking] = React.useState(false);
 
   const appState = useAppState();
   const navigation = useNavigation<FakeNavigation>();
@@ -234,6 +236,10 @@ const Order: React.FC = () => {
     }
   }
 
+  function openBooking() {
+    setShowBooking(true);
+  }
+
   return (
     <View style={{flex: 1, backgroundColor: '#f4f4f4', position: 'relative'}}>
       <StatusBar barStyle="dark-content" />
@@ -247,7 +253,7 @@ const Order: React.FC = () => {
               <Image source={poster ? {uri: poster} : require('../../assets/sku_def_1_1.png')} style={{width: 60, height: 60, borderRadius: 5}} />
               <View style={{flex: 1, marginLeft: globalStyleVariables.MODULE_SPACE}}>
                 <View style={globalStyles.containerRow}>
-                  <Icon name="store" size={20} />
+                  <MaterialIcon name="store" size={20} />
                   <Text style={[globalStyles.fontStrong]} numberOfLines={1}>
                     {spu?.bizName}
                   </Text>
@@ -370,6 +376,14 @@ const Order: React.FC = () => {
               {/* <Input placeholder="请输入备注（非必填）" /> */}
             </FormItem>
           </View>
+          <View>
+            <TouchableOpacity activeOpacity={0.8} onPress={openBooking}>
+              <View style={[globalStyles.containerLR, {height: 50, paddingHorizontal: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}]}>
+                <Text>预约信息</Text>
+                <MaterialIcon name="chevron-right" size={20} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+              </View>
+            </TouchableOpacity>
+          </View>
           {/* 支付方式 */}
           <View style={[globalStyles.moduleMarginTop, {backgroundColor: '#fff', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             {/* 微信 */}
@@ -429,6 +443,7 @@ const Order: React.FC = () => {
           </View>
         </View>
       </Modal>
+      <BookingModal visible={showBooking} skuId={70} onClose={() => setShowBooking(false)} />
     </View>
   );
 };

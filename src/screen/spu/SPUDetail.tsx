@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {View, StyleSheet, Text, ScrollView, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
@@ -52,9 +52,12 @@ const SPUDetail: React.FC = () => {
     }
   }
 
-  function handleChangeSKU(sku: SKUDetail | PackageDetail, isPackage: boolean) {
-    spuDispatcher.changeSKU(sku, isPackage);
-  }
+  const handleChangeSKU = useCallback(
+    (sku: SKUDetail | PackageDetail, isPackage: boolean) => {
+      spuDispatcher.changeSKU(sku, isPackage);
+    },
+    [spuDispatcher],
+  );
 
   return (
     <View style={styles.container}>

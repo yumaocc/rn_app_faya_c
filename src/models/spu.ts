@@ -137,3 +137,24 @@ export interface SKUShowInfo {
   salePriceYuan: string;
   // saleStatus: SKUSaleState;
 }
+
+export interface BookingModelF {
+  id: number;
+  name: string; // 型号名称
+  shopId: number;
+  shopName: string;
+  allStock: number; // 总库存
+  usedStock: number; // 已用库存
+}
+export interface DayBookingModelF {
+  allStock: number;
+  usedStock: number;
+  stockDateInt: number;
+  list: BookingModelF[];
+}
+
+export interface GroupedShopBookingModel {
+  id: number;
+  name: string;
+  list: BookingModelF[];
+}
