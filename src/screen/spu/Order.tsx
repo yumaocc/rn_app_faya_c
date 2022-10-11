@@ -9,7 +9,7 @@ import FormItem from '../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {findItem, moneyToYuan} from '../../fst/helper';
 import {useAppState, useCommonDispatcher, useCoupons, useSPUDispatcher, useWallet} from '../../helper/hooks';
-import {BookingType, CouponState, FakeNavigation, OrderPayState, PackageDetail, PayChannel, SKUDetail} from '../../models';
+import {BookingModelF, BookingType, CouponState, FakeNavigation, OrderPayState, PackageDetail, PayChannel, SKUDetail} from '../../models';
 import {RootState} from '../../redux/reducers';
 import * as api from '../../apis';
 import {cleanOrderForm} from '../../helper/order';
@@ -34,6 +34,7 @@ const Order: React.FC = () => {
   const [checkOrderType, setCheckOrderType] = React.useState<number>(0); // 0 订单id，1tempId;
   const [canUseAlipay, setCanUseAlipay] = React.useState(false);
   const [showBooking, setShowBooking] = React.useState(false);
+  const [bookingModel, setBookingModel] = React.useState<BookingModelF>(null);
 
   const appState = useAppState();
   const navigation = useNavigation<FakeNavigation>();
@@ -203,10 +204,41 @@ const Order: React.FC = () => {
     }
     setFormField('skuId', e);
   }
-  async function check() {
+  function check(formData: OrderForm): string {
+    const {name, telephone, amount, idCard} = formData;
+    if (!name) {
+      return '请输入姓名';
+    }
+    if (!telephone) {
+      return '请输入手机号';
+    }
+    if (!amount) {
+      return '请输入购买数量';
+    }
+    if (minPurchaseAmount && amount < minPurchaseAmount) {
+      return `该商品至少购买${minPurchaseAmount}件`;
+    }
+    if (maxPurchaseAmount && amount > maxPurchaseAmount) {
+      return `该商品最多购买${maxPurchaseAmount}件`;
+    }
+    if (spu.needIdCard && !idCard) {
+      return '该商品下单需要填写身份证号';
+    }
+  }
+  async function submit() {
     // todo: 检查合法性
     const formData = cleanOrderForm(form);
     const {channel} = formData;
+    const errorMsg = check(formData);
+    if (bookingModel) {
+      // 如果填写了预约信息
+      formData.bizShopId = bookingModel?.shopId;
+      formData.skuModelId = bookingModel?.id;
+      formData.stockDateInt = bookingModel.stockDateInt;
+    }
+    if (errorMsg) {
+      return commonDispatcher.error(errorMsg);
+    }
     let link = '';
     try {
       if (channel === PayChannel.WECHAT) {
@@ -376,14 +408,17 @@ const Order: React.FC = () => {
               {/* <Input placeholder="请输入备注（非必填）" /> */}
             </FormItem>
           </View>
-          <View>
+
+          {/* 预约信息 */}
+          <View style={[globalStyles.moduleMarginTop, {backgroundColor: '#fff', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             <TouchableOpacity activeOpacity={0.8} onPress={openBooking}>
               <View style={[globalStyles.containerLR, {height: 50, paddingHorizontal: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}]}>
-                <Text>预约信息</Text>
+                <Text>预约信息{bookingModel ? `${bookingModel?.stockDateInt} ${bookingModel?.shopName} ${bookingModel?.name}` : ''}</Text>
                 <MaterialIcon name="chevron-right" size={20} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
               </View>
             </TouchableOpacity>
           </View>
+
           {/* 支付方式 */}
           <View style={[globalStyles.moduleMarginTop, {backgroundColor: '#fff', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             {/* 微信 */}
@@ -431,7 +466,7 @@ const Order: React.FC = () => {
             </Text>
             <Text style={[globalStyles.fontTertiary]}>共优惠 ¥{moneyToYuan(totalSaved)}元</Text>
           </View>
-          <Button type="primary" onPress={check} style={{flex: 1, height: 40, marginLeft: globalStyleVariables.MODULE_SPACE}}>
+          <Button type="primary" onPress={submit} style={{flex: 1, height: 40, marginLeft: globalStyleVariables.MODULE_SPACE}}>
             提交订单
           </Button>
         </View>
@@ -443,7 +478,7 @@ const Order: React.FC = () => {
           </View>
         </View>
       </Modal>
-      <BookingModal visible={showBooking} skuId={70} onClose={() => setShowBooking(false)} />
+      <BookingModal visible={showBooking} skuId={70} onClose={() => setShowBooking(false)} onSelect={setBookingModel} />
     </View>
   );
 };

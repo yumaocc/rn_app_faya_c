@@ -145,6 +145,7 @@ export interface BookingModelF {
   shopName: string;
   allStock: number; // 总库存
   usedStock: number; // 已用库存
+  stockDateInt: number; // 库存日期
 }
 export interface DayBookingModelF {
   allStock: number;
