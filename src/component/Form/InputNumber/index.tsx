@@ -29,7 +29,9 @@ const InputNumber: React.FC<InputNumberProps> = props => {
 
   useEffect(() => {
     if (value !== stringToNumber(showValue)) {
-      setShowValue(numberToString(value));
+      const r = numberToString(value);
+      console.log('r=', r);
+      setShowValue(r);
     }
   }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -47,18 +49,21 @@ const InputNumber: React.FC<InputNumberProps> = props => {
     return Math.max(Math.min(max, val), min);
   }
 
+  function emitOnChange(val: number) {
+    const res = validNumber(val);
+    onChange && onChange(res || 0);
+  }
+
   function handleChange(value: string) {
     if (!value) {
       setShowValue('');
       onChange && onChange(undefined);
       return;
     }
-    // console.log(numberReg);
     if (numberReg.test(value)) {
-      onChange && onChange(validNumber(stringToNumber(value)));
+      emitOnChange(stringToNumber(value));
       setShowValue(value);
     } else {
-      // console.log('inValid');
       setShowValue(showValue);
     }
   }
@@ -70,13 +75,17 @@ const InputNumber: React.FC<InputNumberProps> = props => {
     let newValue = value || 0;
     if (isAdd) {
       newValue += step;
-      // newValue = Math.min(newValue, max);
     } else {
       newValue -= step;
-      // newValue = Math.max(newValue, min);
     }
     if (onChange) {
-      onChange(validNumber(newValue));
+      emitOnChange(newValue);
+    }
+  }
+
+  function handleBlur() {
+    if (value !== Number(showValue)) {
+      setShowValue(numberToString(value));
     }
   }
 
@@ -98,12 +107,6 @@ const InputNumber: React.FC<InputNumberProps> = props => {
           <Icon name="add" size={20} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
         </View>
       );
-    }
-  }
-
-  function handleBlur() {
-    if (value !== Number(showValue)) {
-      setShowValue(String(value));
     }
   }
 
