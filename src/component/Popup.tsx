@@ -11,7 +11,7 @@ interface PopupProps {
   style?: StylePropView;
   children?: React.ReactNode;
   round?: number;
-  useNativeDrive?: boolean;
+  useNativeDrive?: boolean; // 设置为false减少闪屏，true提升性能
   onClose: () => void;
 }
 

@@ -35,12 +35,25 @@ const Button: React.FC<ButtonProps> = props => {
     containerStyle.push({opacity: 0.5});
     return (
       <View style={[containerStyle, props.containerStyle]}>
+        {props.loading && (
+          <Animated.View
+            style={[
+              {
+                transform: [{rotate: rotate.interpolate({inputRange: [0, 1], outputRange: ['0deg', '360deg']})}],
+                width: 15,
+                height: 15,
+                marginRight: globalStyleVariables.MODULE_SPACE,
+              },
+            ]}>
+            <Icon name="loading-3-quarters" color={textStyle.color as string} size={15} />
+          </Animated.View>
+        )}
         <Text style={textStyle}>{title}</Text>
       </View>
     );
   }
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={props.onPress} style={props.containerStyle}>
+    <TouchableOpacity activeOpacity={0.7} onPress={props.onPress} style={[containerStyle, props.containerStyle]}>
       <View style={containerStyle}>
         {props.loading && (
           <Animated.View
@@ -80,7 +93,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   text: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '500',
     color: '#fff',
   },

@@ -48,6 +48,7 @@ export interface CouponF {
   justInvalidTime: string; // 直接作废时间
   justInvalidUserIdCom: number; // 操作直接作废的公司员工
   money: number; // 优惠券金额
+  moneyYuan: string;
   name: string; // 优惠券名字
   refundInvalidTime: string; // 退款作废时间
   status: CouponState;

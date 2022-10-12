@@ -1,10 +1,10 @@
-import {Button} from '@ant-design/react-native';
-import React, {useEffect, useMemo, useRef} from 'react';
+// import {Button} from '@ant-design/react-native';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal, StatusBar, TextInput, KeyboardAvoidingView, Platform, TextInputProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
-import {InputNumber, NavigationBar, Select} from '../../component';
+import {InputNumber, NavigationBar, Popup, Select, Button} from '../../component';
 import FormItem from '../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {fenToYuan, findItem, moneyToYuan} from '../../fst/helper';
@@ -29,12 +29,13 @@ const Order: React.FC = () => {
   // const payOrder = useSelector((state: RootState) => state.order.payOrder);
   const token = useSelector((state: RootState) => state.common.token);
 
-  const [isPaying, setIsPaying] = React.useState(false);
-  const [checkOrderId, setCheckOrderId] = React.useState<string>('');
-  const [checkOrderType, setCheckOrderType] = React.useState<number>(0); // 0 订单id，1tempId;
-  const [canUseAlipay, setCanUseAlipay] = React.useState(false);
-  const [showBooking, setShowBooking] = React.useState(false);
-  const [bookingModel, setBookingModel] = React.useState<BookingModelF>(null);
+  const [isPaying, setIsPaying] = useState(false);
+  const [checkOrderId, setCheckOrderId] = useState<string>('');
+  const [checkOrderType, setCheckOrderType] = useState<number>(0); // 0 订单id，1tempId;
+  const [canUseAlipay, setCanUseAlipay] = useState(false);
+  const [showBooking, setShowBooking] = useState(false);
+  const [bookingModel, setBookingModel] = useState<BookingModelF>(null);
+  const [showSelectCoupon, setShowSelectCoupon] = useState(false);
 
   const appState = useAppState();
   const navigation = useNavigation<FakeNavigation>();
@@ -278,6 +279,30 @@ const Order: React.FC = () => {
   function openBooking() {
     setShowBooking(true);
   }
+  function renderCouponEntry() {
+    const hasValidCoupons = canUseCoupons?.length > 0;
+    if (!hasValidCoupons) {
+      return <Text>{getCouponText()}</Text>;
+    } else {
+      return (
+        <TouchableOpacity onPress={() => setShowSelectCoupon(true)}>
+          <Text>{getCouponText()}</Text>
+        </TouchableOpacity>
+      );
+    }
+  }
+  function getCouponText() {
+    if (!form.couponId) {
+      if (canUseCoupons?.length) {
+        return `${canUseCoupons.length}张可用`;
+      } else {
+        return '暂无可用优惠券';
+      }
+    }
+    const foundCoupon = findItem(couponList, item => item.id === form.couponId);
+    const couponMoney = moneyToYuan(foundCoupon?.money) || 0;
+    return `-¥${couponMoney}`;
+  }
 
   return (
     <View style={{flex: 1, backgroundColor: '#f4f4f4', position: 'relative'}}>
@@ -386,8 +411,11 @@ const Order: React.FC = () => {
               />
             </FormItem>
             <FormItem label="优惠券" {...formItemProps}>
-              <Select
+              {renderCouponEntry()}
+              {/* <Select
                 disabled={canUseCoupons?.length === 0}
+                value={form.couponId}
+                onChange={val => setFormField('couponId', val)}
                 options={canUseCoupons?.map(coupon => ({value: coupon.id, label: `¥${moneyToYuan(coupon.money)}`})) || []}
                 placeholder="请选择优惠券">
                 {e => {
@@ -402,7 +430,7 @@ const Order: React.FC = () => {
                   const couponMoney = moneyToYuan(foundCoupon?.money) || 0;
                   return <Text>-¥{couponMoney}</Text>;
                 }}
-              </Select>
+              </Select> */}
             </FormItem>
 
             <FormItem label="备注" {...formItemProps}>
@@ -485,11 +513,13 @@ const Order: React.FC = () => {
             </Text>
             <Text style={[globalStyles.fontTertiary]}>共优惠 ¥{moneyToYuan(totalSaved)}元</Text>
           </View>
-          <Button type="primary" onPress={submit} style={{flex: 1, height: 40, marginLeft: globalStyleVariables.MODULE_SPACE}}>
+          {/* <Button type="primary" onPress={submit} style={{flex: 1, height: 40, marginLeft: globalStyleVariables.MODULE_SPACE}}>
             提交订单
-          </Button>
+          </Button> */}
+          <Button title="提交订单" onPress={submit} style={{flex: 1, height: 40, marginLeft: globalStyleVariables.MODULE_SPACE}} />
         </View>
       </View>
+      {/* 支付中弹窗 */}
       <Modal visible={isPaying} transparent animationType="fade">
         <View style={[globalStyles.containerCenter, {flex: 1, backgroundColor: '#00000033'}]}>
           <View style={[globalStyles.containerCenter, {backgroundColor: '#fff', paddingHorizontal: 30, paddingVertical: 40, borderRadius: 5}]}>
@@ -497,7 +527,58 @@ const Order: React.FC = () => {
           </View>
         </View>
       </Modal>
+      {/* 预约弹窗 */}
       <BookingModal visible={showBooking} skuId={skuId} onClose={() => setShowBooking(false)} onSelect={setBookingModel} />
+
+      {/* 优惠券弹窗 */}
+      <Popup visible={showSelectCoupon} round={5} onClose={() => setShowSelectCoupon(false)}>
+        <View style={[globalStyles.containerCenter, {height: 40}]}>
+          <Text style={[globalStyles.fontPrimary]}>选择优惠券({canUseCoupons?.length}张可用)</Text>
+        </View>
+        <ScrollView style={[{height: 250}]}>
+          <View style={{padding: 20}}>
+            {canUseCoupons.map((coupon, index) => {
+              const marginTop = index === 0 ? 0 : globalStyleVariables.MODULE_SPACE;
+              return (
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  key={coupon.id}
+                  style={{marginTop}}
+                  onPress={() => {
+                    setFormField('couponId', coupon.id);
+                    setShowSelectCoupon(false);
+                  }}>
+                  <View key={coupon.id} style={[styles.couponItem, {marginTop, backgroundColor: '#F9CE8F'}]}>
+                    <View style={globalStyles.containerRow}>
+                      <View style={[{width: 100}, globalStyles.containerCenter]}>
+                        <Text style={{color: '#7C5C35'}}>
+                          <Text style={{fontSize: 15}}>¥</Text>
+                          <Text style={{fontSize: 30}}>{coupon.moneyYuan}</Text>
+                        </Text>
+                        <Text style={{color: '#7C5C35', fontSize: 12}}>满{moneyToYuan(coupon.amountThreshold)}可用</Text>
+                      </View>
+                      <View style={[globalStyles.lineVertical, {marginHorizontal: 20, height: 12, backgroundColor: '#0000001A'}]} />
+                      <View style={{flex: 1}}>
+                        <Text style={{color: '#7C5C35', fontSize: 15, fontWeight: '600'}}>{coupon.name}</Text>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
+        <View style={[{padding: globalStyleVariables.MODULE_SPACE}]}>
+          <Button
+            title="不使用优惠券"
+            style={{height: 40}}
+            onPress={() => {
+              setShowSelectCoupon(false);
+              setFormField('couponId', null);
+            }}
+          />
+        </View>
+      </Popup>
     </View>
   );
 };
@@ -515,6 +596,11 @@ export const styles = StyleSheet.create({
     paddingRight: globalStyleVariables.MODULE_SPACE,
     textAlign: 'right',
     width: '100%',
+  },
+  couponItem: {
+    paddingVertical: 24,
+    paddingHorizontal: 15,
+    borderRadius: 7,
   },
 });
 

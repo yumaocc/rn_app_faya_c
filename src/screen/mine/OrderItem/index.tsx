@@ -65,11 +65,13 @@ const OrderItem: React.FC<OrderItemProps> = props => {
                   <Text style={{fontSize: 20}}>{order.paidRealMoneyYuan}</Text>
                 </Text>
               </View>
-              {order.status === OrderStatus.Paid && <Button onPress={handleGoDetail} title="立即使用" />}
-              {order.status === OrderStatus.WaitPay && <Button onPress={handlePay} title="立即支付" />}
-              {order.needBooking === BoolEnum.TRUE && <Button onPress={handleGoDetail} title="立即预约" />}
+              {order.status === OrderStatus.Paid && <Button style={styles.button} textStyle={styles.buttonText} onPress={handleGoDetail} title="立即使用" />}
+              {order.status === OrderStatus.WaitPay && <Button style={styles.button} textStyle={styles.buttonText} onPress={handlePay} title="立即支付" />}
+              {order.needBooking === BoolEnum.TRUE && <Button style={styles.button} textStyle={styles.buttonText} onPress={handleGoDetail} title="立即预约" />}
               {canComment && (
                 <Button
+                  style={styles.button}
+                  textStyle={styles.buttonText}
                   onPress={() => {
                     onGoComment && onGoComment(order.orderBigIdStr);
                   }}
@@ -98,5 +100,12 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 5,
     marginRight: globalStyleVariables.MODULE_SPACE,
+  },
+  button: {
+    height: 30,
+    paddingHorizontal: 7,
+  },
+  buttonText: {
+    fontSize: 12,
   },
 });
