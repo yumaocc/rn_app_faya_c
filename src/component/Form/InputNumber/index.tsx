@@ -140,6 +140,7 @@ const InputNumber: React.FC<InputNumberProps> = props => {
           placeholder={props.placeholder}
           keyboardType="numeric"
           value={showValue}
+          placeholderTextColor={globalStyleVariables.TEXT_COLOR_TERTIARY}
           onChange={handleNativeChange}
           style={[styles.input, props.styles?.input]}
         />

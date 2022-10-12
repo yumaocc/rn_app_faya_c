@@ -107,7 +107,7 @@ const Order: React.FC = () => {
     }
     const integralMoney = form.integralMoney;
     if (integralMoney) {
-      saved += integralMoney;
+      saved += integralMoney * 100; // 输入的代币是元，需要转换成分
     }
     return saved;
   }, [currentSelectedCoupon, form.integralMoney]);
@@ -395,7 +395,7 @@ const Order: React.FC = () => {
                 <View style={globalStyles.containerRow}>
                   <Text style={[globalStyles.fontPrimary, {fontSize: 16}]}>使用芽抵扣</Text>
                   <View style={[globalStyles.tagWrapper, {backgroundColor: '#0000001A', marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                    <Text style={[globalStyles.tag, {color: globalStyleVariables.TEXT_COLOR_PRIMARY}]}>{wallet?.money ? wallet?.moneyYuan : '余额为0'}</Text>
+                    <Text style={[globalStyles.tag, {color: globalStyleVariables.TEXT_COLOR_PRIMARY}]}>{wallet?.money ? `余${wallet?.moneyYuan}` : '余额为0'}</Text>
                   </View>
                 </View>
               }>

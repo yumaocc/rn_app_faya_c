@@ -28,7 +28,8 @@ export function resetToken(token: string) {
 
 // axios.interceptors.request.use((config: AxiosRequestConfig) => {
 //   // const {baseURL, url, data} = config;
-//   console.log(config);
+//   console.log(`发起请求, url=${config.url}, data=`);
+//   console.log(config.data);
 //   return config;
 // });
 
