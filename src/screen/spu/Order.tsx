@@ -35,7 +35,6 @@ const Order: React.FC = () => {
   const [canUseAlipay, setCanUseAlipay] = React.useState(false);
   const [showBooking, setShowBooking] = React.useState(false);
   const [bookingModel, setBookingModel] = React.useState<BookingModelF>(null);
-  const skuId = useMemo(() => (currentSkuIsPackage ? null : (sku as SKUDetail)?.id), [sku, currentSkuIsPackage]);
 
   const appState = useAppState();
   const navigation = useNavigation<FakeNavigation>();
@@ -53,8 +52,13 @@ const Order: React.FC = () => {
   const [form, setFormField] = useSearch<OrderForm>(initForm);
   // 当前是sku，且购买数量为1时才显示提前预约
   const canBooking = useMemo(() => !currentSkuIsPackage && form.amount === 1 && spu?.bookingType === BookingType.URL, [currentSkuIsPackage, form.amount, spu.bookingType]);
+  const skuId = useMemo(() => {
+    if (!canBooking || currentSkuIsPackage) {
+      return null;
+    }
+    return (sku as SKUDetail)?.id;
+  }, [canBooking, currentSkuIsPackage, sku]);
 
-  // const [form] = Form.useForm(initForm);
   const payChannel = useMemo(() => form.channel, [form]);
 
   // 可以切换的sku
