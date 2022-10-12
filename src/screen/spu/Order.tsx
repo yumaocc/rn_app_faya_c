@@ -35,6 +35,7 @@ const Order: React.FC = () => {
   const [canUseAlipay, setCanUseAlipay] = React.useState(false);
   const [showBooking, setShowBooking] = React.useState(false);
   const [bookingModel, setBookingModel] = React.useState<BookingModelF>(null);
+  const skuId = useMemo(() => (currentSkuIsPackage ? null : (sku as SKUDetail)?.id), [sku, currentSkuIsPackage]);
 
   const appState = useAppState();
   const navigation = useNavigation<FakeNavigation>();
@@ -51,7 +52,7 @@ const Order: React.FC = () => {
 
   const [form, setFormField] = useSearch<OrderForm>(initForm);
   // 当前是sku，且购买数量为1时才显示提前预约
-  const canBooking = useMemo(() => !currentSkuIsPackage && form.amount === 1 && spu.bookingType === BookingType.URL, [currentSkuIsPackage, form.amount, spu.bookingType]);
+  const canBooking = useMemo(() => !currentSkuIsPackage && form.amount === 1 && spu?.bookingType === BookingType.URL, [currentSkuIsPackage, form.amount, spu.bookingType]);
 
   // const [form] = Form.useForm(initForm);
   const payChannel = useMemo(() => form.channel, [form]);
@@ -491,7 +492,7 @@ const Order: React.FC = () => {
           </View>
         </View>
       </Modal>
-      <BookingModal visible={showBooking} skuId={spu?.id} onClose={() => setShowBooking(false)} onSelect={setBookingModel} />
+      <BookingModal visible={showBooking} skuId={skuId} onClose={() => setShowBooking(false)} onSelect={setBookingModel} />
     </View>
   );
 };

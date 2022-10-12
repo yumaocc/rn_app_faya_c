@@ -48,6 +48,9 @@ const BookingModal: React.FC<BookingModalProps> = props => {
   }, [currentBookingModel]);
 
   useEffect(() => {
+    if (!skuId) {
+      return;
+    }
     const start = month.startOf('month');
     const end = month.endOf('month');
     api.spu
