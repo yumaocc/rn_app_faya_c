@@ -6,7 +6,7 @@ import {Icon} from '@ant-design/react-native';
 import QRCode from 'react-native-qrcode-svg';
 import Popover from 'react-native-popover-view';
 
-import {Button, Modal, NavigationBar} from '../../component';
+import {Modal, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useParams} from '../../helper/hooks';
 import {OrderDetailF, OrderPackageSKU, PayChannel} from '../../models';
@@ -96,7 +96,9 @@ const OrderDetail: React.FC = () => {
                   </Text>
                 </View>
               </View>
-              <Button title="批量核销" style={[styles.batchCheck]} textStyle={{color: globalStyleVariables.TEXT_COLOR_PRIMARY}} onPress={() => setShowBatch(true)} />
+              <TouchableOpacity activeOpacity={0.8} style={[globalStyles.containerCenter, styles.batchCheck]} onPress={() => setShowBatch(true)}>
+                <Text style={[globalStyles.fontPrimary]}>批量核销</Text>
+              </TouchableOpacity>
             </View>
             <ScrollView style={{flex: 1, backgroundColor: '#f4f4f4'}}>
               <View style={{paddingBottom: bottom}}>
@@ -301,6 +303,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0000000D',
     borderWidth: 0,
     height: 40,
+    borderRadius: 5,
     marginTop: globalStyleVariables.MODULE_SPACE,
   },
   code: {
