@@ -1,7 +1,7 @@
 import {SearchParam} from '../fst/models';
-import {OrderF} from '../models';
+import {OrderBookingForm, OrderF} from '../models';
 import {OrderDetailF} from '../models';
-import {OrderCommentForm, OrderForm, OrderPayState, OrderRefundForm, PayOrder} from '../models/order';
+import {OrderBookingDetailF, OrderCommentForm, OrderForm, OrderPayState, OrderRefundForm, PayOrder} from '../models';
 import {post} from './helper';
 
 export async function getOrderList(params: SearchParam): Promise<OrderF[]> {
@@ -31,4 +31,12 @@ export async function payAgain(id: string): Promise<string> {
 }
 export async function commentOrder(params: OrderCommentForm): Promise<boolean> {
   return await post('/order/comment/add/one', params);
+}
+
+export async function skuBookingDetail(orderSmallId: string): Promise<OrderBookingDetailF> {
+  return await post('/order/details/with/booking', {orderSmallId});
+}
+
+export async function booking(bookingForm: OrderBookingForm) {
+  return await post('/order/booking/order', bookingForm);
 }

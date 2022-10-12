@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Icon} from '@ant-design/react-native';
@@ -14,6 +14,8 @@ import * as api from '../../apis';
 import {StylePropView} from '../../models';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {navigateTo} from '../../router/Router';
+import {OrderPackage, OrderStatus} from '../../models/order';
+import {BoolEnum} from '../../fst/models';
 
 const OrderDetail: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -22,6 +24,9 @@ const OrderDetail: React.FC = () => {
   const [showCode, setShowCode] = React.useState(false);
   const [currentCode, setCurrentCode] = React.useState<OrderPackageSKU>();
   const [showMenu, setShowMenu] = React.useState(false);
+  const orderCompleted = orderDetail?.status === OrderStatus.Completed;
+  const orderCanceled = orderDetail?.status === OrderStatus.Canceled;
+  const orderCanUse = useMemo(() => [OrderStatus.Booked, OrderStatus.Paid].includes(orderDetail?.status), [orderDetail]);
 
   const {bottom} = useSafeAreaInsets();
 
@@ -43,6 +48,93 @@ const OrderDetail: React.FC = () => {
   async function handleRefund() {
     setShowMenu(false);
     navigateTo('Refund', {id});
+  }
+
+  function goBooking(orderSmallId: string) {
+    navigateTo('OrderBooking', {id: orderSmallId});
+  }
+
+  function renderCodeItem(orderPackage: OrderPackage, index: number) {
+    return (
+      <View key={index} style={{marginBottom: globalStyleVariables.MODULE_SPACE}}>
+        <Text style={[globalStyles.fontPrimary]}>{orderPackage.packageName}</Text>
+        <View style={{marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}}>
+          {orderPackage.list?.map((sku, i) => {
+            const {status, code, codeUrl} = sku;
+            const hasCode = !!(code && codeUrl);
+            const canUse = [OrderStatus.Booked, OrderStatus.Paid].includes(status);
+            const canUseCode = canUse && hasCode;
+            const booked = status === OrderStatus.Booked;
+            const codeStyle: StylePropView[] = [styles.code];
+            const needBooking = orderDetail?.needBooking === BoolEnum.TRUE && status === OrderStatus.Paid;
+
+            if (booked) {
+              codeStyle.push(styles.codeBooked);
+            }
+            return (
+              <View key={i} style={codeStyle}>
+                <View style={[globalStyles.containerLR]}>
+                  <View>
+                    <Text numberOfLines={1} style={[globalStyles.fontPrimary, {color: '#fff', textDecorationLine: canUse ? 'none' : 'line-through'}]}>
+                      {sku.code}
+                    </Text>
+                    <Text style={[globalStyles.fontTertiary, {color: '#ffffffb2', textDecorationLine: canUse ? 'none' : 'line-through'}]}>使用时请出示此二维码</Text>
+                  </View>
+                  {canUseCode && (
+                    <TouchableOpacity activeOpacity={0.8} onPress={() => handleShowCode(sku)}>
+                      <Icon name="qrcode" color="#fff" />
+                    </TouchableOpacity>
+                  )}
+                </View>
+                {/* 需要预约才显示！ */}
+                <View style={{marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}}>
+                  {needBooking && (
+                    <TouchableOpacity activeOpacity={0.8} onPress={() => goBooking(sku.orderSmallId)}>
+                      <View style={globalStyles.containerRow}>
+                        <Text style={[globalStyles.fontTertiary, {color: '#fff'}]}>立即预约</Text>
+                        <Icon name="right" color="#fff" size={12} />
+                      </View>
+                    </TouchableOpacity>
+                  )}
+                  {booked && (
+                    <View style={globalStyles.containerLR}>
+                      <View style={{flex: 1}}>
+                        <Text numberOfLines={1} style={[globalStyles.fontTertiary, {color: '#ffffffb2'}]}>
+                          王大一 2022.04.12 型号名称型号名称型号名称型号名称型号名称
+                        </Text>
+                      </View>
+                      <TouchableOpacity activeOpacity={0.8} onPress={() => goBooking(sku.orderSmallId)}>
+                        <View style={globalStyles.containerRow}>
+                          <Text style={[globalStyles.fontTertiary, {color: '#fff'}]}>修改预约</Text>
+                          <Icon name="right" color="#fff" size={12} />
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
+              </View>
+            );
+          })}
+        </View>
+      </View>
+    );
+  }
+
+  function renderOrderStatus() {
+    if (orderCompleted) {
+      return (
+        <View style={[styles.orderStatus, {backgroundColor: '#333'}]}>
+          <Text style={[globalStyles.fontTertiary, styles.orderStatusText]}>订单已完成</Text>
+        </View>
+      );
+    }
+    if (orderCanceled) {
+      return (
+        <View style={[styles.orderStatus, {backgroundColor: '#999'}]}>
+          <Text style={[globalStyles.fontTertiary, styles.orderStatusText]}>已取消订单</Text>
+        </View>
+      );
+    }
   }
 
   return (
@@ -83,6 +175,7 @@ const OrderDetail: React.FC = () => {
         {!orderDetail && <Text>loading...</Text>}
         {orderDetail && (
           <>
+            {renderOrderStatus()}
             <View style={[{padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}]}>
               <View style={[globalStyles.containerRow, {alignItems: 'flex-start'}]}>
                 <Image source={{uri: orderDetail?.spuCoverImage}} style={styles.orderCover} />
@@ -96,111 +189,59 @@ const OrderDetail: React.FC = () => {
                   </Text>
                 </View>
               </View>
-              <TouchableOpacity activeOpacity={0.8} style={[globalStyles.containerCenter, styles.batchCheck]} onPress={() => setShowBatch(true)}>
-                <Text style={[globalStyles.fontPrimary]}>批量核销</Text>
-              </TouchableOpacity>
+              {orderCanUse && (
+                <TouchableOpacity activeOpacity={0.8} style={[globalStyles.containerCenter, styles.batchCheck]} onPress={() => setShowBatch(true)}>
+                  <Text style={[globalStyles.fontPrimary]}>批量核销</Text>
+                </TouchableOpacity>
+              )}
             </View>
             <ScrollView style={{flex: 1, backgroundColor: '#f4f4f4'}}>
               <View style={{paddingBottom: bottom}}>
-                {/* 电子码 */}
-                <View style={{padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}}>
-                  {orderDetail.list?.map((orderPackage, index) => {
-                    return (
-                      <View key={index} style={{marginBottom: globalStyleVariables.MODULE_SPACE}}>
-                        <Text style={[globalStyles.fontPrimary]}>{orderPackage.packageName}</Text>
-                        <View style={{marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}}>
-                          {orderPackage.list?.map((sku, i) => {
-                            const booked = sku.bookingDateAndShopAndModel; // TODO: 是否预订的判断条件？
-                            const codeStyle: StylePropView[] = [styles.code];
-                            if (booked) {
-                              codeStyle.push(styles.codeBooked);
-                            }
-                            return (
-                              <View key={i} style={codeStyle}>
-                                <View style={[globalStyles.containerLR]}>
-                                  <View>
-                                    <Text numberOfLines={1} style={[globalStyles.fontPrimary, {color: '#fff'}]}>
-                                      {sku.code}
-                                    </Text>
-                                    <Text style={[globalStyles.fontTertiary, {color: '#ffffffb2'}]}>使用时请出示此二维码</Text>
-                                  </View>
-                                  <TouchableOpacity activeOpacity={0.8} onPress={() => handleShowCode(sku)}>
-                                    <Icon name="qrcode" color="#fff" />
+                {orderCanUse && (
+                  <View>
+                    {/* 电子码 */}
+                    <View style={{padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}}>{orderDetail.list?.map(renderCodeItem)}</View>
+
+                    {/* 可用门店 */}
+                    <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+                      <View style={[globalStyles.containerLR, {height: 24}]}>
+                        <Text style={[globalStyles.fontStrong]}>可用门店{orderDetail.canUseShops?.length ? `（${orderDetail.canUseShops?.length}）` : ''}</Text>
+                        {orderDetail.canUseShops?.length > 1 && <MaterialIcon name="arrow-forward-ios" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
+                      </View>
+                      <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
+                      {/* 店铺列表 */}
+                      <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+                        {orderDetail.canUseShops?.map((shop, index) => {
+                          return (
+                            <View key={index}>
+                              {index !== 0 && (
+                                <View style={[globalStyles.lineHorizontal, {height: StyleSheet.hairlineWidth, marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
+                              )}
+                              <Text style={[globalStyles.fontStrong]}>{shop.shopName}</Text>
+                              <View style={[globalStyles.containerLR]}>
+                                <View style={[{flex: 1}]}>
+                                  <Text>{shop.shopAddress}</Text>
+                                </View>
+                                <View style={[globalStyles.containerRow, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
+                                  <TouchableOpacity activeOpacity={0.9}>
+                                    <View style={styles.shopAction}>
+                                      <MaterialIcon name="navigation" size={16} color="#49a0ff" />
+                                    </View>
+                                  </TouchableOpacity>
+                                  <TouchableOpacity activeOpacity={0.9}>
+                                    <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
+                                      <MaterialIcon name="call" size={16} color="#48db94" />
+                                    </View>
                                   </TouchableOpacity>
                                 </View>
-                                {/* 需要预约才显示！ */}
-                                <View style={{marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}}>
-                                  {!booked && (
-                                    <TouchableOpacity activeOpacity={0.8}>
-                                      <View style={globalStyles.containerRow}>
-                                        <Text style={[globalStyles.fontTertiary, {color: '#fff'}]}>立即预约</Text>
-                                        <Icon name="right" color="#fff" size={12} />
-                                      </View>
-                                    </TouchableOpacity>
-                                  )}
-                                  {booked && (
-                                    <View style={globalStyles.containerLR}>
-                                      <View style={{flex: 1}}>
-                                        <Text numberOfLines={1} style={[globalStyles.fontTertiary, {color: '#ffffffb2'}]}>
-                                          王大一 2022.04.12 型号名称型号名称型号名称型号名称型号名称
-                                        </Text>
-                                      </View>
-                                      <TouchableOpacity activeOpacity={0.8}>
-                                        <View style={globalStyles.containerRow}>
-                                          <Text style={[globalStyles.fontTertiary, {color: '#fff'}]}>修改预约</Text>
-                                          <Icon name="right" color="#fff" size={12} />
-                                        </View>
-                                      </TouchableOpacity>
-                                    </View>
-                                  )}
-                                </View>
                               </View>
-                            );
-                          })}
-                        </View>
+                            </View>
+                          );
+                        })}
                       </View>
-                    );
-                  })}
-                </View>
-
-                {/* 可用门店 */}
-                <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
-                  <View style={[globalStyles.containerLR, {height: 24}]}>
-                    <Text style={[globalStyles.fontStrong]}>可用门店{orderDetail.canUseShops?.length ? `（${orderDetail.canUseShops?.length}）` : ''}</Text>
-                    {orderDetail.canUseShops?.length > 1 && <MaterialIcon name="arrow-forward-ios" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
+                    </View>
                   </View>
-                  <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
-                  {/* 店铺列表 */}
-                  <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
-                    {orderDetail.canUseShops?.map((shop, index) => {
-                      return (
-                        <View key={index}>
-                          {index !== 0 && (
-                            <View style={[globalStyles.lineHorizontal, {height: StyleSheet.hairlineWidth, marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
-                          )}
-                          <Text style={[globalStyles.fontStrong]}>{shop.shopName}</Text>
-                          <View style={[globalStyles.containerLR]}>
-                            <View style={[{flex: 1}]}>
-                              <Text>{shop.shopAddress}</Text>
-                            </View>
-                            <View style={[globalStyles.containerRow, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                              <TouchableOpacity activeOpacity={0.9}>
-                                <View style={styles.shopAction}>
-                                  <MaterialIcon name="navigation" size={16} color="#49a0ff" />
-                                </View>
-                              </TouchableOpacity>
-                              <TouchableOpacity activeOpacity={0.9}>
-                                <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                                  <MaterialIcon name="call" size={16} color="#48db94" />
-                                </View>
-                              </TouchableOpacity>
-                            </View>
-                          </View>
-                        </View>
-                      );
-                    })}
-                  </View>
-                </View>
+                )}
 
                 {/* 订单信息 */}
                 <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
@@ -249,7 +290,7 @@ const OrderDetail: React.FC = () => {
                   <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE}]} />
                   <View>
                     <Text style={[globalStyles.fontPrimary, {textAlign: 'right'}]}>
-                      <Text>实际支付：</Text>
+                      <Text>总金额：</Text>
                       <Text style={{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 18}}>¥{orderDetail?.paidAllMoneyYuan}</Text>
                     </Text>
                   </View>
@@ -351,5 +392,13 @@ const styles = StyleSheet.create({
   popoverText: {
     fontSize: 15,
     color: globalStyleVariables.TEXT_COLOR_PRIMARY,
+  },
+  orderStatus: {
+    height: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  orderStatusText: {
+    color: '#fff',
   },
 });

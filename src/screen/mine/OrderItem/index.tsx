@@ -18,6 +18,7 @@ const OrderItem: React.FC<OrderItemProps> = props => {
   const {order, onGoDetail, onPayAgain, onGoComment} = props;
   const canComment = useMemo(() => order.status === OrderStatus.Completed && order.evaluated === BoolEnum.FALSE, [order]);
   const commentText = useMemo(() => (order.canGetCommentPackage === BoolEnum.TRUE ? '评价拿红包' : '去评价'), [order]);
+  const showBooking = useMemo(() => order?.status === OrderStatus.Paid && order?.needBooking === BoolEnum.TRUE, [order?.needBooking, order?.status]);
 
   function handleGoDetail() {
     onGoDetail && onGoDetail(order.orderBigIdStr);
@@ -67,7 +68,7 @@ const OrderItem: React.FC<OrderItemProps> = props => {
               </View>
               {order.status === OrderStatus.Paid && <Button style={styles.button} textStyle={styles.buttonText} onPress={handleGoDetail} title="立即使用" />}
               {order.status === OrderStatus.WaitPay && <Button style={styles.button} textStyle={styles.buttonText} onPress={handlePay} title="立即支付" />}
-              {order.needBooking === BoolEnum.TRUE && <Button style={styles.button} textStyle={styles.buttonText} onPress={handleGoDetail} title="立即预约" />}
+              {showBooking && <Button style={styles.button} textStyle={styles.buttonText} onPress={handleGoDetail} title="立即预约" />}
               {canComment && (
                 <Button
                   style={styles.button}

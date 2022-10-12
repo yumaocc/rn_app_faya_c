@@ -24,7 +24,7 @@ const CouponList: React.FC = () => {
           <View style={[{width: 100}, globalStyles.containerCenter]}>
             <Text style={{color}}>
               <Text style={{fontSize: 15}}>¥</Text>
-              <Text style={{fontSize: 30}}>999</Text>
+              <Text style={{fontSize: 30}}>{coupon.moneyYuan}</Text>
             </Text>
             <Text style={{color, fontSize: 12}}>满{moneyToYuan(coupon.amountThreshold)}可用</Text>
           </View>

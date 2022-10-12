@@ -1,5 +1,5 @@
 import {BoolEnum, DateTimeString} from '../fst/models';
-import {PayChannel, PayWay} from './spu';
+import {BookingType, PayChannel, PayWay} from './spu';
 
 export interface OrderForm {
   addressId?: string; // 收货地址
@@ -96,6 +96,7 @@ export interface OrderDetailF {
   paidAllMoneyYuan: string;
   numberOfProducts: number;
   canRefundNumberOfProducts: number;
+  needBooking: BoolEnum;
 }
 
 export interface OrderPackage {
@@ -145,4 +146,31 @@ export interface OrderRefundForm {
   orderBigId: string;
   quantity: number;
   reason: string;
+}
+
+export interface OrderBookingForm {
+  name: string;
+  contactPhone: string;
+  memo: string;
+  bizShopId: number;
+  orderSmallId: string;
+  skuModelId: number;
+  stockDateInt: number;
+}
+
+export interface OrderBookingDetailF {
+  bizName: string;
+  bookingBeginTime: string;
+  bookingCanCancel: BoolEnum; // 能否取消
+  bookingCancelDay: number; // 提前几天取消
+  bookingDateInt: number;
+  bookingEarlyDay: string;
+  bookingType: BookingType;
+  contactPhone: string;
+  memo: string;
+  name: string;
+  orderSmallId: string;
+  reserved: BoolEnum;
+  skuId: number;
+  skuModelName: string;
 }

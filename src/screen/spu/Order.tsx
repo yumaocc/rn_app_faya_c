@@ -242,7 +242,7 @@ const Order: React.FC = () => {
     if (bookingModel && canBooking) {
       // 如果填写了预约信息
       formData.bizShopId = bookingModel?.shopId;
-      formData.skuModelId = bookingModel?.id;
+      formData.skuModelId = bookingModel?.skuModelId;
       formData.stockDateInt = bookingModel.stockDateInt;
     }
     if (errorMsg) {
@@ -413,25 +413,6 @@ const Order: React.FC = () => {
             </FormItem>
             <FormItem label="优惠券" {...formItemProps}>
               {renderCouponEntry()}
-              {/* <Select
-                disabled={canUseCoupons?.length === 0}
-                value={form.couponId}
-                onChange={val => setFormField('couponId', val)}
-                options={canUseCoupons?.map(coupon => ({value: coupon.id, label: `¥${moneyToYuan(coupon.money)}`})) || []}
-                placeholder="请选择优惠券">
-                {e => {
-                  if (!e) {
-                    if (canUseCoupons?.length) {
-                      return <Text>{canUseCoupons?.length}张可用</Text>;
-                    } else {
-                      return <Text>暂无可用优惠券</Text>;
-                    }
-                  }
-                  const foundCoupon = findItem(couponList, item => item.id === e.value);
-                  const couponMoney = moneyToYuan(foundCoupon?.money) || 0;
-                  return <Text>-¥{couponMoney}</Text>;
-                }}
-              </Select> */}
             </FormItem>
 
             <FormItem label="备注" {...formItemProps}>

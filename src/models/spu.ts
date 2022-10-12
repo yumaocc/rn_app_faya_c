@@ -141,6 +141,7 @@ export interface SKUShowInfo {
 export interface BookingModelF {
   id: number;
   name: string; // 型号名称
+  skuModelId: number; // 预约型号ID
   shopId: number;
   shopName: string;
   allStock: number; // 总库存

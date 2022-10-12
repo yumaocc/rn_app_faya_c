@@ -15,13 +15,14 @@ import Button from '../Button';
 interface BookingModalProps {
   visible: boolean;
   skuId: number;
+  month?: Moment;
   onClose: () => void;
   onSelect?: (model: BookingModelF) => void;
 }
 
 const BookingModal: React.FC<BookingModalProps> = props => {
   const {skuId, onClose, onSelect} = props;
-  const [month, setMonth] = useState<Moment>(moment());
+  const [month, setMonth] = useState<Moment>(props.month || moment());
   const [bookingModels, setBookingModels] = useState<DayBookingModelF[]>([]);
   const [currentBookingModel, setCurrentBookingModel] = useState<DayBookingModelF>();
   const [showCalendar, setShowCalendar] = useState(true);
@@ -228,6 +229,9 @@ const BookingModal: React.FC<BookingModalProps> = props => {
 };
 
 export default BookingModal;
+BookingModal.defaultProps = {
+  // month: moment(),
+};
 
 BookingModal.defaultProps = {
   visible: false,
