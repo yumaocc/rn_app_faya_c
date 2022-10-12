@@ -15,7 +15,7 @@ import * as api from '../../apis';
 import {cleanOrderForm} from '../../helper/order';
 // import {useOrderDispatcher} from '../../helper/hooks/dispatchers';
 import {useNavigation} from '@react-navigation/native';
-import {useSearch} from '../../fst/hooks';
+import {useLog, useSearch} from '../../fst/hooks';
 import {OrderForm} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
 import {getAliPayUrl, getWechatPayUrl} from '../../constants';
@@ -36,6 +36,7 @@ const Order: React.FC = () => {
   const [showBooking, setShowBooking] = useState(false);
   const [bookingModel, setBookingModel] = useState<BookingModelF>(null);
   const [showSelectCoupon, setShowSelectCoupon] = useState(false);
+  useLog('checkid', checkOrderId);
 
   const appState = useAppState();
   const navigation = useNavigation<FakeNavigation>();

@@ -30,7 +30,6 @@ const InputNumber: React.FC<InputNumberProps> = props => {
   useEffect(() => {
     if (value !== stringToNumber(showValue)) {
       const r = numberToString(value);
-      console.log('r=', r);
       setShowValue(r);
     }
   }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
