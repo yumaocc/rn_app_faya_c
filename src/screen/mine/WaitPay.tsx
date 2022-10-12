@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo} from 'react';
-import {View, Text, Modal, StyleSheet, TouchableOpacity, ScrollView, Image, Linking} from 'react-native';
+import {View, Text, Modal, StyleSheet, TouchableOpacity, ScrollView, Image, Linking, StatusBar} from 'react-native';
 import {Button, NavigationBar} from '../../component';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -141,6 +141,7 @@ const WaitPay: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       <NavigationBar
         title=""
         canBack={false}

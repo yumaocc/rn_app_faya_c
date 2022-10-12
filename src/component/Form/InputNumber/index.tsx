@@ -43,6 +43,10 @@ const InputNumber: React.FC<InputNumberProps> = props => {
     return new RegExp(regString);
   }, [props.digit]);
 
+  function validNumber(val: number) {
+    return Math.max(Math.min(max, val), min);
+  }
+
   function handleChange(value: string) {
     if (!value) {
       setShowValue('');
@@ -51,7 +55,7 @@ const InputNumber: React.FC<InputNumberProps> = props => {
     }
     // console.log(numberReg);
     if (numberReg.test(value)) {
-      onChange && onChange(stringToNumber(value));
+      onChange && onChange(validNumber(stringToNumber(value)));
       setShowValue(value);
     } else {
       // console.log('inValid');
@@ -66,13 +70,13 @@ const InputNumber: React.FC<InputNumberProps> = props => {
     let newValue = value || 0;
     if (isAdd) {
       newValue += step;
-      newValue = Math.min(newValue, max);
+      // newValue = Math.min(newValue, max);
     } else {
       newValue -= step;
-      newValue = Math.max(newValue, min);
+      // newValue = Math.max(newValue, min);
     }
     if (onChange) {
-      onChange(newValue);
+      onChange(validNumber(newValue));
     }
   }
 
@@ -94,6 +98,12 @@ const InputNumber: React.FC<InputNumberProps> = props => {
           <Icon name="add" size={20} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
         </View>
       );
+    }
+  }
+
+  function handleBlur() {
+    if (value !== Number(showValue)) {
+      setShowValue(String(value));
     }
   }
 
@@ -123,6 +133,7 @@ const InputNumber: React.FC<InputNumberProps> = props => {
       {renderSubtractControl()}
       <View style={props.styles?.inputContainer}>
         <TextInput
+          onBlur={handleBlur}
           editable={!disabled}
           placeholder={props.placeholder}
           keyboardType="numeric"

@@ -7,7 +7,7 @@ import {useSelector} from 'react-redux';
 import {InputNumber, NavigationBar, Select} from '../../component';
 import FormItem from '../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {findItem, moneyToYuan} from '../../fst/helper';
+import {fenToYuan, findItem, moneyToYuan} from '../../fst/helper';
 import {useAppState, useCommonDispatcher, useCoupons, useSPUDispatcher, useWallet} from '../../helper/hooks';
 import {BookingModelF, BookingType, CouponState, FakeNavigation, OrderPayState, PackageDetail, PayChannel, SKUDetail} from '../../models';
 import {RootState} from '../../redux/reducers';
@@ -318,7 +318,7 @@ const Order: React.FC = () => {
               <Select value={form.skuId} options={flatSKUList} placeholder="请选择规格" onChange={handleSKUChange} />
             </FormItem>
             <FormItem label="数量" {...formItemProps}>
-              <InputNumber value={form.amount} onChange={val => setFormField('amount', val)} min={minPurchaseAmount} max={maxPurchaseAmount} />
+              <InputNumber digit={0} value={form.amount} onChange={val => setFormField('amount', val)} min={minPurchaseAmount} max={maxPurchaseAmount} />
             </FormItem>
             <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
             <FormItem label="商品总价" {...formItemProps}>
@@ -377,7 +377,8 @@ const Order: React.FC = () => {
                 styles={{container: {flex: 1, paddingRight: globalStyleVariables.MODULE_SPACE}, inputContainer: {flex: 1}, input: {textAlign: 'right', width: '100%'}}}
                 controls={false}
                 min={0}
-                max={wallet?.money}
+                digit={2}
+                max={fenToYuan(wallet?.money)}
                 value={form.integralMoney}
                 disabled={!wallet?.money}
                 onChange={val => setFormField('integralMoney', val)}
