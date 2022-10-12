@@ -2,7 +2,7 @@ import {PayChannel, PayWay} from '../../models';
 import {OrderForm} from '../../models/order';
 
 export function cleanOrderForm(formData: any): OrderForm {
-  const {amount, channel, couponId, idCard, memo, name, skuId: id, telephone} = formData;
+  const {skuId: id, channel} = formData;
   let skuId;
   let packageId;
   if (id?.startsWith('sku_')) {
@@ -12,14 +12,8 @@ export function cleanOrderForm(formData: any): OrderForm {
   }
   const payWay: PayWay = channel === PayChannel.ALIPAY ? 'USER_SCAN' : 'MINI_PROGRAM';
   return {
-    amount,
-    channel,
-    couponId,
-    idCard,
-    memo,
-    name,
+    ...formData,
     skuId,
-    telephone,
     packageId,
     payWay,
   };
