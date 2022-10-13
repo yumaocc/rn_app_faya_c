@@ -81,11 +81,6 @@ const Withdrawal: React.FC = () => {
               backgroundStyle={{backgroundColor: '#00000011'}}
               arrowSize={{width: 0, height: 0}}>
               <View style={styles.popoverMenu}>
-                <TouchableOpacity activeOpacity={0.8} onPress={handleShowRecords}>
-                  <View style={styles.popoverItem}>
-                    <Text style={styles.popoverText}>提现记录</Text>
-                  </View>
-                </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.8}>
                   <View style={styles.popoverItem}>
                     <Text style={styles.popoverText}>常见疑问</Text>
@@ -147,6 +142,12 @@ const Withdrawal: React.FC = () => {
             )}
           </View>
         </ScrollView>
+
+        <TouchableOpacity activeOpacity={0.8} onPress={handleShowRecords}>
+          <View style={[globalStyles.containerCenter, {paddingBottom: 20}]}>
+            <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_LINK}]}>提现记录</Text>
+          </View>
+        </TouchableOpacity>
       </SafeAreaView>
 
       <Popup visible={showSelectBank} onClose={() => setShowSelectBank(false)} style={styles.model}>
