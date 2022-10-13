@@ -45,6 +45,9 @@ const Withdrawal: React.FC = () => {
   }
 
   async function handleWithdrawal() {
+    if (!cashMoney) {
+      return commonDispatcher.error('请输入提现金额');
+    }
     try {
       await api.user.userWithDraw(cashMoney);
       commonDispatcher.success('提现申请提交成功');

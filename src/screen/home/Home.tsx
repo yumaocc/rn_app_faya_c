@@ -67,7 +67,7 @@ const Home: React.FC = () => {
 
   return (
     <SafeAreaView edges={['top']} style={{flex: 1}}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor="#f4f4f4" />
       <View style={styles.container}>
         <View style={{position: 'relative'}}>
           <Tabs styles={tabStyles} gap={30} currentKey={currentTab.type} tabs={tabs.map(tab => ({title: tab.title, key: tab.key}))} onChange={handleChangeTab} />
