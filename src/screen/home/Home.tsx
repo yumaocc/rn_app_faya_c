@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, ScrollView, useWindowDimensions, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, ScrollView, useWindowDimensions, TouchableOpacity, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {Tabs} from '../../component';
@@ -67,6 +67,7 @@ const Home: React.FC = () => {
 
   return (
     <SafeAreaView edges={['top']} style={{flex: 1}}>
+      <StatusBar barStyle="dark-content" />
       <View style={styles.container}>
         <View style={{position: 'relative'}}>
           <Tabs styles={tabStyles} gap={30} currentKey={currentTab.type} tabs={tabs.map(tab => ({title: tab.title, key: tab.key}))} onChange={handleChangeTab} />
