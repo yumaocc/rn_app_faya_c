@@ -55,6 +55,11 @@ const Withdrawal: React.FC = () => {
     }
   }
 
+  function handleShowRecords() {
+    setShowMenu(false);
+    navigation.navigate('WithdrawalRecords');
+  }
+
   return (
     <>
       <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
@@ -76,7 +81,7 @@ const Withdrawal: React.FC = () => {
               backgroundStyle={{backgroundColor: '#00000011'}}
               arrowSize={{width: 0, height: 0}}>
               <View style={styles.popoverMenu}>
-                <TouchableOpacity activeOpacity={0.8} onPress={() => setShowMenu(false)}>
+                <TouchableOpacity activeOpacity={0.8} onPress={handleShowRecords}>
                   <View style={styles.popoverItem}>
                     <Text style={styles.popoverText}>提现记录</Text>
                   </View>
