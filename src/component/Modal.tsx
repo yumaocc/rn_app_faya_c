@@ -1,9 +1,24 @@
 import {Button, Icon} from '@ant-design/react-native';
-import React, {useCallback, useEffect} from 'react';
-import {View, StyleSheet, Modal as RNModal, TouchableWithoutFeedback, BackHandler, useWindowDimensions, ScrollView, Text, TouchableOpacity} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  Modal as RNModal,
+  TouchableWithoutFeedback,
+  BackHandler,
+  useWindowDimensions,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  TextStyle,
+  ViewStyle,
+} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../constants/styles';
-import {StylePropText, StylePropView} from '../models';
+import {StylePropView} from '../models';
 
+export type ModalStyles = {
+  [key in keyof typeof styles]: ViewStyle | TextStyle;
+};
 interface ModalProps {
   title?: string;
   visible: boolean;
@@ -13,7 +28,8 @@ interface ModalProps {
   showCancel?: boolean; // only if footer is true
   okText?: string;
   cancelText?: string;
-  styles?: {[key: string]: StylePropView | StylePropText};
+  styles?: Partial<ModalStyles>;
+  style?: StylePropView;
   onOk?: () => Promise<void> | void;
   onCancel?: () => Promise<void> | void;
   onClose: () => void;
@@ -21,6 +37,7 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = props => {
   const {onClose, onOk, onCancel} = props;
+  const [okLoading, setOkLoading] = useState(false);
   const windowSize = useWindowDimensions();
 
   function handleClickMask() {
@@ -33,9 +50,17 @@ const Modal: React.FC<ModalProps> = props => {
 
   async function handleOk() {
     if (onOk) {
-      await onOk();
+      setOkLoading(true);
+      try {
+        await onOk();
+        setOkLoading(false);
+        handleClose();
+      } catch (error) {
+        setOkLoading(false);
+      }
+    } else {
+      handleClose();
     }
-    handleClose();
   }
   async function handleCancel() {
     if (onCancel) {
@@ -54,13 +79,13 @@ const Modal: React.FC<ModalProps> = props => {
 
   function renderDefaultFooter() {
     return (
-      <View style={styles.defaultFooterWrapper}>
+      <View style={[styles.defaultFooterWrapper, props.styles.defaultFooterWrapper]}>
         {props.showCancel && (
           <Button style={[styles.footerButton, {marginRight: globalStyleVariables.MODULE_SPACE}]} onPress={handleCancel}>
             {props.cancelText}
           </Button>
         )}
-        <Button style={[styles.footerButton]} type="primary" onPress={handleOk}>
+        <Button loading={okLoading} style={[styles.footerButton]} type="primary" onPress={handleOk}>
           {props.okText}
         </Button>
       </View>
@@ -69,11 +94,11 @@ const Modal: React.FC<ModalProps> = props => {
 
   return (
     <RNModal visible={props.visible} transparent animationType="fade">
-      <View style={styles.container}>
+      <View style={[styles.container, props.styles.container]}>
         <TouchableWithoutFeedback onPress={handleClickMask}>
           <View style={[styles.mask, props.maskStyle]} />
         </TouchableWithoutFeedback>
-        <View style={[styles.body, {width: windowSize.width - 80}, props.styles.body]}>
+        <View style={[styles.body, {width: windowSize.width - 80}, props.styles.body, props.style]}>
           <View style={[globalStyles.borderBottom, styles.header]}>
             <View style={[styles.title]}>
               <Text style={[globalStyles.fontPrimary, styles.titleText]}>{props.title}</Text>
@@ -102,6 +127,7 @@ Modal.defaultProps = {
   okText: '确定',
   cancelText: '取消',
   styles: {},
+  style: {},
 };
 export default Modal;
 const styles = StyleSheet.create({

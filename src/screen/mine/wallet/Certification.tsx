@@ -6,19 +6,44 @@ import {Button, NavigationBar} from '../../../component';
 import FormItem from '../../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useSearch} from '../../../fst/hooks';
-import {useCommonDispatcher, useRNSelectPhoto} from '../../../helper/hooks';
+import {useCommonDispatcher, useRNSelectPhoto, useWallet} from '../../../helper/hooks';
 import {UserCertificationForm} from '../../../models';
 import * as api from '../../../apis';
 import {compressImageUntil, getFileNameByPath} from '../../../helper/system';
 import {useNavigation} from '@react-navigation/native';
 
 const Certification: React.FC = () => {
-  const [form, setFormField] = useSearch<UserCertificationForm>();
+  const [form, setFormField, setFormFields] = useSearch<UserCertificationForm>();
   const [agree, setAgree] = React.useState(false);
   const [showPreview, setShowPreview] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [previewIndex, setPreviewIndex] = React.useState(0);
   const [sendRest, setSendRest] = React.useState(0);
+  const [rejectReason, setRejectReason] = React.useState('');
+
+  const [wallet, updateWallet] = useWallet();
+
+  useEffect(() => {
+    if (!wallet) {
+      return;
+    }
+    const detail = wallet?.details;
+    const {reason, bankCard, cardholder, bankTelephone, idCard, idCardBack, idCardBackOss, idCardFront, idCardFrontOss} = detail || {};
+    setFormFields({
+      name: cardholder,
+      cardNo: bankCard,
+      idCardBack: idCardBack,
+      idCardBackOss: idCardBackOss,
+      idCardFront: idCardFront,
+      idCardFrontOss: idCardFrontOss,
+      idNo: idCard,
+      mobileNo: bankTelephone,
+      _idCardBack: {uri: idCardBackOss},
+      _idCardFront: {uri: idCardFrontOss},
+    });
+    setRejectReason(reason);
+  }, [wallet, setFormFields]);
+
   const previewList = useMemo(() => {
     const list = [];
     if (form?._idCardBack) {
@@ -152,7 +177,8 @@ const Certification: React.FC = () => {
       }
       await api.user.userCertification(formData);
       setLoading(false);
-      commonDispatcher.success('认证成功');
+      commonDispatcher.success('提交成功，请等待认证');
+      updateWallet(); // 刷新钱包信息
       navigation.canGoBack() && navigation.goBack();
     } catch (error) {
       setLoading(false);
@@ -167,6 +193,11 @@ const Certification: React.FC = () => {
         <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">
           <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
             <Text style={[globalStyles.fontTertiary]}>首次添加银行卡需要实名认证。认证信息将用于收益提现，与账号唯一绑定。我们会对信息进行严格保密，认证后不可解绑</Text>
+            {rejectReason && (
+              <View style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
+                <Text style={[globalStyles.fontTertiary, {color: globalStyleVariables.COLOR_WARNING_RED}]}>{rejectReason}</Text>
+              </View>
+            )}
             <FormItem label="真实姓名" {...formItemProps}>
               <TextInput value={form.name} onChangeText={val => setFormField('name', val)} placeholder="请输入您的真实姓名" {...formItemInputProps} style={styles.formItemInput} />
             </FormItem>
@@ -208,33 +239,57 @@ const Certification: React.FC = () => {
                 )}
               </View>
             </FormItem>
-            <FormItem label="身份证国徽面" {...formItemProps}>
-              {form._idCardFront ? (
-                <TouchableOpacity activeOpacity={0.8} onPress={() => startPreview(0)}>
-                  <Image source={{uri: form._idCardFront?.uri}} style={styles.idCard} />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity activeOpacity={0.8} onPress={() => selectIDCard(true)}>
-                  <View style={styles.idCard} />
-                  {/* <MaterialIcon name="image" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} /> */}
-                </TouchableOpacity>
-              )}
+            <FormItem label="身份证人像面" {...formItemProps} style={{marginTop: 20}}>
+              <View style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
+                {form._idCardFront ? (
+                  <View style={[styles.idCard]}>
+                    <TouchableOpacity activeOpacity={0.8} onPress={() => startPreview(0)}>
+                      <Image source={{uri: form._idCardFront?.uri}} style={styles.idCard} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.remove}
+                      onPress={() => {
+                        setFormFields({
+                          _idCardFront: null,
+                          idCardFront: null,
+                          idCardFrontOss: null,
+                        });
+                      }}>
+                      <MaterialIcon name="remove-circle" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <TouchableOpacity activeOpacity={0.8} onPress={() => selectIDCard(true)}>
+                    <View style={styles.idCard} />
+                  </TouchableOpacity>
+                )}
+              </View>
             </FormItem>
-            <FormItem label="身份证人像面" {...formItemProps} style={{marginTop: 10}}>
-              {form._idCardBack ? (
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => {
-                    startPreview(previewList.length - 1);
-                  }}>
-                  <Image source={{uri: form._idCardBack?.uri}} style={styles.idCard} />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity activeOpacity={0.8} onPress={() => selectIDCard(false)}>
-                  <View style={styles.idCard} />
-                  {/* <MaterialIcon name="image" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} /> */}
-                </TouchableOpacity>
-              )}
+            <FormItem label="身份证国徽面" {...formItemProps} style={{marginTop: 20}}>
+              <View style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
+                {form._idCardBack ? (
+                  <View style={[styles.idCard]}>
+                    <TouchableOpacity activeOpacity={0.8} onPress={() => startPreview(previewList.length - 1)}>
+                      <Image source={{uri: form._idCardBack?.uri}} style={styles.idCard} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.remove}
+                      onPress={() => {
+                        setFormFields({
+                          _idCardBack: null,
+                          idCardBack: null,
+                          idCardBackOss: null,
+                        });
+                      }}>
+                      <MaterialIcon name="remove-circle" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <TouchableOpacity activeOpacity={0.8} onPress={() => selectIDCard(false)}>
+                    <View style={styles.idCard} />
+                  </TouchableOpacity>
+                )}
+              </View>
             </FormItem>
 
             {/* 协议 */}
@@ -296,6 +351,14 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: globalStyleVariables.COLOR_CASH,
     borderColor: globalStyleVariables.COLOR_CASH,
+  },
+  remove: {
+    width: 24,
+    height: 24,
+    position: 'absolute',
+    top: -12,
+    right: -12,
+    zIndex: 2,
   },
 });
 

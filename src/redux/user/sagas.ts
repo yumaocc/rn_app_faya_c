@@ -82,6 +82,15 @@ function* getWalletSummary(): any {
   }
 }
 
+function* loadBankCards(): any {
+  try {
+    const bankCards = yield call(api.user.getMyBankCardList);
+    yield put(Actions.loadBankCardsSuccess(bankCards));
+  } catch (error) {
+    yield put(CommonActions.error(error));
+  }
+}
+
 function* watchUserSagas() {
   yield takeLatest(ActionType.INIT, initUser);
   yield takeLatest(ActionType.LOGOUT, logout);
@@ -92,6 +101,7 @@ function* watchUserSagas() {
   yield takeLatest(ActionType.GET_COUPON_LIST, getCouponList);
   yield takeLatest(ActionType.GET_MINE_DETAIL, getMyDetail);
   yield takeLatest(ActionType.GET_WALLET_SUMMARY, getWalletSummary);
+  yield takeLatest(ActionType.LOAD_BANK_CARDS, loadBankCards);
 }
 
 export default function* userSagas() {

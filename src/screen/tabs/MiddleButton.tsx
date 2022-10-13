@@ -21,12 +21,12 @@ const MiddleButton: React.FC = () => {
       });
     } else {
       // navigation.navigate('ShootVideo');
-      // navigation.navigate('Certification');
+      navigation.navigate('Certification');
       // navigation.navigate('Withdrawal');
       // navigation.navigate('WalletSettings');
       // navigation.navigate('SPUDetail', {id: 62});
       // navigation.navigate('OrderDetail', {id: '1580101446588235776'});
-      navigation.navigate('OrderBooking', {id: '1580135056015572993'});
+      // navigation.navigate('OrderBooking', {id: '1580135056015572993'});
     }
   }
   return (

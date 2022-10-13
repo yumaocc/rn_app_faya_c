@@ -87,3 +87,11 @@ export async function getMyBankCardList(): Promise<BankCardF[]> {
 export async function addNewBankCard(bankCard: string): Promise<boolean> {
   return await post('/user/wallet/add/bank/card', {bankCard});
 }
+
+export async function unBindBankCard(id: number): Promise<boolean> {
+  return await post('/user/wallet/remove/bank/card', {bankCardId: id});
+}
+
+export async function userWithDraw(money: number): Promise<boolean> {
+  return await post('/yeepay/withdraw/money', {money, type: 'consumer'});
+}

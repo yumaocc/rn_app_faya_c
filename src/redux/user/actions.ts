@@ -1,6 +1,6 @@
 import {Action, ActionsUnion, ActionWithPayload, createAction} from '../types';
 import {ActionType} from './types';
-import {CouponF, GoLoginParams, MineDetail, UserInfo, WalletInfo, WalletSummary} from '../../models';
+import {BankCardF, CouponF, GoLoginParams, MineDetail, UserInfo, WalletInfo, WalletSummary} from '../../models';
 
 export const Actions = {
   init: (): Action<ActionType.INIT> => createAction(ActionType.INIT),
@@ -20,6 +20,8 @@ export const Actions = {
   login: (payload: GoLoginParams): ActionWithPayload<ActionType.LOGIN, GoLoginParams> => createAction(ActionType.LOGIN, payload),
   loginSuccess: (token: string): ActionWithPayload<ActionType.LOGIN_SUCCESS, string> => createAction(ActionType.LOGIN_SUCCESS, token),
   clearLoginInfo: (): Action<ActionType.CLEAR_LOGIN_INFO> => createAction(ActionType.CLEAR_LOGIN_INFO),
+  loadBankCards: (): Action<ActionType.LOAD_BANK_CARDS> => createAction(ActionType.LOAD_BANK_CARDS),
+  loadBankCardsSuccess: (bankCards: BankCardF[]): ActionWithPayload<ActionType.LOAD_BANK_CARDS_SUCCESS, BankCardF[]> => createAction(ActionType.LOAD_BANK_CARDS_SUCCESS, bankCards),
 };
 
 export type UserActions = ActionsUnion<typeof Actions>;

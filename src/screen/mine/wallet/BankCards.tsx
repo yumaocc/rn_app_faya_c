@@ -1,20 +1,46 @@
 import {SwipeAction} from '@ant-design/react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
-import {NavigationBar} from '../../../component';
+import {Modal, NavigationBar} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
-import {useBankCards} from '../../../helper/hooks';
+import {useBankCards, useCommonDispatcher, useWallet} from '../../../helper/hooks';
 import {useNavigation} from '@react-navigation/native';
-import {FakeNavigation} from '../../../models';
+import {BankCardF, FakeNavigation, UserCertificationStatus} from '../../../models';
+import * as api from '../../../apis';
 
 const BankCards: React.FC = () => {
-  const [bankCards] = useBankCards();
+  const [showUnbind, setShowUnbind] = useState(false);
+  const [selectCard, setSelectCard] = useState<BankCardF>();
+
+  const [bankCards, updateBankCards] = useBankCards();
+  const [wallet, updateWallet] = useWallet();
   const navigation = useNavigation<FakeNavigation>();
+  const [commonDispatcher] = useCommonDispatcher();
 
   function handleAddCard() {
-    // todo: 判断是否实名认证
-    navigation.navigate('AddBankCard');
+    if (wallet.status !== UserCertificationStatus.Success) {
+      navigation.navigate('Certification');
+    } else {
+      navigation.navigate('AddBankCard');
+    }
+  }
+
+  async function unbindBankCard() {
+    try {
+      await api.user.unBindBankCard(selectCard?.id);
+      commonDispatcher.success('解绑成功');
+      updateBankCards();
+      updateWallet();
+    } catch (error) {
+      commonDispatcher.error(error);
+      throw error;
+    }
+  }
+
+  function handleUnbindCard(bankCard: BankCardF) {
+    setSelectCard(bankCard);
+    setShowUnbind(true);
   }
 
   return (
@@ -23,7 +49,18 @@ const BankCards: React.FC = () => {
       <ScrollView style={{flex: 1}}>
         {bankCards.map((card, i) => {
           return (
-            <SwipeAction key={i} right={[{text: <MaterialIcon name="delete" size={24} color="#fff" />, backgroundColor: '#f00', color: '#fff'}]}>
+            <SwipeAction
+              key={i}
+              right={[
+                {
+                  onPress: () => {
+                    handleUnbindCard(card);
+                  },
+                  text: <MaterialIcon name="delete" size={24} color="#fff" />,
+                  backgroundColor: '#f00',
+                  color: '#fff',
+                },
+              ]}>
               <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE}}>
                 <View style={[globalStyles.containerRow, styles.item]}>
                   <Text>
@@ -52,6 +89,21 @@ const BankCards: React.FC = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      <Modal
+        title="提示"
+        visible={showUnbind}
+        onClose={() => setShowUnbind(false)}
+        okText="确定解绑"
+        showCancel
+        style={{paddingHorizontal: 20, paddingBottom: 10}}
+        onOk={unbindBankCard}>
+        <View style={[{height: 100}, globalStyles.containerCenter]}>
+          <Text>
+            确定解绑银行卡{selectCard?.bankCodeName}（{selectCard?.accountNo}）吗？
+          </Text>
+        </View>
+      </Modal>
     </View>
   );
 };

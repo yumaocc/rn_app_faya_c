@@ -57,10 +57,36 @@ export interface CouponF {
   usedTime: string; // 使用时间
 }
 
+export enum UserCertificationStatus {
+  UnSubmit = 0,
+  Success = 1,
+  Failed = 2,
+  Checking = 3,
+}
+
+export interface UserCertificationDetail {
+  id: number;
+  bankCard: string;
+  bankCompanyName: string;
+  bankTelephone: string;
+  cardholder: string;
+  idCard: string;
+  idCardBack: string;
+  idCardBackOss: string;
+  idCardFront: string;
+  idCardFrontOss: string;
+  reason: string;
+  status: UserCertificationStatus;
+}
+
 export interface WalletInfo {
   money: number;
   moneyYuan: string;
   numberOfCards: number;
+  numberOfBankCards: number;
+  cardholder: string;
+  status: UserCertificationStatus;
+  details: UserCertificationDetail;
 }
 
 // 我的用户信息

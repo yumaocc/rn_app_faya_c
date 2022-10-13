@@ -12,6 +12,7 @@ export interface UserDispatcher {
   getCouponList(): void;
   getMyDetail(): void;
   getWalletSummary(): void;
+  loadBankCards(): void;
 }
 
 export const getUserDispatcher = (dispatch: Dispatch): UserDispatcher => ({
@@ -24,4 +25,5 @@ export const getUserDispatcher = (dispatch: Dispatch): UserDispatcher => ({
   getCouponList: () => dispatch(Actions.getCouponList()),
   getMyDetail: () => dispatch(Actions.getMyDetail()),
   getWalletSummary: () => dispatch(Actions.getWalletSummary()),
+  loadBankCards: () => dispatch(Actions.loadBankCards()),
 });

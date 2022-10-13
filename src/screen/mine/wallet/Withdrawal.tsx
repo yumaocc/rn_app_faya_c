@@ -1,29 +1,58 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Button, InputNumber, NavigationBar, Popup} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {stringToNumber} from '../../../fst/helper';
-import {useWalletSummary, useBankCards} from '../../../helper/hooks';
+import {useWalletSummary, useBankCards, useWallet, useCommonDispatcher} from '../../../helper/hooks';
 import Popover from 'react-native-popover-view';
+import {BankCardF, FakeNavigation, UserCertificationStatus} from '../../../models';
+import {useNavigation} from '@react-navigation/native';
+import * as api from '../../../apis';
 
 const Withdrawal: React.FC = () => {
-  const [cashMoney, setCashMoney] = React.useState(0);
-  const [showSelectBank, setShowSelectBank] = React.useState(false);
-  const [walletSummary] = useWalletSummary();
-  const [showMenu, setShowMenu] = React.useState(false);
+  const [cashMoney, setCashMoney] = useState(0);
+  const [showSelectBank, setShowSelectBank] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [selectBankCard, setSelectBankCard] = useState<BankCardF>(null);
 
+  const [walletSummary] = useWalletSummary();
   const [bankCards] = useBankCards();
+  const [wallet, updateWallet] = useWallet();
+  const navigation = useNavigation<FakeNavigation>();
+  const [commonDispatcher] = useCommonDispatcher();
+
+  useEffect(() => {
+    if (!selectBankCard && bankCards?.length) {
+      setSelectBankCard(bankCards[0]);
+    }
+  }, [bankCards, selectBankCard]);
 
   function addBankCard() {
-    console.log('新建银行卡');
+    if (wallet?.status === UserCertificationStatus.Success) {
+      navigation.navigate('AddBankCard');
+    } else {
+      navigation.navigate('Certification');
+    }
   }
-  function handleChangeCard() {
+  function handleChangeCard(card: BankCardF) {
+    setSelectBankCard(card);
     setShowSelectBank(false);
   }
   function cashAll() {
     setCashMoney(stringToNumber(walletSummary?.canWithdrawalMoneyYuan));
+  }
+
+  async function handleWithdrawal() {
+    try {
+      await api.user.userWithDraw(cashMoney);
+      commonDispatcher.success('提现申请提交成功');
+      updateWallet();
+      navigation.canGoBack() && navigation.goBack();
+    } catch (error) {
+      commonDispatcher.error(error);
+    }
   }
 
   return (
@@ -61,7 +90,7 @@ const Withdrawal: React.FC = () => {
             </Popover>
           }
         />
-        <ScrollView style={[{flex: 1}]}>
+        <ScrollView style={[{flex: 1}]} keyboardDismissMode="on-drag">
           <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
             {!bankCards?.length && (
               <View>
@@ -80,8 +109,10 @@ const Withdrawal: React.FC = () => {
                 <TouchableOpacity activeOpacity={0.5} onPress={() => setShowSelectBank(true)}>
                   <View style={[styles.bankCardItem, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
                     <View style={[globalStyles.containerRow, {flex: 1}]}>
-                      <MaterialIcon name="credit-card" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-                      <Text style={[styles.bankText]}>工商银行(尾号1234)</Text>
+                      {/* <MaterialIcon name="credit-card" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} /> */}
+                      <Text style={[styles.bankText]}>
+                        {selectBankCard?.bankCodeName}({selectBankCard?.accountNo})
+                      </Text>
                     </View>
                     <MaterialIcon name="chevron-right" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                   </View>
@@ -90,7 +121,7 @@ const Withdrawal: React.FC = () => {
                 <Text style={globalStyles.fontPrimary}>提现金额</Text>
                 <View style={[globalStyles.containerRow, {height: 45, marginTop: 20}]}>
                   <Text style={[globalStyles.fontPrimary, {fontSize: 40, padding: 0, includeFontPadding: false}]}>¥</Text>
-                  <InputNumber digit={2} controls={false} styles={inputStyle} value={cashMoney} onChange={setCashMoney} placeholder="0" />
+                  <InputNumber min={-Infinity} digit={2} controls={false} styles={inputStyle} value={cashMoney} onChange={setCashMoney} placeholder="0" />
                 </View>
                 <View style={[globalStyles.lineHorizontal, {marginBottom: globalStyleVariables.MODULE_SPACE}]} />
                 <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
@@ -105,7 +136,7 @@ const Withdrawal: React.FC = () => {
                   )}
                 </View>
                 <View style={[globalStyles.containerCenter, {marginTop: 90}]}>
-                  <Button title="确定" style={styles.button} />
+                  <Button title="确定" style={styles.button} onPress={handleWithdrawal} />
                 </View>
               </View>
             )}
@@ -115,20 +146,17 @@ const Withdrawal: React.FC = () => {
 
       <Popup visible={showSelectBank} onClose={() => setShowSelectBank(false)} style={styles.model}>
         <View style={styles.banksContainer}>
-          <TouchableOpacity activeOpacity={0.5} onPress={handleChangeCard}>
-            <View style={[styles.bankCardItem]}>
-              <MaterialIcon name="credit-card" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-              <Text style={[styles.bankText]}>工商银行(尾号1234)</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity activeOpacity={0.5} onPress={handleChangeCard}>
-            <View style={[styles.bankCardItem]}>
-              <MaterialIcon name="credit-card" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-              <Text style={[styles.bankText]}>建设银行(尾号1234)</Text>
-            </View>
-          </TouchableOpacity>
-
+          {bankCards?.map(card => {
+            return (
+              <TouchableOpacity activeOpacity={0.5} onPress={() => handleChangeCard(card)} key={card.id}>
+                <View style={[styles.bankCardItem]}>
+                  <Text style={[styles.bankText]}>
+                    {card?.bankCodeName}({card?.accountNo})
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
           <TouchableOpacity activeOpacity={0.5} onPress={addBankCard}>
             <View style={[styles.bankCardItem, {borderBottomWidth: 0}]}>
               <MaterialIcon name="add" size={24} color={globalStyleVariables.COLOR_CASH} />

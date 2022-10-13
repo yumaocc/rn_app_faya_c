@@ -1,24 +1,26 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {View, Text, StyleSheet, TextInput, TextInputProps, TouchableOpacity} from 'react-native';
 import {Button, NavigationBar} from '../../../component';
 import FormItem from '../../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {useCommonDispatcher} from '../../../helper/hooks';
+import {useCommonDispatcher, useUserDispatcher, useWallet} from '../../../helper/hooks';
 import * as api from '../../../apis';
 import {FakeNavigation} from '../../../models';
 import {useNavigation} from '@react-navigation/native';
 
 const AddBankCard: React.FC = () => {
-  const [agree, setAgree] = React.useState(false);
-  const [bankCard, setBankCard] = React.useState('');
-  const [loading, setLoading] = React.useState(false);
+  const [agree, setAgree] = useState(false);
+  const [bankCard, setBankCard] = useState('');
+  const [loading, setLoading] = useState(false);
   const disabled = useMemo(() => {
     return !agree || !bankCard || loading;
   }, [agree, bankCard, loading]);
 
   const [commonDispatcher] = useCommonDispatcher();
+  const [userDispatcher] = useUserDispatcher();
   const navigation = useNavigation<FakeNavigation>();
+  const [wallet, updateWallet] = useWallet();
 
   async function submit() {
     if (!bankCard) {
@@ -29,6 +31,8 @@ const AddBankCard: React.FC = () => {
       await api.user.addNewBankCard(bankCard);
       commonDispatcher.success('新增成功');
       setLoading(false);
+      updateWallet(); // 刷新钱包信息
+      userDispatcher.loadBankCards(); // 刷新银行卡
       navigation.canGoBack() && navigation.goBack();
     } catch (error) {
       setLoading(false);
@@ -44,7 +48,7 @@ const AddBankCard: React.FC = () => {
           <Text style={globalStyles.fontTertiary}>请绑定持卡人本人的银行卡</Text>
         </View>
         <FormItem {...formItemProps} label="持卡人">
-          <Text style={[globalStyles.fontTertiary, {fontSize: 15, paddingRight: globalStyleVariables.MODULE_SPACE}]}>张小三</Text>
+          <Text style={[globalStyles.fontTertiary, {fontSize: 15, paddingRight: globalStyleVariables.MODULE_SPACE}]}>{wallet?.cardholder}</Text>
         </FormItem>
         <FormItem {...formItemProps} label="银行卡号">
           <TextInput {...formItemInputProps} keyboardType="numeric" value={bankCard} onChangeText={setBankCard} placeholder="请输入银行卡号" />

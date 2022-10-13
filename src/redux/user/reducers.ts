@@ -2,7 +2,7 @@ import produce from 'immer';
 import {UserActions} from './actions';
 // import { ActionType } from './types';
 import {ActionType} from './types';
-import {CouponF, GoLoginParams, MineDetail, UserInfo, WalletInfo, WalletSummary} from '../../models';
+import {BankCardF, CouponF, GoLoginParams, MineDetail, UserInfo, WalletInfo, WalletSummary} from '../../models';
 
 export interface UserState {
   phone: string;
@@ -13,12 +13,14 @@ export interface UserState {
   couponList?: CouponF[];
   myDetail?: MineDetail;
   login?: GoLoginParams;
+  bankCards?: BankCardF[];
 }
 
 export const initialState: UserState = {
   phone: '',
   isLogout: false,
   couponList: [],
+  bankCards: [],
   myDetail: {
     account: '',
     nickName: '游客',
@@ -75,6 +77,10 @@ export default (state = initialState, action: UserActions): UserState => {
     case ActionType.GET_WALLET_SUMMARY_SUCCESS:
       return produce(state, draft => {
         draft.walletSummary = action.payload;
+      });
+    case ActionType.LOAD_BANK_CARDS_SUCCESS:
+      return produce(state, draft => {
+        draft.bankCards = action.payload;
       });
     case ActionType.RESET:
       return initialState;

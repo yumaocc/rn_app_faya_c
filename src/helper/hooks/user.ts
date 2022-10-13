@@ -70,11 +70,12 @@ export function useWalletSummary(): [WalletSummary, () => void] {
 
 export function useBankCards(): [BankCardF[], () => void] {
   const [signal, force] = useForceUpdate();
-  const [bankList, setBankList] = useState<BankCardF[]>([]);
-  const [commonDispatcher] = useCommonDispatcher();
+  const bankList = useSelector((state: RootState) => state.user.bankCards);
+  const [userDispatcher] = useUserDispatcher();
+
   useEffect(() => {
-    api.user.getMyBankCardList().then(setBankList).catch(commonDispatcher.error);
-  }, [signal, commonDispatcher]);
+    userDispatcher.loadBankCards();
+  }, [signal, userDispatcher]);
 
   return [bankList, force];
 }
