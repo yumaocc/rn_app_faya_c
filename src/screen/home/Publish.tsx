@@ -99,7 +99,7 @@ const Publish: React.FC = () => {
           </View>
         </ScrollView>
         <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, paddingBottom: globalStyleVariables.MODULE_SPACE}}>
-          <Button title="发布" style={{height: 40}} onPress={handlePublish} />
+          <Button type="primary" title="发布" style={{height: 40}} onPress={handlePublish} />
         </View>
       </SafeAreaView>
       {/* 选择可见范围 */}

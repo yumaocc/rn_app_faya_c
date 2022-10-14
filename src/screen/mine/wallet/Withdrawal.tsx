@@ -30,6 +30,7 @@ const Withdrawal: React.FC = () => {
   }, [bankCards, selectBankCard]);
 
   function addBankCard() {
+    setShowSelectBank(false);
     if (wallet?.status === UserCertificationStatus.Success) {
       navigation.navigate('AddBankCard');
     } else {
@@ -139,7 +140,7 @@ const Withdrawal: React.FC = () => {
                   )}
                 </View>
                 <View style={[globalStyles.containerCenter, {marginTop: 90}]}>
-                  <Button title="确定" style={styles.button} onPress={handleWithdrawal} />
+                  <Button title="确定" cash style={styles.button} onPress={handleWithdrawal} />
                 </View>
               </View>
             )}

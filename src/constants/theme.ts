@@ -14,6 +14,9 @@ export default {
   button_height: 40,
   button_font_size: 15,
 
+  ghost_button_color: primary, // 同时应用于背景、文字颜色、边框色
+  ghost_button_fill_tap: `${primary}99`, // alpha 60%  https://codepen.io/chriscoyier/pen/XjbzAW
+
   // input
   input_font_size: 15,
 

@@ -127,7 +127,7 @@ const OrderComment: React.FC = () => {
           title="首页"
           headerRight={
             <View style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
-              <Button title="发布" onPress={handleSend} />
+              <Button title="发布" type="primary" style={{height: 34}} onPress={handleSend} />
             </View>
           }
         />

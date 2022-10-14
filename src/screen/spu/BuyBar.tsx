@@ -62,7 +62,7 @@ const BuyBar: React.FC<BuyBarProps> = props => {
             style={[styles.button, {backgroundColor: globalStyleVariables.COLOR_BUD, borderColor: globalStyleVariables.COLOR_BUD, marginRight: globalStyleVariables.MODULE_SPACE}]}
           />
         )}
-        <Button disabled={sku?.saleStatus !== SKUSaleState.ON_SALE} title="立即购买" style={[styles.button]} containerStyle={{flex: 1}} onPress={onBuy} />
+        <Button disabled={sku?.saleStatus !== SKUSaleState.ON_SALE} type="primary" title="立即购买" style={[styles.button, {flex: 1}]} onPress={onBuy} />
       </View>
     </View>
   );

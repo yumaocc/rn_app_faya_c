@@ -68,7 +68,7 @@ const AddBankCard: React.FC = () => {
         </TouchableOpacity>
 
         <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
-          <Button loading={loading} style={styles.button} textStyle={{fontSize: 15}} disabled={disabled} onPress={submit} title="确认添加" />
+          <Button loading={loading} cash style={styles.button} disabled={disabled} onPress={submit} title="确认添加" />
         </View>
       </View>
     </View>

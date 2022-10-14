@@ -401,7 +401,7 @@ const Order: React.FC = () => {
                 </View>
               }>
               <InputNumber
-                styles={{container: {flex: 1, paddingRight: globalStyleVariables.MODULE_SPACE}, inputContainer: {flex: 1}, input: {textAlign: 'right', width: '100%'}}}
+                styles={{container: {flex: 1}, inputContainer: {flex: 1}, input: {textAlign: 'right', width: '100%'}}}
                 controls={false}
                 min={0}
                 digit={2}
@@ -499,7 +499,7 @@ const Order: React.FC = () => {
           {/* <Button type="primary" onPress={submit} style={{flex: 1, height: 40, marginLeft: globalStyleVariables.MODULE_SPACE}}>
             提交订单
           </Button> */}
-          <Button title="提交订单" onPress={submit} style={{flex: 1, height: 40, marginLeft: globalStyleVariables.MODULE_SPACE}} />
+          <Button type="primary" title="提交订单" onPress={submit} style={{flex: 1, height: 40, marginLeft: globalStyleVariables.MODULE_SPACE}} />
         </View>
       </View>
       {/* 支付中弹窗 */}
@@ -557,6 +557,7 @@ const Order: React.FC = () => {
         <View style={[{padding: globalStyleVariables.MODULE_SPACE}]}>
           <Button
             title="不使用优惠券"
+            type="primary"
             style={{height: 40}}
             onPress={() => {
               setShowSelectCoupon(false);
@@ -579,7 +580,10 @@ export const styles = StyleSheet.create({
   },
   formItemInput: {
     fontSize: 15,
-    paddingRight: globalStyleVariables.MODULE_SPACE,
+    padding: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    // paddingRight: globalStyleVariables.MODULE_SPACE,
     textAlign: 'right',
     width: '100%',
   },

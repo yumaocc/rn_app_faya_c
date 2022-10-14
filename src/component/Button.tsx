@@ -1,106 +1,46 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Animated, TextStyle} from 'react-native';
 import {globalStyleVariables} from '../constants/styles';
-import {useInfinityRotate} from '../helper/hooks';
-import {StylePropText, StylePropView} from '../models';
-import {Icon} from '@ant-design/react-native';
+import {Button as AntButton} from '@ant-design/react-native';
+import {ButtonProps as AntButtonProps} from '@ant-design/react-native/lib/button';
+import {StyleSheet} from 'react-native';
 
-interface ButtonProps {
-  title: string;
-  style?: StylePropView;
-  disabled?: boolean;
-  ghost?: boolean;
-  textStyle?: StylePropText;
-  loading?: boolean;
-  containerStyle?: StylePropView;
-  onPress?: () => void;
+interface ButtonProps extends AntButtonProps {
+  title: string | React.ReactNode;
+  cash?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = props => {
-  const {title, disabled, ghost} = props;
-
-  const containerStyle: StylePropView[] = [styles.container];
-  let textStyle: TextStyle = {...styles.text};
-  const rotate = useInfinityRotate();
-  if (ghost) {
-    containerStyle.push(styles.ghostContainer);
-    textStyle = Object.assign(textStyle, styles.ghostText);
-    // textStyle.push(styles.ghostText);
+  const {title, children, activeStyle, styles: propStyles, style, type, cash, ...restProps} = props;
+  let newActiveStyle = activeStyle;
+  if (props.type === 'primary') {
+    newActiveStyle = [styles.primaryTap, activeStyle];
   }
-  containerStyle.push(props.style);
-  // textStyle.push(props.textStyle);
-  textStyle = Object.assign(textStyle, props.textStyle);
-
-  if (disabled) {
-    containerStyle.push({opacity: 0.5});
-    return (
-      <View style={[containerStyle, props.containerStyle]}>
-        {props.loading && (
-          <Animated.View
-            style={[
-              {
-                transform: [{rotate: rotate.interpolate({inputRange: [0, 1], outputRange: ['0deg', '360deg']})}],
-                width: 15,
-                height: 15,
-                marginRight: globalStyleVariables.MODULE_SPACE,
-              },
-            ]}>
-            <Icon name="loading-3-quarters" color={textStyle.color as string} size={15} />
-          </Animated.View>
-        )}
-        <Text style={textStyle}>{title}</Text>
-      </View>
-    );
+  if (cash) {
+    newActiveStyle = [styles.cashTap, activeStyle];
   }
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={props.onPress} style={[containerStyle, props.containerStyle]}>
-      <View style={containerStyle}>
-        {props.loading && (
-          <Animated.View
-            style={[
-              {
-                transform: [{rotate: rotate.interpolate({inputRange: [0, 1], outputRange: ['0deg', '360deg']})}],
-                width: 15,
-                height: 15,
-                marginRight: globalStyleVariables.MODULE_SPACE,
-              },
-            ]}>
-            <Icon name="loading-3-quarters" color={textStyle.color as string} size={15} />
-          </Animated.View>
-        )}
-        <Text style={textStyle}>{title}</Text>
-      </View>
-    </TouchableOpacity>
+    <AntButton {...restProps} activeStyle={newActiveStyle} type={cash ? 'primary' : type} styles={{ghostRaw: {borderWidth: 2}, ...propStyles}} style={[style, cash && styles.cash]}>
+      {children || title}
+    </AntButton>
   );
 };
+
 Button.defaultProps = {
-  onPress: () => {},
-  disabled: false,
-  ghost: false,
-  loading: false,
+  cash: false,
+  styles: {},
 };
 export default Button;
+
 const styles = StyleSheet.create({
-  container: {
-    paddingVertical: 7,
-    paddingHorizontal: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: globalStyleVariables.COLOR_PRIMARY,
-    backgroundColor: globalStyleVariables.COLOR_PRIMARY,
-    borderRadius: 5,
-    flexDirection: 'row',
+  primaryTap: {
+    backgroundColor: globalStyleVariables.COLOR_PRIMARY_TAP,
+    borderColor: globalStyleVariables.COLOR_PRIMARY_TAP,
   },
-  text: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#fff',
+  cash: {
+    backgroundColor: globalStyleVariables.COLOR_CASH,
   },
-  ghostContainer: {
-    backgroundColor: 'transparent',
-  },
-  ghostText: {
-    color: globalStyleVariables.COLOR_PRIMARY,
+  cashTap: {
+    backgroundColor: globalStyleVariables.COLOR_CASH_TAP,
+    borderColor: globalStyleVariables.COLOR_CASH_TAP,
   },
 });

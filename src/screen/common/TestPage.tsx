@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, ViewStyle} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import {NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {icons} from '../../component/Icon/icons';
@@ -23,6 +23,16 @@ const TestPage: React.FC = () => {
   return (
     <View style={styles.container}>
       <NavigationBar title="测试" />
+      <View style={{padding: 20}}>
+        <Button type="primary" onPress={() => {}} style={{width: 80, height: 30}}>
+          按钮
+        </Button>
+        {/* <Button type="primary" onPress={() => {}} style={{height: 20}}>
+          按钮
+        </Button> */}
+        <View style={{marginTop: 20}} />
+        <MyButton type="primary" onPress={() => {}} title="按钮2" />
+      </View>
       <Text>图标测试：点击颜色切换</Text>
       <View style={[globalStyles.containerRow, {flexWrap: 'wrap'}]}>
         {colors.map((color, index) => {
@@ -33,16 +43,7 @@ const TestPage: React.FC = () => {
           );
         })}
       </View>
-      <View style={{padding: 20}}>
-        <Button type="primary" onPress={() => {}} activeStyle={check} style={{width: 80, height: 30}}>
-          按钮
-        </Button>
-        {/* <Button type="primary" onPress={() => {}} style={{height: 20}}>
-          按钮
-        </Button> */}
-        <View style={{marginTop: 20}} />
-        <MyButton onPress={() => {}} title="按钮" />
-      </View>
+
       <ScrollView style={{flex: 1}}>
         <View style={{flexDirection: 'row', flexWrap: 'wrap', padding: 30}}>
           {Object.keys(icons).map((item, index) => {
@@ -69,8 +70,3 @@ const styles = StyleSheet.create({
     height: 200,
   },
 });
-
-const check: ViewStyle = {
-  backgroundColor: '#6cf',
-  borderColor: '#6cf',
-};

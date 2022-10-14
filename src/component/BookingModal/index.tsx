@@ -71,11 +71,18 @@ const BookingModal: React.FC<BookingModalProps> = props => {
     }).start();
   }, [showCalendar]);
 
-  function handleSelectDay(day: Moment, bookingModel: DayBookingModelF) {
-    setSelectDay(day);
-    setCurrentBookingModel(bookingModel);
+  useEffect(() => {
     setSelectShop(null);
     setSelectModal(null);
+  }, [selectDay]);
+
+  useEffect(() => {
+    setSelectModal(null);
+  }, [selectShop]);
+
+  function handleSelectDay(day: Moment, bookingModel: DayBookingModelF) {
+    setSelectDay(day);
+    setCurrentBookingModel(bookingModel); // 用于接下来渲染店铺和型号
     setShowCalendar(false);
   }
 
@@ -222,7 +229,7 @@ const BookingModal: React.FC<BookingModalProps> = props => {
         )}
       </ScrollView>
       <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
-        <Button disabled={!selectModal} title="保存" style={{height: 40}} onPress={handleSubmit} />
+        <Button type="primary" disabled={!selectModal} title="保存" style={{height: 40}} onPress={handleSubmit} />
       </View>
     </Popup>
   );

@@ -238,7 +238,7 @@ const WaitPay: React.FC = () => {
           </View> */}
         </ScrollView>
         <View style={{marginBottom: 10, padding: globalStyleVariables.MODULE_SPACE}}>
-          <Button title="立即支付" disabled={expired} onPress={payNow} style={{height: 40}} />
+          <Button title="立即支付" type="primary" disabled={expired} onPress={payNow} style={{height: 40}} />
         </View>
       </SafeAreaView>
 

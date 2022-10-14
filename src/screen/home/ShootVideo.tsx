@@ -4,7 +4,7 @@ import {View, StyleSheet, NativeSyntheticEvent, Text, TouchableOpacity, Platform
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {useWorkDispatcher} from '../../helper/hooks';
+import {useAndroidBack, useWorkDispatcher} from '../../helper/hooks';
 import {FakeNavigation, VideoInfo} from '../../models';
 import {RecorderFinishData, RecorderView, RecorderViewRef, RecorderViewActionType, RecorderErrorData, RecorderState, RecorderProgressData} from '../../native-modules/RecorderView';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -27,6 +27,8 @@ const ShootVideo: React.FC = () => {
   const [videoInfo, setVideoInfo] = React.useState<VideoInfo>(null);
 
   const navigation = useNavigation<FakeNavigation>();
+
+  useAndroidBack();
 
   function handleReady() {
     console.log('recorder ready');
@@ -143,7 +145,7 @@ const ShootVideo: React.FC = () => {
               color="#fff"
               headerRight={
                 <View style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
-                  <Button title="下一步" onPress={onNext} style={{height: 25, paddingVertical: 0}} />
+                  <Button type="primary" title="下一步" onPress={onNext} style={{height: 25, paddingVertical: 0, paddingLeft: 5, paddingRight: 5}} />
                 </View>
               }
             />
