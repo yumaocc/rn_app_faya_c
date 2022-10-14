@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Image, StyleSheet} from 'react-native';
+import {View, Image, StyleSheet, StatusBar} from 'react-native';
 import {useCommonDispatcher} from '../../helper/hooks';
 
 const Loading: React.FC = () => {
@@ -11,6 +11,7 @@ const Loading: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
       <Image source={require('../../assets/slogan_white.png')} style={styles.slogan} />
     </View>
   );

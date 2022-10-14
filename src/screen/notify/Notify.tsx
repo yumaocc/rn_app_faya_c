@@ -1,11 +1,14 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight, StatusBar} from 'react-native';
 import {NavigationBar} from '../../component';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {SwipeAction} from '@ant-design/react-native';
+import {useIsFocused} from '@react-navigation/native';
 
 const Notify: React.FC = () => {
+  const isFocused = useIsFocused();
+
   function noop() {
     console.log(1);
   }
@@ -135,6 +138,7 @@ const Notify: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      {isFocused && <StatusBar backgroundColor="#fff" barStyle="dark-content" />}
       <NavigationBar
         title="消息"
         canBack={false}

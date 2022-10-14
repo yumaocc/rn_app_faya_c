@@ -31,8 +31,12 @@ const Popup: React.FC<PopupProps> = props => {
     return () => handler.remove();
   }, [handleClose]);
 
+  if (!props.visible) {
+    return null;
+  }
+
   return (
-    <Modal isVisible={props.visible} style={styles.container} onBackdropPress={handleClose} onBackButtonPress={handleClose} useNativeDriver={props.useNativeDrive}>
+    <Modal isVisible={true} style={styles.container} onBackdropPress={handleClose} onBackButtonPress={handleClose} useNativeDriver={props.useNativeDrive}>
       <View style={[styles.body, {paddingBottom: bottom, borderTopLeftRadius: round, borderTopRightRadius: round}, props.style]}>{props.children}</View>
     </Modal>
   );

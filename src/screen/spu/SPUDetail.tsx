@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from 'react';
 import {View, StyleSheet, Text, ScrollView, StatusBar} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
+import {useAndroidBack, useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
 import {FakeNavigation, PackageDetail, SKUDetail, SPUDetailF} from '../../models';
 
 import SPUDetailView from './SPUDetailView';
@@ -20,6 +20,7 @@ const SPUDetail: React.FC = () => {
   const isFocused = useIsFocused();
 
   const [spuDispatcher] = useSPUDispatcher();
+  useAndroidBack();
 
   // 如果有其他页面修改了redux中的spu，返回该页面时需要重新加载spu
   useEffect(() => {
@@ -61,7 +62,7 @@ const SPUDetail: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <ScrollView style={{flex: 1}}>
         {spu ? <SPUDetailView isPackage={isPackage} currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} /> : <Text>loading...</Text>}
       </ScrollView>

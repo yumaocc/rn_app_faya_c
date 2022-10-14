@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, Text, ScrollView, Image} from 'react-native';
+import {View, StyleSheet, Text, ScrollView, Image, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -96,6 +96,8 @@ const Discover: React.FC = () => {
         </View> */}
         {/* 地址 + 搜索 */}
         <SafeAreaView edges={['top']} style={{flex: 1}}>
+          {/* 其他页面会默认此状态栏设置 */}
+          <StatusBar backgroundColor="#fff" barStyle="dark-content" />
           <View style={[globalStyles.containerLR, {paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             <View style={globalStyles.containerRow}>
               <Icon name="location-on" size={24} color="#333" />

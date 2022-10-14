@@ -39,6 +39,7 @@ const WorkList: React.FC<WorkListProps> = props => {
   }
   async function handleRefresh() {
     setRefreshing(true);
+    // todo: 异步加载，状态应该取redux中的
     await emitRefresh();
     setRefreshing(false);
   }
@@ -54,7 +55,6 @@ const WorkList: React.FC<WorkListProps> = props => {
       emitLoadMore();
     }
   }
-
   function renderWorkItem(work: WorkF, index: number, left = false) {
     if (left) {
       index = index * 2;

@@ -8,14 +8,14 @@ import {InputNumber, NavigationBar, Popup, Select, Button} from '../../component
 import FormItem from '../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {fenToYuan, findItem, moneyToYuan} from '../../fst/helper';
-import {useAppState, useCommonDispatcher, useCoupons, useSPUDispatcher, useWallet} from '../../helper/hooks';
+import {useAndroidBack, useAppState, useCommonDispatcher, useCoupons, useSPUDispatcher, useWallet} from '../../helper/hooks';
 import {BookingModelF, BookingType, CouponState, FakeNavigation, OrderPayState, PackageDetail, PayChannel, SKUDetail} from '../../models';
 import {RootState} from '../../redux/reducers';
 import * as api from '../../apis';
 import {cleanOrderForm} from '../../helper/order';
 // import {useOrderDispatcher} from '../../helper/hooks/dispatchers';
 import {useNavigation} from '@react-navigation/native';
-import {useLog, useSearch} from '../../fst/hooks';
+import {useSearch} from '../../fst/hooks';
 import {OrderForm} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
 import {getAliPayUrl, getWechatPayUrl} from '../../constants';
@@ -36,7 +36,8 @@ const Order: React.FC = () => {
   const [showBooking, setShowBooking] = useState(false);
   const [bookingModel, setBookingModel] = useState<BookingModelF>(null);
   const [showSelectCoupon, setShowSelectCoupon] = useState(false);
-  useLog('checkid', checkOrderId);
+  // useLog('checkid', checkOrderId);
+  useAndroidBack();
 
   const appState = useAppState();
   const navigation = useNavigation<FakeNavigation>();
@@ -502,13 +503,16 @@ const Order: React.FC = () => {
         </View>
       </View>
       {/* 支付中弹窗 */}
-      <Modal visible={isPaying} transparent animationType="fade">
-        <View style={[globalStyles.containerCenter, {flex: 1, backgroundColor: '#00000033'}]}>
-          <View style={[globalStyles.containerCenter, {backgroundColor: '#fff', paddingHorizontal: 30, paddingVertical: 40, borderRadius: 5}]}>
-            <Text style={[globalStyles.fontPrimary]}>正在支付</Text>
+      {isPaying && (
+        <Modal visible={true} transparent animationType="fade">
+          <View style={[globalStyles.containerCenter, {flex: 1, backgroundColor: '#00000033'}]}>
+            <View style={[globalStyles.containerCenter, {backgroundColor: '#fff', paddingHorizontal: 30, paddingVertical: 40, borderRadius: 5}]}>
+              <Text style={[globalStyles.fontPrimary]}>正在支付</Text>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      )}
+
       {/* 预约弹窗 */}
       <BookingModal visible={showBooking} skuId={skuId} onClose={() => setShowBooking(false)} onSelect={setBookingModel} />
 

@@ -2,7 +2,6 @@ import {Icon} from '@ant-design/react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, StatusBar} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {Tabs} from '../../component';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
@@ -14,7 +13,6 @@ import {useUserDispatcher} from '../../helper/hooks';
 const Mine: React.FC = () => {
   const detail = useSelector((state: RootState) => state.user.myDetail);
   const token = useSelector((state: RootState) => state.common.token);
-  const {top} = useSafeAreaInsets();
   const navigation = useNavigation<FakeNavigation>();
   const isFocused = useIsFocused();
   const [userDispatcher] = useUserDispatcher();
@@ -58,12 +56,12 @@ const Mine: React.FC = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      {isFocused && <StatusBar barStyle="light-content" />}
+      {isFocused && <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} />}
       <ScrollView style={{flex: 1}} contentContainerStyle={{position: 'relative'}}>
         <Image source={require('../../assets/mine-bg.png')} style={styles.cover} />
         <View style={[styles.container, {paddingTop: 170}]}>
           {/* 顶部扫码等按钮栏 */}
-          <View style={[globalStyles.containerLR, {position: 'absolute', top: top + 20, width: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
+          <View style={[globalStyles.containerLR, {position: 'absolute', top: 50, width: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             <Icon name="scan" size={24} color="#fff" />
             <View style={globalStyles.containerLR}>
               {!!token && (

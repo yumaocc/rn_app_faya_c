@@ -11,6 +11,7 @@ import {RootState} from '../../redux/reducers';
 import WorkList from './WorkList';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {WorkTabType} from '../../models';
+import {useIsFocused} from '@react-navigation/native';
 
 const Home: React.FC = () => {
   const currentTab = useSelector((state: RootState) => state.work.currentTab);
@@ -21,6 +22,7 @@ const Home: React.FC = () => {
   const tabs = useSelector((state: RootState) => state.work.tabs);
   const {width} = useWindowDimensions();
   const [ref, setRef, isReady] = useRefCallback();
+  const isFocused = useIsFocused();
 
   const [workDispatcher] = useWorkDispatcher();
 
@@ -66,8 +68,8 @@ const Home: React.FC = () => {
   }
 
   return (
-    <SafeAreaView edges={['top']} style={{flex: 1}}>
-      <StatusBar barStyle="dark-content" backgroundColor="#f4f4f4" />
+    <SafeAreaView edges={['top']} style={{flex: 1, backgroundColor: '#f4f4f4'}}>
+      {isFocused && <StatusBar barStyle="dark-content" backgroundColor="#f4f4f4" />}
       <View style={styles.container}>
         <View style={{position: 'relative'}}>
           <Tabs styles={tabStyles} gap={30} currentKey={currentTab.type} tabs={tabs.map(tab => ({title: tab.title, key: tab.key}))} onChange={handleChangeTab} />
