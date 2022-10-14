@@ -310,7 +310,7 @@ const Order: React.FC = () => {
     <View style={{flex: 1, backgroundColor: '#f4f4f4', position: 'relative'}}>
       <StatusBar barStyle="dark-content" />
       <NavigationBar title="确认订单" style={{backgroundColor: '#fff'}} />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{flex: 1}}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{flex: 1}}>
         <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">
           {/* <Form form={form} itemStyle={{children: styles.formChildren, container: styles.formItem}} hiddenLine> */}
 
@@ -485,23 +485,20 @@ const Order: React.FC = () => {
           </View>
           {/* </Form> */}
         </ScrollView>
-      </KeyboardAvoidingView>
 
-      <View style={{backgroundColor: '#fff', paddingBottom: bottom}}>
-        <View style={[globalStyles.containerRow, {padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
-          <View>
-            <Text style={[{color: globalStyleVariables.COLOR_PRIMARY}]}>
-              <Text>¥</Text>
-              <Text style={[{fontSize: 30, lineHeight: 30}]}>{moneyToYuan(shouldPay)}</Text>
-            </Text>
-            <Text style={[globalStyles.fontTertiary]}>共优惠 ¥{moneyToYuan(totalSaved)}元</Text>
+        <View style={{backgroundColor: '#fff', paddingBottom: bottom}}>
+          <View style={[globalStyles.containerRow, {padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+            <View>
+              <Text style={[{color: globalStyleVariables.COLOR_PRIMARY}]}>
+                <Text>¥</Text>
+                <Text style={[{fontSize: 30, lineHeight: 30}]}>{moneyToYuan(shouldPay)}</Text>
+              </Text>
+              <Text style={[globalStyles.fontTertiary]}>共优惠 ¥{moneyToYuan(totalSaved)}元</Text>
+            </View>
+            <Button type="primary" title="提交订单" onPress={submit} style={{flex: 1, height: 40, marginLeft: globalStyleVariables.MODULE_SPACE}} />
           </View>
-          {/* <Button type="primary" onPress={submit} style={{flex: 1, height: 40, marginLeft: globalStyleVariables.MODULE_SPACE}}>
-            提交订单
-          </Button> */}
-          <Button type="primary" title="提交订单" onPress={submit} style={{flex: 1, height: 40, marginLeft: globalStyleVariables.MODULE_SPACE}} />
         </View>
-      </View>
+      </KeyboardAvoidingView>
       {/* 支付中弹窗 */}
       {isPaying && (
         <Modal visible={true} transparent animationType="fade">
