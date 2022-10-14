@@ -4,7 +4,7 @@ import xmldom from 'xmldom';
 import Svg, {Circle, Ellipse, G, LinearGradient, RadialGradient, Line, Path, Polygon, Polyline, Rect, Symbol, Use, Defs, Stop} from 'react-native-svg';
 
 import * as utils from './utils';
-import {StylePropView} from '../../models';
+import {StylePropView} from '../../../models';
 
 const ACEPTED_SVG_ELEMENTS = ['svg', 'g', 'circle', 'path', 'rect', 'linearGradient', 'radialGradient', 'stop', 'ellipse', 'polygon'];
 

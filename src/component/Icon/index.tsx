@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {globalStyleVariables} from '../../constants/styles';
 import {StylePropView} from '../../models';
-import SvgUri from '../SvgUri';
+import SvgUri from './SvgUri';
 import {IconName, icons} from './icons';
 
 interface IconProps {
