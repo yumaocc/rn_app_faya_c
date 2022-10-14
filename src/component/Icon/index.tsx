@@ -1,30 +1,27 @@
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, {useMemo} from 'react';
 import {globalStyleVariables} from '../../constants/styles';
-
-type IconName = 'delete';
+import {StylePropView} from '../../models';
+import SvgUri from '../SvgUri';
+import {IconName, icons} from './icons';
 
 interface IconProps {
-  name: IconName;
+  name?: IconName;
   size?: number;
   color?: string;
+  style?: StylePropView;
 }
 
 const Icon: React.FC<IconProps> = props => {
-  const {size, color} = props;
-  return (
-    <View style={[styles.container, {height: size, width: size}]}>
-      <View style={{backgroundColor: color}} />
-    </View>
-  );
+  const {name} = props;
+  const svgData = useMemo(() => icons[name], [name]);
+  if (!svgData) {
+    return null;
+  }
+  return <SvgUri style={props.style} width={props.size} height={props.size} svgXmlData={svgData} fill={props.color} />;
 };
 Icon.defaultProps = {
-  size: 15,
-  color: globalStyleVariables.TEXT_COLOR_SECONDARY,
+  size: 24,
+  color: globalStyleVariables.COLOR_CASH,
+  style: {},
 };
 export default Icon;
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'flex-start',
-  },
-});

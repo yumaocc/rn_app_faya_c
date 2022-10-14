@@ -1,50 +1,48 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView, RefreshControl} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import {NavigationBar} from '../../component';
-import {globalStyleVariables} from '../../constants/styles';
-
-const wait = (timeout: number) => {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(null), timeout);
-  });
-};
+import {globalStyles, globalStyleVariables} from '../../constants/styles';
+import {icons} from '../../component/Icon/icons';
+import Icon from '../../component/Icon';
 
 const TestPage: React.FC = () => {
-  const [refreshing, setRefreshing] = React.useState(false);
+  const colors = [
+    globalStyleVariables.COLOR_PRIMARY,
+    globalStyleVariables.COLOR_CASH,
+    globalStyleVariables.COLOR_BUD,
+    globalStyleVariables.COLOR_WARNING_RED,
+    globalStyleVariables.COLOR_WARNING_YELLOW,
+    globalStyleVariables.TEXT_COLOR_PRIMARY,
+    globalStyleVariables.TEXT_COLOR_SECONDARY,
+    globalStyleVariables.TEXT_COLOR_TERTIARY,
+  ];
+  const [currentColor, setCurrentColor] = React.useState('#333');
 
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    // console.log('去刷新');
-
-    wait(1000).then(() => setRefreshing(false));
-  }, []);
   return (
     <View style={styles.container}>
       <NavigationBar title="测试" />
-      <ScrollView
-        style={{flex: 1}}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            title="下拉刷新"
-            colors={[globalStyleVariables.COLOR_PRIMARY]}
-            titleColor={globalStyleVariables.COLOR_PRIMARY}
-            tintColor={globalStyleVariables.COLOR_PRIMARY}
-          />
-        }>
-        <View>
-          <View style={{height: 900, backgroundColor: '#6cf'}}>
-            <Text>顶部</Text>
-          </View>
-          <Text>底部</Text>
+      <Text>图标测试：点击颜色切换</Text>
+      <View style={[globalStyles.containerRow, {flexWrap: 'wrap'}]}>
+        {colors.map((color, index) => {
+          return (
+            <TouchableOpacity key={index} style={{marginRight: 10, marginBottom: 10}} onPress={() => setCurrentColor(color)}>
+              <View style={{backgroundColor: color, width: 40, height: 40}} />
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+      <ScrollView style={{flex: 1}}>
+        <View style={{flexDirection: 'row', flexWrap: 'wrap', padding: 30}}>
+          {Object.keys(icons).map((item, index) => {
+            return (
+              <View key={index}>
+                <Text>{item}</Text>
+                <Icon name={item} size={24} color={currentColor} />
+              </View>
+            );
+          })}
         </View>
       </ScrollView>
-      {/* <Video source={{uri: demoVideo}} paused={paused} style={styles.video} repeat onProgress={handleProgress} />
-      <View style={{marginTop: 30}}>
-        <Text>{progress}</Text>
-        <Button title="播放/暂停" onPress={() => setPaused(!paused)} />
-      </View> */}
     </View>
   );
 };
