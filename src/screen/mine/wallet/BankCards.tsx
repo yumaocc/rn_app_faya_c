@@ -90,20 +90,22 @@ const BankCards: React.FC = () => {
         </View>
       </ScrollView>
 
-      <Modal
-        title="提示"
-        visible={showUnbind}
-        onClose={() => setShowUnbind(false)}
-        okText="确定解绑"
-        showCancel
-        style={{paddingHorizontal: 20, paddingBottom: 10}}
-        onOk={unbindBankCard}>
-        <View style={[{height: 100}, globalStyles.containerCenter]}>
-          <Text>
-            确定解绑银行卡{selectCard?.bankCodeName}（{selectCard?.accountNo}）吗？
-          </Text>
-        </View>
-      </Modal>
+      {showUnbind && (
+        <Modal
+          title="提示"
+          visible={true}
+          onClose={() => setShowUnbind(false)}
+          okText="确定解绑"
+          showCancel
+          style={{paddingHorizontal: 20, paddingBottom: 10}}
+          onOk={unbindBankCard}>
+          <View style={[{height: 100}, globalStyles.containerCenter]}>
+            <Text>
+              确定解绑银行卡{selectCard?.bankCodeName}（{selectCard?.accountNo}）吗？
+            </Text>
+          </View>
+        </Modal>
+      )}
     </View>
   );
 };

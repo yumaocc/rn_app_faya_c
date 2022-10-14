@@ -6,7 +6,7 @@ import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation, OrderDetailF, OrderPayState, PayChannel} from '../../models';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useAppState, useCommonDispatcher, useParams} from '../../helper/hooks';
+import {useAndroidBack, useAppState, useCommonDispatcher, useParams} from '../../helper/hooks';
 import * as api from '../../apis';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
@@ -22,6 +22,7 @@ const WaitPay: React.FC = () => {
   const [, setLoading] = React.useState(true);
   const [isPaying, setIsPaying] = React.useState(false);
   const appState = useAppState();
+  useAndroidBack();
 
   const token = useSelector((state: RootState) => state.common.token);
   const [restSeconds, setRestSeconds] = React.useState(0);
@@ -242,13 +243,15 @@ const WaitPay: React.FC = () => {
         </View>
       </SafeAreaView>
 
-      <Modal visible={isPaying} transparent animationType="fade">
-        <View style={[globalStyles.containerCenter, {flex: 1, backgroundColor: '#00000033'}]}>
-          <View style={[globalStyles.containerCenter, {backgroundColor: '#fff', paddingHorizontal: 30, paddingVertical: 40, borderRadius: 5}]}>
-            <Text style={[globalStyles.fontPrimary]}>正在支付</Text>
+      {isPaying && (
+        <Modal visible={true} transparent animationType="fade">
+          <View style={[globalStyles.containerCenter, {flex: 1, backgroundColor: '#00000033'}]}>
+            <View style={[globalStyles.containerCenter, {backgroundColor: '#fff', paddingHorizontal: 30, paddingVertical: 40, borderRadius: 5}]}>
+              <Text style={[globalStyles.fontPrimary]}>正在支付</Text>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      )}
     </View>
   );
 };

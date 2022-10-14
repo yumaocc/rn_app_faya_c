@@ -302,26 +302,30 @@ const OrderDetail: React.FC = () => {
       </View>
 
       {/* 批量核销电子码 */}
-      <Modal visible={showBatch} onClose={() => setShowBatch(false)} footer={false} title="电子码" styles={{body: styles.modalBody}}>
-        <View style={[styles.qrcodeContainer]}>
-          <Text style={globalStyles.fontPrimary}>请向商家出示此电子码</Text>
-          <View style={[styles.qrcode, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
-            <QRCode value={orderDetail?.codeUrl} size={200} />
+      {showBatch && (
+        <Modal visible={true} onClose={() => setShowBatch(false)} footer={false} title="电子码" styles={{body: styles.modalBody}}>
+          <View style={[styles.qrcodeContainer]}>
+            <Text style={globalStyles.fontPrimary}>请向商家出示此电子码</Text>
+            <View style={[styles.qrcode, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
+              <QRCode value={orderDetail?.codeUrl} size={200} />
+            </View>
+            <Text style={[globalStyles.fontPrimary, {fontSize: 24}]}>{orderDetail?.code}</Text>
           </View>
-          <Text style={[globalStyles.fontPrimary, {fontSize: 24}]}>{orderDetail?.code}</Text>
-        </View>
-      </Modal>
+        </Modal>
+      )}
 
       {/* 单个电子码 */}
-      <Modal visible={showCode} onClose={() => setShowCode(false)} footer={false} title="电子码" styles={{body: styles.modalBody}}>
-        <View style={[styles.qrcodeContainer]}>
-          <Text style={globalStyles.fontPrimary}>请向商家出示此电子码</Text>
-          <View style={[styles.qrcode, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
-            <QRCode value={currentCode?.codeUrl} size={200} />
+      {showCode && (
+        <Modal visible={true} onClose={() => setShowCode(false)} footer={false} title="电子码" styles={{body: styles.modalBody}}>
+          <View style={[styles.qrcodeContainer]}>
+            <Text style={globalStyles.fontPrimary}>请向商家出示此电子码</Text>
+            <View style={[styles.qrcode, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
+              <QRCode value={currentCode?.codeUrl} size={200} />
+            </View>
+            <Text style={[globalStyles.fontPrimary, {fontSize: 24}]}>{currentCode?.code}</Text>
           </View>
-          <Text style={[globalStyles.fontPrimary, {fontSize: 24}]}>{currentCode?.code}</Text>
-        </View>
-      </Modal>
+        </Modal>
+      )}
     </>
   );
 };

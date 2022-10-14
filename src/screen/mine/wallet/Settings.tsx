@@ -64,14 +64,16 @@ const Settings: React.FC = () => {
           </View>
         </TouchableHighlight>
       </View>
-      <Modal title="提示" visible={showWaiting} onClose={() => setShowWaiting(false)} styles={{defaultFooterWrapper: {paddingHorizontal: 20}}} style={{paddingBottom: 10}}>
-        <View style={[globalStyles.containerCenter, {height: 100}]}>
-          <Text>还在审核中，请耐心等待</Text>
-          <View>
-            <Text>请留意【易宝支付】短信内容</Text>
+      {showWaiting && (
+        <Modal title="提示" visible={true} onClose={() => setShowWaiting(false)} styles={{defaultFooterWrapper: {paddingHorizontal: 20}}} style={{paddingBottom: 10}}>
+          <View style={[globalStyles.containerCenter, {height: 100}]}>
+            <Text>还在审核中，请耐心等待</Text>
+            <View>
+              <Text>请留意【易宝支付】短信内容</Text>
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      )}
     </View>
   );
 };

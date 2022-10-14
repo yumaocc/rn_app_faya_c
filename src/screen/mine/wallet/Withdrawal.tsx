@@ -5,7 +5,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Button, InputNumber, NavigationBar, Popup} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {stringToNumber} from '../../../fst/helper';
-import {useWalletSummary, useBankCards, useWallet, useCommonDispatcher} from '../../../helper/hooks';
+import {useWalletSummary, useBankCards, useWallet, useCommonDispatcher, useAndroidBack} from '../../../helper/hooks';
 import Popover from 'react-native-popover-view';
 import {BankCardF, FakeNavigation, UserCertificationStatus} from '../../../models';
 import {useNavigation} from '@react-navigation/native';
@@ -22,6 +22,7 @@ const Withdrawal: React.FC = () => {
   const [wallet, updateWallet] = useWallet();
   const navigation = useNavigation<FakeNavigation>();
   const [commonDispatcher] = useCommonDispatcher();
+  useAndroidBack();
 
   useEffect(() => {
     if (!selectBankCard && bankCards?.length) {
@@ -72,7 +73,10 @@ const Withdrawal: React.FC = () => {
           headerRight={
             <Popover
               isVisible={showMenu}
-              onRequestClose={() => setShowMenu(false)}
+              onRequestClose={() => {
+                console.log('111');
+                setShowMenu(false);
+              }}
               animationConfig={{
                 delay: 0,
                 duration: 200,
