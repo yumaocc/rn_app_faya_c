@@ -1,9 +1,11 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity, ViewStyle} from 'react-native';
 import {NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {icons} from '../../component/Icon/icons';
-import Icon from '../../component/Icon';
+import Icon, {IconName} from '../../component/Icon';
+import {Button} from '@ant-design/react-native';
+import {Button as MyButton} from '../../component';
 
 const TestPage: React.FC = () => {
   const colors = [
@@ -31,13 +33,23 @@ const TestPage: React.FC = () => {
           );
         })}
       </View>
+      <View style={{padding: 20}}>
+        <Button type="primary" onPress={() => {}} activeStyle={check} style={{width: 80, height: 30}}>
+          按钮
+        </Button>
+        {/* <Button type="primary" onPress={() => {}} style={{height: 20}}>
+          按钮
+        </Button> */}
+        <View style={{marginTop: 20}} />
+        <MyButton onPress={() => {}} title="按钮" />
+      </View>
       <ScrollView style={{flex: 1}}>
         <View style={{flexDirection: 'row', flexWrap: 'wrap', padding: 30}}>
           {Object.keys(icons).map((item, index) => {
             return (
               <View key={index}>
                 <Text>{item}</Text>
-                <Icon name={item} size={24} color={currentColor} />
+                <Icon name={item as IconName} size={24} color={currentColor} />
               </View>
             );
           })}
@@ -57,3 +69,8 @@ const styles = StyleSheet.create({
     height: 200,
   },
 });
+
+const check: ViewStyle = {
+  backgroundColor: '#6cf',
+  borderColor: '#6cf',
+};

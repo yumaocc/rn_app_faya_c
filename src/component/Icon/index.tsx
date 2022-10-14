@@ -2,8 +2,9 @@ import React, {useMemo} from 'react';
 import {globalStyleVariables} from '../../constants/styles';
 import {StylePropView} from '../../models';
 import SvgUri from './SvgUri';
-import {IconName, icons} from './icons';
+import {icons} from './icons';
 
+export type IconName = keyof typeof icons;
 interface IconProps {
   name?: IconName;
   size?: number;

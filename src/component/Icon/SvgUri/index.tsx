@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import xmldom from 'xmldom';
-import Svg, {Circle, Ellipse, G, LinearGradient, RadialGradient, Line, Path, Polygon, Polyline, Rect, Symbol, Use, Defs, Stop} from 'react-native-svg';
+import Svg, {Circle, Ellipse, G, LinearGradient, RadialGradient, Path, Polygon, Rect, Defs, Stop} from 'react-native-svg';
 
 import * as utils from './utils';
+import {NodeAttribute} from './utils';
 import {StylePropView} from '../../../models';
 
 const ACEPTED_SVG_ELEMENTS = ['svg', 'g', 'circle', 'path', 'rect', 'linearGradient', 'radialGradient', 'stop', 'ellipse', 'polygon'];
@@ -148,9 +149,9 @@ const SvgUri: React.FC<SvgUriProps> = props => {
     }
   }
 
-  function obtainComponentAtts({attributes}: any, enabledAttributes: any) {
+  function obtainComponentAtts({attributes}: {attributes: NodeAttribute[]}, enabledAttributes: any) {
     let styleAtts = {};
-    Array.from(attributes).forEach(({nodeName, nodeValue}) => {
+    Array.from(attributes).forEach(({nodeName, nodeValue}: any) => {
       Object.assign(styleAtts, utils.transformStyle(nodeName, nodeValue, fill));
     });
 

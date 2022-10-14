@@ -1,10 +1,15 @@
-export const camelCase = value => value.replace(/-([a-z])/g, g => g[1].toUpperCase());
+export interface NodeAttribute {
+  nodeName: string;
+  nodeValue: string;
+}
 
-export const camelCaseNodeName = ({nodeName, nodeValue}) => ({nodeName: camelCase(nodeName), nodeValue});
+export const camelCase = (value: string) => value.replace(/-([a-z])/g, g => g[1].toUpperCase());
 
-export const removePixelsFromNodeValue = ({nodeName, nodeValue}) => ({nodeName, nodeValue: nodeValue.replace('px', '')});
+export const camelCaseNodeName = ({nodeName, nodeValue}: NodeAttribute) => ({nodeName: camelCase(nodeName), nodeValue});
 
-export const transformStyle = (nodeName, nodeValue, fillProp) => {
+export const removePixelsFromNodeValue = ({nodeName, nodeValue}: NodeAttribute) => ({nodeName, nodeValue: nodeValue.replace('px', '')});
+
+export const transformStyle = (nodeName: string, nodeValue: string, fillProp: string) => {
   if (nodeName === 'style') {
     return nodeValue.split(';').reduce((acc, attribute) => {
       const [property, value] = attribute.split(':');
@@ -19,6 +24,6 @@ export const transformStyle = (nodeName, nodeValue, fillProp) => {
 };
 
 export const getEnabledAttributes =
-  enabledAttributes =>
-  ({nodeName}) =>
+  (enabledAttributes: string[]) =>
+  ({nodeName}: NodeAttribute) =>
     enabledAttributes.includes(nodeName);

@@ -65,8 +65,8 @@ export async function uploadCertificationFile(uri: string, fileName: string, typ
     await RNFS.copyFile(uri, newUri);
   }
   const file = {uri: newUri, type: 'image/jpeg', name: fileName};
-  formData.append('file', file);
-  formData.append('type', type);
+  formData.append('file', file as any);
+  formData.append('type', String(type));
   formData.append('withWho', 'consumer');
   return await post('/yeepay/file/upload', formData, {headers: {'Content-Type': 'multipart/form-data'}});
 }
