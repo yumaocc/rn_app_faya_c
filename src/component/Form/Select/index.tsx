@@ -63,22 +63,24 @@ const Select: React.FC<SelectProps> = props => {
         }}>
         {renderChildren()}
       </TouchableOpacity>
-      <Popup visible={show} onClose={handleClose}>
-        <View style={styles.container}>
-          <View style={[globalStyles.borderBottom, styles.headerWrapper]}>
-            <TouchableOpacity onPress={handleClose}>
-              <Text>取消</Text>
-            </TouchableOpacity>
-            <Text style={styles.title}>{props.title}</Text>
-            <TouchableOpacity onPress={handleOk}>
-              <Text style={styles.ok}>确定</Text>
-            </TouchableOpacity>
+      {show && (
+        <Popup visible={true} onClose={handleClose}>
+          <View style={styles.container}>
+            <View style={[globalStyles.borderBottom, styles.headerWrapper]}>
+              <TouchableOpacity onPress={handleClose}>
+                <Text>取消</Text>
+              </TouchableOpacity>
+              <Text style={styles.title}>{props.title}</Text>
+              <TouchableOpacity onPress={handleOk}>
+                <Text style={styles.ok}>确定</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.pickerContainer}>
+              <Picker style={{flex: 1}} value={currentValue} onChange={setCurrentValue} items={props.options} />
+            </View>
           </View>
-          <View style={styles.pickerContainer}>
-            <Picker style={{flex: 1}} value={currentValue} onChange={setCurrentValue} items={props.options} />
-          </View>
-        </View>
-      </Popup>
+        </Popup>
+      )}
     </>
   );
 };

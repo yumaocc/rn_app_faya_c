@@ -511,58 +511,60 @@ const Order: React.FC = () => {
       )}
 
       {/* 预约弹窗 */}
-      <BookingModal visible={showBooking} skuId={skuId} onClose={() => setShowBooking(false)} onSelect={setBookingModel} />
+      {showBooking && <BookingModal visible={true} skuId={skuId} onClose={() => setShowBooking(false)} onSelect={setBookingModel} />}
 
       {/* 优惠券弹窗 */}
-      <Popup visible={showSelectCoupon} round={5} onClose={() => setShowSelectCoupon(false)}>
-        <View style={[globalStyles.containerCenter, {height: 40}]}>
-          <Text style={[globalStyles.fontPrimary]}>选择优惠券({canUseCoupons?.length}张可用)</Text>
-        </View>
-        <ScrollView style={[{height: 250}]}>
-          <View style={{padding: 20}}>
-            {canUseCoupons.map((coupon, index) => {
-              const marginTop = index === 0 ? 0 : globalStyleVariables.MODULE_SPACE;
-              return (
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  key={coupon.id}
-                  style={{marginTop}}
-                  onPress={() => {
-                    setFormField('couponId', coupon.id);
-                    setShowSelectCoupon(false);
-                  }}>
-                  <View key={coupon.id} style={[styles.couponItem, {marginTop, backgroundColor: '#F9CE8F'}]}>
-                    <View style={globalStyles.containerRow}>
-                      <View style={[{width: 100}, globalStyles.containerCenter]}>
-                        <Text style={{color: '#7C5C35'}}>
-                          <Text style={{fontSize: 15}}>¥</Text>
-                          <Text style={{fontSize: 30}}>{coupon.moneyYuan}</Text>
-                        </Text>
-                        <Text style={{color: '#7C5C35', fontSize: 12}}>满{moneyToYuan(coupon.amountThreshold)}可用</Text>
-                      </View>
-                      <View style={[globalStyles.lineVertical, {marginHorizontal: 20, height: 12, backgroundColor: '#0000001A'}]} />
-                      <View style={{flex: 1}}>
-                        <Text style={{color: '#7C5C35', fontSize: 15, fontWeight: '600'}}>{coupon.name}</Text>
+      {showSelectCoupon && (
+        <Popup visible={true} round={5} onClose={() => setShowSelectCoupon(false)}>
+          <View style={[globalStyles.containerCenter, {height: 40}]}>
+            <Text style={[globalStyles.fontPrimary]}>选择优惠券({canUseCoupons?.length}张可用)</Text>
+          </View>
+          <ScrollView style={[{height: 250}]}>
+            <View style={{padding: 20}}>
+              {canUseCoupons.map((coupon, index) => {
+                const marginTop = index === 0 ? 0 : globalStyleVariables.MODULE_SPACE;
+                return (
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    key={coupon.id}
+                    style={{marginTop}}
+                    onPress={() => {
+                      setFormField('couponId', coupon.id);
+                      setShowSelectCoupon(false);
+                    }}>
+                    <View key={coupon.id} style={[styles.couponItem, {marginTop, backgroundColor: '#F9CE8F'}]}>
+                      <View style={globalStyles.containerRow}>
+                        <View style={[{width: 100}, globalStyles.containerCenter]}>
+                          <Text style={{color: '#7C5C35'}}>
+                            <Text style={{fontSize: 15}}>¥</Text>
+                            <Text style={{fontSize: 30}}>{coupon.moneyYuan}</Text>
+                          </Text>
+                          <Text style={{color: '#7C5C35', fontSize: 12}}>满{moneyToYuan(coupon.amountThreshold)}可用</Text>
+                        </View>
+                        <View style={[globalStyles.lineVertical, {marginHorizontal: 20, height: 12, backgroundColor: '#0000001A'}]} />
+                        <View style={{flex: 1}}>
+                          <Text style={{color: '#7C5C35', fontSize: 15, fontWeight: '600'}}>{coupon.name}</Text>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </ScrollView>
+          <View style={[{padding: globalStyleVariables.MODULE_SPACE}]}>
+            <Button
+              title="不使用优惠券"
+              type="primary"
+              style={{height: 40}}
+              onPress={() => {
+                setShowSelectCoupon(false);
+                setFormField('couponId', null);
+              }}
+            />
           </View>
-        </ScrollView>
-        <View style={[{padding: globalStyleVariables.MODULE_SPACE}]}>
-          <Button
-            title="不使用优惠券"
-            type="primary"
-            style={{height: 40}}
-            onPress={() => {
-              setShowSelectCoupon(false);
-              setFormField('couponId', null);
-            }}
-          />
-        </View>
-      </Popup>
+        </Popup>
+      )}
     </View>
   );
 };
