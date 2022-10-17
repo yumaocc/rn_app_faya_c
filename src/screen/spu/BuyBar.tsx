@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../../component/Icon';
 import {Button} from '../../component';
 import {globalStyleVariables} from '../../constants/styles';
 import {PackageDetail, SKUDetail, SKUSaleState, SPUDetailF} from '../../models';
@@ -27,12 +27,12 @@ const BuyBar: React.FC<BuyBarProps> = props => {
           <View style={styles.action}>
             {collected ? (
               <>
-                <Icon name="star" size={24} color={globalStyleVariables.COLOR_WARNING_YELLOW} />
+                <Icon name="shangpin_shoucang_sel" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                 <Text style={styles.actionText}>已收藏</Text>
               </>
             ) : (
               <>
-                <Icon name="star-border" size={24} />
+                <Icon name="shangpin_shoucang_nor" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                 <Text style={styles.actionText}>收藏</Text>
               </>
             )}
@@ -42,12 +42,12 @@ const BuyBar: React.FC<BuyBarProps> = props => {
           <View style={styles.action}>
             {inShopWindow ? (
               <>
-                <Icon name="storefront" size={24} />
+                <Icon name="shangpin_addchuchaung_sel" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                 <Text style={styles.actionText}>已加入</Text>
               </>
             ) : (
               <>
-                <Icon name="storefront" size={24} />
+                <Icon name="shangpin_addchuchaung_nor" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                 <Text style={styles.actionText}>加入橱窗</Text>
               </>
             )}

@@ -1,8 +1,7 @@
-// import {Button} from '@ant-design/react-native';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal, StatusBar, TextInput, KeyboardAvoidingView, Platform, TextInputProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../../component/Icon';
 import {useSelector} from 'react-redux';
 import {InputNumber, NavigationBar, Popup, Select, Button} from '../../component';
 import FormItem from '../../component/Form/FormItem';
@@ -13,7 +12,6 @@ import {BookingModelF, BookingType, CouponState, FakeNavigation, OrderPayState, 
 import {RootState} from '../../redux/reducers';
 import * as api from '../../apis';
 import {cleanOrderForm} from '../../helper/order';
-// import {useOrderDispatcher} from '../../helper/hooks/dispatchers';
 import {useNavigation} from '@react-navigation/native';
 import {useSearch} from '../../fst/hooks';
 import {OrderForm} from '../../models/order';
@@ -319,14 +317,21 @@ const Order: React.FC = () => {
               <Image source={poster ? {uri: poster} : require('../../assets/sku_def_1_1.png')} style={{width: 60, height: 60, borderRadius: 5}} />
               <View style={{flex: 1, marginLeft: globalStyleVariables.MODULE_SPACE}}>
                 <View style={globalStyles.containerRow}>
-                  <MaterialIcon name="store" size={20} />
+                  <Icon name="shangpin_shanghu24" size={18} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                   <Text style={[globalStyles.fontStrong]} numberOfLines={1}>
                     {spu?.bizName}
                   </Text>
                 </View>
                 <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_SMALLER, flexDirection: 'row'}]}>
-                  <Text style={[globalStyles.fontTertiary]}>暂无标签字段</Text>
-                  {spu?.bookingType === BookingType.URL && <Text style={[globalStyles.fontTertiary, {marginLeft: 10}]}>需要预约</Text>}
+                  {spu?.tags?.length &&
+                    spu.tags.map((tag, index) => {
+                      return (
+                        <Text key={index} style={[globalStyles.fontTertiary, {marginRight: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
+                          {tag}
+                        </Text>
+                      );
+                    })}
+                  {spu?.bookingType === BookingType.URL && <Text style={[globalStyles.fontTertiary]}>需要预约</Text>}
                 </View>
                 <Text style={[globalStyles.fontStrong]} numberOfLines={2}>
                   {spu?.name}
@@ -442,7 +447,7 @@ const Order: React.FC = () => {
                         {`${bookingModel?.stockDateInt} ${bookingModel?.name} ${bookingModel?.shopName}`}
                       </Text>
                     )}
-                    <MaterialIcon name="chevron-right" size={20} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                    <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
                   </View>
                 </View>
               </TouchableOpacity>

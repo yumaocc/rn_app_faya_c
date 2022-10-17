@@ -7,10 +7,10 @@ import {findItem, formatMoment} from '../../fst/helper';
 import {BookingModelF, DayBookingModelF, GroupedShopBookingModel} from '../../models';
 import Popup from '../Popup';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Calendar from '../Calendar';
 import {groupBy} from 'lodash';
 import Button from '../Button';
+import Icon from '../Icon';
 
 interface BookingModalProps {
   visible: boolean;
@@ -152,7 +152,7 @@ const BookingModal: React.FC<BookingModalProps> = props => {
         <Text style={[globalStyles.fontPrimary, {flex: 1, textAlign: 'center'}]}>选择预约</Text>
         <View style={styles.modelIcon}>
           <TouchableOpacity onPress={onClose}>
-            <MaterialIcon name="close" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+            <Icon name="all_popclose36" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
           </TouchableOpacity>
         </View>
       </View>
@@ -167,7 +167,7 @@ const BookingModal: React.FC<BookingModalProps> = props => {
               <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{selectDay?.format('YYYY-MM-DD') || '请选择'}</Text>
             </View>
             <Animated.View style={[styles.arrowIconContainer, {transform: [{rotate: arrowRotation.current.interpolate({inputRange: [0, 1], outputRange: ['0deg', '180deg']})}]}]}>
-              <MaterialIcon name="arrow-drop-down" size={16} color="#000" />
+              <Icon name="all_xiaosanjiaoD24" size={12} color="#000" />
             </Animated.View>
           </View>
         </TouchableOpacity>

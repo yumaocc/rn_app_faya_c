@@ -1,6 +1,5 @@
 import React, {useEffect, useMemo} from 'react';
 import {View, Text, StyleSheet, Image, ScrollView, TextInput, TouchableOpacity, Modal, Animated} from 'react-native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useCommonDispatcher, useInfinityRotate, useParams} from '../../helper/hooks';
 import {OrderCommentForm, OrderDetailF} from '../../models';
 import * as api from '../../apis';
@@ -13,7 +12,9 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {getFileNameByPath} from '../../helper/system';
 import {navigateBack} from '../../router/Router';
-import {Icon} from '@ant-design/react-native';
+import Icon from '../../component/Icon';
+import {Icon as AIcon} from '@ant-design/react-native';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 // import {copyFileUrl} from '../../helper/system';
 
 const OrderComment: React.FC = () => {
@@ -137,7 +138,7 @@ const OrderComment: React.FC = () => {
               <Image source={{uri: orderDetail?.spuCoverImage}} defaultSource={require('../../assets/sku_def_1_1.png')} style={styles.orderCover} />
               <View style={{flex: 1, marginLeft: globalStyleVariables.MODULE_SPACE}}>
                 <View style={globalStyles.containerRow}>
-                  <MaterialIcon name="store" size={20} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                  <Icon name="shangpin_shanghu24" size={20} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                   <Text style={[globalStyles.fontStrong]} numberOfLines={1}>
                     {orderDetail?.bizName}
                   </Text>
@@ -189,7 +190,7 @@ const OrderComment: React.FC = () => {
                             form._fileList.filter((_, index) => index !== i),
                           )
                         }>
-                        <MaterialIcon name="remove-circle" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
+                        <Icon name="all_delete48" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
                       </TouchableOpacity>
                     </View>
                   );
@@ -197,7 +198,7 @@ const OrderComment: React.FC = () => {
                 {form._fileList.length < 9 && (
                   <TouchableOpacity activeOpacity={0.6} onPress={selectPhoto}>
                     <View style={[globalStyles.containerCenter, styles.camera]}>
-                      <MaterialIcon name="camera-alt" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+                      <Icon name="all_uptupian64" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
                     </View>
                   </TouchableOpacity>
                 )}
@@ -234,7 +235,7 @@ const OrderComment: React.FC = () => {
         <View style={[globalStyles.containerCenter, {flex: 1, backgroundColor: '#00000033'}]}>
           <View style={[globalStyles.containerCenter, {backgroundColor: '#fff', paddingHorizontal: 30, paddingVertical: 40, borderRadius: 5}]}>
             <Animated.View style={[styles.uploadIconContainer, {transform: [{rotate: rotateDeg.interpolate({inputRange: [0, 1], outputRange: ['0deg', '360deg']})}]}]}>
-              <Icon name="loading-3-quarters" color={globalStyleVariables.TEXT_COLOR_TERTIARY} size={30} />
+              <AIcon name="loading-3-quarters" color={globalStyleVariables.TEXT_COLOR_TERTIARY} size={30} />
             </Animated.View>
             <Text style={[globalStyles.fontPrimary, {marginTop: 10}]}>正在发布</Text>
           </View>

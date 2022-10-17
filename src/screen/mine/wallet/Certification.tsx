@@ -2,6 +2,7 @@ import React, {useEffect, useMemo} from 'react';
 import {View, Text, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput, TextInputProps, TouchableOpacity, Image, Modal} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../../../component/Icon';
 import {Button, NavigationBar} from '../../../component';
 import FormItem from '../../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
@@ -255,7 +256,7 @@ const Certification: React.FC = () => {
                           idCardFrontOss: null,
                         });
                       }}>
-                      <MaterialIcon name="remove-circle" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
+                      <Icon name="all_tupian_delete48" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
                     </TouchableOpacity>
                   </View>
                 ) : (
@@ -281,7 +282,7 @@ const Certification: React.FC = () => {
                           idCardBackOss: null,
                         });
                       }}>
-                      <MaterialIcon name="remove-circle" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
+                      <Icon name="all_tupian_delete48" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
                     </TouchableOpacity>
                   </View>
                 ) : (

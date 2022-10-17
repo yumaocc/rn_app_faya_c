@@ -3,9 +3,9 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {dictOrderState} from '../../../helper/dictionary';
 import {OrderF, OrderStatus} from '../../../models';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Button} from '../../../component';
 import {BoolEnum} from '../../../fst/models';
+import Icon from '../../../component/Icon';
 
 interface OrderItemProps {
   order: OrderF;
@@ -44,7 +44,7 @@ const OrderItem: React.FC<OrderItemProps> = props => {
           <View style={{flex: 1}}>
             <View style={[globalStyles.containerLR]}>
               <View style={globalStyles.containerRow}>
-                <MaterialIcon name="storefront" size={20} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                <Icon name="shangpin_shanghu24" size={15} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                 <Text style={[globalStyles.fontPrimary, globalStyles.moduleMarginLeft]}>{order.bizName}</Text>
               </View>
               <View>

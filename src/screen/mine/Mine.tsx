@@ -1,5 +1,6 @@
-import {Icon} from '@ant-design/react-native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+// import {Icon} from '@ant-design/react-native';
+// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../../component/Icon';
 import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, StatusBar} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -62,15 +63,15 @@ const Mine: React.FC = () => {
         <View style={[styles.container, {paddingTop: 170}]}>
           {/* 顶部扫码等按钮栏 */}
           <View style={[globalStyles.containerLR, {position: 'absolute', top: 50, width: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-            <Icon name="scan" size={24} color="#fff" />
+            <Icon name="wode_scan48" size={24} color="#fff" />
             <View style={globalStyles.containerLR}>
               {!!token && (
                 <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('MyCode')}>
-                  <Icon name="qrcode" size={24} color="#fff" />
+                  <Icon name="wode_erweima48" size={24} color="#fff" />
                 </TouchableOpacity>
               )}
               <TouchableOpacity style={{marginLeft: globalStyleVariables.MODULE_SPACE}} activeOpacity={0.8} onPress={logout}>
-                <Icon name="menu" size={24} color="#fff" />
+                <Icon name="wode_hanbao48" size={24} color="#fff" />
               </TouchableOpacity>
             </View>
           </View>
@@ -111,7 +112,7 @@ const Mine: React.FC = () => {
                 <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop]}>
                   <Text style={[globalStyles.fontPrimary]}>发芽号：{detail?.account}</Text>
                   <TouchableOpacity activeOpacity={0.8} onPress={handleCopy}>
-                    <Icon name="copy" size={18} color="#ccc" style={{marginLeft: 10}} />
+                    <Icon name="all_copy" size={18} color="#ccc" style={{marginLeft: 10}} />
                   </TouchableOpacity>
                 </View>
               )}
@@ -129,7 +130,7 @@ const Mine: React.FC = () => {
                   <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={() => navigation.navigate('OrderList')}>
                     <View style={[globalStyles.containerRow]}>
                       <View style={[globalStyles.containerCenter, styles.entry]}>
-                        <MaterialIcon name="assignment" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
+                        <Icon name="wode_dingdan48" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
                       </View>
                       <Text>订单</Text>
                     </View>
@@ -137,7 +138,7 @@ const Mine: React.FC = () => {
                   <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={() => navigation.navigate('Wallet')}>
                     <View style={[globalStyles.containerRow]}>
                       <View style={[globalStyles.containerCenter, styles.entry]}>
-                        <MaterialIcon name="account-balance-wallet" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
+                        <Icon name="wode_qianbao48" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
                       </View>
                       <Text>钱包</Text>
                     </View>
@@ -145,7 +146,7 @@ const Mine: React.FC = () => {
                   <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
                     <View style={[globalStyles.containerRow]}>
                       <View style={[globalStyles.containerCenter, styles.entry]}>
-                        <MaterialIcon name="store" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
+                        <Icon name="wode_chuchuang48" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
                       </View>
                       <Text>橱窗</Text>
                     </View>

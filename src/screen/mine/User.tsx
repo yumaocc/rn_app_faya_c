@@ -1,6 +1,4 @@
 import React, {useEffect, useMemo} from 'react';
-import {Icon} from '@ant-design/react-native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, StatusBar} from 'react-native';
 import {NavigationBar, Tabs} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -9,6 +7,7 @@ import * as api from '../../apis';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import {useCommonDispatcher, useUserDispatcher} from '../../helper/hooks';
+import Icon from '../../component/Icon';
 // import { goLogin } from '../../router/Router';
 const items = [
   {
@@ -73,7 +72,7 @@ const User: React.FC = () => {
             {true && (
               <TouchableOpacity activeOpacity={0.7} onPress={sendMessage}>
                 <View style={[styles.userAction]}>
-                  <Icon name="message" color="#fff" size={18} />
+                  <Icon name="wode_sixin30" color="#fff" size={15} />
                   <Text style={[globalStyles.fontPrimary, {color: '#fff', marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}]}>发私信</Text>
                 </View>
               </TouchableOpacity>
@@ -130,7 +129,7 @@ const User: React.FC = () => {
                     <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
                       <View style={[globalStyles.containerRow]}>
                         <View style={[globalStyles.containerCenter, styles.entry]}>
-                          <MaterialIcon name="store" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
+                          <Icon name="wode_dingdan48" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
                         </View>
                         <Text>橱窗</Text>
                       </View>

@@ -160,7 +160,7 @@ const SvgUri: React.FC<SvgUriProps> = props => {
       .map(utils.removePixelsFromNodeValue)
       .filter(utils.getEnabledAttributes(enabledAttributes))
       .map(a => {
-        console.log('attr', a);
+        // console.log('attr', a);
         return a;
       })
       .reduce(

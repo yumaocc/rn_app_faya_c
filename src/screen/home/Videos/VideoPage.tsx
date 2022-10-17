@@ -1,7 +1,7 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useCallback, useEffect, useImperativeHandle, useMemo, useState, memo} from 'react';
 import {View, Text, StyleSheet, useWindowDimensions, Image} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../../../component/Icon';
 import Video, {OnLoadData} from 'react-native-video';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useAppState, useCommonDispatcher} from '../../../helper/hooks';
@@ -12,6 +12,7 @@ import * as api from '../../../apis';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/reducers';
 import CustomTouchable from '../../../component/CustomTouchable';
+import {BoolEnum} from '../../../fst/models';
 
 interface VideoPageProps {
   item: WorkF;
@@ -62,6 +63,8 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
       api.work.getWorkDetail(props.item.mainId).then(setWorkDetail).catch(commonDispatcher.error);
     }
   }, [props.paused, props.item, workDetail, commonDispatcher]);
+
+  console.log(workDetail);
 
   function handleOnLoad(e: OnLoadData) {
     const {naturalSize} = e;
@@ -129,7 +132,7 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
               {/* 暂停后的播放按钮 */}
               {paused && !error ? (
                 <View style={[globalStyles.containerCenter, styles.full]}>
-                  <Icon name="play-arrow" color="#ddd" size={80} />
+                  <Icon name="home_faxian_nor64" color="#ddd" size={80} />
                 </View>
               ) : null}
               {workDetail && (
@@ -138,18 +141,27 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
                     <Image source={require('../../../assets/avatar_def.png')} style={[styles.sideItem, styles.avatar]} />
                   </View>
                   <View style={styles.sideItem}>
-                    <Icon name="favorite" size={50} color="#fff" />
+                    {workDetail?.liked === BoolEnum.TRUE ? (
+                      <Icon name="zuopin_zan80" size={40} color={globalStyleVariables.COLOR_LIKE_RED} />
+                    ) : (
+                      <Icon name="zuopin_zan80" size={40} color="#fff" />
+                    )}
                     <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfLikes}</Text>
                   </View>
                   <View style={styles.sideItem}>
-                    <Icon name="pending" size={50} color="#fff" />
+                    <Icon name="zuopin_pinglun80" size={40} color="#fff" />
                     <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfComments}</Text>
                   </View>
                   <View style={styles.sideItem}>
-                    <Icon name="grade" size={50} color="#fff" />
+                    {workDetail?.collected === BoolEnum.TRUE ? (
+                      <Icon name="zuopin_shoucang80" size={40} color={globalStyleVariables.COLOR_COLLECT_YELLOW} />
+                    ) : (
+                      <Icon name="zuopin_shoucang80" size={40} color="#fff" />
+                    )}
+                    <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfCollects}</Text>
                   </View>
                   <View style={styles.sideItem}>
-                    <Icon name="share" size={40} color="#fff" />
+                    <Icon name="zuopin_share80" size={40} color="#fff" />
                   </View>
                 </View>
               )}
@@ -157,12 +169,9 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
                 <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
                   {/* 发布人 */}
                   {hasSpu && (
-                    // <CustomTouchable>
-
-                    // </CustomTouchable>
                     <CustomTouchable activeOpacity={0.5} onPress={openSPU} style={{width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}}>
                       <View style={[globalStyles.containerRow]}>
-                        <Icon name="shopping-cart" color={globalStyleVariables.COLOR_WARNING} size={24} />
+                        <Icon name="zuopin_shangping" color={globalStyleVariables.COLOR_WARNING} size={24} />
                         <Text style={[globalStyles.fontTertiary, {flex: 1, color: '#fff'}]} numberOfLines={1}>
                           {workDetail?.spuName}
                         </Text>

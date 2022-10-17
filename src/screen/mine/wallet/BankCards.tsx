@@ -1,6 +1,6 @@
 import {SwipeAction} from '@ant-design/react-native';
 import React, {useState} from 'react';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../../../component/Icon';
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import {Modal, NavigationBar} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
@@ -56,8 +56,8 @@ const BankCards: React.FC = () => {
                   onPress: () => {
                     handleUnbindCard(card);
                   },
-                  text: <MaterialIcon name="delete" size={24} color="#fff" />,
-                  backgroundColor: '#f00',
+                  text: <Icon name="all_delete48" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />,
+                  backgroundColor: '#fff',
                   color: '#fff',
                 },
               ]}>
@@ -83,7 +83,7 @@ const BankCards: React.FC = () => {
         <View style={[styles.item, globalStyles.containerRow, {paddingLeft: globalStyleVariables.MODULE_SPACE}]}>
           <TouchableOpacity activeOpacity={0.8} onPress={handleAddCard}>
             <View style={[globalStyles.containerRow]}>
-              <MaterialIcon name="add" color={globalStyleVariables.COLOR_CASH} size={24} />
+              <Icon name="all_plus48" color={globalStyleVariables.COLOR_CASH} size={24} />
               <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_CASH}]}>添加银行卡</Text>
             </View>
           </TouchableOpacity>
@@ -91,15 +91,8 @@ const BankCards: React.FC = () => {
       </ScrollView>
 
       {showUnbind && (
-        <Modal
-          title="提示"
-          visible={true}
-          onClose={() => setShowUnbind(false)}
-          okText="确定解绑"
-          showCancel
-          style={{paddingHorizontal: 20, paddingBottom: 10}}
-          onOk={unbindBankCard}>
-          <View style={[{height: 100}, globalStyles.containerCenter]}>
+        <Modal title="提示" visible={true} onClose={() => setShowUnbind(false)} okText="确定解绑" showCancel onOk={unbindBankCard}>
+          <View style={[{height: 100}, globalStyles.containerCenter, {paddingHorizontal: 20}]}>
             <Text>
               确定解绑银行卡{selectCard?.bankCodeName}（{selectCard?.accountNo}）吗？
             </Text>

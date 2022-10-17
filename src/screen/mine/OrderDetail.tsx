@@ -1,8 +1,6 @@
 import React, {useEffect, useMemo} from 'react';
 import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {Icon} from '@ant-design/react-native';
-
+import Icon from '../../component/Icon';
 import QRCode from 'react-native-qrcode-svg';
 import Popover from 'react-native-popover-view';
 
@@ -82,7 +80,7 @@ const OrderDetail: React.FC = () => {
                   </View>
                   {canUseCode && (
                     <TouchableOpacity activeOpacity={0.8} onPress={() => handleShowCode(sku)}>
-                      <Icon name="qrcode" color="#fff" />
+                      <Icon name="wode_erweima48" color="#fff" size={24} />
                     </TouchableOpacity>
                   )}
                 </View>
@@ -92,7 +90,7 @@ const OrderDetail: React.FC = () => {
                     <TouchableOpacity activeOpacity={0.8} onPress={() => goBooking(sku.orderSmallId)}>
                       <View style={globalStyles.containerRow}>
                         <Text style={[globalStyles.fontTertiary, {color: '#fff'}]}>立即预约</Text>
-                        <Icon name="right" color="#fff" size={12} />
+                        <Icon name="all_arrowR36" color="#fff" size={12} />
                       </View>
                     </TouchableOpacity>
                   )}
@@ -106,7 +104,7 @@ const OrderDetail: React.FC = () => {
                       <TouchableOpacity activeOpacity={0.8} onPress={() => goBooking(sku.orderSmallId)}>
                         <View style={globalStyles.containerRow}>
                           <Text style={[globalStyles.fontTertiary, {color: '#fff'}]}>修改预约</Text>
-                          <Icon name="right" color="#fff" size={12} />
+                          <Icon name="all_arrowR36" color="#fff" size={12} />
                         </View>
                       </TouchableOpacity>
                     </View>
@@ -152,7 +150,7 @@ const OrderDetail: React.FC = () => {
               }}
               from={
                 <TouchableOpacity activeOpacity={0.8} onPress={() => setShowMenu(true)}>
-                  <MaterialIcon name="more-horiz" size={24} color="#333" style={{marginRight: 20}} />
+                  <Icon name="nav_more" size={24} color="#333" style={{marginRight: 20}} />
                 </TouchableOpacity>
               }
               backgroundStyle={{backgroundColor: '#00000011'}}
@@ -181,7 +179,7 @@ const OrderDetail: React.FC = () => {
                 <Image source={{uri: orderDetail?.spuCoverImage}} style={styles.orderCover} />
                 <View>
                   <View style={globalStyles.containerRow}>
-                    <MaterialIcon name="storefront" size={15} />
+                    <Icon name="shangpin_shanghu24" size={15} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                     <Text style={globalStyles.fontPrimary}>{orderDetail?.bizName}</Text>
                   </View>
                   <Text style={[globalStyles.fontPrimary]} numberOfLines={2}>
@@ -206,7 +204,7 @@ const OrderDetail: React.FC = () => {
                     <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
                       <View style={[globalStyles.containerLR, {height: 24}]}>
                         <Text style={[globalStyles.fontStrong]}>可用门店{orderDetail.canUseShops?.length ? `（${orderDetail.canUseShops?.length}）` : ''}</Text>
-                        {orderDetail.canUseShops?.length > 1 && <MaterialIcon name="arrow-forward-ios" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
+                        {orderDetail.canUseShops?.length > 1 && <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
                       </View>
                       <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
                       {/* 店铺列表 */}
@@ -225,12 +223,12 @@ const OrderDetail: React.FC = () => {
                                 <View style={[globalStyles.containerRow, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
                                   <TouchableOpacity activeOpacity={0.9}>
                                     <View style={styles.shopAction}>
-                                      <MaterialIcon name="navigation" size={16} color="#49a0ff" />
+                                      <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
                                     </View>
                                   </TouchableOpacity>
                                   <TouchableOpacity activeOpacity={0.9}>
                                     <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                                      <MaterialIcon name="call" size={16} color="#48db94" />
+                                      <Icon name="shangpin_dianpu_dianhua" size={16} color="#48db94" />
                                     </View>
                                   </TouchableOpacity>
                                 </View>

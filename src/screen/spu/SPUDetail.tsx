@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {View, StyleSheet, Text, ScrollView, StatusBar} from 'react-native';
+import {View, StyleSheet, Text, ScrollView, StatusBar, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useAndroidBack, useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
 import {FakeNavigation, PackageDetail, SKUDetail, SPUDetailF} from '../../models';
@@ -9,6 +9,7 @@ import BuyBar from './BuyBar';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {NavigationBar} from '../../component';
 
 const SPUDetail: React.FC = () => {
   const {id} = useParams<{id: number}>();
@@ -16,6 +17,8 @@ const SPUDetail: React.FC = () => {
   const spu: SPUDetailF = useSelector((state: RootState) => state.spu.currentSPU);
   const currentSKU: PackageDetail | SKUDetail = useSelector((state: RootState) => state.spu.currentSKU);
   const isPackage: boolean = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
+  const [titleOpacity, setTitleOpacity] = React.useState(0);
+
   const [userDispatcher] = useUserDispatcher();
   const isFocused = useIsFocused();
 
@@ -60,10 +63,24 @@ const SPUDetail: React.FC = () => {
     [spuDispatcher],
   );
 
+  const handleScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const threshold = 200;
+    const {y} = e.nativeEvent.contentOffset;
+    const current = Math.min(y, threshold);
+    const opacity = Math.min(1, Math.max(0, current / threshold));
+    if (opacity === 1) {
+      StatusBar.setBarStyle('dark-content');
+    } else {
+      StatusBar.setBarStyle('light-content');
+    }
+    setTitleOpacity(opacity);
+  }, []);
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-      <ScrollView style={{flex: 1}}>
+      {titleOpacity > 0.2 && <NavigationBar title="商品详情" style={[styles.navigation, {opacity: titleOpacity}]} />}
+      <ScrollView style={{flex: 1}} onScroll={handleScroll} scrollEventThrottle={16}>
         {spu ? <SPUDetailView isPackage={isPackage} currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} /> : <Text>loading...</Text>}
       </ScrollView>
       <View style={[{paddingBottom: safeBottom, backgroundColor: '#fff'}]}>
@@ -77,5 +94,13 @@ export default SPUDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  navigation: {
+    position: 'absolute',
+    backgroundColor: '#fff',
+    top: 0,
+    left: 0,
+    width: '100%',
+    zIndex: 10,
   },
 });

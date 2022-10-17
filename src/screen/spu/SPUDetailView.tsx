@@ -1,10 +1,10 @@
-import {Carousel, Icon} from '@ant-design/react-native';
+import {Carousel} from '@ant-design/react-native';
 import {PaginationProps} from '@ant-design/react-native/lib/carousel';
 import React, {useMemo} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {PackageDetail, SKUDetail, SKUSaleState, SKUShowInfo, SPUDetailF} from '../../models';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../../component/Icon';
 import {useWhyDidYouUpdate} from '../../fst/hooks';
 
 interface SPUDetailViewProps {
@@ -138,8 +138,8 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
       <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}}>
         <View style={[globalStyles.containerLR]}>
           <View style={[globalStyles.containerRow]}>
-            <Icon name="shop" size={20} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-            <Text style={[globalStyles.fontPrimary, {paddingLeft: 5}]}>{spu?.bizName}</Text>
+            <Icon name="shangpin_shanghu24" size={12} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+            <Text style={[globalStyles.fontPrimary, {paddingLeft: 5, fontSize: 12}]}>{spu?.bizName}</Text>
           </View>
           <View style={[globalStyles.containerRow]}>
             <Text>收藏{spu?.collectAmount}</Text>
@@ -149,6 +149,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         </View>
         <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
           <View style={[globalStyles.tagWrapper, {backgroundColor: '#4AB87D33'}]}>
+            <Icon name="shangpin_suixintui24" size={12} color="#4AB87D" />
             <Text style={[globalStyles.tag, {color: '#4AB87D'}]}>平台保障·随心腿</Text>
           </View>
           <View style={[globalStyles.tagWrapper, {backgroundColor: '#FF593433', marginLeft: globalStyleVariables.MODULE_SPACE}]}>
@@ -164,26 +165,10 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         <View style={[{flexDirection: 'row', flexWrap: 'wrap', marginTop: globalStyleVariables.MODULE_SPACE}]}>
           {spu?.skuList?.map(sku => {
             return renderSKU(sku);
-            // const isActive = (currentSelect as SKUDetail)?.id === sku.id;
-            // return (
-            //   <TouchableOpacity activeOpacity={0.8} key={'sku_' + sku.id} onPress={() => handleClick(sku)}>
-            //     <View style={[styles.skuItem, isActive && styles.skuItemActive]}>
-            //       <Text style={[styles.skuText, isActive && styles.skuTextActive]}>{sku.skuName}</Text>
-            //     </View>
-            //   </TouchableOpacity>
-            // );
           })}
 
           {spu?.packageDetailsList?.map(packageDetail => {
             return renderPackage(packageDetail);
-            // const isActive = (currentSelect as PackageDetail)?.packageId === packageDetail.packageId;
-            // return (
-            //   <TouchableOpacity activeOpacity={0.8} key={'pkg_' + packageDetail.packageId} onPress={() => handleClick(packageDetail, true)}>
-            //     <View style={[styles.skuItem, isActive && styles.skuItemActive]}>
-            //       <Text style={[styles.skuText, isActive && styles.skuTextActive]}>{packageDetail.packageName}</Text>
-            //     </View>
-            //   </TouchableOpacity>
-            // );
           })}
         </View>
       </View>
@@ -192,7 +177,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
       <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
         <View style={[globalStyles.containerLR, {height: 24}]}>
           <Text style={[globalStyles.fontStrong]}>可用门店{spu?.shopList?.length ? `（${spu?.shopList.length}）` : ''}</Text>
-          {spu?.shopList?.length > 1 && <MaterialIcon name="arrow-forward-ios" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
+          {spu?.shopList?.length > 1 && <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
         </View>
         <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
         {/* 所有店铺 */}
@@ -214,12 +199,12 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
                   <View style={[globalStyles.containerRow, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
                     <TouchableOpacity activeOpacity={0.9}>
                       <View style={styles.shopAction}>
-                        <MaterialIcon name="navigation" size={16} color="#49a0ff" />
+                        <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
                       </View>
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={0.9}>
                       <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                        <MaterialIcon name="call" size={16} color="#48db94" />
+                        <Icon name="shangpin_dianpu_dianhua" size={16} color="#48db94" />
                       </View>
                     </TouchableOpacity>
                   </View>

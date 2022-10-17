@@ -1,10 +1,9 @@
 import React from 'react';
-import {View, Text, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import {View, Text, ScrollView, StyleSheet, TouchableOpacity, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../../component';
 import {useWallet} from '../../../helper/hooks';
-import {Icon} from '@ant-design/react-native';
+import Icon from '../../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../../models';
@@ -22,6 +21,7 @@ const Wallet: React.FC = () => {
 
   return (
     <SafeAreaView edges={['top', 'bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
+      <StatusBar barStyle="dark-content" />
       <NavigationBar
         title="我的钱包"
         safeTop={false}
@@ -32,7 +32,7 @@ const Wallet: React.FC = () => {
               navigation.navigate('WalletSettings');
             }}
             style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
-            <Icon name="setting" size={24} color="#333" />
+            <Icon name="nav_setting" size={24} color="#333" />
           </TouchableOpacity>
         }
       />
@@ -49,11 +49,16 @@ const Wallet: React.FC = () => {
                       setShowReal(!showReal);
                     }}>
                     <View>
-                      <MaterialIcon name={showReal ? 'visibility' : 'visibility-off'} size={18} color="#c4c4c4" style={{marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}} />
+                      <Icon
+                        name={showReal ? 'wode_qianbao_on36' : 'wode_qianbao_off36'}
+                        size={18}
+                        color="#c4c4c4"
+                        style={{marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}}
+                      />
                     </View>
                   </TouchableOpacity>
                 </View>
-                <MaterialIcon name="arrow-forward-ios" size={20} color="#fff" />
+                <Icon name="all_arrowR36" size={20} color="#fff" />
               </View>
               <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
                 <Text>
@@ -72,7 +77,7 @@ const Wallet: React.FC = () => {
             <View style={[styles.card, styles.coupon]}>
               <View style={[globalStyles.containerLR]}>
                 <Text style={[globalStyles.fontPrimary, {color: '#726140'}]}>卡券</Text>
-                <MaterialIcon name="arrow-forward-ios" size={20} color="#726140" />
+                <Icon name="all_arrowR36" size={20} color="#726140" />
               </View>
               <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
                 <Text>

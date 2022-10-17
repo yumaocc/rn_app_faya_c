@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
 import {View, StyleSheet, Text, ScrollView, Image, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../../component/Icon';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import * as api from '../../apis';
 import {useDivideData} from '../../helper/hooks';
@@ -30,8 +31,9 @@ const Discover: React.FC = () => {
   async function getCurrentLocation() {
     try {
       const location = await getLocation();
-      console.log(location);
+      console.log('location', location);
     } catch (error) {
+      console.log('location error');
       console.log(error);
     }
   }
@@ -41,6 +43,17 @@ const Discover: React.FC = () => {
   }, []);
 
   function renderSPU(spu: SPUF) {
+    const {commissionRangeLeftMoneyYuan, commissionRangeRightMoneyYuan, salePrice, originPrice} = spu;
+    const commission = commissionRangeLeftMoneyYuan && commissionRangeRightMoneyYuan ? `${commissionRangeLeftMoneyYuan}-${commissionRangeRightMoneyYuan}` : '';
+    let discount = null;
+    if (originPrice && salePrice) {
+      const res = Math.round((salePrice / originPrice) * 10);
+      discount = Math.max(1, res);
+    }
+    if (discount && discount > 5) {
+      discount = null;
+    }
+
     return (
       <View key={spu.spuId} style={styles.spuItem}>
         <TouchableOpacity
@@ -69,16 +82,20 @@ const Discover: React.FC = () => {
                 <Text style={[globalStyles.fontTertiary, {marginLeft: globalStyleVariables.MODULE_SPACE / 2, textDecorationLine: 'line-through'}]}>¥{spu.originPriceYuan}</Text>
               </View>
             </View>
-            <View style={[globalStyles.tagWrapper, globalStyles.moduleMarginLeft]}>
-              <Text style={[globalStyles.tag, {color: globalStyleVariables.COLOR_WARNING_YELLOW}]}>4.5折</Text>
-            </View>
+            {discount && (
+              <View style={[globalStyles.tagWrapper, globalStyles.moduleMarginLeft]}>
+                <Text style={[globalStyles.tag, {color: globalStyleVariables.COLOR_WARNING_YELLOW}]}>{discount}折</Text>
+              </View>
+            )}
           </View>
           <View style={[globalStyles.halfModuleMarginTop, globalStyles.containerLR]}>
-            <Text>已售199</Text>
-            <Text style={{color: globalStyleVariables.COLOR_BUD}}>
-              <Icon name="spa" size={14} />
-              <Text>10-50</Text>
-            </Text>
+            <Text style={[globalStyles.fontTertiary, {fontSize: 10}]}>已售{spu.saleAmount}</Text>
+            {commission && (
+              <Text style={{color: globalStyleVariables.COLOR_BUD}}>
+                <MaterialIcon name="spa" size={14} />
+                <Text>{commission}</Text>
+              </Text>
+            )}
           </View>
         </View>
       </View>
@@ -100,9 +117,9 @@ const Discover: React.FC = () => {
           <StatusBar backgroundColor="#fff" barStyle="dark-content" />
           <View style={[globalStyles.containerLR, {paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             <View style={globalStyles.containerRow}>
-              <Icon name="location-on" size={24} color="#333" />
+              <Icon name="faxian_dingwei" size={15} color="#333" />
               <Text>{location}</Text>
-              <Icon name="arrow-drop-down" size={20} color="#333" />
+              <Icon name="all_xiaosanjiaoD24" size={12} color="#333" />
             </View>
             <View style={styles.searchContainer}>
               <Text style={styles.spuName} numberOfLines={2}>
@@ -110,10 +127,7 @@ const Discover: React.FC = () => {
               </Text>
             </View>
           </View>
-          <View>
-            <Text>{location}</Text>
-          </View>
-          <ScrollView style={{flex: 1}}>
+          <ScrollView style={{flex: 1, marginTop: globalStyleVariables.MODULE_SPACE}}>
             <View style={styles.spuContainer}>
               <View style={styles.spuLeft}>{left.map(renderSPU)}</View>
               <View style={styles.spuRight}>{right.map(renderSPU)}</View>

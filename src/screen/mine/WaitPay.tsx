@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo} from 'react';
 import {View, Text, Modal, StyleSheet, TouchableOpacity, ScrollView, Image, Linking, StatusBar} from 'react-native';
 import {Button, NavigationBar} from '../../component';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation, OrderDetailF, OrderPayState, PayChannel} from '../../models';
@@ -150,7 +150,7 @@ const WaitPay: React.FC = () => {
           <View style={globalStyles.containerRow}>
             <TouchableOpacity activeOpacity={0.6} onPress={handleBack}>
               <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
-                <MaterialIcon name="arrow-back-ios" size={24} color="#333" />
+                <Icon name="nav_back48" size={24} color="#333" />
               </View>
             </TouchableOpacity>
             <View style={globalStyles.moduleMarginLeft}>
@@ -178,7 +178,7 @@ const WaitPay: React.FC = () => {
               <Image source={orderInfo?.spuCoverImage ? {uri: orderInfo.spuCoverImage} : require('../../assets/sku_def_1_1.png')} style={styles.spuCover} />
               <View style={{flex: 1, marginLeft: globalStyleVariables.MODULE_SPACE}}>
                 <View style={globalStyles.containerRow}>
-                  <MaterialIcon name="store" size={20} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                  <Icon name="shangpin_shanghu24" size={15} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                   <Text style={[globalStyles.fontStrong]} numberOfLines={1}>
                     {orderInfo?.bizName}
                   </Text>

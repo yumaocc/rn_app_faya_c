@@ -3,11 +3,12 @@ import {View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, Refresh
 // import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import * as api from '../../apis';
 import {SPUF} from '../../models';
 import {useWorkDispatcher} from '../../helper/hooks';
 import {useNavigation} from '@react-navigation/native';
+import Icon from '../../component/Icon';
 
 const SelectSPU: React.FC = () => {
   const [type, setType] = React.useState<'search' | 'showcase'>('search');
@@ -75,7 +76,7 @@ const SelectSPU: React.FC = () => {
       />
       <View style={styles.searchContainer}>
         <View style={styles.searchBar}>
-          <MaterialIcon name="search" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+          <Icon name="all_input_search36" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
           <TextInput onSubmitEditing={doSearch} returnKeyType="search" ref={searchInput} style={styles.search} placeholder="搜索商品" value={search} onChangeText={setSearch} />
         </View>
         <TouchableOpacity activeOpacity={0.8} onPress={doSearch}>

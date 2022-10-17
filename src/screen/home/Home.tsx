@@ -9,7 +9,7 @@ import {useRefCallback} from '../../fst/hooks';
 import {useWorkDispatcher} from '../../helper/hooks';
 import {RootState} from '../../redux/reducers';
 import WorkList from './WorkList';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../../component/Icon';
 import {WorkTabType} from '../../models';
 import {useIsFocused} from '@react-navigation/native';
 
@@ -35,7 +35,7 @@ const Home: React.FC = () => {
       ref.current?.scrollTo({
         x: width * index,
         y: 0,
-        animated: true,
+        animated: false,
       });
     }, 0);
   }, [currentTab, isReady, ref, width, tabs]);
@@ -75,7 +75,7 @@ const Home: React.FC = () => {
           <Tabs styles={tabStyles} gap={30} currentKey={currentTab.type} tabs={tabs.map(tab => ({title: tab.title, key: tab.key}))} onChange={handleChangeTab} />
           <View style={styles.searchIcon}>
             <TouchableOpacity activeOpacity={0.8} onPress={handleSearch}>
-              <MaterialIcon name="search" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+              <Icon name="all_input_search36" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
             </TouchableOpacity>
           </View>
         </View>

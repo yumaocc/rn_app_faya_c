@@ -3,10 +3,10 @@ import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {useWalletSummary} from '../../../helper/hooks';
 import {FakeNavigation} from '../../../models';
+import Icon from '../../../component/Icon';
 
 const WalletSummary: React.FC = () => {
   const [showReal, setShowReal] = React.useState(true);
@@ -39,7 +39,7 @@ const WalletSummary: React.FC = () => {
                 setShowReal(!showReal);
               }}>
               <View>
-                <MaterialIcon name={showReal ? 'visibility' : 'visibility-off'} size={18} color="#c4c4c4" style={{marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}} />
+                <Icon name={showReal ? 'wode_qianbao_on36' : 'wode_qianbao_off36'} size={18} color="#c4c4c4" style={{marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}} />
               </View>
             </TouchableOpacity>
           </View>

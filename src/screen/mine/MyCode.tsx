@@ -6,7 +6,6 @@ import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useRefCallback} from '../../fst/hooks';
 import {useCommonDispatcher, useParams} from '../../helper/hooks';
 import QRCode from 'react-native-qrcode-svg';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import SwipeView, {SwipeDirection} from '../../component/SwipeView';
 import * as api from '../../apis';
 import {useSelector} from 'react-redux';
@@ -91,12 +90,12 @@ const MyCode: React.FC = () => {
           <View style={{marginTop: 20}}>
             <Text style={globalStyles.fontPrimary}>扫描二维码，立刻关注我</Text>
           </View>
-          <TouchableOpacity activeOpacity={0.8}>
+          {/* <TouchableOpacity activeOpacity={0.8}>
             <View style={[styles.save]}>
               <MaterialIcon name="south" size={15} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />
               <Text style={[globalStyles.fontPrimary]}>保存到本地</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </SwipeView>
         <SwipeView style={[styles.codeContainer, {width: windowWidth}]} onSwipe={handleSwipe}>
           {!userInfo?.avatar ? <Image style={styles.avatar} source={require('../../assets/avatar_def.png')} /> : <Image style={styles.avatar} source={{uri: userInfo.avatar}} />}
@@ -112,12 +111,12 @@ const MyCode: React.FC = () => {
           <View style={{marginTop: 20}}>
             <Text style={globalStyles.fontPrimary}>扫描二维码，开启美好生活</Text>
           </View>
-          <TouchableOpacity activeOpacity={0.8}>
+          {/* <TouchableOpacity activeOpacity={0.8}>
             <View style={[styles.save]}>
               <MaterialIcon name="south" size={15} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />
               <Text style={[globalStyles.fontPrimary]}>保存到本地</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </SwipeView>
       </ScrollView>
     </SafeAreaView>

@@ -98,7 +98,7 @@ const WorkDetailList: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
       <NavigationBar canBack={true} style={styles.nav} color="#fff" />
       <FlatList
         style={{backgroundColor: '#000', flex: 1}}

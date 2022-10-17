@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Icon} from '@ant-design/react-native';
+import Icon from '../../component/Icon';
 
 import Home from '../home/Home';
 
@@ -10,7 +10,6 @@ import Notify from '../notify/Notify';
 
 import MiddleButton from './MiddleButton';
 import {globalStyleVariables} from '../../constants/styles';
-// import {View} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,8 +32,12 @@ const TabNavigator: React.FC = () => {
         component={Home}
         options={{
           headerShown: false,
+          tabBarLabelStyle: {
+            paddingBottom: 5,
+          },
           tabBarLabel: '首页',
-          tabBarIcon: ({color, size}: TabItemProps) => <Icon name="home" color={color} size={size} />,
+          tabBarIcon: ({color, size, focused}: TabItemProps) =>
+            focused ? <Icon name="home_home_sel64" color={color} size={size} /> : <Icon name="home_home_nor64" color={color} size={size} />,
         }}
       />
       <Tab.Screen
@@ -42,8 +45,12 @@ const TabNavigator: React.FC = () => {
         component={Discover}
         options={{
           headerShown: false,
+          tabBarLabelStyle: {
+            paddingBottom: 5,
+          },
           tabBarLabel: '发现',
-          tabBarIcon: ({color, size}: TabItemProps) => <Icon name="shop" color={color} size={size} />,
+          tabBarIcon: ({color, size, focused}: TabItemProps) =>
+            focused ? <Icon name="home_faxian_sel64" color={color} size={size} /> : <Icon name="home_faxian_nor64" color={color} size={size} />,
         }}
       />
       <Tab.Screen
@@ -58,8 +65,12 @@ const TabNavigator: React.FC = () => {
         component={Notify}
         options={{
           headerShown: false,
+          tabBarLabelStyle: {
+            paddingBottom: 5,
+          },
           tabBarLabel: '通知',
-          tabBarIcon: ({color, size}: TabItemProps) => <Icon name="bell" color={color} size={size} />,
+          tabBarIcon: ({color, size, focused}: TabItemProps) =>
+            focused ? <Icon name="home_xiaoxi_sel64" color={color} size={size} /> : <Icon name="home_xiaoxi_nor64" color={color} size={size} />,
         }}
       />
       <Tab.Screen
@@ -67,8 +78,12 @@ const TabNavigator: React.FC = () => {
         component={Mine}
         options={{
           headerShown: false,
+          tabBarLabelStyle: {
+            paddingBottom: 5,
+          },
           tabBarLabel: '我的',
-          tabBarIcon: ({color, size}: TabItemProps) => <Icon name="user" color={color} size={size} />,
+          tabBarIcon: ({color, size, focused}: TabItemProps) =>
+            focused ? <Icon name="home_wode_sel64" color={color} size={size} /> : <Icon name="home_wode_nor64" color={color} size={size} />,
         }}
       />
     </Tab.Navigator>

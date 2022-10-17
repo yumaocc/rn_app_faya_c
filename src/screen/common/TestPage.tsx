@@ -18,14 +18,14 @@ const TestPage: React.FC = () => {
     globalStyleVariables.TEXT_COLOR_TERTIARY,
   ];
   const [currentColor, setCurrentColor] = React.useState('#333');
-  const [showName, setShowName] = React.useState(false);
+  const [showName, setShowName] = React.useState('');
 
   return (
     <View style={styles.container}>
       <NavigationBar title="测试" />
       <View style={{padding: 20}}>
         <View style={{marginTop: 20}} />
-        <Button type="primary" onPress={() => setShowName(!showName)} title={showName ? '隐藏图标名称' : '显示图标名称'} />
+        <Button type="primary" onPress={() => {}} title="测试" />
       </View>
       <Text>图标测试：点击颜色切换</Text>
       <View style={[globalStyles.containerRow, {flexWrap: 'wrap'}]}>
@@ -38,14 +38,19 @@ const TestPage: React.FC = () => {
         })}
       </View>
 
+      <View>
+        <Text>当前选中: {showName}</Text>
+      </View>
+
       <ScrollView style={{flex: 1}}>
-        <View style={[styles.iconWrapper, !showName && styles.iconWrap]}>
+        <View style={[styles.iconWrapper, styles.iconWrap]}>
           {Object.keys(icons).map((item, index) => {
             return (
-              <View key={index}>
-                {showName && <Text>{item}</Text>}
-                <Icon name={item as IconName} size={24} color={currentColor} />
-              </View>
+              <TouchableOpacity key={index} onPress={() => setShowName(item)}>
+                <View>
+                  <Icon name={item as IconName} size={24} color={currentColor} />
+                </View>
+              </TouchableOpacity>
             );
           })}
         </View>

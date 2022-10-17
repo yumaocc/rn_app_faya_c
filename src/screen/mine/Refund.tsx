@@ -3,7 +3,6 @@ import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, Text
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {Button, InputNumber, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useCommonDispatcher, useOrderDetail, useParams} from '../../helper/hooks';
 import {useSearch} from '../../fst/hooks';
@@ -13,6 +12,7 @@ import {getFileNameByPath} from '../../helper/system';
 import * as api from '../../apis';
 import {navigateBack} from '../../router/Router';
 import {moneyToYuan} from '../../fst/helper';
+import Icon from '../../component/Icon';
 
 const Refund: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -102,7 +102,7 @@ const Refund: React.FC = () => {
         title="退款"
         headerRight={
           <View style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
-            <MaterialIcon name="support-agent" size={24} color="#333" />
+            <Icon name="nav_kefu" size={24} color="#333" />
           </View>
         }
       />
@@ -151,7 +151,7 @@ const Refund: React.FC = () => {
                             form._fileList.filter((_, index) => index !== i),
                           )
                         }>
-                        <MaterialIcon name="remove-circle" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
+                        <Icon name="all_delete48" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
                       </TouchableOpacity>
                     </View>
                   );
@@ -159,7 +159,7 @@ const Refund: React.FC = () => {
                 {form._fileList.length < 9 && (
                   <TouchableOpacity activeOpacity={0.6} onPress={selectPhoto}>
                     <View style={[globalStyles.containerCenter, styles.camera]}>
-                      <MaterialIcon name="camera-alt" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+                      <Icon name="all_uptupian64" size={32} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
                       <Text style={[globalStyles.fontTertiary, {marginTop: 5}]}>上传凭证</Text>
                       <Text style={globalStyles.fontTertiary}>（最多3张）</Text>
                     </View>
@@ -170,7 +170,7 @@ const Refund: React.FC = () => {
           </View>
         </ScrollView>
         <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
-          <Button disabled={uploading} title="提交" style={{height: 40}} onPress={handleSubmit} />
+          <Button disabled={uploading} type="primary" title="提交" style={{height: 40}} onPress={handleSubmit} />
         </View>
       </SafeAreaView>
 

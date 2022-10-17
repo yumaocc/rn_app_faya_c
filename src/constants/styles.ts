@@ -11,6 +11,8 @@ export const globalStyleVariables = {
   COLOR_CASH: '#4AB87D', // 绿
   COLOR_CASH_TAP: '#89CAA7', // 60%绿
   COLOR_LINK: '#546DAD', // 链接 蓝
+  COLOR_LIKE_RED: '#FF646D', // 赞的红
+  COLOR_COLLECT_YELLOW: '#FF9C27', // 收藏的黄
   TEXT_COLOR_PRIMARY: '#333',
   TEXT_COLOR_SECONDARY: '#666',
   TEXT_COLOR_TERTIARY: '#999',
@@ -146,7 +148,7 @@ export const globalStyles = StyleSheet.create({
     borderRadius: 3,
   },
   tag: {
-    fontSize: 12,
+    fontSize: 10,
     color: '#FFB443',
   },
 });

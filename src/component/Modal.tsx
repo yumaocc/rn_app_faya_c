@@ -1,5 +1,6 @@
-import {Button, Icon} from '@ant-design/react-native';
+import {Button} from '@ant-design/react-native';
 import React, {useCallback, useEffect, useState} from 'react';
+import Icon from './Icon';
 import {
   View,
   StyleSheet,
@@ -105,9 +106,7 @@ const Modal: React.FC<ModalProps> = props => {
             </View>
             <View style={styles.close}>
               <TouchableOpacity onPress={handleClose} activeOpacity={0.5}>
-                <View style={styles.closeIconWrapper}>
-                  <Icon name="close" style={styles.closeIcon} />
-                </View>
+                <Icon name="all_popclose36" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
               </TouchableOpacity>
             </View>
           </View>
@@ -169,18 +168,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  closeIconWrapper: {
-    backgroundColor: '#ddd',
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  closeIcon: {
-    fontSize: 12,
-    color: '#fff',
-  },
   body: {
     borderRadius: 10,
     overflow: 'hidden',
@@ -201,5 +188,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingBottom: 10,
   },
 });

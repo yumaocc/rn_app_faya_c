@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, BackHandler} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StylePropView} from '../models';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../component/Icon';
 
 interface NavigationBarProps {
   title?: string | React.ReactNode;
@@ -40,7 +40,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
     return (
       <TouchableOpacity activeOpacity={0.5} onPress={handleBack}>
         <View style={styles.defaultLeft}>
-          <MaterialIcon name="arrow-back-ios" size={24} color={props.color} />
+          <Icon name="nav_back48" size={24} color={props.color} />
         </View>
       </TouchableOpacity>
     );

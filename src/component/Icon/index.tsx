@@ -22,7 +22,7 @@ const Icon: React.FC<IconProps> = props => {
 };
 Icon.defaultProps = {
   size: 24,
-  color: globalStyleVariables.COLOR_CASH,
+  color: globalStyleVariables.TEXT_COLOR_PRIMARY,
   style: {},
 };
 export default Icon;

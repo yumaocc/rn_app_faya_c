@@ -47,6 +47,7 @@ export interface WorkF {
   userAvatar: string;
   numberOfLikes: number;
   content: string;
+  liked: BoolEnum;
 }
 
 export interface WorkList {
@@ -58,6 +59,8 @@ export interface WorkDetailF {
   mainId: string;
   numberOfCollects: number;
   numberOfLikes: number;
+  liked: BoolEnum;
+  collected: BoolEnum;
   numberOfComments: number;
   spuId?: number;
   spuName: string;

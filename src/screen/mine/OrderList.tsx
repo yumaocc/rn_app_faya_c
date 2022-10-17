@@ -2,7 +2,8 @@ import React, {useEffect, useMemo} from 'react';
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Animated, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {Icon} from '@ant-design/react-native';
+import {Icon as AIcon} from '@ant-design/react-native';
+import Icon from '../../component/Icon';
 import {Steps} from '../../component';
 import {Step} from '../../component/Steps';
 
@@ -77,7 +78,7 @@ const OrderList: React.FC = () => {
           </TouchableOpacity>
           {/* 搜索框 */}
           <View style={[styles.searchBar]}>
-            <MaterialIcon name="search" size={20} color="#999" style={{marginRight: globalStyleVariables.MODULE_SPACE}} />
+            <Icon name="all_input_search36" size={18} color="#999" style={{marginRight: globalStyleVariables.MODULE_SPACE}} />
             <TextInput
               style={styles.inputCore}
               placeholder="搜索订单号/商品名称"
@@ -119,7 +120,7 @@ const OrderList: React.FC = () => {
             {orders.status === 'loading' && (
               <View style={[globalStyles.containerCenter]}>
                 <Animated.View style={[styles.searchIconContainer, {transform: [{rotate: rotateDeg.interpolate({inputRange: [0, 1], outputRange: ['0deg', '360deg']})}]}]}>
-                  <Icon name="loading-3-quarters" color={globalStyleVariables.TEXT_COLOR_TERTIARY} size={30} />
+                  <AIcon name="loading-3-quarters" color={globalStyleVariables.TEXT_COLOR_TERTIARY} size={30} />
                 </Animated.View>
                 <Text style={[globalStyles.fontTertiary, {fontSize: 15, marginTop: 10}]}>正在加载中...</Text>
               </View>

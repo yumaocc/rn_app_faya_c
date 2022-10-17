@@ -1,12 +1,12 @@
-import {Icon} from '@ant-design/react-native';
 import {useNavigation} from '@react-navigation/native';
 import React, {useRef} from 'react';
 import {View, StyleSheet, ScrollView, NativeSyntheticEvent, NativeScrollEvent, Image, Text, TouchableOpacity, RefreshControl} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useDivideData} from '../../helper/hooks';
 import {FakeNavigation, WorkF, WorkList as IWorkList, WorkType} from '../../models';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../../component/Icon';
 import {dictLoadingState} from '../../helper/dictionary';
+import {BoolEnum} from '../../fst/models';
 
 interface WorkListProps {
   list: IWorkList;
@@ -68,7 +68,7 @@ const WorkList: React.FC<WorkListProps> = props => {
             <Image source={{uri: work?.coverImage}} defaultSource={require('../../assets/sku_def_1_1.png')} style={true ? styles.cover : styles.smallCover} />
             {work.type === WorkType.Video && (
               <View style={[styles.playIcon]}>
-                <MaterialIcon name="play-circle-filled" size={33} />
+                <Image source={require('../../assets/zuopin_tag_video.png')} style={styles.palyIconImage} />
               </View>
             )}
           </View>
@@ -78,15 +78,19 @@ const WorkList: React.FC<WorkListProps> = props => {
             {work.content || '暂无描述'}
           </Text>
           <View style={[globalStyles.containerLR, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
-            <View style={[globalStyles.containerRow, {flex: 1}]}>
+            <View style={[globalStyles.containerRow, {flex: 1, marginRight: 5}]}>
               {work?.userAvatar ? <Image source={{uri: work.userAvatar}} style={styles.avatar} /> : <Image source={require('../../assets/avatar_def.png')} style={styles.avatar} />}
               <Text style={[globalStyles.fontPrimary, {marginLeft: 3, flex: 1}]} numberOfLines={1}>
                 {work.userName}
               </Text>
             </View>
             <View style={globalStyles.containerRow}>
-              <Icon name="heart" size={20} />
-              <Text style={[globalStyles.fontPrimary, {marginLeft: 3}]}>{work.numberOfLikes}</Text>
+              {work.liked === BoolEnum.TRUE ? (
+                <Icon name="home_zuopin_zan_sel20" size={15} color={globalStyleVariables.COLOR_LIKE_RED} />
+              ) : (
+                <Icon name="home_zuopin_zan_nor20" size={15} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+              )}
+              <Text style={[globalStyles.fontPrimary, {marginLeft: 3}]}>92{work.numberOfLikes}</Text>
             </View>
           </View>
         </View>
@@ -176,5 +180,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: globalStyleVariables.MODULE_SPACE,
     top: globalStyleVariables.MODULE_SPACE,
+  },
+  palyIconImage: {
+    width: 24,
+    height: 24,
   },
 });

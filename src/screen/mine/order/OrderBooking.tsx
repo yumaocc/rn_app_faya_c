@@ -6,13 +6,13 @@ import FormItem from '../../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useSearch} from '../../../fst/hooks';
 import {BookingModelF, OrderBookingDetailF, OrderBookingForm} from '../../../models';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useCommonDispatcher, useParams} from '../../../helper/hooks';
 import * as api from '../../../apis';
 import BookingModal from '../../../component/BookingModal';
 import moment from 'moment';
 import {BoolEnum} from '../../../fst/models';
 import {navigateBack} from '../../../router/Router';
+import Icon from '../../../component/Icon';
 
 const OrderBooking: React.FC = () => {
   // todo: 进来直接点修改预约？
@@ -160,7 +160,7 @@ const OrderBooking: React.FC = () => {
                 <Text style={[globalStyles.fontPrimary, {fontSize: 16}]}>预约信息</Text>
                 <View style={[globalStyles.containerRow, {flex: 1, justifyContent: 'flex-end', marginLeft: 10}]}>
                   {renderBookingInfo()}
-                  <MaterialIcon name="chevron-right" size={20} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                  <Icon name="all_arrowR36" size={20} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                 </View>
               </View>
             </TouchableOpacity>

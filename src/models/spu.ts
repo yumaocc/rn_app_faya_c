@@ -117,6 +117,7 @@ export interface SPUDetailF {
   needShowTime: number;
   shopList: SPUShop[];
   skuList: SKUDetail[];
+  tags: string[];
   packageDetailsList: PackageDetail[];
 }
 

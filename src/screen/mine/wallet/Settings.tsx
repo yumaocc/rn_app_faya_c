@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet, TouchableHighlight} from 'react-native';
 import {Modal, NavigationBar} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation, UserCertificationStatus} from '../../../models';
 import {useWallet} from '../../../helper/hooks';
+import Icon from '../../../component/Icon';
 
 const Settings: React.FC = () => {
   const [showWaiting, setShowWaiting] = useState(false);
@@ -57,7 +57,7 @@ const Settings: React.FC = () => {
               <View style={globalStyles.containerRow}>
                 {renderBanks()}
                 {/* <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>未添加</Text> */}
-                <MaterialIcon name="chevron-right" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} style={{marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}} />
+                <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} style={{marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}} />
               </View>
             </View>
             {/* <View style={globalStyles.lineHorizontal} /> */}

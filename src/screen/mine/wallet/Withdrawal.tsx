@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Icon from '../../../component/Icon';
 import {Button, InputNumber, NavigationBar, Popup} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {stringToNumber} from '../../../fst/helper';
@@ -83,7 +83,7 @@ const Withdrawal: React.FC = () => {
               }}
               from={
                 <TouchableOpacity activeOpacity={0.8} onPress={() => setShowMenu(true)}>
-                  <MaterialIcon name="more-horiz" size={24} color="#333" style={{marginRight: 20}} />
+                  <Icon name="nav_more" size={24} color="#333" style={{marginRight: 20}} />
                 </TouchableOpacity>
               }
               backgroundStyle={{backgroundColor: '#00000011'}}
@@ -105,7 +105,7 @@ const Withdrawal: React.FC = () => {
                 <Text style={globalStyles.fontPrimary}>到账银行卡</Text>
                 <TouchableOpacity activeOpacity={0.8} onPress={addBankCard}>
                   <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
-                    <MaterialIcon name="add" size={24} color={globalStyleVariables.COLOR_CASH} />
+                    <Icon name="all_plus48" size={24} color={globalStyleVariables.COLOR_CASH} />
                     <Text style={[globalStyles.fontPrimary, {fontSize: 20, color: globalStyleVariables.COLOR_CASH}]}>添加银行卡</Text>
                   </View>
                 </TouchableOpacity>
@@ -122,7 +122,7 @@ const Withdrawal: React.FC = () => {
                         {selectBankCard?.bankCodeName}({selectBankCard?.accountNo})
                       </Text>
                     </View>
-                    <MaterialIcon name="chevron-right" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                    <Icon name="all_arrowR36" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                   </View>
                 </TouchableOpacity>
                 <View style={[globalStyles.lineHorizontal, {marginBottom: globalStyleVariables.MODULE_SPACE}]} />
@@ -173,7 +173,7 @@ const Withdrawal: React.FC = () => {
           })}
           <TouchableOpacity activeOpacity={0.5} onPress={addBankCard}>
             <View style={[styles.bankCardItem, {borderBottomWidth: 0}]}>
-              <MaterialIcon name="add" size={24} color={globalStyleVariables.COLOR_CASH} />
+              <Icon name="all_plus48" size={24} color={globalStyleVariables.COLOR_CASH} />
               <Text style={[styles.bankText, {color: globalStyleVariables.COLOR_CASH}]}>添加银行卡</Text>
             </View>
           </TouchableOpacity>
