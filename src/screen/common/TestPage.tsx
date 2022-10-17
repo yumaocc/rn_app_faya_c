@@ -4,8 +4,7 @@ import {NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {icons} from '../../component/Icon/icons';
 import Icon, {IconName} from '../../component/Icon';
-import {Button} from '@ant-design/react-native';
-import {Button as MyButton} from '../../component';
+import {Button} from '../../component';
 
 const TestPage: React.FC = () => {
   const colors = [
@@ -26,7 +25,7 @@ const TestPage: React.FC = () => {
       <NavigationBar title="测试" />
       <View style={{padding: 20}}>
         <View style={{marginTop: 20}} />
-        <MyButton type="primary" onPress={() => setShowName(!showName)} title={showName ? '隐藏图标名称' : '显示图标名称'} />
+        <Button type="primary" onPress={() => setShowName(!showName)} title={showName ? '隐藏图标名称' : '显示图标名称'} />
       </View>
       <Text>图标测试：点击颜色切换</Text>
       <View style={[globalStyles.containerRow, {flexWrap: 'wrap'}]}>
