@@ -1,7 +1,7 @@
 //  getSvg.js
 var fs = require('fs');
 var path = require('path');
-const svgDir = path.resolve(__dirname, './svgs');
+const svgDir = path.resolve(__dirname, './icons');
 
 // 读取单个文件
 function readfile(filename) {
@@ -32,9 +32,6 @@ function readSvgs() {
 // 生成icon文件
 readSvgs().then(data => {
   let svgFile = 'export const icons = ' + JSON.stringify(Object.assign.apply(this, data), null, 2);
-  svgFile += `;
-export type IconName = keyof typeof icons;
-`
   fs.writeFile(path.resolve(__dirname, './icons.ts'), svgFile, function(err) {
     if(err) throw new Error(err);
   })

@@ -19,19 +19,14 @@ const TestPage: React.FC = () => {
     globalStyleVariables.TEXT_COLOR_TERTIARY,
   ];
   const [currentColor, setCurrentColor] = React.useState('#333');
+  const [showName, setShowName] = React.useState(false);
 
   return (
     <View style={styles.container}>
       <NavigationBar title="测试" />
       <View style={{padding: 20}}>
-        <Button type="primary" onPress={() => {}} style={{width: 80, height: 30}}>
-          按钮
-        </Button>
-        {/* <Button type="primary" onPress={() => {}} style={{height: 20}}>
-          按钮
-        </Button> */}
         <View style={{marginTop: 20}} />
-        <MyButton type="primary" onPress={() => {}} title="按钮2" />
+        <MyButton type="primary" onPress={() => setShowName(!showName)} title={showName ? '隐藏图标名称' : '显示图标名称'} />
       </View>
       <Text>图标测试：点击颜色切换</Text>
       <View style={[globalStyles.containerRow, {flexWrap: 'wrap'}]}>
@@ -45,11 +40,11 @@ const TestPage: React.FC = () => {
       </View>
 
       <ScrollView style={{flex: 1}}>
-        <View style={{flexDirection: 'row', flexWrap: 'wrap', padding: 30}}>
+        <View style={[styles.iconWrapper, !showName && styles.iconWrap]}>
           {Object.keys(icons).map((item, index) => {
             return (
               <View key={index}>
-                <Text>{item}</Text>
+                {showName && <Text>{item}</Text>}
                 <Icon name={item as IconName} size={24} color={currentColor} />
               </View>
             );
@@ -68,5 +63,12 @@ const styles = StyleSheet.create({
   },
   video: {
     height: 200,
+  },
+  iconWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  iconWrapper: {
+    padding: 30,
   },
 });

@@ -1,12 +1,13 @@
-import {Icon} from '@ant-design/react-native';
+// import {Icon} from '@ant-design/react-native';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {globalStyleVariables} from '../../constants/styles';
 import {useUserDispatcher} from '../../helper/hooks';
 import {FakeNavigation} from '../../models';
 import {RootState} from '../../redux/reducers';
+import Icon from '../../component/Icon';
 
 const MiddleButton: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
@@ -21,18 +22,20 @@ const MiddleButton: React.FC = () => {
       });
     } else {
       // navigation.navigate('ShootVideo');
-      // navigation.navigate('TestPage');
+      navigation.navigate('TestPage');
       // navigation.navigate('PaySuccess');
-      navigation.navigate('Publish');
+      // navigation.navigate('Publish');
       // navigation.navigate('SPUDetail', {id: 62});
       // navigation.navigate('OrderDetail', {id: '1580101446588235776'});
       // navigation.navigate('OrderBooking', {id: '1580135056015572993'});
     }
   }
   return (
-    <TouchableOpacity onPress={handleClick} style={styles.container} activeOpacity={0.9}>
-      <Icon name="plus" color="#fff" size={20} />
-    </TouchableOpacity>
+    <View style={[styles.container]}>
+      <TouchableOpacity onPress={handleClick} style={[styles.round]} activeOpacity={0.9}>
+        <Icon name="all_add" color="#fff" size={20} />
+      </TouchableOpacity>
+    </View>
   );
 };
 // MiddleButton.defaultProps = {
@@ -44,12 +47,19 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: globalStyleVariables.COLOR_PRIMARY,
     position: 'relative',
     top: -10,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
     borderColor: '#fff',
+  },
+  round: {
+    backgroundColor: globalStyleVariables.COLOR_PRIMARY,
+    flex: 1,
+    width: '100%',
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
