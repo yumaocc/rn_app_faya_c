@@ -22,6 +22,7 @@
 		F49777F728C23058007EE7E6 /* antoutline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F49777F528C23058007EE7E6 /* antoutline.ttf */; };
 		F49777F828C23058007EE7E6 /* antfill.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F49777F628C23058007EE7E6 /* antfill.ttf */; };
 		F49777FA28C3B241007EE7E6 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F49777F928C3B241007EE7E6 /* MaterialIcons.ttf */; };
+		F4BEBD3F28FD541F003102C2 /* slogan-white.png in Resources */ = {isa = PBXBuildFile; fileRef = F4BEBD3E28FD541F003102C2 /* slogan-white.png */; };
 		F4ECFC7B28D86DFA000017F0 /* PublishManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F4ECFC7A28D86DFA000017F0 /* PublishManager.m */; };
 		F4ECFC7D28D9BA07000017F0 /* slogan.png in Resources */ = {isa = PBXBuildFile; fileRef = F4ECFC7C28D9BA07000017F0 /* slogan.png */; };
 /* End PBXBuildFile section */
@@ -64,6 +65,7 @@
 		F49777F528C23058007EE7E6 /* antoutline.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = antoutline.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"; sourceTree = "<group>"; };
 		F49777F628C23058007EE7E6 /* antfill.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = antfill.ttf; path = "../node_modules/@ant-design/icons-react-native/fonts/antfill.ttf"; sourceTree = "<group>"; };
 		F49777F928C3B241007EE7E6 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		F4BEBD3E28FD541F003102C2 /* slogan-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "slogan-white.png"; sourceTree = "<group>"; };
 		F4DBA10F28E5A28600ADF4D5 /* faya.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = faya.entitlements; path = faya/faya.entitlements; sourceTree = "<group>"; };
 		F4ECFC7928D86DFA000017F0 /* PublishManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PublishManager.h; sourceTree = "<group>"; };
 		F4ECFC7A28D86DFA000017F0 /* PublishManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PublishManager.m; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				F49777F628C23058007EE7E6 /* antfill.ttf */,
 				F49777F528C23058007EE7E6 /* antoutline.ttf */,
 				F4ECFC7C28D9BA07000017F0 /* slogan.png */,
+				F4BEBD3E28FD541F003102C2 /* slogan-white.png */,
 				13B07FAE1A68108700A75B9A /* faya */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* fayaTests */,
@@ -291,6 +294,7 @@
 				F49777FA28C3B241007EE7E6 /* MaterialIcons.ttf in Resources */,
 				F4ECFC7D28D9BA07000017F0 /* slogan.png in Resources */,
 				F49777F728C23058007EE7E6 /* antoutline.ttf in Resources */,
+				F4BEBD3F28FD541F003102C2 /* slogan-white.png in Resources */,
 				F4934A4428CB22CF007F46EF /* moment.mp4 in Resources */,
 				F49777F828C23058007EE7E6 /* antfill.ttf in Resources */,
 				F4934A4328CB22CF007F46EF /* AlivcCert.crt in Resources */,

@@ -5,7 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -17,7 +16,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="slogan.png" translatesAutoresizingMaskIntoConstraints="NO" id="9K7-mE-IhA">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="slogan-white.png" translatesAutoresizingMaskIntoConstraints="NO" id="9K7-mE-IhA">
                                 <rect key="frame" x="42.5" y="200" width="290" height="131"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="290" id="kVl-BG-MZW"/>
@@ -26,7 +25,7 @@
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.9991521413747475" green="0.43529411764705883" blue="0.30980392156862746" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="9K7-mE-IhA" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="200" id="4yt-wL-JIc"/>
                             <constraint firstItem="9K7-mE-IhA" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="hxQ-Ui-c00"/>
@@ -39,9 +38,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="slogan.png" width="579" height="263"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
+        <image name="slogan-white.png" width="579" height="263"/>
     </resources>
 </document>
