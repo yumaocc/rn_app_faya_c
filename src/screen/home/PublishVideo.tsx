@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, StatusBar} from 'react-native';
 import {useSelector} from 'react-redux';
 import {Button, NavigationBar} from '../../component';
 import {useCommonDispatcher} from '../../helper/hooks';
@@ -92,6 +92,7 @@ const PublishVideo: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <NavigationBar title="发布" headerLeft={false} canBack={false} />
       <View style={styles.progressContainer}>
         {percent < 100 ? (
@@ -102,7 +103,7 @@ const PublishVideo: React.FC = () => {
             {hasError ? (
               <>
                 <Text style={{marginTop: globalStyleVariables.MODULE_SPACE}}>发布失败</Text>
-                <Button style={{marginTop: 20}} title="返回首页" onPress={back} />
+                <Button type="primary" style={{marginTop: 20}} title="返回首页" onPress={back} />
               </>
             ) : (
               <Text style={{marginTop: globalStyleVariables.MODULE_SPACE}}>发布中{percent}%</Text>
@@ -111,7 +112,7 @@ const PublishVideo: React.FC = () => {
         ) : (
           <View style={{alignItems: 'center'}}>
             <Text style={globalStyles.fontPrimary}>发布成功</Text>
-            <Button style={{marginTop: 20}} title="返回首页" onPress={back} />
+            <Button type="primary" style={{marginTop: 20}} title="返回首页" onPress={back} />
           </View>
         )}
       </View>

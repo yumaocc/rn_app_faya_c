@@ -21,7 +21,7 @@ const Wallet: React.FC = () => {
 
   return (
     <SafeAreaView edges={['top', 'bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <NavigationBar
         title="我的钱包"
         safeTop={false}

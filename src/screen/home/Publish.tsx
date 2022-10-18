@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import {View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Image} from 'react-native';
+import {View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Image, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar, Popup, Switch} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -47,7 +47,8 @@ const Publish: React.FC = () => {
   return (
     <>
       <SafeAreaView edges={['bottom']} style={{flex: 1}}>
-        <NavigationBar title="发布" />
+        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+        <NavigationBar title="发布" style={{backgroundColor: '#fff'}} />
         <ScrollView style={{flex: 1}} keyboardShouldPersistTaps="never">
           <View>
             {workType === WorkType.Video && (

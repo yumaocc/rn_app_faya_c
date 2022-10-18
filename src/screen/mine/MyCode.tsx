@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {View, Text, TouchableOpacity, ScrollView, useWindowDimensions, StyleSheet, Image} from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView, useWindowDimensions, StyleSheet, Image, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -62,6 +62,7 @@ const MyCode: React.FC = () => {
 
   return (
     <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <NavigationBar
         title={
           <View style={globalStyles.containerRow}>
