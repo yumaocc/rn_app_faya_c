@@ -1,20 +1,23 @@
 import Icon from '../../component/Icon';
 import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, StatusBar} from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {Tabs} from '../../component';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../models';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
-import {useUserDispatcher} from '../../helper/hooks';
+import {useCommonDispatcher, useUserDispatcher} from '../../helper/hooks';
 
 const Mine: React.FC = () => {
   const detail = useSelector((state: RootState) => state.user.myDetail);
   const token = useSelector((state: RootState) => state.common.token);
   const navigation = useNavigation<FakeNavigation>();
   const isFocused = useIsFocused();
+
   const [userDispatcher] = useUserDispatcher();
+  const [commonDispatcher] = useCommonDispatcher();
 
   useEffect(() => {
     if (token) {
@@ -42,10 +45,12 @@ const Mine: React.FC = () => {
   ];
 
   function handleCopy() {
-    console.log('copy');
+    if (detail?.account) {
+      Clipboard.setString(detail?.account);
+      commonDispatcher.info('复制成功');
+    }
   }
   function goLogin() {
-    // userDispatcher.login({to: 'Tab'});
     navigation.navigate('Login');
   }
 
