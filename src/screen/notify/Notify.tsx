@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight, StatusBar} from 'react-native';
 import {NavigationBar} from '../../component';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {SwipeAction} from '@ant-design/react-native';
 import {useIsFocused} from '@react-navigation/native';
+import Icon from '../../component/Icon';
 
 const Notify: React.FC = () => {
   const isFocused = useIsFocused();
@@ -19,7 +19,7 @@ const Notify: React.FC = () => {
         <View style={styles.listItem}>
           <View style={styles.listHeader}>
             <View style={[styles.avatar, {backgroundColor: '#55ADFF'}]}>
-              <MaterialIcon name="person" size={24} color="#fff" />
+              <Icon name="xiaoxi_newpengyou48" size={24} color="#fff" />
             </View>
           </View>
           <View style={styles.listBody}>
@@ -28,7 +28,7 @@ const Notify: React.FC = () => {
               <Text style={[globalStyles.fontTertiary]}>快去添加朋友吧</Text>
             </View>
           </View>
-          <MaterialIcon name="chevron-right" size={24} color="#999" />
+          <Icon name="all_arrowR36" size={18} color="#999" />
         </View>
       </TouchableHighlight>
     );
@@ -41,7 +41,7 @@ const Notify: React.FC = () => {
         <View style={styles.listItem}>
           <View style={styles.listHeader}>
             <View style={[styles.avatar, {backgroundColor: '#61D288'}]}>
-              <MaterialIcon name="notifications" size={24} color="#fff" />
+              <Icon name="xiaoxi_hudong48" size={24} color="#fff" />
             </View>
           </View>
           <View style={styles.listBody}>
@@ -50,7 +50,7 @@ const Notify: React.FC = () => {
               <Text style={[globalStyles.fontTertiary]}>快去看看有什么新鲜好玩的吧~</Text>
             </View>
           </View>
-          <MaterialIcon name="chevron-right" size={24} color="#999" />
+          <Icon name="all_arrowR36" size={18} color="#999" />
         </View>
       </TouchableHighlight>
     );
@@ -62,7 +62,7 @@ const Notify: React.FC = () => {
         <View style={styles.listItem}>
           <View style={styles.listHeader}>
             <View style={[styles.avatar, {backgroundColor: '#FFB979'}]}>
-              <MaterialIcon name="storefront" size={24} color="#fff" />
+              <Icon name="xiaoxi_chuchuang48" size={24} color="#fff" />
             </View>
           </View>
           <View style={styles.listBody}>
@@ -82,7 +82,7 @@ const Notify: React.FC = () => {
         <View style={styles.listItem}>
           <View style={styles.listHeader}>
             <View style={[styles.avatar, {backgroundColor: '#FFB979'}]}>
-              <MaterialIcon name="notifications" size={24} color="#fff" />
+              <Icon name="xiaoxi_hudong48" size={24} color="#fff" />
             </View>
           </View>
           <View style={styles.listBody}>
@@ -146,7 +146,7 @@ const Notify: React.FC = () => {
         headerRight={
           <TouchableOpacity activeOpacity={0.8}>
             <View style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
-              <MaterialIcon name="add" size={25} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+              <Icon name="xiaoxi_nav_add48" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
             </View>
           </TouchableOpacity>
         }

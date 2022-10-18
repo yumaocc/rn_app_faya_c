@@ -23,7 +23,9 @@ const MiddleButton: React.FC = () => {
       navigation.navigate('ShootVideo');
       // navigation.navigate('TestPage');
       // navigation.navigate('PaySuccess');
+      // navigation.navigate('Certification');
       // navigation.navigate('AddBankCard');
+      // navigation.navigate('Publish');
       // navigation.navigate('PublishVideo');
       // navigation.navigate('WaitPay');
       // navigation.navigate('SPUDetail', {id: 62});

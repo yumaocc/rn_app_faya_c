@@ -1,17 +1,17 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useMemo, useRef} from 'react';
-import {View, StyleSheet, NativeSyntheticEvent, Text, TouchableOpacity, Platform} from 'react-native';
+import {View, StyleSheet, NativeSyntheticEvent, Text, TouchableOpacity, Platform, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useAndroidBack, useWorkDispatcher} from '../../helper/hooks';
 import {FakeNavigation, VideoInfo} from '../../models';
 import {RecorderFinishData, RecorderView, RecorderViewRef, RecorderViewActionType, RecorderErrorData, RecorderState, RecorderProgressData} from '../../native-modules/RecorderView';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {secondToMinute} from '../../fst/helper';
 import {launchImageLibrary} from 'react-native-image-picker';
 import PublishManager from '../../native-modules/PublishManager';
 import {copyFileUrl, getVideoNameByPath} from '../../helper/system';
+import Icon from '../../component/Icon';
 
 const ShootVideo: React.FC = () => {
   const recorder = useRef<RecorderViewRef>(null);
@@ -128,6 +128,7 @@ const ShootVideo: React.FC = () => {
   return (
     <>
       <View style={styles.container}>
+        <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
         <RecorderView
           style={styles.record}
           ref={recorder}
@@ -156,7 +157,7 @@ const ShootVideo: React.FC = () => {
             <View style={styles.side}>
               <TouchableOpacity activeOpacity={0.6} onPress={() => recorder.current?.sendAction(RecorderViewActionType.SwitchCamera)}>
                 <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                  <MaterialIcon name="cached" size={30} color="#fff" />
+                  <Icon name="fabu_menu_fanzhuan" size={30} color="#fff" />
                   <Text style={[globalStyles.fontPrimary, {color: '#fff', fontSize: 12}]}>翻转</Text>
                 </View>
               </TouchableOpacity>
@@ -187,7 +188,7 @@ const ShootVideo: React.FC = () => {
                 {!isRecording && (
                   <TouchableOpacity onPress={selectVideo}>
                     <View style={[globalStyles.containerCenter]}>
-                      <MaterialIcon name="photo" size={40} color="#fff" />
+                      <Icon name="fabu_menu_xiangce" size={45} color="#fff" />
                       <Text style={[globalStyles.fontPrimary, {color: '#fff', fontSize: 12, marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>相册</Text>
                     </View>
                   </TouchableOpacity>
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
   side: {
     position: 'absolute',
     right: globalStyleVariables.MODULE_SPACE,
-    top: 100,
+    top: 150,
   },
   bottom: {
     position: 'absolute',

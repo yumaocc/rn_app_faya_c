@@ -1,7 +1,6 @@
 import React, {useEffect, useMemo} from 'react';
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Animated, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {Icon as AIcon} from '@ant-design/react-native';
 import Icon from '../../component/Icon';
 import {Steps} from '../../component';
@@ -99,9 +98,11 @@ const OrderList: React.FC = () => {
         <ScrollView style={{flex: 1, backgroundColor: '#f4f4f4'}} onMomentumScrollEnd={handleScrollEnd}>
           <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
             {showEmpty && (
-              <View style={globalStyles.containerCenter}>
-                <MaterialIcon name="info" size={30} color="#999" style={{marginBottom: globalStyleVariables.MODULE_SPACE}} />
-                <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>空空如也</Text>
+              <View style={[globalStyles.containerCenter, styles.emptyContainer]}>
+                <View style={[globalStyles.containerCenter, {width: 50, height: 50, borderRadius: 50, backgroundColor: '#0000000D', marginBottom: 15}]}>
+                  <Icon name="empty_dingdan" size={30} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                </View>
+                <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>还没有订单</Text>
               </View>
             )}
             {orderList.map(order => {
@@ -183,5 +184,8 @@ const styles = StyleSheet.create({
   inputCore: {
     flex: 1,
     padding: 0,
+  },
+  emptyContainer: {
+    paddingTop: 160,
   },
 });

@@ -4,13 +4,13 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar, Popup, Switch} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {FakeNavigation, WorkType, WorkVisibleAuth} from '../../models';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {WorkVisibleAuthOptions} from '../../constants';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import {useNavigation} from '@react-navigation/native';
 import {useWorkDispatcher} from '../../helper/hooks';
 import {BoolEnum} from '../../fst/models';
+import Icon from '../../component/Icon';
 
 const Publish: React.FC = () => {
   const workType = WorkType.Video;
@@ -63,7 +63,7 @@ const Publish: React.FC = () => {
             <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('SelectSPU')}>
               <View style={styles.formItem}>
                 <View style={[globalStyles.containerRow]}>
-                  <MaterialIcon name="shopping-cart" size={24} color={globalStyleVariables.COLOR_PRIMARY} />
+                  <Icon name="fabu_shangping48" size={24} color={globalStyleVariables.COLOR_PRIMARY} />
                   <Text style={[globalStyles.fontPrimary, {marginHorizontal: globalStyleVariables.MODULE_SPACE}]}>添加商品</Text>
                   {!spu && (
                     <View style={[globalStyles.tagWrapper, {backgroundColor: '#0000000D'}]}>
@@ -73,7 +73,7 @@ const Publish: React.FC = () => {
                 </View>
                 <View style={globalStyles.containerRow}>
                   {!!spu && <Text>{spu?.spuName}</Text>}
-                  <MaterialIcon name="arrow-forward-ios" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+                  <Icon name="all_arrowR36" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
                 </View>
               </View>
             </TouchableOpacity>
@@ -81,19 +81,23 @@ const Publish: React.FC = () => {
             <TouchableOpacity activeOpacity={0.8} onPress={() => setShowChangeVisibleAuthPopup(true)}>
               <View style={styles.formItem}>
                 <View style={globalStyles.containerRow}>
-                  <MaterialIcon name="lock" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+                  <Icon
+                    name={currentVisibleAuthType.value === WorkVisibleAuth.Public ? 'fabu_quanxian_kai48' : 'fabu_quanxian_guan48'}
+                    size={24}
+                    color={globalStyleVariables.TEXT_COLOR_TERTIARY}
+                  />
                   <Text style={[globalStyles.fontPrimary, {marginHorizontal: globalStyleVariables.MODULE_SPACE}]}>{currentVisibleAuthType?.label}</Text>
                 </View>
-                <MaterialIcon name="arrow-forward-ios" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+                <Icon name="all_arrowR36" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
               </View>
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.8} onPress={() => setShowSettingPopup(true)}>
               <View style={styles.formItem}>
                 <View style={globalStyles.containerRow}>
-                  <MaterialIcon name="settings" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+                  <Icon name="fabu_shezhi48" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
                   <Text style={[globalStyles.fontPrimary, {marginHorizontal: globalStyleVariables.MODULE_SPACE}]}>更多设置</Text>
                 </View>
-                <MaterialIcon name="arrow-forward-ios" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+                <Icon name="all_arrowR36" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
               </View>
             </TouchableOpacity>
           </View>

@@ -1,9 +1,7 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import {View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, RefreshControl} from 'react-native';
-// import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import * as api from '../../apis';
 import {SPUF} from '../../models';
 import {useWorkDispatcher} from '../../helper/hooks';

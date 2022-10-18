@@ -1,7 +1,6 @@
 import React, {useEffect, useMemo} from 'react';
 import {View, Text, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TextInput, TextInputProps, TouchableOpacity, Image, Modal} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from '../../../component/Icon';
 import {Button, NavigationBar} from '../../../component';
 import FormItem from '../../../component/Form/FormItem';
@@ -12,6 +11,7 @@ import {UserCertificationForm} from '../../../models';
 import * as api from '../../../apis';
 import {compressImageUntil, getFileNameByPath} from '../../../helper/system';
 import {useNavigation} from '@react-navigation/native';
+import Radio from '../../../component/Form/Radio';
 
 const Certification: React.FC = () => {
   const [form, setFormField, setFormFields] = useSearch<UserCertificationForm>();
@@ -294,19 +294,11 @@ const Certification: React.FC = () => {
             </FormItem>
 
             {/* 协议 */}
-            <TouchableOpacity activeOpacity={0.8} onPress={() => setAgree(!agree)} style={{marginTop: 10}}>
-              <View style={[globalStyles.containerRow]}>
-                {agree ? (
-                  <MaterialIcon name="check-circle" size={24} color={globalStyleVariables.COLOR_CASH} />
-                ) : (
-                  <MaterialIcon name="radio-button-unchecked" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
-                )}
-                {/* todo: 协议内容和链接 */}
-                <Text style={{marginLeft: globalStyleVariables.MODULE_SPACE}}>已阅读并同意《实名认证服务协议》</Text>
-              </View>
-            </TouchableOpacity>
+            <Radio checked={agree} onChange={setAgree} style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
+              已阅读并同意《实名认证服务协议》
+            </Radio>
             <View style={{marginTop: 20}}>
-              <Button loading={loading} disabled={loading} title="提交" style={styles.submit} onPress={submit} />
+              <Button cash loading={loading} disabled={loading} title="提交" style={styles.submit} onPress={submit} />
             </View>
           </View>
         </ScrollView>

@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {View, StyleSheet, TouchableWithoutFeedback} from 'react-native';
-// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyleVariables} from '../../../constants/styles';
 import {StylePropView} from '../../../models';
 import Icon from '../../Icon';
