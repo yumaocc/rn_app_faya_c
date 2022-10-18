@@ -60,7 +60,8 @@ const Mine: React.FC = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      {isFocused && <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} />}
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      {/* {isFocused ? <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} /> : <StatusBar barStyle="dark-content" backgroundColor="#fff" />} */}
       <ScrollView style={{flex: 1}} contentContainerStyle={{position: 'relative'}}>
         <Image source={require('../../assets/mine-bg.png')} style={styles.cover} />
         <View style={[styles.container, {paddingTop: 170}]}>
