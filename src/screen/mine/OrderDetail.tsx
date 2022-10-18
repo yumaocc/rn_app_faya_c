@@ -352,7 +352,8 @@ const styles = StyleSheet.create({
   code: {
     borderRadius: 5,
     backgroundColor: '#42C2BB',
-    padding: globalStyleVariables.MODULE_SPACE_SMALLER,
+    padding: globalStyleVariables.MODULE_SPACE,
+    marginBottom: globalStyleVariables.MODULE_SPACE,
   },
   codeBooked: {
     backgroundColor: '#409FF5',
