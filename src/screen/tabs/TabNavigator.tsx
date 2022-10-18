@@ -26,18 +26,20 @@ const TabNavigator: React.FC = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: globalStyleVariables.COLOR_PRIMARY,
+        tabBarItemStyle: {
+          height: 50,
+          paddingBottom: 5,
+        },
       }}>
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
           headerShown: false,
-          tabBarLabelStyle: {
-            paddingBottom: 5,
-          },
           tabBarLabel: '首页',
-          tabBarIcon: ({color, size, focused}: TabItemProps) =>
-            focused ? <Icon name="home_home_sel64" color={color} size={size} /> : <Icon name="home_home_nor64" color={color} size={size} />,
+          tabBarIcon: ({color, focused}: TabItemProps) => {
+            return focused ? <Icon name="home_home_sel64" color={color} size={32} /> : <Icon name="home_home_nor64" color={color} size={32} />;
+          },
         }}
       />
       <Tab.Screen
@@ -45,12 +47,9 @@ const TabNavigator: React.FC = () => {
         component={Discover}
         options={{
           headerShown: false,
-          tabBarLabelStyle: {
-            paddingBottom: 5,
-          },
           tabBarLabel: '发现',
-          tabBarIcon: ({color, size, focused}: TabItemProps) =>
-            focused ? <Icon name="home_faxian_sel64" color={color} size={size} /> : <Icon name="home_faxian_nor64" color={color} size={size} />,
+          tabBarIcon: ({color, focused}: TabItemProps) =>
+            focused ? <Icon name="home_faxian_sel64" color={color} size={32} /> : <Icon name="home_faxian_nor64" color={color} size={32} />,
         }}
       />
       <Tab.Screen
@@ -65,12 +64,9 @@ const TabNavigator: React.FC = () => {
         component={Notify}
         options={{
           headerShown: false,
-          tabBarLabelStyle: {
-            paddingBottom: 5,
-          },
           tabBarLabel: '通知',
-          tabBarIcon: ({color, size, focused}: TabItemProps) =>
-            focused ? <Icon name="home_xiaoxi_sel64" color={color} size={size} /> : <Icon name="home_xiaoxi_nor64" color={color} size={size} />,
+          tabBarIcon: ({color, focused}: TabItemProps) =>
+            focused ? <Icon name="home_xiaoxi_sel64" color={color} size={32} /> : <Icon name="home_xiaoxi_nor64" color={color} size={32} />,
         }}
       />
       <Tab.Screen
@@ -78,12 +74,9 @@ const TabNavigator: React.FC = () => {
         component={Mine}
         options={{
           headerShown: false,
-          tabBarLabelStyle: {
-            paddingBottom: 5,
-          },
           tabBarLabel: '我的',
-          tabBarIcon: ({color, size, focused}: TabItemProps) =>
-            focused ? <Icon name="home_wode_sel64" color={color} size={size} /> : <Icon name="home_wode_nor64" color={color} size={size} />,
+          tabBarIcon: ({color, focused}: TabItemProps) =>
+            focused ? <Icon name="home_wode_sel64" color={color} size={32} /> : <Icon name="home_wode_nor64" color={color} size={32} />,
         }}
       />
     </Tab.Navigator>
