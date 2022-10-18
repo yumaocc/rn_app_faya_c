@@ -2,4 +2,4 @@ export {useInfinityRotate, useRNSelectPhoto, useDivideData, useParams, useAppSta
 export {useCommonDispatcher, useUserDispatcher, useWorkDispatcher, useSPUDispatcher, useOrderDispatcher} from './dispatchers';
 export {useCoupons, useWallet, useWalletSummary, useUsedCoupons, useInvalidCoupons, useBankCards} from './user';
 export {useOrderDetail} from './order';
-export {useAndroidBack} from './system';
+export {useAndroidBack, useDeviceDimensions} from './system';

@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, StatusBar} from 'react-native';
 import {NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {icons} from '../../component/Icon/icons';
@@ -19,6 +19,12 @@ const TestPage: React.FC = () => {
   ];
   const [currentColor, setCurrentColor] = React.useState('#333');
   const [showName, setShowName] = React.useState('');
+
+  useEffect(() => {
+    console.log(Dimensions.get('window'));
+    console.log(Dimensions.get('screen'));
+    console.log(StatusBar.currentHeight);
+  }, []);
 
   return (
     <View style={styles.container}>

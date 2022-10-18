@@ -1,10 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, StyleSheet, FlatList, ListRenderItemInfo, useWindowDimensions, StatusBar, RefreshControl, ScrollView} from 'react-native';
+import {View, StyleSheet, FlatList, ListRenderItemInfo, StatusBar, RefreshControl, ScrollView} from 'react-native';
 import {useSelector} from 'react-redux';
 import {NavigationBar, Popup} from '../../component';
 import {useRefCallback} from '../../fst/hooks';
-import {useParams, useSPUDispatcher, useUserDispatcher, useWorkDispatcher} from '../../helper/hooks';
+import {useDeviceDimensions, useParams, useSPUDispatcher, useUserDispatcher, useWorkDispatcher} from '../../helper/hooks';
 import {FakeNavigation, PackageDetail, SKUDetail, WorkF} from '../../models';
 import {RootState} from '../../redux/reducers';
 import BuyBar from '../spu/BuyBar';
@@ -25,7 +25,7 @@ const WorkDetailList: React.FC = () => {
   const currentSKUIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
   const token = useSelector((state: RootState) => state.common.token);
 
-  const {height} = useWindowDimensions();
+  const {height} = useDeviceDimensions();
   const [flatListRef, setRef, isReady] = useRefCallback(null);
   const navigation = useNavigation<FakeNavigation>();
 

@@ -1,9 +1,9 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState, memo} from 'react';
-import {View, Text, StyleSheet, useWindowDimensions, Image} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import Icon from '../../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
-import {useAppState, useCommonDispatcher} from '../../../helper/hooks';
+import {useAppState, useCommonDispatcher, useDeviceDimensions} from '../../../helper/hooks';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {WorkDetailF, WorkF, WorkType} from '../../../models';
 import * as api from '../../../apis';
@@ -35,7 +35,7 @@ const VideoPage: React.FC<VideoPageProps> = props => {
 
   const token = useSelector((state: RootState) => state.common.token);
 
-  const {width, height} = useWindowDimensions();
+  const {width, height} = useDeviceDimensions();
   const isFocused = useIsFocused();
   const appState = useAppState();
   const {bottom} = useSafeAreaInsets();
