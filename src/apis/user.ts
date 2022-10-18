@@ -92,6 +92,6 @@ export async function unBindBankCard(id: number): Promise<boolean> {
   return await post('/user/wallet/remove/bank/card', {bankCardId: id});
 }
 
-export async function userWithDraw(money: number): Promise<boolean> {
-  return await post('/yeepay/withdraw/money', {money, type: 'consumer'});
+export async function userWithDraw(money: number, accountId: number): Promise<boolean> {
+  return await post('/yeepay/withdraw/money', {money, type: 'consumer', accountId});
 }

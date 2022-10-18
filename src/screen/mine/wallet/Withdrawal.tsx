@@ -50,8 +50,11 @@ const Withdrawal: React.FC = () => {
     if (!cashMoney) {
       return commonDispatcher.error('请输入提现金额');
     }
+    if (!selectBankCard) {
+      return commonDispatcher.error('请选择银行卡');
+    }
     try {
-      await api.user.userWithDraw(cashMoney);
+      await api.user.userWithDraw(cashMoney, selectBankCard.id);
       commonDispatcher.success('提现申请提交成功');
       updateWallet();
       navigation.canGoBack() && navigation.goBack();
