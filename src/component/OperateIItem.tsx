@@ -1,53 +1,60 @@
-import {Icon} from '@ant-design/react-native';
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {ReactNode} from 'react';
+import {View, Text, StyleSheet, TouchableHighlight} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../constants/styles';
+import {StylePropView} from '../models';
+import Icon from './Icon';
 
 interface OperateItemProps {
-  title?: string;
-  icon?: React.ReactNode;
-  extra?: React.ReactNode;
+  label?: string | ReactNode;
+  children?: ReactNode;
+  showArrow?: boolean;
+  canPress?: boolean;
+  style?: StylePropView;
+  onPress?: () => void;
 }
 
 const OperateItem: React.FC<OperateItemProps> = props => {
-  const {title} = props;
+  const {label, children, showArrow, canPress, onPress} = props;
+
+  function renderLabel() {
+    if (typeof label === 'string') {
+      return <Text style={[globalStyles.fontSecondary]}>{label}</Text>;
+    }
+  }
+  function handlePress() {
+    if (canPress && onPress) {
+      onPress();
+    }
+  }
   return (
-    <View style={styles.operateWrapper}>
-      <View style={[styles.operateBody]}>
-        {props.icon}
-        <Text style={[globalStyles.fontPrimary, styles.operateTitle]}>
-          {title}
-        </Text>
-        <Icon name="right" style={globalStyles.iconRight} />
+    <TouchableHighlight underlayColor="#999" onPress={handlePress} style={[styles.container, props.style]}>
+      <View style={[globalStyles.containerRow, styles.item]}>
+        {renderLabel()}
+        <View style={styles.children}>{children}</View>
+        {showArrow && <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
       </View>
-      {props.extra && <View style={styles.operateExtra}>{props.extra}</View>}
-    </View>
+    </TouchableHighlight>
   );
 };
 OperateItem.defaultProps = {
-  title: '请填写操作名字',
+  canPress: true,
+  showArrow: false,
+  label: '请设置操作名称',
+  onPress: () => {},
 };
 export default OperateItem;
 
 const styles = StyleSheet.create({
-  SectionGroup: {
-    marginTop: globalStyleVariables.MODULE_SPACE,
+  container: {
+    height: 60,
   },
-  operateWrapper: {
-    backgroundColor: '#fff',
-    paddingVertical: 18,
-    paddingHorizontal: 15,
-  },
-  operateBody: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  operateTitle: {
+  item: {
     flex: 1,
-    marginHorizontal: globalStyleVariables.MODULE_SPACE,
+    paddingHorizontal: globalStyleVariables.MODULE_SPACE,
+    backgroundColor: '#fff',
   },
-  operateExtra: {
-    marginTop: globalStyleVariables.MODULE_SPACE,
-    paddingLeft: 30,
+  children: {
+    flex: 1,
+    alignItems: 'flex-end',
   },
 });

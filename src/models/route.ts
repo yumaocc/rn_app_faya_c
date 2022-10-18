@@ -43,6 +43,7 @@ export type RootStackParamList = {
   OrderBooking: IDBody;
   WithdrawalRecords: undefined;
   Profile: undefined;
+  Settings: undefined;
 };
 
 export type ValidRoute = keyof RootStackParamList;

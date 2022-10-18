@@ -53,8 +53,9 @@ const Mine: React.FC = () => {
     navigation.navigate('Login');
   }
 
-  function logout() {
-    userDispatcher.logout();
+  function goSettings() {
+    // userDispatcher.logout();
+    navigation.navigate('Settings');
   }
 
   function goAgentProfile() {
@@ -81,7 +82,7 @@ const Mine: React.FC = () => {
                   <Icon name="wode_erweima48" size={24} color="#fff" />
                 </TouchableOpacity>
               )}
-              <TouchableOpacity style={{marginLeft: globalStyleVariables.MODULE_SPACE}} activeOpacity={0.8} onPress={logout}>
+              <TouchableOpacity style={{marginLeft: globalStyleVariables.MODULE_SPACE}} activeOpacity={0.8} onPress={goSettings}>
                 <Icon name="wode_hanbao48" size={24} color="#fff" />
               </TouchableOpacity>
             </View>
