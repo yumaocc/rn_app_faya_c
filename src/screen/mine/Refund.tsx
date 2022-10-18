@@ -151,7 +151,7 @@ const Refund: React.FC = () => {
                             form._fileList.filter((_, index) => index !== i),
                           )
                         }>
-                        <Icon name="all_delete48" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
+                        <Icon name="all_tupian_delete48" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
                       </TouchableOpacity>
                     </View>
                   );

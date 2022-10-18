@@ -1,10 +1,9 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, StatusBar} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image, StatusBar} from 'react-native';
 import {Button, NavigationBar} from '../../component';
-import {globalStyles, globalStyleVariables} from '../../constants/styles';
+import {globalStyles} from '../../constants/styles';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../models';
-import Icon from '../../component/Icon';
 
 const PaySuccess: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
@@ -14,17 +13,7 @@ const PaySuccess: React.FC = () => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <NavigationBar
-        title="支付结果"
-        canBack={false}
-        headerLeft={
-          <TouchableOpacity activeOpacity={0.6} onPress={backToTab}>
-            <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
-              <Icon name="nav_back48" size={24} color="#333" />
-            </View>
-          </TouchableOpacity>
-        }
-      />
+      <NavigationBar title="支付结果" canBack={false} onBack={backToTab} />
       <ScrollView style={{flex: 1}}>
         <View style={[globalStyles.containerCenter, {marginTop: 60}]}>
           <Image source={require('../../assets/pay-success.png')} style={styles.image} />

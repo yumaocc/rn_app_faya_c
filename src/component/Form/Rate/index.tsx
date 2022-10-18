@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
 import {View, StyleSheet, TouchableWithoutFeedback} from 'react-native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyleVariables} from '../../../constants/styles';
 import {StylePropView} from '../../../models';
+import Icon from '../../Icon';
 
 export interface RateProps {
   size?: number;
@@ -36,7 +37,7 @@ const Rate: React.FC<RateProps> = props => {
         return (
           <TouchableWithoutFeedback key={i} onPress={() => handleClick(i)}>
             <View>
-              <MaterialIcon name="star" size={props.size} color={active ? globalStyleVariables.COLOR_PRIMARY : '#c4c4c4'} />
+              <Icon name="wode_dingdan_pingjia" size={props.size} color={active ? globalStyleVariables.COLOR_PRIMARY : '#c4c4c4'} />
             </View>
           </TouchableWithoutFeedback>
         );

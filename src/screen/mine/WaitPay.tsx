@@ -150,7 +150,7 @@ const WaitPay: React.FC = () => {
           <View style={globalStyles.containerRow}>
             <TouchableOpacity activeOpacity={0.6} onPress={handleBack}>
               <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
-                <Icon name="nav_back48" size={24} color="#333" />
+                <Icon name="nav_back48" width={11} height={24} color="#333" />
               </View>
             </TouchableOpacity>
             <View style={globalStyles.moduleMarginLeft}>

@@ -1,12 +1,12 @@
 import React, {useCallback, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {Icon} from '@ant-design/react-native';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {StylePropView} from '../../../models';
 import Picker from '../../Picker';
 import {PickerItemProps} from '../../Picker/PickerItem';
 import Popup from '../../Popup';
 import isNil from 'lodash/isNil';
+import Icon from '../../Icon';
 
 export type RenderPickerChildren = (option: PickerItemProps, index: number) => React.ReactNode;
 
@@ -34,7 +34,7 @@ const Select: React.FC<SelectProps> = props => {
       return (
         <View style={styles.childrenWrapper}>
           {!showPlaceholder ? <Text>{foundOption?.label || value}</Text> : <Text style={styles.placeholder}>{props.placeholder}</Text>}
-          <Icon name="caret-right" style={styles.arrow} />
+          <Icon name="all_xiaosanjiaoD24" size={12} style={styles.arrow} />
         </View>
       );
     }
@@ -124,9 +124,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   arrow: {
-    transform: [{rotate: '90deg'}],
     marginLeft: 3,
     color: '#000',
-    fontSize: 10,
   },
 });

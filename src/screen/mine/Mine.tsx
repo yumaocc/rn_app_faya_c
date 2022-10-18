@@ -1,5 +1,3 @@
-// import {Icon} from '@ant-design/react-native';
-// import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from '../../component/Icon';
 import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, StatusBar} from 'react-native';

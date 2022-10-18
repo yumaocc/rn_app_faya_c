@@ -142,7 +142,7 @@ const Notify: React.FC = () => {
       <NavigationBar
         title="消息"
         canBack={false}
-        headerLeft={<View />}
+        headerLeft={false}
         headerRight={
           <TouchableOpacity activeOpacity={0.8}>
             <View style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>

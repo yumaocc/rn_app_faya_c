@@ -1,4 +1,3 @@
-// import {Icon} from '@ant-design/react-native';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
@@ -21,10 +20,12 @@ const MiddleButton: React.FC = () => {
         redirect: true,
       });
     } else {
-      // navigation.navigate('ShootVideo');
-      navigation.navigate('TestPage');
+      navigation.navigate('ShootVideo');
+      // navigation.navigate('TestPage');
       // navigation.navigate('PaySuccess');
-      // navigation.navigate('Publish');
+      // navigation.navigate('AddBankCard');
+      // navigation.navigate('PublishVideo');
+      // navigation.navigate('WaitPay');
       // navigation.navigate('SPUDetail', {id: 62});
       // navigation.navigate('OrderDetail', {id: '1580101446588235776'});
       // navigation.navigate('OrderBooking', {id: '1580135056015572993'});

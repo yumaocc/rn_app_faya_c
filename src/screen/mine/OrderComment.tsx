@@ -14,7 +14,7 @@ import {getFileNameByPath} from '../../helper/system';
 import {navigateBack} from '../../router/Router';
 import Icon from '../../component/Icon';
 import {Icon as AIcon} from '@ant-design/react-native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Radio from '../../component/Form/Radio';
 // import {copyFileUrl} from '../../helper/system';
 
 const OrderComment: React.FC = () => {
@@ -190,7 +190,7 @@ const OrderComment: React.FC = () => {
                             form._fileList.filter((_, index) => index !== i),
                           )
                         }>
-                        <Icon name="all_delete48" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
+                        <Icon name="all_tupian_delete48" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />
                       </TouchableOpacity>
                     </View>
                   );
@@ -204,24 +204,15 @@ const OrderComment: React.FC = () => {
                 )}
               </View>
             </View>
-            {form._fileList.length > 0 && (
-              <View style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
-                <TouchableOpacity activeOpacity={0.8} onPress={() => setFormField('syncToVideo', form.syncToVideo === BoolEnum.TRUE ? BoolEnum.FALSE : BoolEnum.TRUE)}>
-                  <View style={[globalStyles.containerRow]}>
-                    {form.syncToVideo === BoolEnum.TRUE ? (
-                      <MaterialIcon name="check-circle" size={24} color={form.syncToVideo ? globalStyleVariables.COLOR_WARNING_RED : globalStyleVariables.TEXT_COLOR_TERTIARY} />
-                    ) : (
-                      <MaterialIcon
-                        name="radio-button-unchecked"
-                        size={24}
-                        color={form.syncToVideo ? globalStyleVariables.COLOR_WARNING_RED : globalStyleVariables.TEXT_COLOR_TERTIARY}
-                      />
-                    )}
 
-                    <Text style={{marginLeft: globalStyleVariables.MODULE_SPACE}}>公开，同步到首页推荐和个人作品</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+            {form._fileList.length > 0 && (
+              <Radio
+                checked={form.syncToVideo === BoolEnum.TRUE}
+                fontSize={15}
+                onChange={val => setFormField('syncToVideo', val ? BoolEnum.TRUE : BoolEnum.FALSE)}
+                style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
+                公开，同步到首页推荐和个人作品
+              </Radio>
             )}
           </View>
         </ScrollView>

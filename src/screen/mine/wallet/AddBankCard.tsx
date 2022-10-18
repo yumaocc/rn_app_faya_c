@@ -1,21 +1,21 @@
 import React, {useMemo, useState} from 'react';
-import {View, Text, StyleSheet, TextInput, TextInputProps, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TextInput, TextInputProps} from 'react-native';
 import {Button, NavigationBar} from '../../../component';
 import FormItem from '../../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useCommonDispatcher, useUserDispatcher, useWallet} from '../../../helper/hooks';
 import * as api from '../../../apis';
 import {FakeNavigation} from '../../../models';
 import {useNavigation} from '@react-navigation/native';
+// import Radio from '../../../component/Form/Radio';
 
 const AddBankCard: React.FC = () => {
-  const [agree, setAgree] = useState(false);
+  // const [agree, setAgree] = useState(false);
   const [bankCard, setBankCard] = useState('');
   const [loading, setLoading] = useState(false);
   const disabled = useMemo(() => {
-    return !agree || !bankCard || loading;
-  }, [agree, bankCard, loading]);
+    return !bankCard || loading;
+  }, [bankCard, loading]);
 
   const [commonDispatcher] = useCommonDispatcher();
   const [userDispatcher] = useUserDispatcher();
@@ -55,17 +55,10 @@ const AddBankCard: React.FC = () => {
         </FormItem>
 
         {/* 协议 */}
-        <TouchableOpacity activeOpacity={0.8} onPress={() => setAgree(!agree)} style={{marginTop: 10}}>
-          <View style={[globalStyles.containerRow]}>
-            {agree ? (
-              <MaterialIcon name="check-circle" size={24} color={globalStyleVariables.COLOR_CASH} />
-            ) : (
-              <MaterialIcon name="radio-button-unchecked" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
-            )}
-            {/* todo: 协议内容和链接 */}
-            <Text style={{marginLeft: globalStyleVariables.MODULE_SPACE}}>已阅读并同意《实名认证服务协议》</Text>
-          </View>
-        </TouchableOpacity>
+
+        {/* <Radio checked={agree} onChange={setAgree} style={{marginTop: 10}}>
+          已阅读并同意《实名认证服务协议》
+        </Radio> */}
 
         <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
           <Button loading={loading} cash style={styles.button} disabled={disabled} onPress={submit} title="确认添加" />

@@ -4,16 +4,27 @@ import {View, Text, StyleSheet, TouchableOpacity, BackHandler} from 'react-nativ
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StylePropView} from '../models';
 import Icon from '../component/Icon';
+import {globalStyleVariables} from '../constants/styles';
 
 interface NavigationBarProps {
   title?: string | React.ReactNode;
-  headerLeft?: React.ReactNode;
+  headerLeft?: React.ReactNode | false;
+  leftIcon?: React.ReactNode;
   headerRight?: React.ReactNode;
   safeTop?: boolean;
   style?: StylePropView;
   color?: string;
   canBack?: boolean; // 安卓是否响应默认的返回按钮
+  onBack?: () => void; // 返回按钮的点击事件，如果指定，会覆盖默认的返回事件
 }
+
+// 延伸返回按钮的点击区域
+const hitSLop = {
+  left: 15,
+  right: 15,
+  top: 15,
+  bottom: 15,
+};
 
 const NavigationBar: React.FC<NavigationBarProps> = props => {
   const navigation = useNavigation();
@@ -23,25 +34,32 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       if (props.canBack) {
         navigation.goBack();
+        return true;
+      } else {
+        return false;
       }
-      return true;
     });
     return () => backHandler.remove();
   }, [navigation, props.canBack]);
 
   function handleBack() {
+    if (props.onBack) {
+      props.onBack();
+      return;
+    }
     navigation.canGoBack() && navigation.goBack();
   }
 
   function renderHeaderLeft() {
+    if (props.headerLeft === false) {
+      return null;
+    }
     if (props.headerLeft) {
       return props.headerLeft;
     }
     return (
-      <TouchableOpacity activeOpacity={0.5} onPress={handleBack}>
-        <View style={styles.defaultLeft}>
-          <Icon name="nav_back48" size={24} color={props.color} />
-        </View>
+      <TouchableOpacity activeOpacity={0.5} onPress={handleBack} hitSlop={hitSLop}>
+        <View style={styles.defaultLeft}>{props.leftIcon || <Icon name="nav_back48" width={11} height={24} color={props.color} />}</View>
       </TouchableOpacity>
     );
   }
@@ -116,9 +134,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
-    width: 24,
-    paddingLeft: 10,
-    // paddingHorizontal: 10,
+    paddingLeft: globalStyleVariables.MODULE_SPACE,
   },
   titleText: {
     fontSize: 16,
