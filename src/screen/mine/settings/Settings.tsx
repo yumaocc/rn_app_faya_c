@@ -13,8 +13,8 @@ const Settings: React.FC = () => {
       <NavigationBar title="设置" />
       <StatusBar barStyle="dark-content" />
       <ScrollView style={{flex: 1}}>
-        <OperateItem label="账号与安全" showArrow />
-        <OperateItem label="隐私设置" showArrow />
+        <OperateItem label="个人资料" showArrow />
+        {/* <OperateItem label="隐私设置" showArrow /> */}
         <OperateItem label="联系客服" showArrow />
         <OperateItem label="帮助与反馈" showArrow />
         <OperateItem label="鼓励一下" showArrow />
