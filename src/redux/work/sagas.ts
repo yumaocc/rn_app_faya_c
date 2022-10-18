@@ -19,7 +19,7 @@ function* loadWork(action: ActionWithPayload<ActionType, {replace?: boolean; tab
   try {
     const pageIndex = replace ? 1 : index + 1;
     const pageSize = 10;
-    const data: PagedData<WorkF[]> = yield call(api.work.getWorkList, tabType, {pageIndex});
+    const data: PagedData<WorkF[]> = yield call(api.work.getWorkList, tabType, {pageIndex, pageSize});
     let newList: WorkF[] = [];
     if (!replace) {
       newList = list.concat(data.content);

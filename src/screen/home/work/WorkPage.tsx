@@ -30,6 +30,8 @@ const VideoPage: React.FC<VideoPageProps> = props => {
   const [videoUrl, setVideoUrl] = useState(''); // 控制视频地址以达到懒加载效果
   const [reportedStart, setReportedStart] = useState(false); // 是否已经上报过开始播放
   const [reportedEnd, setReportedEnd] = useState(false); // 是否已经上报过结束播放
+  const [loadingLike, setLoadingLike] = useState(false);
+  const [loadingCollect, setLoadingCollect] = useState(false);
 
   const token = useSelector((state: RootState) => state.common.token);
 
@@ -105,6 +107,46 @@ const VideoPage: React.FC<VideoPageProps> = props => {
     }
   }
 
+  async function handleLike() {
+    if (!loadingLike && !!workDetail) {
+      const {liked, numberOfLikes, mainId} = workDetail;
+      const hasLike = liked === BoolEnum.TRUE;
+      try {
+        setLoadingLike(true);
+        await api.work.likeWork(mainId);
+        setWorkDetail({
+          ...workDetail,
+          liked: hasLike ? BoolEnum.FALSE : BoolEnum.TRUE,
+          numberOfLikes: hasLike ? numberOfLikes - 1 : numberOfLikes + 1,
+        });
+        setLoadingLike(false);
+      } catch (error) {
+        commonDispatcher.error(error);
+        setLoadingLike(false);
+      }
+    }
+  }
+
+  async function handleCollect() {
+    if (!loadingCollect && !!workDetail) {
+      const {collected, numberOfCollects, mainId} = workDetail;
+      const hasCollect = collected === BoolEnum.TRUE;
+      try {
+        setLoadingCollect(true);
+        await api.work.collectWork(mainId);
+        setWorkDetail({
+          ...workDetail,
+          collected: hasCollect ? BoolEnum.FALSE : BoolEnum.TRUE,
+          numberOfCollects: hasCollect ? numberOfCollects - 1 : numberOfCollects + 1,
+        });
+        setLoadingCollect(false);
+      } catch (error) {
+        commonDispatcher.error(error);
+        setLoadingCollect(false);
+      }
+    }
+  }
+
   return (
     <View style={[{width, height}, styles.container]}>
       {workDetail?.type === WorkType.Video && (
@@ -131,11 +173,15 @@ const VideoPage: React.FC<VideoPageProps> = props => {
                     <Image source={require('../../../assets/avatar_def.png')} style={[styles.sideItem, styles.avatar]} />
                   </View>
                   <View style={styles.sideItem}>
-                    {workDetail?.liked === BoolEnum.TRUE ? (
-                      <Icon name="zuopin_zan80" size={40} color={globalStyleVariables.COLOR_LIKE_RED} />
-                    ) : (
-                      <Icon name="zuopin_zan80" size={40} color="#fff" />
-                    )}
+                    <CustomTouchable onPress={handleLike}>
+                      <View>
+                        {workDetail?.liked === BoolEnum.TRUE ? (
+                          <Icon name="zuopin_zan80" size={40} color={globalStyleVariables.COLOR_LIKE_RED} />
+                        ) : (
+                          <Icon name="zuopin_zan80" size={40} color="#fff" />
+                        )}
+                      </View>
+                    </CustomTouchable>
                     <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfLikes}</Text>
                   </View>
                   <View style={styles.sideItem}>
@@ -143,11 +189,15 @@ const VideoPage: React.FC<VideoPageProps> = props => {
                     <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfComments}</Text>
                   </View>
                   <View style={styles.sideItem}>
-                    {workDetail?.collected === BoolEnum.TRUE ? (
-                      <Icon name="zuopin_shoucang80" size={40} color={globalStyleVariables.COLOR_COLLECT_YELLOW} />
-                    ) : (
-                      <Icon name="zuopin_shoucang80" size={40} color="#fff" />
-                    )}
+                    <CustomTouchable onPress={handleCollect}>
+                      <View>
+                        {workDetail?.collected === BoolEnum.TRUE ? (
+                          <Icon name="zuopin_shoucang80" size={40} color={globalStyleVariables.COLOR_COLLECT_YELLOW} />
+                        ) : (
+                          <Icon name="zuopin_shoucang80" size={40} color="#fff" />
+                        )}
+                      </View>
+                    </CustomTouchable>
                     <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfCollects}</Text>
                   </View>
                   <View style={styles.sideItem}>

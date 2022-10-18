@@ -90,7 +90,7 @@ const WorkList: React.FC<WorkListProps> = props => {
               ) : (
                 <Icon name="home_zuopin_zan_nor20" size={15} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
               )}
-              <Text style={[globalStyles.fontPrimary, {marginLeft: 3}]}>92{work.numberOfLikes}</Text>
+              <Text style={[globalStyles.fontPrimary, {marginLeft: 3}]}>{work.numberOfLikes}</Text>
             </View>
           </View>
         </View>
