@@ -44,7 +44,14 @@ const Discover: React.FC = () => {
 
   function renderSPU(spu: SPUF) {
     const {commissionRangeLeftMoneyYuan, commissionRangeRightMoneyYuan, salePrice, originPrice} = spu;
-    const commission = commissionRangeLeftMoneyYuan && commissionRangeRightMoneyYuan ? `${commissionRangeLeftMoneyYuan}-${commissionRangeRightMoneyYuan}` : '';
+    let commission = '';
+    if (commissionRangeLeftMoneyYuan && commissionRangeRightMoneyYuan) {
+      if (commissionRangeLeftMoneyYuan === commissionRangeRightMoneyYuan) {
+        commission = commissionRangeLeftMoneyYuan;
+      } else {
+        commission = `${commissionRangeLeftMoneyYuan}-${commissionRangeRightMoneyYuan}`;
+      }
+    }
     let discount = null;
     if (originPrice && salePrice) {
       const res = Math.round((salePrice / originPrice) * 10);
