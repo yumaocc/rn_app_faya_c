@@ -4,7 +4,7 @@ import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, StatusBar} 
 import Clipboard from '@react-native-clipboard/clipboard';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {Tabs} from '../../component';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../models';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
@@ -14,7 +14,6 @@ const Mine: React.FC = () => {
   const detail = useSelector((state: RootState) => state.user.myDetail);
   const token = useSelector((state: RootState) => state.common.token);
   const navigation = useNavigation<FakeNavigation>();
-  const isFocused = useIsFocused();
 
   const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
