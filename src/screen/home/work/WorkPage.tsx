@@ -28,8 +28,8 @@ const VideoPage: React.FC<VideoPageProps> = props => {
   const [workDetail, setWorkDetail] = useState<WorkDetailF>();
   const hasSpu = useMemo(() => workDetail?.spuId && workDetail?.spuName, [workDetail]);
   const [videoUrl, setVideoUrl] = useState(''); // 控制视频地址以达到懒加载效果
-  // const [reportedStart, setReportedStart] = useState(false); // 是否已经上报过开始播放
-  // const [reportedEnd, setReportedEnd] = useState(false); // 是否已经上报过结束播放
+  const [reportedStart, setReportedStart] = useState(false); // 是否已经上报过开始播放
+  const [reportedEnd, setReportedEnd] = useState(false); // 是否已经上报过结束播放
 
   const token = useSelector((state: RootState) => state.common.token);
 
@@ -84,12 +84,33 @@ const VideoPage: React.FC<VideoPageProps> = props => {
 
   function handleLoad() {
     setResourcesLoaded(true);
+    if (!reportedStart) {
+      api.point
+        .reportWorkPreview(workDetail?.mainId)
+        .then(() => {
+          setReportedStart(true);
+        })
+        .catch(console.log);
+    }
+  }
+
+  function handleEnd() {
+    if (!reportedEnd) {
+      api.point
+        .reportWorkWatchFinished(workDetail?.mainId)
+        .then(() => {
+          setReportedEnd(true);
+        })
+        .catch(console.log);
+    }
   }
 
   return (
     <View style={[{width, height}, styles.container]}>
-      {workDetail?.type === WorkType.Video && <Player style={[styles.full]} videoUri={videoUrl} paused={paused} poster={props.item.coverImage} onLoad={handleLoad} />}
-      {workDetail?.type === WorkType.Photo && <PhotoPlayer style={[styles.full]} files={workDetail?.fileList} paused={paused} onLoad={handleLoad} />}
+      {workDetail?.type === WorkType.Video && (
+        <Player style={[styles.full]} videoUri={videoUrl} paused={paused} poster={props.item.coverImage} onLoad={handleLoad} onEnd={handleEnd} />
+      )}
+      {workDetail?.type === WorkType.Photo && <PhotoPlayer style={[styles.full]} files={workDetail?.fileList} paused={paused} onLoad={handleLoad} onEnd={handleEnd} />}
       {showPoster && <Image style={[styles.full]} source={{uri: props.item.coverImage}} resizeMode="cover" />}
 
       {/* 视频上覆盖的所有页面 */}

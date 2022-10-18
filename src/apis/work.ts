@@ -35,7 +35,6 @@ export async function collectWork(id: string): Promise<boolean> {
 export async function getPublishMainID(type: WorkType): Promise<string> {
   return await post('/video/main/vod/init/main/id', {type});
 }
-
 export async function getUploadVideoAuth(params: VideoUploadAuthParams): Promise<VideoUploadAuth> {
   return await post('/video/main/vod/get/pass', params);
 }
