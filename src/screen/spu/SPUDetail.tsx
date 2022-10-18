@@ -63,18 +63,24 @@ const SPUDetail: React.FC = () => {
     [spuDispatcher],
   );
 
-  const handleScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const threshold = 200;
-    const {y} = e.nativeEvent.contentOffset;
-    const current = Math.min(y, threshold);
-    const opacity = Math.min(1, Math.max(0, current / threshold));
-    if (opacity === 1) {
-      StatusBar.setBarStyle('dark-content');
-    } else {
-      StatusBar.setBarStyle('light-content');
-    }
-    setTitleOpacity(opacity);
-  }, []);
+  const handleScroll = useCallback(
+    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      if (!isFocused) {
+        return;
+      }
+      const threshold = 200;
+      const {y} = e.nativeEvent.contentOffset;
+      const current = Math.min(y, threshold);
+      const opacity = Math.min(1, Math.max(0, current / threshold));
+      if (opacity === 1) {
+        StatusBar.setBarStyle('dark-content');
+      } else {
+        StatusBar.setBarStyle('light-content');
+      }
+      setTitleOpacity(opacity);
+    },
+    [isFocused],
+  );
 
   return (
     <View style={styles.container}>

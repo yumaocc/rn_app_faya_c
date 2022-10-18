@@ -57,6 +57,7 @@ const BuyBar: React.FC<BuyBarProps> = props => {
       <View style={styles.buttons}>
         {!!sku?.userCommission && (
           <Button
+            cash
             title={`分享得${sku?.userCommissionYuan}`}
             onPress={onShare}
             style={[styles.button, {backgroundColor: globalStyleVariables.COLOR_BUD, borderColor: globalStyleVariables.COLOR_BUD, marginRight: globalStyleVariables.MODULE_SPACE}]}
