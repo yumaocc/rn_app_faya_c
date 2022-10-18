@@ -38,6 +38,7 @@ import BankCards from '../screen/mine/wallet/BankCards';
 import AddBankCard from '../screen/mine/wallet/AddBankCard';
 import OrderBooking from '../screen/mine/order/OrderBooking';
 import WithdrawalRecords from '../screen/mine/wallet/WithdrawalRecords';
+import Profile from '../screen/mine/agent/Profile';
 
 import {RootStackParamList, ValidRoute} from '../models';
 
@@ -89,6 +90,7 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="AddBankCard" component={AddBankCard} options={commonScreenOptions} />
           <Stack.Screen name="OrderBooking" component={OrderBooking} options={commonScreenOptions} />
           <Stack.Screen name="WithdrawalRecords" component={WithdrawalRecords} options={commonScreenOptions} />
+          <Stack.Screen name="Profile" component={Profile} options={commonScreenOptions} />
         </>
       ) : (
         <></>

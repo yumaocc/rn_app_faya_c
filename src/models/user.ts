@@ -96,7 +96,7 @@ export interface MineDetail {
   age: string;
   avatar: string;
   backgroudPic: string;
-  level: string;
+  level: number;
   say: string;
   nums: {
     fansNums: number;

@@ -1,6 +1,6 @@
 import Icon from '../../component/Icon';
 import React, {useEffect} from 'react';
-import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, StatusBar} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, StatusBar, TouchableWithoutFeedback, Platform} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {Tabs} from '../../component';
@@ -57,9 +57,17 @@ const Mine: React.FC = () => {
     userDispatcher.logout();
   }
 
+  function goAgentProfile() {
+    // if (!detail.level) {
+    //   return;
+    // }
+    navigation.navigate('Profile');
+  }
+
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      {Platform.OS === 'ios' ? <StatusBar barStyle="light-content" /> : <StatusBar barStyle="dark-content" />}
+      {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
       {/* {isFocused ? <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} /> : <StatusBar barStyle="dark-content" backgroundColor="#fff" />} */}
       <ScrollView style={{flex: 1}} contentContainerStyle={{position: 'relative'}}>
         <Image source={require('../../assets/mine-bg.png')} style={styles.cover} />
@@ -81,8 +89,17 @@ const Mine: React.FC = () => {
           <View style={{borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: '#fff'}}>
             {/* 头像栏 */}
             <View style={[styles.userData]}>
-              {!!detail.avatar && <Image style={[styles.avatar]} source={{uri: detail.avatar}} />}
-              {!detail.avatar && <Image style={[styles.avatar]} source={require('../../assets/avatar_def.png')} />}
+              <View style={styles.avatarContainer}>
+                <TouchableWithoutFeedback onPress={goAgentProfile}>
+                  <View style={{alignItems: 'center'}}>
+                    {!!detail.avatar && <Image style={[styles.avatar]} source={{uri: detail.avatar}} />}
+                    {!detail.avatar && <Image style={[styles.avatar]} source={require('../../assets/avatar_def.png')} />}
+                    {detail?.level === 1 && <Image source={require('../../assets/tag_darensign_xinshou.png')} style={styles.agentBadge} />}
+                    {detail?.level === 2 && <Image source={require('../../assets/tag_darensign_zishen.png')} style={styles.agentBadge} />}
+                    {detail?.level === 3 && <Image source={require('../../assets/tag_darensign_jinjie.png')} style={styles.agentBadge} />}
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
               <View style={[globalStyles.containerRow, {justifyContent: 'space-around', flex: 1, height: 62}]}>
                 <View style={{alignItems: 'center', flex: 1}}>
                   <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{detail?.nums?.fansNums}</Text>
@@ -187,6 +204,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 10,
     marginTop: -20,
+  },
+  avatarContainer: {
+    alignItems: 'center',
+  },
+  agentBadge: {
+    width: 93,
+    height: 24,
+    position: 'absolute',
+    bottom: 0,
   },
   avatar: {
     width: 80,

@@ -42,6 +42,7 @@ export type RootStackParamList = {
   AddBankCard: undefined;
   OrderBooking: IDBody;
   WithdrawalRecords: undefined;
+  Profile: undefined;
 };
 
 export type ValidRoute = keyof RootStackParamList;
