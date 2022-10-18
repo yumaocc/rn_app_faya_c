@@ -62,7 +62,7 @@ const WorkList: React.FC<WorkListProps> = props => {
       index = index * 2 + 1;
     }
     return (
-      <View style={styles.item} key={work.mainId}>
+      <View style={styles.item} key={`${work.mainId}-${index}-${left ? 'l' : 'r'}`}>
         <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetailList', {index})}>
           <View style={{width: '100%', position: 'relative'}}>
             <Image source={{uri: work?.coverImage}} defaultSource={require('../../assets/sku_def_1_1.png')} style={true ? styles.cover : styles.smallCover} />
@@ -113,7 +113,7 @@ const WorkList: React.FC<WorkListProps> = props => {
             tintColor={globalStyleVariables.COLOR_PRIMARY}
           />
         }
-        onScroll={handleScroll}
+        onMomentumScrollEnd={handleScroll}
         scrollEventThrottle={100}
         onScrollEndDrag={endDrag}>
         <View style={styles.itemContainer}>

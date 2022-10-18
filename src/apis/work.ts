@@ -9,7 +9,7 @@ export async function getWorkList(type: WorkTabType, params: SearchParam): Promi
       url = '/video/main/care/page';
       break;
     case WorkTabType.Recommend:
-      url = '/video/main/newest/list';
+      url = '/video/main/recommend';
       break;
     case WorkTabType.Nearby:
       url = '/video/main/newest/list';
