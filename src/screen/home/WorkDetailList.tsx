@@ -4,17 +4,21 @@ import {View, StyleSheet, FlatList, ListRenderItemInfo, StatusBar, RefreshContro
 import {useSelector} from 'react-redux';
 import {NavigationBar, Popup} from '../../component';
 import {useRefCallback} from '../../fst/hooks';
-import {useDeviceDimensions, useParams, useSPUDispatcher, useUserDispatcher, useWorkDispatcher} from '../../helper/hooks';
+import {useCommonDispatcher, useDeviceDimensions, useParams, useSPUDispatcher, useUserDispatcher, useWorkDispatcher} from '../../helper/hooks';
 import {FakeNavigation, PackageDetail, SKUDetail, WorkF} from '../../models';
 import {RootState} from '../../redux/reducers';
 import BuyBar from '../spu/BuyBar';
 import SPUDetailView from '../spu/SPUDetailView';
 import WorkPage from './work/WorkPage';
+import * as api from '../../apis';
+import {BoolEnum} from '../../fst/models';
 
 const WorkDetailList: React.FC = () => {
   const params = useParams<{index: number}>();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showSPU, setShowSPU] = useState(false);
+  const [isCollect, setIsCollect] = useState(false);
+  const [isJoinShowCase, setIsJoinShowCase] = useState(false);
 
   const currentTabType = useSelector((state: RootState) => state.work.currentTab.type);
   const works = useSelector((state: RootState) => state.work.works[currentTabType]);
@@ -32,6 +36,7 @@ const WorkDetailList: React.FC = () => {
   const [workDispatcher] = useWorkDispatcher();
   const [spuDispatcher] = useSPUDispatcher();
   const [userDispatcher] = useUserDispatcher();
+  const [commonDispatcher] = useCommonDispatcher();
 
   useEffect(() => {
     if (currentIndex > videos.length - 3) {
@@ -96,6 +101,51 @@ const WorkDetailList: React.FC = () => {
     return <WorkPage item={item} paused={currentIndex !== index} shouldLoad={shouldLoad} onShowSPU={openSPU} />;
   }
 
+  function handleCollect() {
+    if (!token) {
+      navigation.replace('Login', {to: 'SPUDetail', params: {id: currentSPU?.id}});
+    } else {
+      if (isCollect || !currentSPU) {
+        return;
+      }
+      const {collected} = currentSPU;
+      const currentIsCollect = collected === BoolEnum.TRUE;
+      api.spu
+        .collectSPU(currentSPU?.id)
+        .then(() => {
+          setIsCollect(false);
+          commonDispatcher.info(currentIsCollect ? '已取消收藏' : '收藏成功');
+          spuDispatcher.changeCurrentSPU({...currentSPU, collected: currentIsCollect ? BoolEnum.FALSE : BoolEnum.TRUE});
+        })
+        .catch(() => {
+          setIsCollect(false);
+        });
+    }
+  }
+
+  function handleJoinShowCase() {
+    if (!token) {
+      navigation.replace('Login', {to: 'SPUDetail', params: {id: currentSPU?.id}});
+    } else {
+      if (isJoinShowCase || !currentSPU) {
+        return;
+      }
+      const {showcaseJoined} = currentSPU;
+      const currentIsShowCase = showcaseJoined === BoolEnum.TRUE;
+      api.spu
+        .joinToShowCase(currentSPU?.id)
+        .then(() => {
+          setIsJoinShowCase(false);
+          commonDispatcher.info(currentIsShowCase ? '已取消展示' : '展示成功');
+          spuDispatcher.changeCurrentSPU({...currentSPU, showcaseJoined: currentIsShowCase ? BoolEnum.FALSE : BoolEnum.TRUE});
+        })
+        .catch(() => {
+          // console.log(e);
+          setIsJoinShowCase(false);
+        });
+    }
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
@@ -122,7 +172,7 @@ const WorkDetailList: React.FC = () => {
             <ScrollView style={{flex: 1}} bounces={false}>
               <SPUDetailView currentSelect={currentSKU} spu={currentSPU} isPackage={currentSKUIsPackage} onChangeSelect={handleChangeSKU} />
             </ScrollView>
-            <BuyBar sku={currentSKU} onBuy={handleBuy} />
+            <BuyBar spu={currentSPU} sku={currentSKU} onBuy={handleBuy} onCollect={handleCollect} onAddToShopWindow={handleJoinShowCase} />
           </View>
         </Popup>
       )}

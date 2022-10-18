@@ -119,6 +119,8 @@ export interface SPUDetailF {
   skuList: SKUDetail[];
   tags: string[];
   packageDetailsList: PackageDetail[];
+  showcaseJoined: BoolEnum; // 是否加入橱窗
+  collected: BoolEnum; // 是否已收藏
 }
 
 export enum PayChannel {

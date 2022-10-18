@@ -4,10 +4,9 @@ import Icon from '../../component/Icon';
 import {Button} from '../../component';
 import {globalStyleVariables} from '../../constants/styles';
 import {PackageDetail, SKUDetail, SKUSaleState, SPUDetailF} from '../../models';
+import {BoolEnum} from '../../fst/models';
 
 interface BuyBarProps {
-  collected?: boolean;
-  inShopWindow?: boolean; // 是否加入橱窗
   hasCommission?: boolean;
   isSoldOut?: boolean;
   spu?: SPUDetailF;
@@ -19,13 +18,14 @@ interface BuyBarProps {
 }
 
 const BuyBar: React.FC<BuyBarProps> = props => {
-  const {collected, inShopWindow, onBuy, sku, onShare, onAddToShopWindow, onCollect} = props;
+  const {sku, spu, onBuy, onShare, onAddToShopWindow, onCollect} = props;
+
   return (
     <View style={styles.container}>
       <View style={styles.actions}>
         <TouchableOpacity activeOpacity={0.8} onPress={onCollect}>
           <View style={styles.action}>
-            {collected ? (
+            {spu?.collected === BoolEnum.TRUE ? (
               <>
                 <Icon name="shangpin_shoucang_sel" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                 <Text style={styles.actionText}>已收藏</Text>
@@ -40,7 +40,7 @@ const BuyBar: React.FC<BuyBarProps> = props => {
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.8} onPress={onAddToShopWindow}>
           <View style={styles.action}>
-            {inShopWindow ? (
+            {spu?.showcaseJoined === BoolEnum.TRUE ? (
               <>
                 <Icon name="shangpin_addchuchaung_sel" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                 <Text style={styles.actionText}>已加入</Text>
@@ -69,8 +69,6 @@ const BuyBar: React.FC<BuyBarProps> = props => {
   );
 };
 BuyBar.defaultProps = {
-  collected: false,
-  inShopWindow: false,
   hasCommission: false,
   isSoldOut: false,
   onAddToShopWindow: () => {},
