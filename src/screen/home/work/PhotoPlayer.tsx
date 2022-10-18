@@ -6,24 +6,26 @@ import {StylePropView, WorkFile} from '../../../models';
 interface PhotoPlayerProps {
   style?: StylePropView;
   files?: WorkFile[];
-  poster?: string;
   paused?: boolean;
+  onLoad?: () => void;
 }
 
 const PhotoPlayer: React.FC<PhotoPlayerProps> = props => {
-  const {files, poster, paused} = props;
+  const {files, paused, onLoad} = props;
+
+  function handleLoad(index: number) {
+    if (index === 0) {
+      onLoad && onLoad();
+    }
+  }
 
   return (
     <View style={props.style}>
-      {!files?.length ? (
-        <Image source={{uri: poster}} style={styles.full} />
-      ) : (
-        <Carousel autoplay={!paused} autoplayInterval={3000} infinite style={styles.full}>
-          {files.map((file, i) => (
-            <Image key={i} source={{uri: file.videoUrl}} style={styles.full} resizeMode="cover" />
-          ))}
-        </Carousel>
-      )}
+      <Carousel autoplay={!paused} autoplayInterval={3000} infinite style={styles.full}>
+        {files?.map((file, i) => (
+          <Image onLoad={() => handleLoad(i)} key={i} source={{uri: file.videoUrl}} style={styles.full} resizeMode="cover" />
+        ))}
+      </Carousel>
     </View>
   );
 };

@@ -12,6 +12,7 @@ interface PlayerProps {
   muted?: boolean;
   repeat?: boolean;
   onProgress?: (data: OnProgressData) => void;
+  onLoad?: () => void;
   onEnd?: () => void;
 }
 
@@ -27,6 +28,7 @@ const Player: React.FC<PlayerProps> = props => {
       // 横屏视频不缩放，竖屏视频cover
       setResizeMode('none');
     }
+    props.onLoad && props.onLoad();
   }
 
   function handleOnEnd() {

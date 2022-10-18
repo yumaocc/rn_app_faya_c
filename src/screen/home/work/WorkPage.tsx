@@ -24,6 +24,7 @@ interface VideoPageProps {
 const VideoPage: React.FC<VideoPageProps> = props => {
   const {shouldLoad} = props;
   const [paused, setPaused] = useState(props.paused);
+  const [resourcesLoaded, setResourcesLoaded] = useState(false);
   const [workDetail, setWorkDetail] = useState<WorkDetailF>();
   const hasSpu = useMemo(() => workDetail?.spuId && workDetail?.spuName, [workDetail]);
   const [videoUrl, setVideoUrl] = useState(''); // 控制视频地址以达到懒加载效果
@@ -37,6 +38,7 @@ const VideoPage: React.FC<VideoPageProps> = props => {
   const appState = useAppState();
   const {bottom} = useSafeAreaInsets();
   const [commonDispatcher] = useCommonDispatcher();
+  const showPoster = useMemo(() => !resourcesLoaded, [resourcesLoaded]);
 
   useEffect(() => {
     if (shouldLoad) {
@@ -47,8 +49,6 @@ const VideoPage: React.FC<VideoPageProps> = props => {
       // setVideoUrl('');
     }
   }, [shouldLoad, props.item.videoUrl, videoUrl]);
-
-  // useLog('detail', workDetail);
 
   useEffect(() => {
     if (isFocused && appState === 'active' && !props.paused) {
@@ -82,11 +82,15 @@ const VideoPage: React.FC<VideoPageProps> = props => {
     console.log(1);
   }
 
+  function handleLoad() {
+    setResourcesLoaded(true);
+  }
+
   return (
     <View style={[{width, height}, styles.container]}>
-      {workDetail?.type === WorkType.Video && <Player style={[styles.full]} videoUri={videoUrl} paused={paused} poster={props.item.coverImage} />}
-      {workDetail?.type === WorkType.Photo && <PhotoPlayer style={[styles.full]} files={workDetail?.fileList} paused={paused} poster={props.item.coverImage} />}
-      {!workDetail && <Image style={[styles.full]} source={{uri: props.item.coverImage}} />}
+      {workDetail?.type === WorkType.Video && <Player style={[styles.full]} videoUri={videoUrl} paused={paused} poster={props.item.coverImage} onLoad={handleLoad} />}
+      {workDetail?.type === WorkType.Photo && <PhotoPlayer style={[styles.full]} files={workDetail?.fileList} paused={paused} onLoad={handleLoad} />}
+      {showPoster && <Image style={[styles.full]} source={{uri: props.item.coverImage}} resizeMode="cover" />}
 
       {/* 视频上覆盖的所有页面 */}
 
