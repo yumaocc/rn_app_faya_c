@@ -55,10 +55,16 @@ export interface WorkList {
   index: number;
   status: LoadingState;
 }
+
+export interface WorkFile {
+  coverPic: string;
+  videoUrl: string; // 图片也取这个地址
+}
 export interface WorkDetailF {
   mainId: string;
   numberOfCollects: number;
   numberOfLikes: number;
+  fileList: WorkFile[];
   liked: BoolEnum;
   collected: BoolEnum;
   numberOfComments: number;

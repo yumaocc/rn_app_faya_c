@@ -1,18 +1,18 @@
 import {useIsFocused} from '@react-navigation/native';
-import React, {useCallback, useEffect, useImperativeHandle, useMemo, useState, memo} from 'react';
+import React, {useCallback, useEffect, useMemo, useState, memo} from 'react';
 import {View, Text, StyleSheet, useWindowDimensions, Image} from 'react-native';
 import Icon from '../../../component/Icon';
-import Video, {OnLoadData} from 'react-native-video';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useAppState, useCommonDispatcher} from '../../../helper/hooks';
-import {VideoPlayerRef} from './types';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import {WorkDetailF, WorkF} from '../../../models';
+import {WorkDetailF, WorkF, WorkType} from '../../../models';
 import * as api from '../../../apis';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/reducers';
 import CustomTouchable from '../../../component/CustomTouchable';
 import {BoolEnum} from '../../../fst/models';
+import Player from './Player';
+import PhotoPlayer from './PhotoPlayer';
 
 interface VideoPageProps {
   item: WorkF;
@@ -21,14 +21,14 @@ interface VideoPageProps {
   onShowSPU: (id: number) => void;
 }
 
-const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) => {
+const VideoPage: React.FC<VideoPageProps> = props => {
   const {shouldLoad} = props;
   const [paused, setPaused] = useState(props.paused);
-  const [resizeMode, setResizeMode] = useState<'none' | 'cover'>('cover');
-  const [error, setError] = useState('');
   const [workDetail, setWorkDetail] = useState<WorkDetailF>();
   const hasSpu = useMemo(() => workDetail?.spuId && workDetail?.spuName, [workDetail]);
-  const [videoUrl, setVideoUrl] = useState(''); // 控制视频地址已达到懒加载效果
+  const [videoUrl, setVideoUrl] = useState(''); // 控制视频地址以达到懒加载效果
+  // const [reportedStart, setReportedStart] = useState(false); // 是否已经上报过开始播放
+  // const [reportedEnd, setReportedEnd] = useState(false); // 是否已经上报过结束播放
 
   const token = useSelector((state: RootState) => state.common.token);
 
@@ -64,28 +64,10 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
     }
   }, [props.paused, props.item, workDetail, commonDispatcher]);
 
-  console.log(workDetail);
-
-  function handleOnLoad(e: OnLoadData) {
-    const {naturalSize} = e;
-    if (naturalSize.orientation === 'landscape') {
-      // 横屏视频不缩放，竖屏视频cover
-      setResizeMode('none');
-    }
-  }
-
-  useImperativeHandle(ref, () => ({
-    play: () => setPaused(false),
-    pause: () => setPaused(true),
-  }));
-
   useEffect(() => {
     setPaused(props.paused);
   }, [props.paused]);
 
-  function handleError() {
-    setError('呀，视频加载失败～');
-  }
   const handleClickCover = useCallback(() => {
     setPaused(!paused);
   }, [paused]);
@@ -102,26 +84,9 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
 
   return (
     <View style={[{width, height}, styles.container]}>
-      {!error && (
-        <Video
-          style={styles.full}
-          disableFocus={true}
-          onLoad={handleOnLoad}
-          onError={handleError}
-          source={{uri: videoUrl}}
-          paused={paused}
-          repeat={true}
-          resizeMode={resizeMode}
-          poster={props.item.coverImage}
-        />
-      )}
-      {!!error && (
-        <View style={[styles.full, globalStyles.containerCenter]}>
-          <View style={[globalStyles.containerCenter, {backgroundColor: '#f4f4f4', width: '100%', height: 180}]}>
-            <Text style={{fontSize: 18}}>{error}</Text>
-          </View>
-        </View>
-      )}
+      {workDetail?.type === WorkType.Video && <Player style={[styles.full]} videoUri={videoUrl} paused={paused} poster={props.item.coverImage} />}
+      {workDetail?.type === WorkType.Photo && <PhotoPlayer style={[styles.full]} files={workDetail?.fileList} paused={paused} poster={props.item.coverImage} />}
+      {!workDetail && <Image style={[styles.full]} source={{uri: props.item.coverImage}} />}
 
       {/* 视频上覆盖的所有页面 */}
 
@@ -130,9 +95,9 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
           <CustomTouchable activeOpacity={1} onPress={handleClickCover} style={[styles.cover]}>
             <View style={[styles.cover]}>
               {/* 暂停后的播放按钮 */}
-              {paused && !error ? (
+              {paused ? (
                 <View style={[globalStyles.containerCenter, styles.full]}>
-                  <Icon name="home_faxian_nor64" color="#ddd" size={80} />
+                  <Icon name="zuopin_shipin_zanting200" color="#ffffffcc" size={100} />
                 </View>
               ) : null}
               {workDetail && (
@@ -213,11 +178,9 @@ const VideoPage = React.forwardRef<VideoPlayerRef, VideoPageProps>((props, ref) 
       </View>
     </View>
   );
-});
+};
 
-export default memo(VideoPage, (prev: VideoPageProps, next: VideoPageProps) => {
-  return prev.item.mainId === next.item.mainId && prev.paused === next.paused && prev.shouldLoad === next.shouldLoad && prev.onShowSPU === next.onShowSPU;
-});
+export default memo(VideoPage);
 
 VideoPage.defaultProps = {
   shouldLoad: false,

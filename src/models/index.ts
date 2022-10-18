@@ -13,6 +13,7 @@ export type {
   PhotoUploadAuthParams,
   PhotoUploadAuth,
   WorkList,
+  WorkFile,
 } from './work';
 export type {SPUF, SPUShop, PackageDetail, SKUDetail, SPUDetailF, SKUShowInfo, PayWay, DayBookingModelF, BookingModelF, GroupedShopBookingModel} from './spu';
 export type {OrderF, OrderDetailF, OrderPackageSKU, PayOrder, OrderCommentForm, OrderRefundForm, OrderBookingForm, OrderBookingDetailF, OrderForm} from './order';

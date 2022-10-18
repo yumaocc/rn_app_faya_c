@@ -9,7 +9,7 @@ import {FakeNavigation, PackageDetail, SKUDetail, WorkF} from '../../models';
 import {RootState} from '../../redux/reducers';
 import BuyBar from '../spu/BuyBar';
 import SPUDetailView from '../spu/SPUDetailView';
-import VideoPage from './Videos/VideoPage';
+import WorkPage from './work/WorkPage';
 
 const WorkDetailList: React.FC = () => {
   const params = useParams<{index: number}>();
@@ -93,7 +93,7 @@ const WorkDetailList: React.FC = () => {
   function renderVideoPage(info: ListRenderItemInfo<WorkF>) {
     const {item, index} = info;
     const shouldLoad = index === currentIndex || index === currentIndex + 1 || index === currentIndex - 1;
-    return <VideoPage item={item} paused={currentIndex !== index} shouldLoad={shouldLoad} onShowSPU={openSPU} />;
+    return <WorkPage item={item} paused={currentIndex !== index} shouldLoad={shouldLoad} onShowSPU={openSPU} />;
   }
 
   return (
