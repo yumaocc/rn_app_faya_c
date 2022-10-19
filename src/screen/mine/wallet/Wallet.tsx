@@ -1,22 +1,36 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../../component';
-import {useWallet} from '../../../helper/hooks';
+import {useUserDispatcher, useWallet} from '../../../helper/hooks';
 import Icon from '../../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../../models';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../redux/reducers';
 
 const Wallet: React.FC = () => {
   const [wallet] = useWallet();
   const [showReal, setShowReal] = React.useState(true);
+  const userDetail = useSelector((state: RootState) => state.user.myDetail);
 
   const navigation = useNavigation<FakeNavigation>();
+  const [userDispatcher] = useUserDispatcher();
+
+  useEffect(() => {
+    if (!userDetail) {
+      userDispatcher.getMyDetail();
+    }
+  }, [userDetail, userDispatcher]);
 
   function showSummary() {
     // todo: 判断是否是代理
-    navigation.navigate('WalletSummary');
+    if (!userDetail?.level) {
+      navigation.navigate('WalletSummary');
+    } else {
+      navigation.navigate('WalletSummaryAgent');
+    }
   }
 
   return (
