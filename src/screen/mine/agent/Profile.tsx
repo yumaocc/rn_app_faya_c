@@ -1,11 +1,9 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {View, Text, StyleSheet, StatusBar, ScrollView, TouchableWithoutFeedback, Image, TouchableHighlight, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
 import {NavigationBar, OperateItem} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
-import {useCommonDispatcher, useUserDispatcher} from '../../../helper/hooks';
-import {RootState} from '../../../redux/reducers';
+import {useCommonDispatcher} from '../../../helper/hooks';
 import Icon from '../../../component/Icon';
 import {AgentHomeInfo} from '../../../models';
 import * as api from '../../../apis';
@@ -23,7 +21,7 @@ const Profile: React.FC = () => {
     return opacity > 0.5 ? '#000' : '#fff';
   }, [opacity]);
 
-  const detail = useSelector((state: RootState) => state.user.myDetail);
+  // const detail = useSelector((state: RootState) => state.user.myDetail);
   const progress = useMemo(() => {
     if (!agentInfo) {
       return 0;
@@ -54,12 +52,10 @@ const Profile: React.FC = () => {
   const hasLevel2Right = useMemo(() => agentInfo?.level >= 2, [agentInfo]);
   const hasLevel3Right = useMemo(() => agentInfo?.level >= 3, [agentInfo]);
 
-  const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
   // const {top} = useSafeAreaInsets();
 
   useEffect(() => {
-    userDispatcher.getMyDetail();
     api.user
       .agentInfo()
       .then(res => {
@@ -68,7 +64,7 @@ const Profile: React.FC = () => {
       .catch(e => {
         commonDispatcher.error(e);
       });
-  }, [userDispatcher, commonDispatcher]);
+  }, [commonDispatcher]);
 
   function handleScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
     const threshold = 100;
@@ -83,9 +79,9 @@ const Profile: React.FC = () => {
       <NavigationBar title="达人主页" color={navigationColor} style={[{position: 'absolute', top: 0, left: 0, width: '100%', zIndex: 3, backgroundColor: navigationBg}]} />
       <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
       <ScrollView style={{flex: 1}} onScroll={handleScroll} scrollEventThrottle={16} contentContainerStyle={{position: 'relative'}} bounces={false}>
-        {detail?.level === 1 && <Image source={require('../../../assets/img_darenbg_xinshou.png')} style={styles.cover} />}
-        {detail?.level === 2 && <Image source={require('../../../assets/img_darenbg_jinjie.png')} style={styles.cover} />}
-        {detail?.level === 3 && <Image source={require('../../../assets/img_darenbg_zishen.png')} style={styles.cover} />}
+        {agentInfo?.level === 1 && <Image source={require('../../../assets/img_darenbg_xinshou.png')} style={styles.cover} />}
+        {agentInfo?.level === 2 && <Image source={require('../../../assets/img_darenbg_jinjie.png')} style={styles.cover} />}
+        {agentInfo?.level === 3 && <Image source={require('../../../assets/img_darenbg_zishen.png')} style={styles.cover} />}
 
         <View style={[styles.container, {paddingTop: 170, paddingBottom: bottom}]}>
           <View style={{borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: '#f4f4f4'}}>
@@ -94,11 +90,11 @@ const Profile: React.FC = () => {
               <View style={styles.avatarContainer}>
                 <TouchableWithoutFeedback>
                   <View style={{alignItems: 'center'}}>
-                    {!!detail.avatar && <Image style={[styles.avatar]} source={{uri: detail.avatar}} />}
-                    {!detail.avatar && <Image style={[styles.avatar]} source={require('../../../assets/avatar_def.png')} />}
-                    {detail?.level === 1 && <Image source={require('../../../assets/tag_darensign_xinshou.png')} style={styles.agentBadge} />}
-                    {detail?.level === 2 && <Image source={require('../../../assets/tag_darensign_zishen.png')} style={styles.agentBadge} />}
-                    {detail?.level === 3 && <Image source={require('../../../assets/tag_darensign_jinjie.png')} style={styles.agentBadge} />}
+                    {!!agentInfo?.avatar && <Image style={[styles.avatar]} source={{uri: agentInfo?.avatar}} />}
+                    {!agentInfo?.avatar && <Image style={[styles.avatar]} source={require('../../../assets/avatar_def.png')} />}
+                    {agentInfo?.level === 1 && <Image source={require('../../../assets/tag_darensign_xinshou.png')} style={styles.agentBadge} />}
+                    {agentInfo?.level === 2 && <Image source={require('../../../assets/tag_darensign_jinjie.png')} style={styles.agentBadge} />}
+                    {agentInfo?.level === 3 && <Image source={require('../../../assets/tag_darensign_zishen.png')} style={styles.agentBadge} />}
                   </View>
                 </TouchableWithoutFeedback>
               </View>
@@ -134,10 +130,10 @@ const Profile: React.FC = () => {
                     <View style={{padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}}>
                       <View style={[globalStyles.containerLR]}>
                         <View style={[globalStyles.containerRow]}>
-                          <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{dictAgentLevel(detail?.level)}</Text>
+                          <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{dictAgentLevel(agentInfo?.level)}</Text>
                           <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
                         </View>
-                        <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>{dictAgentLevel(detail?.level + 1)}</Text>
+                        <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>{dictAgentLevel(agentInfo?.level + 1)}</Text>
                       </View>
                       {/* 经验条 */}
                       <View style={{backgroundColor: '#0000001A', height: 4, marginTop: globalStyleVariables.MODULE_SPACE}}>

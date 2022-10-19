@@ -163,6 +163,7 @@ export interface AgentTask {
 }
 export interface AgentHomeInfo {
   level: number;
+  avatar: string;
   cumulativeOrders: number; // 累计订单
   cumulativeIncome: number; // 累计收益
   cumulativeIncomeYuan: string;
