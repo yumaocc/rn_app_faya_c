@@ -80,9 +80,9 @@ const Mine: React.FC = () => {
   }
 
   function goAgentProfile() {
-    // if (!detail.level) {
-    //   return;
-    // }
+    if (!detail.level) {
+      return;
+    }
     navigation.navigate('Profile');
   }
 
