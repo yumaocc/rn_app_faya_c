@@ -1,5 +1,5 @@
 import {Asset} from 'react-native-image-picker';
-import {BoolEnum} from '../fst/models';
+import {BoolEnum, DateTimeString} from '../fst/models';
 import {ValidRoute} from './route';
 
 export enum UserState {
@@ -151,4 +151,25 @@ export interface BankCardF {
   accountNo: string;
   bankCode: string; // 银行代码
   bankCodeName: string; // 银行名称
+}
+
+export interface AgentTask {
+  userId: number;
+  userName: string;
+  avatar: string;
+  createdTime: DateTimeString;
+  spuName: string;
+  spuId: number;
+}
+export interface AgentHomeInfo {
+  level: number;
+  cumulativeOrders: number; // 累计订单
+  cumulativeIncome: number; // 累计收益
+  cumulativeIncomeYuan: string;
+  developNewUsers: number; // 团队人数
+  developNewUsersMax: number; // 拉新任务目标数
+  shareCompletedOrder: number; // 订单任务完成数
+  shareCompletedOrderMax: number; // 订单任务目标数
+  newUsersOrders: AgentTask[]; // 拉新任务
+  orders: AgentTask[]; // 订单任务
 }

@@ -1,5 +1,18 @@
 export type {RootStackParamList, Props, FakeNavigation, ValidRoute} from './route';
-export type {UserInfo, CouponF, WalletInfo, WalletSummary, MineDetail, GoLoginParams, OtherUserDetail, UserCertificationForm, BankCardF, UserCertificationDetail} from './user';
+export type {
+  UserInfo,
+  CouponF,
+  WalletInfo,
+  WalletSummary,
+  MineDetail,
+  GoLoginParams,
+  OtherUserDetail,
+  UserCertificationForm,
+  BankCardF,
+  UserCertificationDetail,
+  AgentHomeInfo,
+  AgentTask,
+} from './user';
 export type {AppHeader, StylePropText, StylePropView, StylesProp, CacheKeys, LoadingState, LoadListState} from './common';
 export type {
   WorkTab,

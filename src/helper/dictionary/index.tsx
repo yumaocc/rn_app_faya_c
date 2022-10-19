@@ -37,3 +37,19 @@ export function dictLoadingState(state: LoadingState) {
       return '滑动加载';
   }
 }
+
+export function dictAgentLevel(num: number) {
+  if (!num) {
+    return '';
+  }
+  switch (num) {
+    case 1:
+      return '新手达人';
+    case 2:
+      return '进阶达人';
+    case 3:
+      return '资深达人';
+    default:
+      return '';
+  }
+}

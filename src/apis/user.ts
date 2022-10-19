@@ -1,6 +1,6 @@
 import RNFS from 'react-native-fs';
 import {post} from './helper';
-import {BankCardF, CouponF, CouponFilterState, MineDetail, OtherUserDetail, UserCertificationForm, UserInfo, WalletInfo, WalletSummary} from '../models';
+import {AgentHomeInfo, BankCardF, CouponF, CouponFilterState, MineDetail, OtherUserDetail, UserCertificationForm, UserInfo, WalletInfo, WalletSummary} from '../models';
 import {Platform} from 'react-native';
 
 export async function userLogin(phone: string, code: string): Promise<UserInfo> {
@@ -94,4 +94,8 @@ export async function unBindBankCard(id: number): Promise<boolean> {
 
 export async function userWithDraw(money: number, accountId: number): Promise<boolean> {
   return await post('/yeepay/withdraw/money', {money, type: 'consumer', accountId});
+}
+// /user/agent/info
+export async function agentInfo(): Promise<AgentHomeInfo> {
+  return await post('/user/agent/info');
 }

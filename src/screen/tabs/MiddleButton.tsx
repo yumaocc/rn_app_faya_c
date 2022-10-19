@@ -20,8 +20,9 @@ const MiddleButton: React.FC = () => {
         redirect: true,
       });
     } else {
-      navigation.navigate('ShootVideo');
-      // navigation.navigate('TestPage');
+      // navigation.navigate('ShootVideo');
+      navigation.navigate('TestPage');
+      // navigation.navigate('Profile');
       // navigation.navigate('PaySuccess');
       // navigation.navigate('Certification');
       // navigation.navigate('AddBankCard');
