@@ -113,68 +113,73 @@ const Profile: React.FC = () => {
                 </View>
               </View>
             </View>
-            <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE}}>
-              <View style={[styles.card]}>
-                <OperateItem label="我的推广码" showArrow>
-                  <Icon name="wode_erweima48" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-                </OperateItem>
-                <View style={globalStyles.lineHorizontal} />
-                <OperateItem label="我的团队">
-                  <Text style={globalStyles.fontPrimary}>{agentInfo?.developNewUsers || '-'}人</Text>
-                </OperateItem>
-              </View>
 
+            <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE}}>
+              {/* 团队情况 */}
+              {hasLevel2Right && (
+                <View style={[styles.card]}>
+                  <OperateItem label="我的推广码" showArrow>
+                    <Icon name="wode_erweima48" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                  </OperateItem>
+                  <View style={globalStyles.lineHorizontal} />
+                  <OperateItem label="我的团队">
+                    <Text style={globalStyles.fontPrimary}>{agentInfo?.developNewUsers || '-'}人</Text>
+                  </OperateItem>
+                </View>
+              )}
               {/* 任务面板 */}
-              <View style={styles.card}>
-                <TouchableHighlight underlayColor="#999" onPress={() => {}}>
-                  <View style={{padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}}>
-                    <View style={[globalStyles.containerLR]}>
-                      <View style={[globalStyles.containerRow]}>
-                        <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{dictAgentLevel(detail?.level)}</Text>
-                        <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+              {!hasLevel3Right && (
+                <View style={styles.card}>
+                  <TouchableHighlight underlayColor="#999" onPress={() => {}}>
+                    <View style={{padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}}>
+                      <View style={[globalStyles.containerLR]}>
+                        <View style={[globalStyles.containerRow]}>
+                          <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{dictAgentLevel(detail?.level)}</Text>
+                          <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+                        </View>
+                        <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>{dictAgentLevel(detail?.level + 1)}</Text>
                       </View>
-                      <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>{dictAgentLevel(detail?.level + 1)}</Text>
-                    </View>
-                    {/* 经验条 */}
-                    <View style={{backgroundColor: '#0000001A', height: 4, marginTop: globalStyleVariables.MODULE_SPACE}}>
-                      <View style={{backgroundColor: globalStyleVariables.COLOR_BUD, height: 4, width: progress + '%'}} />
-                    </View>
-                    {/* 任务完成情况 */}
-                    <View style={[{marginTop: globalStyleVariables.MODULE_SPACE}]}>
-                      <View style={[globalStyles.containerRow]}>
-                        {newUserTaskCompleted ? (
-                          <Icon name="task_complete_true" size={18} color={globalStyleVariables.COLOR_BUD} />
-                        ) : (
-                          <Icon name="task_complete_false" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
-                        )}
-                        <Text
-                          style={[
-                            globalStyles.fontPrimary,
-                            styles.taskName,
-                            {color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
-                          ]}>
-                          发展新用户{`（${Math.min(agentInfo?.developNewUsers, agentInfo?.developNewUsersMax)}/${agentInfo?.developNewUsersMax}）`}
-                        </Text>
+                      {/* 经验条 */}
+                      <View style={{backgroundColor: '#0000001A', height: 4, marginTop: globalStyleVariables.MODULE_SPACE}}>
+                        <View style={{backgroundColor: globalStyleVariables.COLOR_BUD, height: 4, width: progress + '%'}} />
                       </View>
-                      <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
-                        {newOrderTaskCompleted ? (
-                          <Icon name="task_complete_true" size={18} color={globalStyleVariables.COLOR_BUD} />
-                        ) : (
-                          <Icon name="task_complete_false" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
-                        )}
-                        <Text
-                          style={[
-                            globalStyles.fontPrimary,
-                            styles.taskName,
-                            {color: newOrderTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
-                          ]}>
-                          分享商品完成订单交易{`（${Math.min(agentInfo?.shareCompletedOrder, agentInfo?.shareCompletedOrderMax)}/${agentInfo?.shareCompletedOrderMax}）`}
-                        </Text>
+                      {/* 任务完成情况 */}
+                      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE}]}>
+                        <View style={[globalStyles.containerRow]}>
+                          {newUserTaskCompleted ? (
+                            <Icon name="task_complete_true" size={18} color={globalStyleVariables.COLOR_BUD} />
+                          ) : (
+                            <Icon name="task_complete_false" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+                          )}
+                          <Text
+                            style={[
+                              globalStyles.fontPrimary,
+                              styles.taskName,
+                              {color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
+                            ]}>
+                            发展新用户{`（${Math.min(agentInfo?.developNewUsers, agentInfo?.developNewUsersMax)}/${agentInfo?.developNewUsersMax}）`}
+                          </Text>
+                        </View>
+                        <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
+                          {newOrderTaskCompleted ? (
+                            <Icon name="task_complete_true" size={18} color={globalStyleVariables.COLOR_BUD} />
+                          ) : (
+                            <Icon name="task_complete_false" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+                          )}
+                          <Text
+                            style={[
+                              globalStyles.fontPrimary,
+                              styles.taskName,
+                              {color: newOrderTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
+                            ]}>
+                            分享商品完成订单交易{`（${Math.min(agentInfo?.shareCompletedOrder, agentInfo?.shareCompletedOrderMax)}/${agentInfo?.shareCompletedOrderMax}）`}
+                          </Text>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                </TouchableHighlight>
-              </View>
+                  </TouchableHighlight>
+                </View>
+              )}
               {/* 权益面板 */}
               <View style={styles.card}>
                 <View style={[{padding: globalStyleVariables.MODULE_SPACE}]}>
