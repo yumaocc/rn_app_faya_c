@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Image, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar, Popup, Switch} from '../../component';
@@ -26,6 +26,12 @@ const Publish: React.FC = () => {
 
   const navigation = useNavigation<FakeNavigation>();
   const [workDispatcher] = useWorkDispatcher();
+
+  useEffect(() => {
+    return () => {
+      workDispatcher.setWorkSPU(null);
+    };
+  }, [workDispatcher]);
 
   const currentVisibleAuthType = useMemo(() => {
     return WorkVisibleAuthOptions.find(item => item.value === visibleAuthType);
