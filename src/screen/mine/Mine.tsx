@@ -1,47 +1,68 @@
 import Icon from '../../component/Icon';
-import React, {useEffect} from 'react';
-import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, StatusBar, TouchableWithoutFeedback, Platform} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  StatusBar,
+  TouchableWithoutFeedback,
+  Platform,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  useWindowDimensions,
+} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {Tabs} from '../../component';
-import {useNavigation} from '@react-navigation/native';
-import {FakeNavigation} from '../../models';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {FakeNavigation, MyWorkTabType} from '../../models';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import {useCommonDispatcher, useUserDispatcher} from '../../helper/hooks';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import WorkList from './work/WorkList';
+import {useRefCallback} from '../../fst/hooks';
 
 const Mine: React.FC = () => {
   const detail = useSelector((state: RootState) => state.user.myDetail);
   const token = useSelector((state: RootState) => state.common.token);
-  const navigation = useNavigation<FakeNavigation>();
+  const tabs = useSelector((state: RootState) => state.user.myTabs);
+  const items = useMemo(() => tabs.map(e => ({title: e.title, key: String(e.value)})), [tabs]);
+  const currentTabKey = useSelector((state: RootState) => String(state.user.currentTabType));
+  const allWorks = useSelector((state: RootState) => state.user.myWorks);
 
+  const [showFixTab, setShowFixTab] = useState(false);
+
+  const navigation = useNavigation<FakeNavigation>();
   const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
+  const isFocused = useIsFocused();
+  const {top} = useSafeAreaInsets();
+  const {width} = useWindowDimensions();
+  const [ref, setRef, isReady] = useRefCallback();
+
+  useEffect(() => {
+    if (!isReady) {
+      return;
+    }
+    const index = tabs.findIndex(t => t.value === Number(currentTabKey));
+    setTimeout(() => {
+      ref.current?.scrollTo({
+        x: width * index,
+        y: 0,
+        animated: true,
+      });
+    }, 0);
+  }, [currentTabKey, isReady, ref, width, tabs]);
 
   useEffect(() => {
     if (token) {
       userDispatcher.getMyDetail();
     }
   }, [userDispatcher, token]);
-
-  const items = [
-    {
-      title: '作品',
-      key: 'work',
-    },
-    {
-      title: '私密',
-      key: 'private',
-    },
-    {
-      title: '喜欢',
-      key: 'like',
-    },
-    {
-      title: '收藏',
-      key: 'collection',
-    },
-  ];
 
   function handleCopy() {
     if (detail?.account) {
@@ -65,16 +86,73 @@ const Mine: React.FC = () => {
     navigation.navigate('Profile');
   }
 
+  const handleScroll = useCallback(
+    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      if (isFocused) {
+        const {y} = e.nativeEvent.contentOffset;
+        // console.log(y);
+        const threshold = Platform.select({
+          ios: 352,
+          android: 410,
+        });
+        if (y > threshold && !showFixTab) {
+          setShowFixTab(true);
+        } else if (y <= threshold && showFixTab) {
+          setShowFixTab(false);
+        }
+      }
+    },
+    [isFocused, showFixTab],
+  );
+
+  function handleChangeTab(key: string) {
+    userDispatcher.changeMyTab(Number(key) as MyWorkTabType);
+  }
+
+  function renderStatusBar() {
+    return Platform.OS === 'ios' ? <StatusBar barStyle="light-content" /> : <StatusBar barStyle="dark-content" backgroundColor="#fff" />;
+  }
+
+  function loadWork() {
+    userDispatcher.loadMyWork(Number(currentTabKey) as MyWorkTabType);
+  }
+
+  function handleScrollEnd() {
+    if (isFocused) {
+      loadWork();
+    }
+  }
+
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+    const workList = allWorks[currentTabKey];
+    const {list, status} = workList;
+    if (!list?.length && status === 'none') {
+      userDispatcher.loadMyWork(Number(currentTabKey) as MyWorkTabType, true);
+    }
+  }, [allWorks, currentTabKey, userDispatcher, token]);
+
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      {Platform.OS === 'ios' ? <StatusBar barStyle="light-content" /> : <StatusBar barStyle="dark-content" />}
-      {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
-      {/* {isFocused ? <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} /> : <StatusBar barStyle="dark-content" backgroundColor="#fff" />} */}
-      <ScrollView style={{flex: 1}} contentContainerStyle={{position: 'relative'}}>
+      {isFocused && renderStatusBar()}
+      {showFixTab && (
+        <View style={[styles.fixedHeader, {paddingTop: top}]}>
+          <Tabs tabs={items} currentKey={currentTabKey} onChange={handleChangeTab} showIndicator style={[styles.fixedTab]} />
+        </View>
+      )}
+      <ScrollView
+        style={{flex: 1}}
+        contentContainerStyle={{position: 'relative'}}
+        bounces={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        onMomentumScrollEnd={handleScrollEnd}>
         <Image source={require('../../assets/mine-bg.png')} style={styles.cover} />
         <View style={[styles.container, {paddingTop: 170}]}>
           {/* 顶部扫码等按钮栏 */}
-          <View style={[globalStyles.containerLR, {position: 'absolute', top: 50, width: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
+          <View style={[globalStyles.containerLR, {position: 'absolute', top: top + 10, width: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             <Icon name="wode_scan48" size={24} color="#fff" />
             <View style={globalStyles.containerLR}>
               {!!token && (
@@ -175,7 +253,22 @@ const Mine: React.FC = () => {
                 </View>
 
                 {/* 作品分类 */}
-                <Tabs tabs={items} showIndicator style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}} />
+                <Tabs tabs={items} currentKey={currentTabKey} onChange={handleChangeTab} showIndicator style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}} />
+                <ScrollView
+                  ref={setRef}
+                  horizontal
+                  style={{marginTop: globalStyleVariables.MODULE_SPACE}}
+                  snapToInterval={width}
+                  showsHorizontalScrollIndicator={false}
+                  scrollEnabled={false}>
+                  {tabs.map(tab => {
+                    return (
+                      <View style={{width}} key={tab.value}>
+                        <WorkList list={allWorks[tab.value]} />
+                      </View>
+                    );
+                  })}
+                </ScrollView>
               </>
             )}
           </View>
@@ -234,5 +327,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#00000008',
     marginRight: 10,
     borderRadius: 5,
+  },
+  fixedTab: {
+    backgroundColor: '#fff',
+  },
+  fixedHeader: {
+    position: 'absolute',
+    backgroundColor: '#fff',
+    top: 0,
+    left: 0,
+    width: '100%',
+    zIndex: 3,
   },
 });

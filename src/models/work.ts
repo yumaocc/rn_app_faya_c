@@ -7,6 +7,14 @@ export enum WorkTabType {
   Nearby = 'Nearby',
 }
 
+// 个人中心的作品tab类型
+export enum MyWorkTabType {
+  Work = 1,
+  Private = 2,
+  Like = 3,
+  Collect = 4,
+}
+
 export interface WorkTab {
   title: string;
   key: string;

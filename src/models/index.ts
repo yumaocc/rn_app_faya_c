@@ -20,6 +20,6 @@ export type {OrderF, OrderDetailF, OrderPackageSKU, PayOrder, OrderCommentForm, 
 export type {CameraType, AppInstallCheckType, ImageCompressOptions, ImageCompressResult} from './device';
 
 export {UserState, CouponState, CouponType, UserLevel, CouponFilterState, UserCertificationStatus} from './user';
-export {WorkTabType, WorkType, WorkVisibleAuth} from './work';
+export {WorkTabType, WorkType, WorkVisibleAuth, MyWorkTabType} from './work';
 export {SPUStatus, SPUType, BookingType, PayChannel, SKUSaleState} from './spu';
 export {OrderStatus, OrderPayState} from './order';

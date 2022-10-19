@@ -120,7 +120,7 @@ const WorkList: React.FC<WorkListProps> = props => {
           <View style={styles.left}>{l.map((v, i) => renderWorkItem(v, i, true))}</View>
           <View style={styles.right}>{r.map((v, i) => renderWorkItem(v, i))}</View>
         </View>
-        <View style={globalStyles.containerCenter}>
+        <View style={[globalStyles.containerCenter, {paddingVertical: globalStyleVariables.MODULE_SPACE}]}>
           <Text>{dictLoadingState(status)}</Text>
         </View>
       </ScrollView>

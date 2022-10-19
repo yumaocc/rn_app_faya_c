@@ -65,7 +65,7 @@ export default (state = initialState, action: WorkActions): WorkState => {
     case ActionType.LOAD_WORK_FAIL:
       return produce(state, draft => {
         const type = action.payload;
-        draft.works[type].status = 'none';
+        draft.works[type].status = 'noMore';
       });
     case ActionType.LOAD_WORK_SUCCESS:
       return produce(state, draft => {

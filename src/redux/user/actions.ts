@@ -1,6 +1,6 @@
 import {Action, ActionsUnion, ActionWithPayload, createAction} from '../types';
 import {ActionType} from './types';
-import {BankCardF, CouponF, GoLoginParams, MineDetail, UserInfo, WalletInfo, WalletSummary} from '../../models';
+import {BankCardF, CouponF, GoLoginParams, MineDetail, MyWorkTabType, UserInfo, WalletInfo, WalletSummary, WorkList} from '../../models';
 
 export const Actions = {
   init: (): Action<ActionType.INIT> => createAction(ActionType.INIT),
@@ -22,6 +22,12 @@ export const Actions = {
   clearLoginInfo: (): Action<ActionType.CLEAR_LOGIN_INFO> => createAction(ActionType.CLEAR_LOGIN_INFO),
   loadBankCards: (): Action<ActionType.LOAD_BANK_CARDS> => createAction(ActionType.LOAD_BANK_CARDS),
   loadBankCardsSuccess: (bankCards: BankCardF[]): ActionWithPayload<ActionType.LOAD_BANK_CARDS_SUCCESS, BankCardF[]> => createAction(ActionType.LOAD_BANK_CARDS_SUCCESS, bankCards),
+  loadMyWork: (tabType: MyWorkTabType, replace?: boolean): ActionWithPayload<ActionType.LOAD_MY_WORK, {tabType: MyWorkTabType; replace?: boolean}> =>
+    createAction(ActionType.LOAD_MY_WORK, {tabType, replace}),
+  loadMyWorkSuccess: (tabType: MyWorkTabType, works: WorkList): ActionWithPayload<ActionType.LOAD_MY_WORK_SUCCESS, {tabType: MyWorkTabType; works: WorkList}> =>
+    createAction(ActionType.LOAD_MY_WORK_SUCCESS, {tabType, works}),
+  loadMyWorkFail: (tabType: MyWorkTabType): ActionWithPayload<ActionType.LOAD_MY_WORK_FAIL, MyWorkTabType> => createAction(ActionType.LOAD_MY_WORK_FAIL, tabType),
+  changeMyTab: (tabType: MyWorkTabType): ActionWithPayload<ActionType.CHANGE_MY_TAB, MyWorkTabType> => createAction(ActionType.CHANGE_MY_TAB, tabType),
 };
 
 export type UserActions = ActionsUnion<typeof Actions>;

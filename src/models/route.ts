@@ -44,6 +44,7 @@ export type RootStackParamList = {
   WithdrawalRecords: undefined;
   Profile: undefined;
   Settings: undefined;
+  MyWorkDetail: undefined;
 };
 
 export type ValidRoute = keyof RootStackParamList;

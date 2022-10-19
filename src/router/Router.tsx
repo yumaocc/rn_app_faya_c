@@ -40,6 +40,7 @@ import OrderBooking from '../screen/mine/order/OrderBooking';
 import WithdrawalRecords from '../screen/mine/wallet/WithdrawalRecords';
 import Profile from '../screen/mine/agent/Profile';
 import UserSettings from '../screen/mine/settings/Settings';
+import MyWorkDetailList from '../screen/mine/work/WorkDetailList';
 
 import {RootStackParamList, ValidRoute} from '../models';
 
@@ -93,6 +94,7 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="WithdrawalRecords" component={WithdrawalRecords} options={commonScreenOptions} />
           <Stack.Screen name="Profile" component={Profile} options={commonScreenOptions} />
           <Stack.Screen name="Settings" component={UserSettings} options={commonScreenOptions} />
+          <Stack.Screen name="MyWorkDetail" component={MyWorkDetailList} options={commonScreenOptions} />
         </>
       ) : (
         <></>

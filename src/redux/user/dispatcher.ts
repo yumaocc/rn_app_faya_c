@@ -1,5 +1,5 @@
 import {Dispatch} from 'redux';
-import {GoLoginParams, UserInfo} from '../../models';
+import {GoLoginParams, MyWorkTabType, UserInfo} from '../../models';
 import {Actions} from './actions';
 
 export interface UserDispatcher {
@@ -13,6 +13,8 @@ export interface UserDispatcher {
   getMyDetail(): void;
   getWalletSummary(): void;
   loadBankCards(): void;
+  loadMyWork: (tabType: MyWorkTabType, replace?: boolean) => void;
+  changeMyTab: (tabType: MyWorkTabType) => void;
 }
 
 export const getUserDispatcher = (dispatch: Dispatch): UserDispatcher => ({
@@ -26,4 +28,6 @@ export const getUserDispatcher = (dispatch: Dispatch): UserDispatcher => ({
   getMyDetail: () => dispatch(Actions.getMyDetail()),
   getWalletSummary: () => dispatch(Actions.getWalletSummary()),
   loadBankCards: () => dispatch(Actions.loadBankCards()),
+  loadMyWork: (tabType: MyWorkTabType, replace?: boolean) => dispatch(Actions.loadMyWork(tabType, replace)),
+  changeMyTab: (tabType: MyWorkTabType) => dispatch(Actions.changeMyTab(tabType)),
 });
