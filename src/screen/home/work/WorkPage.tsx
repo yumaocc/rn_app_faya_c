@@ -1,11 +1,11 @@
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useState, memo} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import Icon from '../../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useAppState, useCommonDispatcher, useDeviceDimensions} from '../../../helper/hooks';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import {WorkDetailF, WorkF, WorkType} from '../../../models';
+import {FakeNavigation, WorkDetailF, WorkF, WorkType} from '../../../models';
 import * as api from '../../../apis';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/reducers';
@@ -41,6 +41,7 @@ const VideoPage: React.FC<VideoPageProps> = props => {
   const {bottom} = useSafeAreaInsets();
   const [commonDispatcher] = useCommonDispatcher();
   const showPoster = useMemo(() => !resourcesLoaded, [resourcesLoaded]);
+  const navigation = useNavigation<FakeNavigation>();
 
   useEffect(() => {
     if (shouldLoad) {
@@ -104,6 +105,12 @@ const VideoPage: React.FC<VideoPageProps> = props => {
           setReportedEnd(true);
         })
         .catch(console.log);
+    }
+  }
+
+  function goAuthor() {
+    if (workDetail?.userId) {
+      navigation.navigate('User', {id: workDetail?.userId});
     }
   }
 
@@ -219,7 +226,7 @@ const VideoPage: React.FC<VideoPageProps> = props => {
                     </CustomTouchable>
                   )}
                   {workDetail?.userName && (
-                    <CustomTouchable activeOpacity={0.8}>
+                    <CustomTouchable activeOpacity={0.8} onPress={goAuthor}>
                       <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@{workDetail?.userName}</Text>
                     </CustomTouchable>
                   )}
