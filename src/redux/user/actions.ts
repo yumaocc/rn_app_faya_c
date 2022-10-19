@@ -1,6 +1,6 @@
 import {Action, ActionsUnion, ActionWithPayload, createAction} from '../types';
 import {ActionType} from './types';
-import {BankCardF, CouponF, GoLoginParams, MineDetail, MyWorkTabType, UserInfo, WalletInfo, WalletSummary, WorkList} from '../../models';
+import {BankCardF, CouponF, GoLoginParams, MineDetail, MyWorkTabType, UserInfo, UserWorkTabType, WalletInfo, WalletSummary, WorkList} from '../../models';
 
 export const Actions = {
   init: (): Action<ActionType.INIT> => createAction(ActionType.INIT),
@@ -28,6 +28,24 @@ export const Actions = {
     createAction(ActionType.LOAD_MY_WORK_SUCCESS, {tabType, works}),
   loadMyWorkFail: (tabType: MyWorkTabType): ActionWithPayload<ActionType.LOAD_MY_WORK_FAIL, MyWorkTabType> => createAction(ActionType.LOAD_MY_WORK_FAIL, tabType),
   changeMyTab: (tabType: MyWorkTabType): ActionWithPayload<ActionType.CHANGE_MY_TAB, MyWorkTabType> => createAction(ActionType.CHANGE_MY_TAB, tabType),
+  changeOtherTab: (tabType: UserWorkTabType, userId: number): ActionWithPayload<ActionType.CHANGE_OTHER_TAB, {tabType: UserWorkTabType; userId: number}> =>
+    createAction(ActionType.CHANGE_OTHER_TAB, {tabType, userId}),
+  loadOtherWork: (
+    tabType: UserWorkTabType,
+    userId: number,
+    replace?: boolean,
+  ): ActionWithPayload<ActionType.LOAD_OTHER_WORK, {tabType: UserWorkTabType; userId: number; replace?: boolean}> =>
+    createAction(ActionType.LOAD_OTHER_WORK, {tabType, userId, replace}),
+  loadOtherWorkSuccess: (
+    tabType: UserWorkTabType,
+    works: WorkList,
+    userId: number,
+  ): ActionWithPayload<ActionType.LOAD_OTHER_WORK_SUCCESS, {tabType: UserWorkTabType; works: WorkList; userId: number}> =>
+    createAction(ActionType.LOAD_OTHER_WORK_SUCCESS, {tabType, works, userId}),
+  loadOtherWorkFail: (tabType: UserWorkTabType, userId: number): ActionWithPayload<ActionType.LOAD_OTHER_WORK_FAIL, {tabType: UserWorkTabType; userId: number}> =>
+    createAction(ActionType.LOAD_OTHER_WORK_FAIL, {tabType, userId}),
+  initOtherUser: (userId: number): ActionWithPayload<ActionType.INIT_OTHER_USER, number> => createAction(ActionType.INIT_OTHER_USER, userId),
+  destroyOtherUser: (userId: number): ActionWithPayload<ActionType.DESTROY_OTHER_USER, number> => createAction(ActionType.DESTROY_OTHER_USER, userId),
 };
 
 export type UserActions = ActionsUnion<typeof Actions>;

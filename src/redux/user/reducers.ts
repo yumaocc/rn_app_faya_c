@@ -2,7 +2,7 @@ import produce from 'immer';
 import {UserActions} from './actions';
 // import { ActionType } from './types';
 import {ActionType} from './types';
-import {BankCardF, CouponF, GoLoginParams, MineDetail, MyWorkTabType, UserInfo, WalletInfo, WalletSummary, WorkList} from '../../models';
+import {BankCardF, CouponF, GoLoginParams, MineDetail, MyWorkTabType, UserCenterWork, UserInfo, UserWorkTabType, WalletInfo, WalletSummary, WorkList} from '../../models';
 
 export interface UserState {
   phone: string;
@@ -22,6 +22,9 @@ export interface UserState {
   };
   myTabs: {title: string; value: MyWorkTabType}[]; // 个人中心的tab
   currentTabType: MyWorkTabType;
+  otherUserWorks: {
+    [userId: string]: UserCenterWork;
+  };
 }
 
 export const initialState: UserState = {
@@ -84,6 +87,7 @@ export const initialState: UserState = {
     },
   },
   currentTabType: MyWorkTabType.Work,
+  otherUserWorks: {},
 };
 
 export default (state = initialState, action: UserActions): UserState => {
@@ -150,6 +154,65 @@ export default (state = initialState, action: UserActions): UserState => {
     case ActionType.LOAD_MY_WORK_SUCCESS:
       return produce(state, draft => {
         draft.myWorks[action.payload.tabType] = action.payload.works;
+      });
+    case ActionType.INIT_OTHER_USER:
+      return produce(state, draft => {
+        const stringId = String(action.payload);
+        const user = draft.otherUserWorks[stringId];
+        if (!user) {
+          draft.otherUserWorks[stringId] = {
+            id: action.payload,
+            currentTabType: UserWorkTabType.Work,
+            tabs: [
+              {title: '作品', type: UserWorkTabType.Work},
+              {title: '喜欢', type: UserWorkTabType.Like},
+            ],
+            works: {
+              [UserWorkTabType.Work]: {
+                index: 0,
+                list: [],
+                status: 'none',
+              },
+              [UserWorkTabType.Like]: {
+                index: 0,
+                list: [],
+                status: 'none',
+              },
+            },
+          };
+        }
+      });
+    case ActionType.DESTROY_OTHER_USER:
+      return produce(state, draft => {
+        const stringId = String(action.payload);
+        delete draft.otherUserWorks[stringId];
+      });
+    case ActionType.CHANGE_OTHER_TAB:
+      return produce(state, draft => {
+        const {userId, tabType} = action.payload;
+        const stringId = String(userId);
+        draft.otherUserWorks[stringId].currentTabType = tabType;
+      });
+    case ActionType.LOAD_OTHER_WORK:
+      return produce(state, draft => {
+        const {userId, tabType, replace} = action.payload;
+        const stringId = String(userId);
+        const work = draft.otherUserWorks[stringId].works[tabType];
+        if (replace || work.status !== 'noMore') {
+          draft.otherUserWorks[stringId].works[tabType].status = 'loading';
+        }
+      });
+    case ActionType.LOAD_OTHER_WORK_FAIL:
+      return produce(state, draft => {
+        const {userId, tabType} = action.payload;
+        const stringId = String(userId);
+        draft.otherUserWorks[stringId].works[tabType].status = 'noMore';
+      });
+    case ActionType.LOAD_OTHER_WORK_SUCCESS:
+      return produce(state, draft => {
+        const {userId, tabType, works} = action.payload;
+        const stringId = String(userId);
+        draft.otherUserWorks[stringId].works[tabType] = works;
       });
     case ActionType.RESET:
       return initialState;

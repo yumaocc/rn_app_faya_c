@@ -41,9 +41,6 @@ const Tabs: React.FC<TabsProps> = props => {
     }
   };
 
-  const textStyle = Object.assign({...styles.tabText}, mergedStyles.tabText || {});
-  const activeTextStyle = Object.assign({...styles.activeTabText}, mergedStyles.activeTabText || {});
-
   return (
     <View style={[styles.container, mergedStyles.container, props.style]}>
       {tabs.map((tab, index) => {
@@ -52,9 +49,9 @@ const Tabs: React.FC<TabsProps> = props => {
         return (
           <TouchableOpacity key={tab.key} activeOpacity={0.7} onPress={() => changeTab(tab.key)} style={[{marginLeft: gap}, styles.tabContainer, mergedStyles.tabContainer]}>
             <View style={[styles.tab, mergedStyles.tab]}>
-              <Text style={[textStyle, activeKey === tab.key ? activeTextStyle : {}]}>{tab.title}</Text>
+              <Text style={[styles.tabText, mergedStyles.tabText, isActive && styles.activeTabText, isActive && mergedStyles.activeTabText]}>{tab.title}</Text>
               {/* 指示器 */}
-              {props.showIndicator && <View style={[{backgroundColor: isActive ? globalStyleVariables.COLOR_PRIMARY : 'transparent'}, styles.indictor, mergedStyles.indictor]} />}
+              {props.showIndicator && <View style={[styles.indictor, mergedStyles.indictor, isActive && styles.indictorActive, isActive && mergedStyles.indictorActive]} />}
             </View>
           </TouchableOpacity>
         );
@@ -96,5 +93,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 2,
     marginTop: globalStyleVariables.MODULE_SPACE_SMALLER,
+    backgroundColor: 'transparent',
+  },
+  indictorActive: {
+    backgroundColor: globalStyleVariables.COLOR_PRIMARY,
   },
 });

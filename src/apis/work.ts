@@ -1,5 +1,17 @@
 import {PagedData, SearchParam} from '../fst/models';
-import {MyWorkTabType, PhotoUploadAuth, PhotoUploadAuthParams, VideoUploadAuth, VideoUploadAuthParams, WorkDetailF, WorkF, WorkPublishForm, WorkTabType, WorkType} from '../models';
+import {
+  MyWorkTabType,
+  PhotoUploadAuth,
+  PhotoUploadAuthParams,
+  UserWorkTabType,
+  VideoUploadAuth,
+  VideoUploadAuthParams,
+  WorkDetailF,
+  WorkF,
+  WorkPublishForm,
+  WorkTabType,
+  WorkType,
+} from '../models';
 import {post, postPaged} from './helper';
 
 export async function getWorkList(type: WorkTabType, params: SearchParam): Promise<PagedData<WorkF[]>> {
@@ -48,4 +60,9 @@ export async function realPublish(params: WorkPublishForm): Promise<boolean> {
 
 export async function getMyWorkList(type: MyWorkTabType, params: SearchParam): Promise<PagedData<WorkF[]>> {
   return await postPaged('/video/main/mine/list', {type, ...params});
+}
+
+export async function getOtherUserWorkList(type: UserWorkTabType, params: SearchParam): Promise<PagedData<WorkF[]>> {
+  console.log({type, ...params});
+  return await postPaged('/video/main/other/list', {type, ...params});
 }

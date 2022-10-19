@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import Icon from '../../../component/Icon';
@@ -6,17 +5,21 @@ import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {BoolEnum} from '../../../fst/models';
 import {dictLoadingState} from '../../../helper/dictionary';
 import {useDivideData} from '../../../helper/hooks';
-import {FakeNavigation, WorkF, WorkList as IWorkList, WorkType} from '../../../models';
+import {WorkF, WorkList as IWorkList, WorkType} from '../../../models';
 
 interface WorkListProps {
   list: IWorkList;
+  onClickWork?: (index: number) => void;
 }
 
 const WorkList: React.FC<WorkListProps> = props => {
   const {list, status} = props.list;
 
   const [l, r] = useDivideData(list);
-  const navigation = useNavigation<FakeNavigation>();
+  // const navigation = useNavigation<FakeNavigation>();
+  function handleClickWork(index: number) {
+    props.onClickWork && props.onClickWork(index);
+  }
 
   function renderWorkItem(work: WorkF, index: number, left = false) {
     if (left) {
@@ -26,7 +29,7 @@ const WorkList: React.FC<WorkListProps> = props => {
     }
     return (
       <View style={styles.item} key={`${work.mainId}-${index}-${left ? 'l' : 'r'}`}>
-        <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('MyWorkDetail', {index})}>
+        <TouchableOpacity activeOpacity={0.9} onPress={() => handleClickWork(index)}>
           <View style={{width: '100%', position: 'relative'}}>
             <Image source={{uri: work?.coverImage}} defaultSource={require('../../../assets/sku_def_1_1.png')} style={true ? styles.cover : styles.smallCover} />
             {work.type === WorkType.Video && (

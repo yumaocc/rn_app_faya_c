@@ -1,5 +1,5 @@
 import {Dispatch} from 'redux';
-import {GoLoginParams, MyWorkTabType, UserInfo} from '../../models';
+import {GoLoginParams, MyWorkTabType, UserInfo, UserWorkTabType} from '../../models';
 import {Actions} from './actions';
 
 export interface UserDispatcher {
@@ -15,6 +15,10 @@ export interface UserDispatcher {
   loadBankCards(): void;
   loadMyWork: (tabType: MyWorkTabType, replace?: boolean) => void;
   changeMyTab: (tabType: MyWorkTabType) => void;
+  initOtherUser: (userId: number) => void;
+  destroyOtherUser: (userId: number) => void;
+  loadOtherUserWork: (tabType: UserWorkTabType, userId: number, replace?: boolean) => void;
+  changeOtherUserTab: (tabType: UserWorkTabType, userId: number) => void;
 }
 
 export const getUserDispatcher = (dispatch: Dispatch): UserDispatcher => ({
@@ -30,4 +34,8 @@ export const getUserDispatcher = (dispatch: Dispatch): UserDispatcher => ({
   loadBankCards: () => dispatch(Actions.loadBankCards()),
   loadMyWork: (tabType: MyWorkTabType, replace?: boolean) => dispatch(Actions.loadMyWork(tabType, replace)),
   changeMyTab: (tabType: MyWorkTabType) => dispatch(Actions.changeMyTab(tabType)),
+  initOtherUser: (userId: number) => dispatch(Actions.initOtherUser(userId)),
+  destroyOtherUser: (userId: number) => dispatch(Actions.destroyOtherUser(userId)),
+  loadOtherUserWork: (tabType: UserWorkTabType, userId: number, replace?: boolean) => dispatch(Actions.loadOtherWork(tabType, userId, replace)),
+  changeOtherUserTab: (tabType: UserWorkTabType, userId: number) => dispatch(Actions.changeOtherTab(tabType, userId)),
 });

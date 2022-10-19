@@ -45,6 +45,7 @@ export type RootStackParamList = {
   Profile: undefined;
   Settings: undefined;
   MyWorkDetail: undefined;
+  UserWorkDetail: {id: number};
 };
 
 export type ValidRoute = keyof RootStackParamList;
@@ -54,7 +55,7 @@ export type Props = NativeStackScreenProps<RootStackParamList>;
 // navigation的类型有问题，一堆类型。用这个类型代替
 export type FakeNavigation = {
   navigate<Params = any>(name: keyof RootStackParamList, params?: Params): void;
-  navigate<Params = any>(options: {name?: keyof RootStackParamList; params?: Params; key?: keyof RootStackParamList}): void;
+  navigate<Params = any>(options: {name?: keyof RootStackParamList; params?: Params; key?: string}): void;
   canGoBack(): boolean;
   goBack(): void;
   isFocused(): void;

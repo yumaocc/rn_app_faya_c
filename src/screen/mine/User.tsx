@@ -1,65 +1,169 @@
-import React, {useEffect, useMemo} from 'react';
-import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, StatusBar} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, StatusBar, useWindowDimensions, Platform, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import {NavigationBar, Tabs} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {OtherUserDetail} from '../../models';
+import {FakeNavigation, OtherUserDetail, UserWorkTabType} from '../../models';
 import * as api from '../../apis';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
-import {useCommonDispatcher, useUserDispatcher} from '../../helper/hooks';
+import {useCommonDispatcher, useParams, useUserDispatcher} from '../../helper/hooks';
 import Icon from '../../component/Icon';
-// import { goLogin } from '../../router/Router';
-const items = [
-  {
-    title: '作品',
-    key: 'work',
-  },
-  {
-    title: '喜欢',
-    key: 'like',
-  },
-];
+import {useForceUpdate, useRefCallback} from '../../fst/hooks';
+import WorkList from './work/WorkList';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {TabsStyles} from '../../component/Tabs';
 
 const User: React.FC = () => {
-  const [userInfo, setUserInfo] = React.useState<OtherUserDetail>(null);
+  const {id} = useParams<{id: number}>();
+  const [userInfo, setUserInfo] = useState<OtherUserDetail>(null);
+  const [showFixTab, setShowFixTab] = useState(false);
+
   const token = useSelector((state: RootState) => state.common.token);
+  const userWorks = useSelector((state: RootState) => state.user.otherUserWorks[String(id)]);
   const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
+  const {width} = useWindowDimensions();
+  const [signal, updateSignal] = useForceUpdate();
+  const [ref, setRef, isReady] = useRefCallback();
+  const isFocused = useIsFocused();
+  const navigation = useNavigation<FakeNavigation>();
+  // useLog('userWorks', userWorks);
 
   const showFollow = useMemo(() => userInfo && !userInfo.hasCare, [userInfo]);
+  const tabs = useMemo(() => {
+    if (!userWorks) {
+      return [];
+    }
+    return userWorks.tabs.map(tab => ({title: tab.title, key: String(tab.type)}));
+  }, [userWorks]);
+  const currentKey = useMemo(() => String(userWorks?.currentTabType), [userWorks]);
+
+  const fetchUser = useCallback(
+    async (userId: number) => {
+      try {
+        const userDetail = await api.user.getOtherUserInfo(userId);
+        setUserInfo(userDetail);
+      } catch (error) {
+        commonDispatcher.error(error);
+      }
+    },
+    [commonDispatcher],
+  );
 
   useEffect(() => {
-    refreshUser();
-  }, []);
+    if (id) {
+      fetchUser(id);
+    }
+  }, [id, userDispatcher, signal, fetchUser]);
 
-  async function refreshUser() {
-    api.user.getOtherUserInfo(3).then(setUserInfo).catch(console.log);
-  }
+  useEffect(() => {
+    if (id) {
+      userDispatcher.initOtherUser(id);
+    }
+    return () => {
+      if (id) {
+        userDispatcher.destroyOtherUser(id);
+      }
+    };
+  }, [id, userDispatcher]);
+
+  useEffect(() => {
+    if (!isReady) {
+      return;
+    }
+    const index = tabs.findIndex(t => t.key === currentKey);
+    setTimeout(() => {
+      ref.current?.scrollTo({
+        x: width * index,
+        y: 0,
+        animated: true,
+      });
+    }, 0);
+  }, [currentKey, isReady, ref, width, tabs]);
+
+  useEffect(() => {
+    const workList = userWorks?.works[currentKey];
+    if (!workList) {
+      return;
+    }
+    if (Number(currentKey) === UserWorkTabType.Like) {
+      // 喜欢不一定要加载
+    }
+    const {list, status} = workList;
+    if (!list?.length && status === 'none') {
+      userDispatcher.loadOtherUserWork(Number(currentKey), id, true);
+    }
+  }, [currentKey, id, userDispatcher, userWorks?.works]);
+
   async function followUser() {
     if (!token) {
       userDispatcher.login({
         back: true,
       });
-    } else {
-      try {
-        await api.user.followUser(3);
-        await refreshUser();
-      } catch (error) {
-        commonDispatcher.error(error);
-      }
+      return;
+    }
+    try {
+      await api.user.followUser(id);
+      updateSignal();
+    } catch (error) {
+      commonDispatcher.error(error);
     }
   }
 
   async function sendMessage() {
     console.log(1);
   }
+  function handleCopy() {
+    console.log(1);
+  }
+
+  function handleTabChange(key: string) {
+    userDispatcher.changeOtherUserTab(Number(key), id);
+  }
+
+  const handleScroll = useCallback(
+    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+      if (isFocused) {
+        const {y} = e.nativeEvent.contentOffset;
+        // console.log(y);
+        const threshold = Platform.select({
+          ios: 352,
+          android: 410,
+        });
+        if (y > threshold && !showFixTab) {
+          setShowFixTab(true);
+        } else if (y <= threshold && showFixTab) {
+          setShowFixTab(false);
+        }
+      }
+    },
+    [isFocused, showFixTab],
+  );
+
+  function loadWork() {
+    userDispatcher.loadOtherUserWork(Number(currentKey), id);
+  }
+
+  function handleScrollEnd() {
+    if (isFocused) {
+      loadWork();
+    }
+  }
+
+  function handleGoShowCase() {
+    // todo
+  }
+
+  function goWorkList(index: number) {
+    navigation.navigate({name: 'UserWorkDetail', params: {index, userId: id}, key: 'UserWorkDetail' + Date.now()});
+  }
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      <ScrollView style={{flex: 1}} contentContainerStyle={{position: 'relative'}}>
+      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+      <ScrollView style={{flex: 1}} contentContainerStyle={{position: 'relative'}} onScroll={handleScroll} scrollEventThrottle={16} onMomentumScrollEnd={handleScrollEnd}>
         <Image source={require('../../assets/mine-bg.png')} style={styles.cover} />
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, paddingBottom: 30}}>
           <NavigationBar title="" color="#fff" />
           <View style={[styles.userActions]}>
             {showFollow && (
@@ -107,14 +211,14 @@ const User: React.FC = () => {
                     {userInfo?.nickName}
                   </Text>
                 </View>
-                {/* {!!userInfo?.account && (
-                <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop]}>
-                  <Text style={[globalStyles.fontPrimary]}>发芽号：{userInfo?.account}</Text>
-                  <TouchableOpacity activeOpacity={0.8} onPress={handleCopy}>
-                    <Icon name="copy" size={18} color="#ccc" style={{marginLeft: 10}} />
-                  </TouchableOpacity>
-                </View>
-              )} */}
+                {!!userInfo?.account && (
+                  <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop]}>
+                    <Text style={[globalStyles.fontPrimary]}>发芽号：{userInfo?.account}</Text>
+                    <TouchableOpacity activeOpacity={0.8} onPress={handleCopy}>
+                      <Icon name="all_copy" size={18} color="#ccc" style={{marginLeft: 10}} />
+                    </TouchableOpacity>
+                  </View>
+                )}
                 <View style={globalStyles.halfModuleMarginTop}>
                   <Text style={globalStyles.fontSecondary} numberOfLines={1}>
                     {userInfo?.say}
@@ -126,7 +230,7 @@ const User: React.FC = () => {
                 <>
                   {/* 订单入口栏 */}
                   <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE, paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-                    <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
+                    <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={handleGoShowCase}>
                       <View style={[globalStyles.containerRow]}>
                         <View style={[globalStyles.containerCenter, styles.entry]}>
                           <Icon name="wode_dingdan48" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
@@ -137,7 +241,29 @@ const User: React.FC = () => {
                   </View>
 
                   {/* 作品分类 */}
-                  <Tabs tabs={items} showIndicator style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}} />
+                  <Tabs
+                    tabs={tabs}
+                    currentKey={currentKey}
+                    onChange={handleTabChange}
+                    showIndicator
+                    style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}
+                    styles={tabStyles}
+                  />
+                  <ScrollView
+                    ref={setRef}
+                    horizontal
+                    style={{marginTop: globalStyleVariables.MODULE_SPACE}}
+                    snapToInterval={width}
+                    showsHorizontalScrollIndicator={false}
+                    scrollEnabled={false}>
+                    {tabs.map(tab => {
+                      return (
+                        <View style={{width}} key={tab.key}>
+                          <WorkList list={userWorks?.works[tab.key]} onClickWork={index => goWorkList(index)} />
+                        </View>
+                      );
+                    })}
+                  </ScrollView>
                 </>
               )}
             </View>
@@ -153,6 +279,7 @@ export default User;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   cover: {
     width: '100%',
@@ -207,3 +334,23 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
+
+const tabStyles: Partial<TabsStyles> = {
+  tab: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  activeTabText: {
+    color: globalStyleVariables.TEXT_COLOR_PRIMARY,
+  },
+  indictor: {
+    marginTop: 10,
+    width: '100%',
+  },
+  indictorActive: {
+    backgroundColor: '#333',
+  },
+  tabContainer: {
+    flex: 1,
+  },
+};

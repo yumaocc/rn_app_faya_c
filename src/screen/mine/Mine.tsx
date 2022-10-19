@@ -25,6 +25,7 @@ import {useCommonDispatcher, useUserDispatcher} from '../../helper/hooks';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import WorkList from './work/WorkList';
 import {useRefCallback} from '../../fst/hooks';
+import {TabsStyles} from '../../component/Tabs';
 
 const Mine: React.FC = () => {
   const detail = useSelector((state: RootState) => state.user.myDetail);
@@ -110,7 +111,7 @@ const Mine: React.FC = () => {
   }
 
   function renderStatusBar() {
-    return Platform.OS === 'ios' ? <StatusBar barStyle="light-content" /> : <StatusBar barStyle="dark-content" backgroundColor="#fff" />;
+    return Platform.OS === 'ios' ? <StatusBar barStyle={showFixTab ? 'dark-content' : 'light-content'} /> : <StatusBar barStyle="dark-content" backgroundColor="#fff" />;
   }
 
   function loadWork() {
@@ -139,7 +140,7 @@ const Mine: React.FC = () => {
       {isFocused && renderStatusBar()}
       {showFixTab && (
         <View style={[styles.fixedHeader, {paddingTop: top}]}>
-          <Tabs tabs={items} currentKey={currentTabKey} onChange={handleChangeTab} showIndicator style={[styles.fixedTab]} />
+          <Tabs tabs={items} currentKey={currentTabKey} onChange={handleChangeTab} showIndicator style={[styles.fixedTab]} styles={tabStyles} />
         </View>
       )}
       <ScrollView
@@ -150,7 +151,7 @@ const Mine: React.FC = () => {
         scrollEventThrottle={16}
         onMomentumScrollEnd={handleScrollEnd}>
         <Image source={require('../../assets/mine-bg.png')} style={styles.cover} />
-        <View style={[styles.container, {paddingTop: 170}]}>
+        <View style={[styles.container, {paddingTop: 170, paddingBottom: 20}]}>
           {/* 顶部扫码等按钮栏 */}
           <View style={[globalStyles.containerLR, {position: 'absolute', top: top + 10, width: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             <Icon name="wode_scan48" size={24} color="#fff" />
@@ -253,7 +254,14 @@ const Mine: React.FC = () => {
                 </View>
 
                 {/* 作品分类 */}
-                <Tabs tabs={items} currentKey={currentTabKey} onChange={handleChangeTab} showIndicator style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}} />
+                <Tabs
+                  tabs={items}
+                  currentKey={currentTabKey}
+                  onChange={handleChangeTab}
+                  showIndicator
+                  style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}
+                  styles={tabStyles}
+                />
                 <ScrollView
                   ref={setRef}
                   horizontal
@@ -264,7 +272,7 @@ const Mine: React.FC = () => {
                   {tabs.map(tab => {
                     return (
                       <View style={{width}} key={tab.value}>
-                        <WorkList list={allWorks[tab.value]} />
+                        <WorkList list={allWorks[tab.value]} onClickWork={index => navigation.navigate('MyWorkDetail', {index})} />
                       </View>
                     );
                   })}
@@ -340,3 +348,23 @@ const styles = StyleSheet.create({
     zIndex: 3,
   },
 });
+
+const tabStyles: Partial<TabsStyles> = {
+  tab: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  activeTabText: {
+    color: globalStyleVariables.TEXT_COLOR_PRIMARY,
+  },
+  indictor: {
+    marginTop: 10,
+    width: '100%',
+  },
+  indictorActive: {
+    backgroundColor: '#333',
+  },
+  tabContainer: {
+    flex: 1,
+  },
+};

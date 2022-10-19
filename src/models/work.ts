@@ -128,3 +128,23 @@ export interface PhotoUploadAuth {
   uploadAddress: string;
   uploadAuth: string;
 }
+
+export enum UserWorkTabType {
+  Work = 1,
+  // Private = 2,
+  Like = 3,
+  // Collect = 4,
+}
+export interface UserTab {
+  title: string;
+  type: UserWorkTabType;
+}
+export interface UserCenterWork {
+  id: number;
+  tabs: UserTab[];
+  currentTabType: UserWorkTabType;
+  works: {
+    [UserWorkTabType.Work]: WorkList;
+    [UserWorkTabType.Like]: WorkList;
+  };
+}

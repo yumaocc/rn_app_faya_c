@@ -5,7 +5,7 @@ import {Actions} from './actions';
 import {ActionType} from './types';
 import {cache} from '../../helper/cache';
 import {ActionWithPayload} from '../types';
-import {GoLoginParams, MyWorkTabType, WorkF, WorkList} from '../../models';
+import {GoLoginParams, MyWorkTabType, UserWorkTabType, WorkF, WorkList} from '../../models';
 import * as api from '../../apis';
 import {navigateBack, navigateTo, relaunch} from '../../router/Router';
 import {RootState} from '../reducers';
@@ -122,6 +122,41 @@ function* loadMyWork(action: ActionWithPayload<ActionType, {replace?: boolean; t
   }
 }
 
+function* loadOtherWork(action: ActionWithPayload<ActionType, {tabType: UserWorkTabType; userId: number; replace?: boolean}>) {
+  const {userId, tabType, replace} = action.payload;
+  const stringId = String(userId);
+  const workList: WorkList = yield select((state: RootState) => state.user.otherUserWorks[stringId]?.works[tabType]);
+  const {index, status, list} = workList;
+  if (status !== 'loading') {
+    return;
+  }
+  try {
+    const pageIndex = replace ? 1 : index + 1;
+    const pageSize = 10;
+    const data: PagedData<WorkF[]> = yield call(api.work.getOtherUserWorkList, tabType, {userId, pageIndex, pageSize});
+    let newList: WorkF[] = [];
+    if (!replace) {
+      newList = list.concat(data.content);
+    } else {
+      newList = data.content;
+    }
+    yield put(
+      Actions.loadOtherWorkSuccess(
+        tabType,
+        {
+          list: newList,
+          index: pageIndex,
+          status: data.content.length < pageSize ? 'noMore' : 'none',
+        },
+        userId,
+      ),
+    );
+  } catch (error) {
+    yield put(Actions.loadOtherWorkFail(tabType, userId));
+    yield put(CommonActions.error(error));
+  }
+}
+
 function* watchUserSagas() {
   yield takeLatest(ActionType.INIT, initUser);
   yield takeLatest(ActionType.LOGOUT, logout);
@@ -134,6 +169,7 @@ function* watchUserSagas() {
   yield takeLatest(ActionType.GET_WALLET_SUMMARY, getWalletSummary);
   yield takeLatest(ActionType.LOAD_BANK_CARDS, loadBankCards);
   yield takeLatest(ActionType.LOAD_MY_WORK, loadMyWork);
+  yield takeLatest(ActionType.LOAD_OTHER_WORK, loadOtherWork);
 }
 
 export default function* userSagas() {
