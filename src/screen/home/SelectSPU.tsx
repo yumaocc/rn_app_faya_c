@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, RefreshControl, useWindowDimensions, Image} from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, useWindowDimensions, Image} from 'react-native';
 import {NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {SPUF} from '../../models';
@@ -55,17 +55,9 @@ const SelectSPU: React.FC = () => {
     }
   }
 
-  function handleFreshSearch() {
-    spuDispatcher.loadSearchSPUForWork(keyword, true);
-  }
-
   function handleSelectSpu(spu: SPUF) {
     workDispatcher.setWorkSPU(spu);
     navigation.canGoBack() && navigation.goBack();
-  }
-
-  function handleFreshShowCase() {
-    spuDispatcher.loadShowCaseSPU({}, true);
   }
 
   function renderSPU(spu: SPUF) {
@@ -174,12 +166,12 @@ const SelectSPU: React.FC = () => {
         showsHorizontalScrollIndicator={false}
         scrollEnabled={false}>
         <View style={{width}}>
-          <ScrollView style={{flex: 1}} refreshControl={<RefreshControl refreshing={spuList?.status === 'loading'} onRefresh={handleFreshSearch} />}>
+          <ScrollView style={{flex: 1}}>
             <View style={{padding: globalStyleVariables.MODULE_SPACE}}>{spuList?.list.map(renderSPU)}</View>
           </ScrollView>
         </View>
         <View style={{width}}>
-          <ScrollView style={{flex: 1}} refreshControl={<RefreshControl refreshing={showCaseSpu?.status === 'loading'} onRefresh={handleFreshShowCase} />}>
+          <ScrollView style={{flex: 1}}>
             <View style={{padding: globalStyleVariables.MODULE_SPACE}}>{showCaseSpu?.list?.map(renderSPU)}</View>
           </ScrollView>
         </View>
