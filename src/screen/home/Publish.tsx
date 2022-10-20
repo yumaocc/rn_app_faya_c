@@ -8,7 +8,7 @@ import {WorkVisibleAuthOptions} from '../../constants';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import {useNavigation} from '@react-navigation/native';
-import {useWorkDispatcher} from '../../helper/hooks';
+import {useCommonDispatcher, useWorkDispatcher} from '../../helper/hooks';
 import {BoolEnum} from '../../fst/models';
 import Icon from '../../component/Icon';
 
@@ -26,6 +26,7 @@ const Publish: React.FC = () => {
 
   const navigation = useNavigation<FakeNavigation>();
   const [workDispatcher] = useWorkDispatcher();
+  const [commonDispatcher] = useCommonDispatcher();
 
   useEffect(() => {
     return () => {
@@ -37,8 +38,18 @@ const Publish: React.FC = () => {
     return WorkVisibleAuthOptions.find(item => item.value === visibleAuthType);
   }, [visibleAuthType]);
 
+  function check(): string {
+    if (!content) {
+      return '请输入视频标题';
+    }
+  }
+
   function handlePublish() {
     // TODO: 检查必填项
+    const res = check();
+    if (res) {
+      return commonDispatcher.error(res);
+    }
     workDispatcher.setPublishConfig({
       content: content,
       hasPrivate: visibleAuthType,
@@ -52,14 +63,14 @@ const Publish: React.FC = () => {
   }
   return (
     <>
-      <SafeAreaView edges={['bottom']} style={{flex: 1}}>
+      <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
         <StatusBar barStyle="dark-content" backgroundColor="#fff" />
         <NavigationBar title="发布" style={{backgroundColor: '#fff'}} />
         <ScrollView style={{flex: 1}} keyboardShouldPersistTaps="never">
           <View>
             {workType === WorkType.Video && (
               <View style={styles.videoContainer}>
-                <TextInput value={content} onChangeText={setContent} multiline={true} style={styles.videoInput} placeholder="写标题并使用合适的话题，能让更多人看到~" />
+                <TextInput value={content} onChangeText={setContent} multiline={true} style={styles.videoInput} placeholder="使用合适的标题，能让更多人看到~" />
                 {!!videoInfo?.coverPath && <Image style={styles.videoCover} source={{uri: 'file://' + videoInfo.coverPath}} />}
                 {!videoInfo?.coverPath && <Image style={styles.videoCover} source={{uri: 'https://fakeimg.pl/100?text=loading'}} />}
               </View>
@@ -78,10 +89,19 @@ const Publish: React.FC = () => {
                     </View>
                   )}
                 </View>
-                <View style={globalStyles.containerRow}>
-                  {!!spu && <Text>{spu?.spuName}</Text>}
-                  <Icon name="all_arrowR36" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+                <View style={[globalStyles.containerRow, {flex: 1}]}>
+                  {!!spu && (
+                    <View style={[globalStyles.containerRow, styles.showSPUContainer]}>
+                      <Image source={{uri: spu.poster}} style={{width: 30, height: 30, borderRadius: 30, marginRight: 5}} />
+                      <View style={{flex: 1}}>
+                        <Text style={globalStyles.fontPrimary} numberOfLines={1}>
+                          {spu.spuName}
+                        </Text>
+                      </View>
+                    </View>
+                  )}
                 </View>
+                <Icon name="all_arrowR36" size={24} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
               </View>
             </TouchableOpacity>
             <View style={globalStyles.lineHorizontal} />
@@ -186,5 +206,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     // backgroundColor: '#6cf',
+  },
+  showSPUContainer: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    width: 200,
+    borderRadius: 5,
+    backgroundColor: '#0000000D',
   },
 });
