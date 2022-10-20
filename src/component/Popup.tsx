@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
   body: {
     width: '100%',
     backgroundColor: '#fff',
+    overflow: 'hidden',
     // borderTopColor: '#e5e5e5',
     // borderTopWidth: StyleSheet.hairlineWidth,
   },

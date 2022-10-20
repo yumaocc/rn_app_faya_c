@@ -32,3 +32,8 @@ export async function collectSPU(id: number): Promise<boolean> {
 export async function joinToShowCase(id: number): Promise<boolean> {
   return await post('/user/showcase/spu/add/one', {id});
 }
+
+// 生成海报 type:1-视频，ID传mainId，2-商品，ID传spu的id
+export async function getSharePoster(id: number | string, type: number): Promise<string> {
+  return await post('/spu/promotional/poster', {id, type});
+}

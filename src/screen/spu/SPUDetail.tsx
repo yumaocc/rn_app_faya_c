@@ -1,17 +1,22 @@
-import React, {useCallback, useEffect} from 'react';
-import {View, StyleSheet, Text, ScrollView, StatusBar, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {View, StyleSheet, Text, ScrollView, StatusBar, NativeSyntheticEvent, NativeScrollEvent, Image, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useAndroidBack, useCommonDispatcher, useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
 import {FakeNavigation, PackageDetail, SKUDetail, SPUDetailF} from '../../models';
+import Modal from 'react-native-modal';
 
 import SPUDetailView from './SPUDetailView';
 import BuyBar from './BuyBar';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {NavigationBar} from '../../component';
+import {NavigationBar, Popup} from '../../component';
 import * as api from '../../apis';
 import {BoolEnum} from '../../fst/models';
+import {globalStyles, globalStyleVariables} from '../../constants/styles';
+import Icon from '../../component/Icon';
+import ImageViewer from 'react-native-image-zoom-viewer';
+import {useLog} from '../../fst/hooks';
 
 const SPUDetail: React.FC = () => {
   const {id} = useParams<{id: number}>();
@@ -19,9 +24,14 @@ const SPUDetail: React.FC = () => {
   const spu: SPUDetailF = useSelector((state: RootState) => state.spu.currentSPU);
   const currentSKU: PackageDetail | SKUDetail = useSelector((state: RootState) => state.spu.currentSKU);
   const isPackage: boolean = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
-  const [titleOpacity, setTitleOpacity] = React.useState(0);
-  const [isCollect, setIsCollect] = React.useState(false);
-  const [isJoinShowCase, setIsJoinShowCase] = React.useState(false);
+  const [titleOpacity, setTitleOpacity] = useState(0);
+  const [isCollect, setIsCollect] = useState(false);
+  const [isJoinShowCase, setIsJoinShowCase] = useState(false);
+  const [showShare, setShowShare] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [posterUrl, setPosterUrl] = useState('');
+
+  useLog('posterUrl', posterUrl);
 
   const [userDispatcher] = useUserDispatcher();
   const [spuDispatcher] = useSPUDispatcher();
@@ -39,6 +49,19 @@ const SPUDetail: React.FC = () => {
       spuDispatcher.viewSPU(id);
     }
   }, [id, spuDispatcher, spu, isFocused]);
+
+  useEffect(() => {
+    if (showShare && !posterUrl) {
+      api.spu
+        .getSharePoster(id, 2)
+        .then(res => {
+          if (res) {
+            setPosterUrl(res);
+          }
+        })
+        .catch(commonDispatcher.error);
+    }
+  }, [commonDispatcher, showShare, id, posterUrl]);
 
   useEffect(() => {
     return () => {
@@ -87,6 +110,11 @@ const SPUDetail: React.FC = () => {
     [isFocused],
   );
 
+  // 点击了分享
+  function handleShare() {
+    setShowShare(true);
+  }
+
   function handleCollect() {
     if (!token) {
       navigation.replace('Login', {to: 'SPUDetail', params: {id}});
@@ -132,6 +160,22 @@ const SPUDetail: React.FC = () => {
     }
   }
 
+  function handleSavePoster() {
+    // todo: 保存海报
+  }
+
+  function handleCopyLink() {
+    // todo: 复制链接
+  }
+
+  function handlePreviewPoster() {
+    setShowShare(false);
+    setShowPreview(true);
+  }
+  function handleClosePreview() {
+    setShowPreview(false);
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
@@ -140,8 +184,57 @@ const SPUDetail: React.FC = () => {
         {spu ? <SPUDetailView isPackage={isPackage} currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} /> : <Text>loading...</Text>}
       </ScrollView>
       <View style={[{paddingBottom: safeBottom, backgroundColor: '#fff'}]}>
-        <BuyBar spu={spu} sku={currentSKU} onBuy={handleBuy} onCollect={handleCollect} onAddToShopWindow={handleJoinShowCase} />
+        <BuyBar spu={spu} sku={currentSKU} onBuy={handleBuy} onCollect={handleCollect} onAddToShopWindow={handleJoinShowCase} onShare={handleShare} />
       </View>
+      {/* 海报弹窗 */}
+      {showShare && (
+        <Popup visible={true} onClose={() => setShowShare(false)} round={10} useNativeDrive={false}>
+          <View style={styles.posterModal}>
+            <View>
+              <View style={globalStyles.containerCenter}>
+                <Text>分享海报</Text>
+              </View>
+              <TouchableOpacity activeOpacity={0.8} style={{position: 'absolute', right: 0, top: 0}}>
+                <Icon name="all_popclose36" size={18} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+              </TouchableOpacity>
+            </View>
+            <View style={[globalStyles.containerCenter, {marginTop: 20}]}>
+              <View style={{width: 192, height: 394, backgroundColor: '#f4f4f4'}}>
+                {posterUrl && (
+                  <TouchableWithoutFeedback onPress={handlePreviewPoster}>
+                    <Image source={{uri: posterUrl}} style={{width: '100%', height: '100%'}} />
+                  </TouchableWithoutFeedback>
+                )}
+              </View>
+
+              <View style={[globalStyles.containerRow, {marginTop: 20}]}>
+                <View style={{marginRight: 20}}>
+                  <TouchableOpacity activeOpacity={0.8} onPress={handleSavePoster}>
+                    <View style={[styles.posterButton, {backgroundColor: '#FF6A6A'}]}>
+                      <Icon name="zuopin_pop_xiazai" size={24} color="#fff" />
+                    </View>
+                  </TouchableOpacity>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 11, marginTop: 7}]}>保存到相册</Text>
+                </View>
+                <View>
+                  <TouchableOpacity activeOpacity={0.8} onPress={handleCopyLink}>
+                    <View style={[styles.posterButton, {backgroundColor: '#8990CD'}]}>
+                      <Icon name="zuopin_pop_link" size={24} color="#fff" />
+                    </View>
+                  </TouchableOpacity>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 11, marginTop: 7}]}>复制链接</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Popup>
+      )}
+
+      {showPreview && (
+        <Modal isVisible={true} style={{margin: 0, flex: 1}} onBackdropPress={handleClosePreview} onBackButtonPress={handleClosePreview} useNativeDriver={false}>
+          <ImageViewer imageUrls={[{url: posterUrl, originUrl: posterUrl}]} index={0} enableSwipeDown={true} onSwipeDown={handleClosePreview} />
+        </Modal>
+      )}
     </View>
   );
 };
@@ -158,5 +251,18 @@ const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     zIndex: 10,
+  },
+  posterModal: {
+    // alignItems: 'center',
+    backgroundColor: '#fff',
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+  },
+  posterButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
