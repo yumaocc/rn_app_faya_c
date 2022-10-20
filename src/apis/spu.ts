@@ -10,8 +10,15 @@ export async function getSpuList(params: SearchParam): Promise<SPUF[]> {
 export async function getSPUDetail(id: number): Promise<SPUDetailF> {
   return await post('/spu/details', {id});
 }
+
+// 橱窗列表
 export async function getShowcaseSPUList(params: SearchParam): Promise<SPUF[]> {
   return await post('/user/showcase/spu/page', params);
+}
+
+// 他人橱窗列表
+export async function getOtherUserShowcase(params: SearchParam): Promise<SPUF[]> {
+  return await post('/user/showcase/spu/page/other', params);
 }
 
 export async function getBookingModal(skuId: number, beginTime: DateTimeString, endTime: DateTimeString): Promise<DayBookingModelF[]> {

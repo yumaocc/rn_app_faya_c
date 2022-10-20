@@ -47,6 +47,7 @@ export type RootStackParamList = {
   MyWorkDetail: undefined;
   UserWorkDetail: {id: number};
   MyShowcase: undefined;
+  OtherShowcase: {id: number};
 };
 
 export type ValidRoute = keyof RootStackParamList;

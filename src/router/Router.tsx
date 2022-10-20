@@ -43,6 +43,7 @@ import UserSettings from '../screen/mine/settings/Settings';
 import MyWorkDetailList from '../screen/mine/work/WorkDetailList';
 import WorkDetailListOther from '../screen/mine/work/WorkDetailListOther';
 import MyShowcase from '../screen/mine/spu/Showcase';
+import OtherShowcase from '../screen/mine/spu/OtherShowcase';
 
 import {RootStackParamList, ValidRoute} from '../models';
 
@@ -99,6 +100,7 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="MyWorkDetail" component={MyWorkDetailList} options={commonScreenOptions} />
           <Stack.Screen name="UserWorkDetail" component={WorkDetailListOther} options={commonScreenOptions} />
           <Stack.Screen name="MyShowcase" component={MyShowcase} options={commonScreenOptions} />
+          <Stack.Screen name="OtherShowcase" component={OtherShowcase} options={commonScreenOptions} />
         </>
       ) : (
         <></>

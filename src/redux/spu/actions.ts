@@ -20,6 +20,21 @@ export const Actions = {
   loadShowCaseSPUSuccess: (list: LoadListState<SPUF>): ActionWithPayload<ActionType.LOAD_SHOW_CASE_SPU_SUCCESS, LoadListState<SPUF>> =>
     createAction(ActionType.LOAD_SHOW_CASE_SPU_SUCCESS, list),
   loadShowCaseSPUFail: (): Action<ActionType.LOAD_SHOW_CASE_SPU_FAIL> => createAction(ActionType.LOAD_SHOW_CASE_SPU_FAIL),
+  initOtherUserShowcase: (userId: number): ActionWithPayload<ActionType.INIT_OTHER_USER_SHOWCASE, number> => createAction(ActionType.INIT_OTHER_USER_SHOWCASE, userId),
+  destroyOtherUserShowcase: (userId: number): ActionWithPayload<ActionType.DESTROY_OTHER_USER_SHOWCASE, number> => createAction(ActionType.DESTROY_OTHER_USER_SHOWCASE, userId),
+  loadOtherUserShowcase: (
+    userId: number,
+    search: SearchForm,
+    replace?: boolean,
+  ): ActionWithPayload<ActionType.LOAD_OTHER_USER_SHOWCASE, {userId: number; search: SearchForm; replace?: boolean}> =>
+    createAction(ActionType.LOAD_OTHER_USER_SHOWCASE, {userId, search, replace}),
+  loadOtherUserShowcaseSuccess: (
+    userId: number,
+    list: LoadListState<SPUF>,
+  ): ActionWithPayload<ActionType.LOAD_OTHER_USER_SHOWCASE_SUCCESS, {userId: number; list: LoadListState<SPUF>}> =>
+    createAction(ActionType.LOAD_OTHER_USER_SHOWCASE_SUCCESS, {userId, list}),
+  loadOtherUserShowcaseFail: (userId: number): ActionWithPayload<ActionType.LOAD_OTHER_USER_SHOWCASE_FAIL, number> =>
+    createAction(ActionType.LOAD_OTHER_USER_SHOWCASE_FAIL, userId),
 };
 
 export type SPUActions = ActionsUnion<typeof Actions>;

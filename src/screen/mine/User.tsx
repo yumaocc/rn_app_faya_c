@@ -152,6 +152,11 @@ const User: React.FC = () => {
 
   function handleGoShowCase() {
     // todo
+    navigation.navigate({
+      name: 'OtherShowcase',
+      params: {userId: id},
+      key: 'OtherShowcase-' + id,
+    });
   }
 
   function goWorkList(index: number) {

@@ -9,6 +9,9 @@ export interface SPUState {
   currentSKUIsPackage?: boolean;
   spuListForWork: LoadListState<SPUF>;
   showCaseSPUList: LoadListState<SPUF>;
+  userShowcase: {
+    [userId: string]: LoadListState<SPUF>;
+  };
 }
 
 export const initialState: SPUState = {
@@ -23,6 +26,7 @@ export const initialState: SPUState = {
     index: 0,
     status: 'none',
   },
+  userShowcase: {},
 };
 
 export default (state: SPUState = initialState, action: SPUActions) => {
@@ -71,6 +75,37 @@ export default (state: SPUState = initialState, action: SPUActions) => {
     case ActionType.LOAD_SHOW_CASE_SPU_FAIL:
       return produce(state, draft => {
         draft.showCaseSPUList.status = 'noMore';
+      });
+    case ActionType.INIT_OTHER_USER_SHOWCASE:
+      return produce(state, draft => {
+        const userId = action.payload;
+        draft.userShowcase[userId] = {
+          list: [],
+          index: 0,
+          status: 'none',
+        };
+      });
+    case ActionType.DESTROY_OTHER_USER_SHOWCASE:
+      return produce(state, draft => {
+        const userId = action.payload;
+        delete draft.userShowcase[userId];
+      });
+    case ActionType.LOAD_OTHER_USER_SHOWCASE:
+      return produce(state, draft => {
+        const {userId, replace} = action.payload;
+        if (replace || state.userShowcase[userId].status !== 'noMore') {
+          draft.userShowcase[userId].status = 'loading';
+        }
+      });
+    case ActionType.LOAD_OTHER_USER_SHOWCASE_SUCCESS:
+      return produce(state, draft => {
+        const {list, userId} = action.payload;
+        draft.userShowcase[userId] = list;
+      });
+    case ActionType.LOAD_OTHER_USER_SHOWCASE_FAIL:
+      return produce(state, draft => {
+        const userId = action.payload;
+        draft.userShowcase[userId].status = 'noMore';
       });
     case ActionType.RESET:
       return initialState;

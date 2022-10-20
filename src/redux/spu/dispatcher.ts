@@ -10,6 +10,9 @@ export interface SPUDispatcher {
   changeSKU(sku: PackageDetail | SKUDetail, isPackage: boolean): void;
   loadSearchSPUForWork(name: string, replace?: boolean): void;
   loadShowCaseSPU(search: SearchForm, replace?: boolean): void;
+  initOtherUserShowcase(userId: number): void;
+  destroyOtherUserShowcase(userId: number): void;
+  loadOtherUserShowcase(userId: number, search: SearchForm, replace?: boolean): void;
 }
 
 export const getSPUDispatcher = (dispatch: Dispatch): SPUDispatcher => ({
@@ -19,4 +22,7 @@ export const getSPUDispatcher = (dispatch: Dispatch): SPUDispatcher => ({
   changeCurrentSPU: (spu: SPUDetailF) => dispatch(Actions.setCurrentSPU(spu)),
   loadSearchSPUForWork: (name: string, replace?: boolean) => dispatch(Actions.loadSearchSPUForWork(name, replace)),
   loadShowCaseSPU: (search: SearchForm, replace?: boolean) => dispatch(Actions.loadShowCaseSPU(search, replace)),
+  initOtherUserShowcase: (userId: number) => dispatch(Actions.initOtherUserShowcase(userId)),
+  destroyOtherUserShowcase: (userId: number) => dispatch(Actions.destroyOtherUserShowcase(userId)),
+  loadOtherUserShowcase: (userId: number, search: SearchForm, replace?: boolean) => dispatch(Actions.loadOtherUserShowcase(userId, search, replace)),
 });

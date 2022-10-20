@@ -85,12 +85,42 @@ function* loadShowCaseSPU(action: ActionWithPayload<ActionType, {search: SearchF
   }
 }
 
+function* loadOtherUserShowCase(action: ActionWithPayload<ActionType, {userId: number; search: SearchForm; replace?: boolean}>) {
+  const {replace, userId} = action.payload;
+  const search = action.payload.search || {};
+  const spuList: LoadListState<SPUF> = yield select((state: RootState) => state.spu.userShowcase[String(userId)]);
+  const {list, status, index} = spuList;
+  if (status !== 'loading') {
+    return;
+  }
+  try {
+    const pageIndex = replace ? 1 : index + 1;
+    const pageSize = 10;
+    const data: SPUF[] = yield call(api.spu.getOtherUserShowcase, {pageIndex, pageSize, userId, ...search});
+    let newList: SPUF[] = [];
+    if (!replace) {
+      newList = list.concat(data);
+    } else {
+      newList = data;
+    }
+    yield put(
+      Actions.loadOtherUserShowcaseSuccess(userId, {
+        list: newList,
+        index: pageIndex,
+        status: data.length < pageSize ? 'noMore' : 'none',
+      }),
+    );
+  } catch (error) {
+    yield put(Actions.loadOtherUserShowcaseFail(userId));
+    yield put(CommonActions.error(error));
+  }
+}
+
 function* watchSPUSagas() {
   yield takeLatest(ActionType.VIEW_SPU, viewSPU);
   yield takeLatest(ActionType.LOAD_SEARCH_SPU_FOR_WORK, loadSearchSPUForWork);
   yield takeLatest(ActionType.LOAD_SHOW_CASE_SPU, loadShowCaseSPU);
-  // yield takeLatest(ActionType.LOGOUT, logout);
-  // yield takeLatest(ActionType.SET_USER_INFO, setUserInfo);
+  yield takeLatest(ActionType.LOAD_OTHER_USER_SHOWCASE, loadOtherUserShowCase);
 }
 
 export default function* spuSagas() {
