@@ -112,8 +112,8 @@ const VideoPage: React.FC<VideoPageProps> = props => {
     if (workDetail?.userId) {
       navigation.navigate({
         name: 'User',
-        params: {id: workDetail?.userId},
-        key: 'User' + Date.now(), // 每次去往个人中心需要新建一个key，否则会返回之前的页面
+        params: {id: workDetail.userId},
+        key: 'User-' + workDetail.userId, // 每次去往个人中心需要新建一个key，否则会返回之前的页面
       });
     }
   }

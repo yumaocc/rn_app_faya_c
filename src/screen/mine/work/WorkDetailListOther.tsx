@@ -17,12 +17,12 @@ const WorkDetailListOther: React.FC = () => {
   const [showSPU, setShowSPU] = useState(false);
 
   const userWorks = useSelector((state: RootState) => state.user.otherUserWorks[String(params.userId)]);
-  const currentTabType = useMemo(() => userWorks.currentTabType, [userWorks.currentTabType]);
-  const works = useMemo(() => userWorks.works[String(currentTabType)], [currentTabType, userWorks]);
+  const currentTabType = useMemo(() => userWorks?.currentTabType, [userWorks?.currentTabType]);
+  const works = useMemo(() => userWorks?.works[String(currentTabType)], [currentTabType, userWorks]);
   // const videos = useMemo(() => works.list, [works.list]);
   // const currentTabType = useSelector((state: RootState) => state.user.currentTabType);
   // const works = useSelector((state: RootState) => state.user.myWorks[currentTabType]);
-  const videos = useMemo(() => works.list, [works.list]);
+  const videos = useMemo(() => works?.list || [], [works?.list]);
   const refreshing = useMemo(() => works.status === 'loading', [works.status]);
   const currentSPU = useSelector((state: RootState) => state.spu.currentSPU);
   const currentSKU = useSelector((state: RootState) => state.spu.currentSKU);
