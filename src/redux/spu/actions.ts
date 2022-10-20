@@ -1,3 +1,4 @@
+import {SearchForm} from '../../fst/models';
 import {LoadListState, PackageDetail, SKUDetail, SPUDetailF, SPUF} from '../../models';
 import {ActionsUnion, ActionWithPayload, createAction, Action} from '../types';
 import {ActionType} from './types';
@@ -14,7 +15,8 @@ export const Actions = {
   loadSearchSPUForWorkSuccess: (list: LoadListState<SPUF>): ActionWithPayload<ActionType.LOAD_SEARCH_SPU_FOR_WORK_SUCCESS, LoadListState<SPUF>> =>
     createAction(ActionType.LOAD_SEARCH_SPU_FOR_WORK_SUCCESS, list),
   loadSearchSPUForWorkFail: (): Action<ActionType.LOAD_SEARCH_SPU_FOR_WORK_FAIL> => createAction(ActionType.LOAD_SEARCH_SPU_FOR_WORK_FAIL),
-  loadShowCaseSPU: (replace?: boolean): ActionWithPayload<ActionType.LOAD_SHOW_CASE_SPU, boolean> => createAction(ActionType.LOAD_SHOW_CASE_SPU, replace),
+  loadShowCaseSPU: (search: SearchForm, replace?: boolean): ActionWithPayload<ActionType.LOAD_SHOW_CASE_SPU, {search: SearchForm; replace?: boolean}> =>
+    createAction(ActionType.LOAD_SHOW_CASE_SPU, {search, replace}),
   loadShowCaseSPUSuccess: (list: LoadListState<SPUF>): ActionWithPayload<ActionType.LOAD_SHOW_CASE_SPU_SUCCESS, LoadListState<SPUF>> =>
     createAction(ActionType.LOAD_SHOW_CASE_SPU_SUCCESS, list),
   loadShowCaseSPUFail: (): Action<ActionType.LOAD_SHOW_CASE_SPU_FAIL> => createAction(ActionType.LOAD_SHOW_CASE_SPU_FAIL),

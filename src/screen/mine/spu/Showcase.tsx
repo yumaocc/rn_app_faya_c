@@ -1,52 +1,28 @@
-import React, {useEffect, useRef} from 'react';
-import {View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, RefreshControl, useWindowDimensions, Image} from 'react-native';
-import {NavigationBar} from '../../component';
-import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {SPUF} from '../../models';
-import {useSPUDispatcher, useWorkDispatcher} from '../../helper/hooks';
 import {useNavigation} from '@react-navigation/native';
-import Icon from '../../component/Icon';
-import {useRefCallback} from '../../fst/hooks';
+import React, {useEffect, useRef} from 'react';
+import {View, Text, StyleSheet, StatusBar, ScrollView, TextInput, TouchableOpacity, Image, RefreshControl, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
-import {RootState} from '../../redux/reducers';
+import {NavigationBar} from '../../../component';
+import Icon from '../../../component/Icon';
+import {globalStyles, globalStyleVariables} from '../../../constants/styles';
+import {useSPUDispatcher} from '../../../helper/hooks';
+import {isReachBottom} from '../../../helper/system';
+import {FakeNavigation, SPUF} from '../../../models';
+import {RootState} from '../../../redux/reducers';
 
-const SelectSPU: React.FC = () => {
-  const [type, setType] = React.useState<'search' | 'showcase'>('search');
+const Showcase: React.FC = () => {
   const [search, setSearch] = React.useState(''); // 文本框内容
   const [keyword, setKeyword] = React.useState(''); // 发起搜索时的关键字
+  const showcaseSPUList = useSelector((state: RootState) => state.spu.showCaseSPUList);
+
   const searchInput = useRef<TextInput>(null);
-
-  const spuList = useSelector((state: RootState) => state.spu.spuListForWork);
-  const showCaseSpu = useSelector((state: RootState) => state.spu.showCaseSPUList);
-
-  const [workDispatcher] = useWorkDispatcher();
   const [spuDispatcher] = useSPUDispatcher();
-  const navigation = useNavigation();
-  const {width} = useWindowDimensions();
-  const [ref, setRef, isReady] = useRefCallback();
+  const navigation = useNavigation<FakeNavigation>();
 
   useEffect(() => {
-    if (type === 'search') {
-      spuDispatcher.loadSearchSPUForWork(keyword, true);
-    } else if (type === 'showcase') {
-      spuDispatcher.loadShowCaseSPU({}, true);
-    }
-  }, [type, spuDispatcher, keyword]);
-
-  useEffect(() => {
-    if (!isReady) {
-      return;
-    }
-    const index = type === 'search' ? 0 : 1;
-    setTimeout(() => {
-      ref.current?.scrollTo({
-        x: width * index,
-        y: 0,
-        animated: true,
-      });
-    }, 0);
-  }, [type, isReady, ref, width]);
+    spuDispatcher.loadShowCaseSPU({name: keyword}, true);
+  }, [keyword, spuDispatcher]);
 
   function doSearch() {
     searchInput.current?.blur();
@@ -56,16 +32,21 @@ const SelectSPU: React.FC = () => {
   }
 
   function handleFreshSearch() {
-    spuDispatcher.loadSearchSPUForWork(keyword, true);
+    spuDispatcher.loadShowCaseSPU({name: keyword}, true);
   }
 
-  function handleSelectSpu(spu: SPUF) {
-    workDispatcher.setWorkSPU(spu);
-    navigation.canGoBack() && navigation.goBack();
+  function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
+    if (isReachBottom(e)) {
+      spuDispatcher.loadShowCaseSPU({name: keyword});
+    }
   }
 
-  function handleFreshShowCase() {
-    spuDispatcher.loadShowCaseSPU({}, true);
+  function goSPUDetail(id: number) {
+    navigation.navigate({
+      name: 'SPUDetail',
+      params: {id},
+      key: 'SPUDetail-' + id,
+    });
   }
 
   function renderSPU(spu: SPUF) {
@@ -89,23 +70,25 @@ const SelectSPU: React.FC = () => {
 
     return (
       <View key={spu.spuId}>
-        <TouchableOpacity activeOpacity={0.8} onPress={() => handleSelectSpu(spu)}>
+        <TouchableOpacity activeOpacity={0.8} onPress={() => goSPUDetail(spu.spuId)}>
           <View style={styles.spuItem}>
             <View style={styles.spuCoverContainer}>
-              <Image source={{uri: spu.poster}} defaultSource={require('../../assets/sku_def_1_1.png')} style={styles.spuCover} />
+              <Image source={{uri: spu.poster}} defaultSource={require('../../../assets/sku_def_1_1.png')} style={styles.spuCover} />
             </View>
             <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, flex: 1}}>
               <View style={globalStyles.containerRow}>
                 <Icon name="shangpin_shanghu24" size={15} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-                <Text style={[globalStyles.fontPrimary, globalStyles.moduleMarginLeft]}>商家名称，暂无字段</Text>
+                <Text style={[globalStyles.fontPrimary, globalStyles.moduleMarginLeft]}>{spu.bizName}</Text>
               </View>
-              <View style={[globalStyles.halfModuleMarginTop]}>
-                {spu.tags?.map((tag, i) => (
-                  <Text key={i} style={[globalStyles.fontTertiary, {marginRight: globalStyleVariables.MODULE_SPACE}]}>
-                    {tag}
-                  </Text>
-                ))}
-              </View>
+              {!!spu.tags?.length && (
+                <View style={[globalStyles.halfModuleMarginTop]}>
+                  {spu.tags.map((tag, i) => (
+                    <Text key={i} style={[globalStyles.fontTertiary, {marginRight: globalStyleVariables.MODULE_SPACE}]}>
+                      {tag}
+                    </Text>
+                  ))}
+                </View>
+              )}
               <Text style={[globalStyles.fontStrong, {marginTop: 10}]}>{spu.spuName}</Text>
               <View style={[globalStyles.halfModuleMarginTop, globalStyles.containerLR]}>
                 <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop]}>
@@ -139,57 +122,46 @@ const SelectSPU: React.FC = () => {
   }
 
   return (
-    <View style={{flex: 1, backgroundColor: '#f4f4f4'}}>
-      <NavigationBar
-        style={{backgroundColor: '#fff'}}
-        title={
-          <View style={globalStyles.containerRow}>
-            <TouchableOpacity activeOpacity={0.8} onPress={() => setType('search')}>
-              <Text style={[globalStyles.fontPrimary, {color: type === 'search' ? globalStyleVariables.TEXT_COLOR_PRIMARY : globalStyleVariables.TEXT_COLOR_TERTIARY}]}>
-                选择商品
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.8} onPress={() => setType('showcase')} style={{marginLeft: 20}}>
-              <Text style={[globalStyles.fontPrimary, {color: type === 'showcase' ? globalStyleVariables.TEXT_COLOR_PRIMARY : globalStyleVariables.TEXT_COLOR_TERTIARY}]}>
-                我的橱窗
-              </Text>
-            </TouchableOpacity>
-          </View>
-        }
-      />
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+      <NavigationBar title="我的橱窗" />
       <View style={styles.searchContainer}>
         <View style={styles.searchBar}>
           <Icon name="all_input_search36" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
-          <TextInput onSubmitEditing={doSearch} returnKeyType="search" ref={searchInput} style={styles.search} placeholder="搜索商品" value={search} onChangeText={setSearch} />
+          <TextInput
+            onSubmitEditing={doSearch}
+            returnKeyType="search"
+            ref={searchInput}
+            style={styles.search}
+            placeholder="搜索橱窗商品"
+            value={search}
+            onChangeText={setSearch}
+            clearButtonMode="while-editing"
+          />
         </View>
         <TouchableOpacity activeOpacity={0.8} onPress={doSearch}>
           <Text>搜索</Text>
         </TouchableOpacity>
       </View>
       <ScrollView
-        ref={setRef}
-        horizontal
-        style={{marginTop: globalStyleVariables.MODULE_SPACE, flex: 1}}
-        snapToInterval={width}
-        showsHorizontalScrollIndicator={false}
-        scrollEnabled={false}>
-        <View style={{width}}>
-          <ScrollView style={{flex: 1}} refreshControl={<RefreshControl refreshing={spuList?.status === 'loading'} onRefresh={handleFreshSearch} />}>
-            <View style={{padding: globalStyleVariables.MODULE_SPACE}}>{spuList?.list.map(renderSPU)}</View>
-          </ScrollView>
-        </View>
-        <View style={{width}}>
-          <ScrollView style={{flex: 1}} refreshControl={<RefreshControl refreshing={showCaseSpu?.status === 'loading'} onRefresh={handleFreshShowCase} />}>
-            <View style={{padding: globalStyleVariables.MODULE_SPACE}}>{showCaseSpu?.list?.map(renderSPU)}</View>
-          </ScrollView>
+        style={{flex: 1, backgroundColor: '#f4f4f4'}}
+        onMomentumScrollEnd={handleScrollEnd}
+        refreshControl={<RefreshControl refreshing={showcaseSPUList?.status === 'loading'} onRefresh={handleFreshSearch} />}>
+        <View>
+          <View style={{padding: globalStyleVariables.MODULE_SPACE}}>{showcaseSPUList?.list.map(renderSPU)}</View>
         </View>
       </ScrollView>
     </View>
   );
 };
-export default SelectSPU;
+
+export default Showcase;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   searchContainer: {
     padding: globalStyleVariables.MODULE_SPACE,
     borderBottomLeftRadius: 10,

@@ -6,6 +6,7 @@ import {CommonActions} from '../actions';
 import {LoadListState, SPUDetailF, SPUF} from '../../models';
 import {Actions} from './actions';
 import {RootState} from '../reducers';
+import {SearchForm} from '../../fst/models';
 
 function* viewSPU(action: ActionWithPayload<ActionType, number>) {
   const id = action.payload;
@@ -52,8 +53,10 @@ function* loadSearchSPUForWork(action: ActionWithPayload<ActionType, {name: stri
   }
 }
 
-function* loadShowCaseSPU(action: ActionWithPayload<ActionType, boolean>) {
-  const replace = action.payload;
+function* loadShowCaseSPU(action: ActionWithPayload<ActionType, {search: SearchForm; replace?: boolean}>) {
+  // const {replace, search} = action.payload;
+  const replace = action.payload.replace || false;
+  const search = action.payload.search || {};
   const spuList: LoadListState<SPUF> = yield select((state: RootState) => state.spu.showCaseSPUList);
   const {list, status, index} = spuList;
   if (status !== 'loading') {
@@ -62,7 +65,7 @@ function* loadShowCaseSPU(action: ActionWithPayload<ActionType, boolean>) {
   try {
     const pageIndex = replace ? 1 : index + 1;
     const pageSize = 10;
-    const data: SPUF[] = yield call(api.spu.getShowcaseSPUList, {pageIndex, pageSize});
+    const data: SPUF[] = yield call(api.spu.getShowcaseSPUList, {pageIndex, pageSize, ...search});
     let newList: SPUF[] = [];
     if (!replace) {
       newList = list.concat(data);

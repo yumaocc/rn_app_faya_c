@@ -59,7 +59,8 @@ export default (state: SPUState = initialState, action: SPUActions) => {
       });
     case ActionType.LOAD_SHOW_CASE_SPU:
       return produce(state, draft => {
-        if (action.payload || state.showCaseSPUList.status !== 'noMore') {
+        const {replace} = action.payload;
+        if (replace || state.showCaseSPUList.status !== 'noMore') {
           draft.showCaseSPUList.status = 'loading';
         }
       });

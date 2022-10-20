@@ -1,4 +1,4 @@
-import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
+import {Platform, PermissionsAndroid, Alert, Linking, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import RNFS from 'react-native-fs';
@@ -146,4 +146,11 @@ export async function compressImageUntil(config: ImageCompressOptions, size: num
   } else {
     return res;
   }
+}
+
+export function isReachBottom(e: NativeSyntheticEvent<NativeScrollEvent>, offset = 50): boolean {
+  var offsetY = e.nativeEvent.contentOffset.y; //滑动距离
+  var contentSizeHeight = e.nativeEvent.contentSize.height; //scrollView contentSize高度
+  var scrollViewHeight = e.nativeEvent.layoutMeasurement.height; //scrollView高度
+  return offsetY + scrollViewHeight + offset >= contentSizeHeight;
 }

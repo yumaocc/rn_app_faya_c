@@ -14,6 +14,7 @@ export interface SPUF {
   commissionRangeRightMoney: number;
   commissionRangeRightMoneyYuan: string;
   categoryName: string;
+  bizName: string;
   tags: string[];
 }
 

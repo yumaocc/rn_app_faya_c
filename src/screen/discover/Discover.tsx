@@ -38,6 +38,14 @@ const Discover: React.FC = () => {
     }
   }
 
+  function goSPUDetail(id: number) {
+    navigation.navigate({
+      name: 'SPUDetail',
+      params: {id},
+      key: 'SPUDetail-' + id,
+    });
+  }
+
   useEffect(() => {
     getCurrentLocation();
   }, []);
@@ -66,7 +74,7 @@ const Discover: React.FC = () => {
         <TouchableOpacity
           activeOpacity={0.9}
           onPress={() => {
-            navigation.navigate('SPUDetail', {id: spu.spuId});
+            goSPUDetail(spu.spuId);
           }}>
           <View style={styles.spuCoverContainer}>
             <Image source={{uri: spu.poster}} defaultSource={require('../../assets/sku_def_1_1.png')} style={styles.spuCover} />
