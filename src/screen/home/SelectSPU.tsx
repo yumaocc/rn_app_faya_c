@@ -30,7 +30,7 @@ const SelectSPU: React.FC = () => {
     if (type === 'search') {
       spuDispatcher.loadSearchSPUForWork(keyword, true);
     } else if (type === 'showcase') {
-      spuDispatcher.loadShowCaseSPU({}, true);
+      spuDispatcher.loadShowCaseSPU({name: keyword}, true);
     }
   }, [type, spuDispatcher, keyword]);
 
@@ -97,7 +97,7 @@ const SelectSPU: React.FC = () => {
             <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, flex: 1}}>
               <View style={globalStyles.containerRow}>
                 <Icon name="shangpin_shanghu24" size={15} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-                <Text style={[globalStyles.fontPrimary, globalStyles.moduleMarginLeft]}>商家名称，暂无字段</Text>
+                <Text style={[globalStyles.fontPrimary, globalStyles.moduleMarginLeft]}>{spu?.bizName}</Text>
               </View>
               <View style={[globalStyles.halfModuleMarginTop]}>
                 {spu.tags?.map((tag, i) => (
@@ -211,6 +211,7 @@ const styles = StyleSheet.create({
   },
   search: {
     // backgroundColor: '#6cf',
+    marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER,
     flex: 1,
     height: 35,
     padding: 0,

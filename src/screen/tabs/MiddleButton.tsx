@@ -20,7 +20,7 @@ const MiddleButton: React.FC = () => {
         redirect: true,
       });
     } else {
-      // navigation.navigate('ShootVideo');
+      navigation.navigate('ShootVideo');
       // navigation.navigate('TestPage');
       // navigation.navigate('WalletSummaryAgent');
       // navigation.navigate('Profile');
@@ -32,7 +32,7 @@ const MiddleButton: React.FC = () => {
       // navigation.navigate('PublishVideo');
       // navigation.navigate('WaitPay');
       // navigation.navigate('SPUDetail', {id: 62});
-      navigation.navigate('User', {id: 2});
+      // navigation.navigate('User', {id: 2});
       // navigation.navigate('OrderDetail', {id: '1580101446588235776'});
       // navigation.navigate('OrderBooking', {id: '1580135056015572993'});
     }

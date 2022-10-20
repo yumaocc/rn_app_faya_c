@@ -183,6 +183,7 @@ const styles = StyleSheet.create({
   },
   search: {
     // backgroundColor: '#6cf',
+    marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER,
     flex: 1,
     height: 35,
     padding: 0,
