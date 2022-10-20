@@ -5,6 +5,7 @@ import RNFS from 'react-native-fs';
 import {displayName} from '../../../app.json';
 import {APP_SCHEMES} from '../../constants';
 import {AppInstallCheckType, ImageCompressOptions, ImageCompressResult} from '../../models';
+import CameraRoll from '@react-native-community/cameraroll';
 
 export function getVideoNameByPath(videPath: string) {
   return getFileNameByPath(videPath, 'upload.mp4');
@@ -153,4 +154,28 @@ export function isReachBottom(e: NativeSyntheticEvent<NativeScrollEvent>, offset
   var contentSizeHeight = e.nativeEvent.contentSize.height; //scrollView contentSize高度
   var scrollViewHeight = e.nativeEvent.layoutMeasurement.height; //scrollView高度
   return offsetY + scrollViewHeight + offset >= contentSizeHeight;
+}
+
+export async function saveImageToGallery(uri: string) {
+  const isRemote = uri.startsWith('http');
+  if (isRemote) {
+    if (Platform.OS === 'ios') {
+      // ios可以直接保存远程图片
+      return await CameraRoll.save(uri, {type: 'auto'});
+    } else {
+      const fileName = getFileNameByPath(uri);
+      const toPath = RNFS.DownloadDirectoryPath + '/' + fileName;
+      await RNFS.downloadFile({
+        fromUrl: uri,
+        toFile: toPath,
+      }).promise;
+      return await CameraRoll.save(toPath, {type: 'auto'});
+    }
+  } else {
+    // todo: 本地图片保存到相册
+  }
+}
+
+export function getTempFilePath(fileName: string) {
+  return `${RNFS.TemporaryDirectoryPath}/${fileName}`;
 }

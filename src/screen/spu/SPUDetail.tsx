@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View, StyleSheet, Text, ScrollView, StatusBar, NativeSyntheticEvent, NativeScrollEvent, Image, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useAndroidBack, useCommonDispatcher, useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
@@ -17,6 +17,7 @@ import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import Icon from '../../component/Icon';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {useLog} from '../../fst/hooks';
+import {saveImageToGallery} from '../../helper/system';
 
 const SPUDetail: React.FC = () => {
   const {id} = useParams<{id: number}>();
@@ -33,6 +34,7 @@ const SPUDetail: React.FC = () => {
 
   useLog('posterUrl', posterUrl);
 
+  const posterRef = useRef<Image>(null);
   const [userDispatcher] = useUserDispatcher();
   const [spuDispatcher] = useSPUDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
@@ -160,8 +162,13 @@ const SPUDetail: React.FC = () => {
     }
   }
 
-  function handleSavePoster() {
-    // todo: 保存海报
+  async function handleSavePoster() {
+    try {
+      await saveImageToGallery(posterUrl);
+      commonDispatcher.info('保存成功');
+    } catch (error) {
+      commonDispatcher.error(error);
+    }
   }
 
   function handleCopyLink() {
@@ -202,7 +209,7 @@ const SPUDetail: React.FC = () => {
               <View style={{width: 192, height: 394, backgroundColor: '#f4f4f4'}}>
                 {posterUrl && (
                   <TouchableWithoutFeedback onPress={handlePreviewPoster}>
-                    <Image source={{uri: posterUrl}} style={{width: '100%', height: '100%'}} />
+                    <Image ref={posterRef} source={{uri: posterUrl}} style={{width: '100%', height: '100%'}} />
                   </TouchableWithoutFeedback>
                 )}
               </View>
