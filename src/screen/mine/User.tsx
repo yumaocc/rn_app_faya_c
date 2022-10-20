@@ -1,8 +1,9 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, StatusBar, useWindowDimensions, Platform, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import {NavigationBar, Tabs} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {FakeNavigation, OtherUserDetail, UserWorkTabType} from '../../models';
+import {FakeNavigation, OtherUserDetail, UserFollowState, UserWorkTabType} from '../../models';
 import * as api from '../../apis';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
@@ -29,7 +30,9 @@ const User: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
   // useLog('userWorks', userWorks);
 
-  const showFollow = useMemo(() => userInfo && !userInfo.hasCare, [userInfo]);
+  // 是否已关注
+  const followed = useMemo(() => userInfo && [UserFollowState.FOLLOW_EACH_OTHER, UserFollowState.FOLLOWED_USER].includes(userInfo?.hasCare), [userInfo]);
+
   const tabs = useMemo(() => {
     if (!userWorks) {
       return [];
@@ -110,11 +113,14 @@ const User: React.FC = () => {
     }
   }
 
-  async function sendMessage() {
-    console.log(1);
-  }
+  // async function sendMessage() {
+  //   console.log(1);
+  // }
   function handleCopy() {
-    console.log(1);
+    if (userInfo?.account) {
+      Clipboard.setString(userInfo?.account);
+      commonDispatcher.info('复制成功');
+    }
   }
 
   function handleTabChange(key: string) {
@@ -171,21 +177,28 @@ const User: React.FC = () => {
         <View style={{flex: 1, paddingBottom: 30}}>
           <NavigationBar title="" color="#fff" />
           <View style={[styles.userActions]}>
-            {showFollow && (
+            {!followed && (
               <TouchableOpacity activeOpacity={0.7} onPress={followUser}>
                 <View style={[styles.userAction]}>
-                  <Text style={[globalStyles.fontPrimary, {color: '#fff'}]}>关注</Text>
+                  <Text style={[globalStyles.fontPrimary, {color: '#fff'}]}>{userInfo?.hasCare === UserFollowState.FOLLOWED_ME ? '回关' : '关注'}</Text>
                 </View>
               </TouchableOpacity>
             )}
-            {true && (
+            {followed && (
+              <TouchableOpacity activeOpacity={0.7} onPress={followUser}>
+                <View style={[globalStyles.containerCenter, styles.userAction, {backgroundColor: 'transparent', paddingHorizontal: 10}]}>
+                  <Icon name="wode_yiguanzhu48" size={24} color="#fff" />
+                </View>
+              </TouchableOpacity>
+            )}
+            {/* {true && (
               <TouchableOpacity activeOpacity={0.7} onPress={sendMessage}>
                 <View style={[styles.userAction]}>
                   <Icon name="wode_sixin30" color="#fff" size={15} />
                   <Text style={[globalStyles.fontPrimary, {color: '#fff', marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}]}>发私信</Text>
                 </View>
               </TouchableOpacity>
-            )}
+            )} */}
           </View>
           <View style={[styles.container, {paddingTop: 0, marginTop: 20}]}>
             <View style={{borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: '#fff'}}>
@@ -293,6 +306,7 @@ const styles = StyleSheet.create({
     top: 0,
   },
   userActions: {
+    height: 35,
     marginTop: 30,
     paddingHorizontal: globalStyleVariables.MODULE_SPACE,
     justifyContent: 'flex-end',

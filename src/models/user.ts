@@ -1,5 +1,5 @@
 import {Asset} from 'react-native-image-picker';
-import {BoolEnum, DateTimeString} from '../fst/models';
+import {DateTimeString} from '../fst/models';
 import {ValidRoute} from './route';
 
 export enum UserState {
@@ -105,8 +105,14 @@ export interface MineDetail {
   };
 }
 
+export enum UserFollowState {
+  FOLLOW_STRANGER = 0, // 互相都未关注
+  FOLLOWED_ME = 1, // 我未关注对方，但对方关注了我
+  FOLLOWED_USER = 2, // 我关注了对方，但对方未关注我
+  FOLLOW_EACH_OTHER = 3, // 互相关注
+}
 export interface OtherUserDetail extends MineDetail {
-  hasCare: BoolEnum;
+  hasCare: UserFollowState;
 }
 
 export enum UserLevel {

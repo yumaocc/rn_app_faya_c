@@ -34,7 +34,7 @@ export type {SPUF, SPUShop, PackageDetail, SKUDetail, SPUDetailF, SKUShowInfo, P
 export type {OrderF, OrderDetailF, OrderPackageSKU, PayOrder, OrderCommentForm, OrderRefundForm, OrderBookingForm, OrderBookingDetailF, OrderForm} from './order';
 export type {CameraType, AppInstallCheckType, ImageCompressOptions, ImageCompressResult} from './device';
 
-export {UserState, CouponState, CouponType, UserLevel, CouponFilterState, UserCertificationStatus} from './user';
+export {UserState, CouponState, CouponType, UserLevel, CouponFilterState, UserCertificationStatus, UserFollowState} from './user';
 export {WorkTabType, WorkType, WorkVisibleAuth, MyWorkTabType, UserWorkTabType} from './work';
 export {SPUStatus, SPUType, BookingType, PayChannel, SKUSaleState} from './spu';
 export {OrderStatus, OrderPayState} from './order';
