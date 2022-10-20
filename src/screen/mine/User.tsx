@@ -9,7 +9,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import {useCommonDispatcher, useParams, useUserDispatcher} from '../../helper/hooks';
 import Icon from '../../component/Icon';
-import {useForceUpdate, useRefCallback} from '../../fst/hooks';
+import {useForceUpdate} from '../../fst/hooks';
 import WorkList from './work/WorkList';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {TabsStyles} from '../../component/Tabs';
@@ -25,7 +25,7 @@ const User: React.FC = () => {
   const [commonDispatcher] = useCommonDispatcher();
   const {width} = useWindowDimensions();
   const [signal, updateSignal] = useForceUpdate();
-  const [ref, setRef, isReady] = useRefCallback();
+  // const [ref, setRef, isReady] = useRefCallback();
   const isFocused = useIsFocused();
   const navigation = useNavigation<FakeNavigation>();
   // useLog('userWorks', userWorks);
@@ -70,19 +70,19 @@ const User: React.FC = () => {
     };
   }, [id, userDispatcher]);
 
-  useEffect(() => {
-    if (!isReady) {
-      return;
-    }
-    const index = tabs.findIndex(t => t.key === currentKey);
-    setTimeout(() => {
-      ref.current?.scrollTo({
-        x: width * index,
-        y: 0,
-        animated: true,
-      });
-    }, 0);
-  }, [currentKey, isReady, ref, width, tabs]);
+  // useEffect(() => {
+  //   if (!isReady) {
+  //     return;
+  //   }
+  //   const index = tabs.findIndex(t => t.key === currentKey);
+  //   setTimeout(() => {
+  //     ref.current?.scrollTo({
+  //       x: width * index,
+  //       y: 0,
+  //       animated: true,
+  //     });
+  //   }, 0);
+  // }, [currentKey, isReady, ref, width, tabs]);
 
   useEffect(() => {
     const workList = userWorks?.works[currentKey];
@@ -267,7 +267,17 @@ const User: React.FC = () => {
                     style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}
                     styles={tabStyles}
                   />
-                  <ScrollView
+                  <View>
+                    {tabs.map(tab => {
+                      const isCurrent = tab.key === currentKey;
+                      return isCurrent ? (
+                        <View style={{width}} key={tab.key}>
+                          <WorkList list={userWorks?.works[tab.key]} onClickWork={index => goWorkList(index)} />
+                        </View>
+                      ) : null;
+                    })}
+                  </View>
+                  {/* <ScrollView
                     ref={setRef}
                     horizontal
                     style={{marginTop: globalStyleVariables.MODULE_SPACE}}
@@ -281,7 +291,7 @@ const User: React.FC = () => {
                         </View>
                       );
                     })}
-                  </ScrollView>
+                  </ScrollView> */}
                 </>
               )}
             </View>

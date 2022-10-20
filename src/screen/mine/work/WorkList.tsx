@@ -74,7 +74,7 @@ const WorkList: React.FC<WorkListProps> = props => {
         <View style={styles.left}>{l.map((v, i) => renderWorkItem(v, i, true))}</View>
         <View style={styles.right}>{r.map((v, i) => renderWorkItem(v, i))}</View>
       </View>
-      <View style={globalStyles.containerCenter}>
+      <View style={[globalStyles.containerCenter, {marginTop: 20}]}>
         <Text>{dictLoadingState(status)}</Text>
       </View>
     </View>
@@ -85,10 +85,10 @@ export default WorkList;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
   },
   itemContainer: {
-    flex: 1,
+    // flex: 1,
     flexDirection: 'row',
     // backgroundColor: '#6cf',
     paddingHorizontal: globalStyleVariables.MODULE_SPACE,

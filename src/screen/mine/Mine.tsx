@@ -1,19 +1,6 @@
 import Icon from '../../component/Icon';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  StatusBar,
-  TouchableWithoutFeedback,
-  Platform,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-  useWindowDimensions,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, StatusBar, TouchableWithoutFeedback, Platform, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {Tabs} from '../../component';
@@ -24,7 +11,6 @@ import {RootState} from '../../redux/reducers';
 import {useCommonDispatcher, useUserDispatcher} from '../../helper/hooks';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import WorkList from './work/WorkList';
-import {useRefCallback} from '../../fst/hooks';
 import {TabsStyles} from '../../component/Tabs';
 
 const Mine: React.FC = () => {
@@ -42,22 +28,22 @@ const Mine: React.FC = () => {
   const [commonDispatcher] = useCommonDispatcher();
   const isFocused = useIsFocused();
   const {top} = useSafeAreaInsets();
-  const {width} = useWindowDimensions();
-  const [ref, setRef, isReady] = useRefCallback();
+  // const {width} = useWindowDimensions();
+  // const [ref, setRef, isReady] = useRefCallback();
 
-  useEffect(() => {
-    if (!isReady) {
-      return;
-    }
-    const index = tabs.findIndex(t => t.value === Number(currentTabKey));
-    setTimeout(() => {
-      ref.current?.scrollTo({
-        x: width * index,
-        y: 0,
-        animated: true,
-      });
-    }, 0);
-  }, [currentTabKey, isReady, ref, width, tabs]);
+  // useEffect(() => {
+  //   if (!isReady) {
+  //     return;
+  //   }
+  //   const index = tabs.findIndex(t => t.value === Number(currentTabKey));
+  //   setTimeout(() => {
+  //     ref.current?.scrollTo({
+  //       x: width * index,
+  //       y: 0,
+  //       animated: true,
+  //     });
+  //   }, 0);
+  // }, [currentTabKey, isReady, ref, width, tabs]);
 
   useEffect(() => {
     if (token) {
@@ -262,7 +248,21 @@ const Mine: React.FC = () => {
                   style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}
                   styles={tabStyles}
                 />
-                <ScrollView
+                <View>
+                  {tabs.map(tab => {
+                    const isCurrentTab = String(tab.value) === currentTabKey;
+                    if (isCurrentTab) {
+                      return (
+                        <View key={tab.value}>
+                          <WorkList list={allWorks[tab.value]} onClickWork={index => navigation.navigate('MyWorkDetail', {index})} />
+                        </View>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
+                </View>
+                {/* <ScrollView
                   ref={setRef}
                   horizontal
                   style={{marginTop: globalStyleVariables.MODULE_SPACE}}
@@ -276,7 +276,7 @@ const Mine: React.FC = () => {
                       </View>
                     );
                   })}
-                </ScrollView>
+                </ScrollView> */}
               </>
             )}
           </View>
