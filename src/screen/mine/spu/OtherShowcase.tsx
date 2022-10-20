@@ -137,7 +137,7 @@ const Showcase: React.FC = () => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <NavigationBar title="我的橱窗" />
+      <NavigationBar title="橱窗" />
       <View style={styles.searchContainer}>
         <View style={styles.searchBar}>
           <Icon name="all_input_search36" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
