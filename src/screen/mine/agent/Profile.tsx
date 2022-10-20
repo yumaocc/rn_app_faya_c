@@ -153,7 +153,7 @@ const Profile: React.FC = () => {
                               styles.taskName,
                               {color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
                             ]}>
-                            发展新用户{`（${Math.min(agentInfo?.developNewUsers, agentInfo?.developNewUsersMax)}/${agentInfo?.developNewUsersMax}）`}
+                            发展新用户{`（${Math.min(agentInfo?.developNewUsers, agentInfo?.developNewUsersMax) ?? '-'}/${agentInfo?.developNewUsersMax ?? '-'}）`}
                           </Text>
                         </View>
                         <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
@@ -168,7 +168,8 @@ const Profile: React.FC = () => {
                               styles.taskName,
                               {color: newOrderTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
                             ]}>
-                            分享商品完成订单交易{`（${Math.min(agentInfo?.shareCompletedOrder, agentInfo?.shareCompletedOrderMax)}/${agentInfo?.shareCompletedOrderMax}）`}
+                            分享商品完成订单交易
+                            {`（${Math.min(agentInfo?.shareCompletedOrder, agentInfo?.shareCompletedOrderMax) ?? '-'}/${agentInfo?.shareCompletedOrderMax ?? '-'}）`}
                           </Text>
                         </View>
                       </View>
