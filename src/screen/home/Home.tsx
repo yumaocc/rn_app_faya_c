@@ -20,6 +20,7 @@ const Home: React.FC = () => {
   const followWorks = useSelector((state: RootState) => state.work.works[WorkTabType.Follow]);
   const nearbyWorks = useSelector((state: RootState) => state.work.works[WorkTabType.Nearby]);
   const tabs = useSelector((state: RootState) => state.work.tabs);
+
   const {width} = useWindowDimensions();
   const [ref, setRef, isReady] = useRefCallback();
   const isFocused = useIsFocused();

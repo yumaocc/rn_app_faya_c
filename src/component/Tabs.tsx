@@ -13,7 +13,6 @@ export type TabsStyles = {
   [key in keyof typeof styles]: ViewStyle | TextStyle;
 };
 interface TabsProps {
-  onChange?: (key: string) => void;
   defaultActiveKey?: string;
   currentKey?: string;
   tabs: TabItem[];
@@ -21,6 +20,8 @@ interface TabsProps {
   showIndicator?: boolean;
   gap?: number;
   styles?: Partial<TabsStyles>;
+  onChange?: (key: string) => void;
+  onBeforeChange?: (next: string, current: string) => Promise<boolean>;
 }
 
 const Tabs: React.FC<TabsProps> = props => {
@@ -34,8 +35,14 @@ const Tabs: React.FC<TabsProps> = props => {
     }
   }, [currentKey]);
 
-  const changeTab = (key: string) => {
+  const changeTab = async (key: string) => {
     if (key !== activeKey) {
+      if (props.onBeforeChange) {
+        const success = await props.onBeforeChange(key, activeKey);
+        if (!success) {
+          return;
+        }
+      }
       setActiveKey(key);
       onChange && onChange(key);
     }

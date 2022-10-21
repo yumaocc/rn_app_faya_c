@@ -7,7 +7,8 @@ import {WorkF, WorkList, WorkTabType} from '../../models';
 import * as api from '../../apis';
 import {RootState} from '../reducers';
 import {Actions} from './actions';
-import {PagedData} from '../../fst/models';
+import {PagedData, SearchParam} from '../../fst/models';
+import {getLocation} from '../../helper/system';
 
 function* loadWork(action: ActionWithPayload<ActionType, {replace?: boolean; tabType: WorkTabType}>): any {
   const {replace, tabType} = action.payload;
@@ -19,7 +20,13 @@ function* loadWork(action: ActionWithPayload<ActionType, {replace?: boolean; tab
   try {
     const pageIndex = replace ? 1 : index + 1;
     const pageSize = 10;
-    const data: PagedData<WorkF[]> = yield call(api.work.getWorkList, tabType, {pageIndex, pageSize});
+    let search: SearchParam = {pageIndex, pageSize};
+    if (tabType === WorkTabType.Nearby) {
+      const {coords} = yield getLocation();
+      const {latitude, longitude} = coords;
+      search = {...search, latitude, longitude};
+    }
+    const data: PagedData<WorkF[]> = yield call(api.work.getWorkList, tabType, search);
     let newList: WorkF[] = [];
     if (!replace) {
       newList = list.concat(data.content);
