@@ -34,7 +34,6 @@ const Discover: React.FC = () => {
   const getCurrentLocation = useCallback(async () => {
     try {
       const location = await getLocation();
-      console.log('location', location.coords);
       const {latitude, longitude} = location.coords;
       const locationMaybe = await api.user.getLocationByGPS(latitude, longitude);
       commonDispatcher.setConfig({
