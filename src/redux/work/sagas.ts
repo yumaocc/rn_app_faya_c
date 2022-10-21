@@ -22,9 +22,13 @@ function* loadWork(action: ActionWithPayload<ActionType, {replace?: boolean; tab
     const pageSize = 10;
     let search: SearchParam = {pageIndex, pageSize};
     if (tabType === WorkTabType.Nearby) {
-      const {coords} = yield getLocation();
-      const {latitude, longitude} = coords;
-      search = {...search, latitude, longitude};
+      try {
+        const {coords} = yield getLocation();
+        const {latitude, longitude} = coords;
+        search = {...search, latitude, longitude};
+      } catch (error) {
+        // 没有定位就静默失败
+      }
     }
     const data: PagedData<WorkF[]> = yield call(api.work.getWorkList, tabType, search);
     let newList: WorkF[] = [];
