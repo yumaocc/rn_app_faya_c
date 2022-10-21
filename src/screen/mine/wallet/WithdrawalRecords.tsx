@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
-import {View, Text, StyleSheet, ScrollView, RefreshControl, NativeSyntheticEvent, NativeScrollEvent, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, RefreshControl, NativeSyntheticEvent, NativeScrollEvent, ActivityIndicator, StatusBar} from 'react-native';
 import {NavigationBar} from '../../../component';
 import {LoadingState, WithdrawalRecord} from '../../../models';
 import * as api from '../../../apis';
@@ -45,6 +45,7 @@ const WithdrawalRecords: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       <NavigationBar title="提现记录" />
       <ScrollView style={{flex: 1}} refreshControl={<RefreshControl refreshing={false} onRefresh={handleRefresh} />} onMomentumScrollEnd={handleScrollEnd}>
         <View>
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: '#fff',
-    paddingVertical: 24,
+    paddingVertical: 20,
     paddingHorizontal: 15,
   },
   itemBorder: {

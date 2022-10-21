@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, ScrollView, TouchableOpacity, StyleSheet, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from '../../../component/Icon';
 import {Button, InputNumber, NavigationBar, Popup} from '../../../component';
@@ -73,6 +73,7 @@ const Withdrawal: React.FC = () => {
   return (
     <>
       <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
+        <StatusBar barStyle="dark-content" />
         <NavigationBar
           title="提现"
           headerRight={
