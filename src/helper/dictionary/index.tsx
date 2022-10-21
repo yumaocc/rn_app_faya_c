@@ -53,3 +53,19 @@ export function dictAgentLevel(num: number) {
       return '';
   }
 }
+
+export function dictWithdrawState(state: number) {
+  // 0提交审核，1审核通过，2审核失败，3已打款，4打款失败
+  switch (state) {
+    case 0:
+      return '正在审核';
+    case 1:
+      return '审核通过,等待打款';
+    case 2:
+      return '审核失败';
+    case 3:
+      return '提现成功';
+    case 4:
+      return '提现失败';
+  }
+}

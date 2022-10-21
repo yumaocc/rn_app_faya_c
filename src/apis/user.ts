@@ -12,8 +12,10 @@ import {
   UserInfo,
   WalletInfo,
   WalletSummary,
+  WithdrawalRecord,
 } from '../models';
 import {Platform} from 'react-native';
+import {SearchParam} from '../fst/models';
 
 export async function userLogin(phone: string, code: string): Promise<UserInfo> {
   return await post<UserInfo, {code: string; telephone: string}>('/user/login', {
@@ -113,4 +115,8 @@ export async function agentInfo(): Promise<AgentHomeInfo> {
 
 export async function getLocationByGPS(latitude: number, longitude: number): Promise<LocationCity> {
   return await post('/location/with/company/by/gps', {latitude, longitude});
+}
+
+export async function getWithdrawRecord(params: SearchParam): Promise<WithdrawalRecord[]> {
+  return await post('/user/withdrawal/log/page', params);
 }

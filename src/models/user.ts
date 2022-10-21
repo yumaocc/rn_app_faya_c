@@ -180,3 +180,13 @@ export interface AgentHomeInfo {
   newUsersOrders: AgentTask[]; // 拉新任务
   orders: AgentTask[]; // 订单任务
 }
+
+export interface WithdrawalRecord {
+  id: number;
+  status: number;
+  createdTime: DateTimeString;
+  money: number;
+  moneyYuan: string;
+  canWithdrawalMoney: number;
+  canWithdrawalMoneyYuan: string;
+}

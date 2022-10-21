@@ -12,6 +12,7 @@ export type {
   UserCertificationDetail,
   AgentHomeInfo,
   AgentTask,
+  WithdrawalRecord,
 } from './user';
 export type {AppHeader, StylePropText, StylePropView, StylesProp, CacheKeys, LoadingState, LoadListState, LocationCity, SystemConfig} from './common';
 export type {
