@@ -11,7 +11,7 @@ import Login from '../screen/common/Login';
 
 import SPUDetail from '../screen/spu/SPUDetail';
 import Order from '../screen/spu/Order';
-import OrderList from '../screen/mine/OrderList';
+// import OrderList from '../screen/mine/OrderList';
 import OrderDetail from '../screen/mine/OrderDetail';
 import Wallet from '../screen/mine/wallet/Wallet';
 import WalletSummary from '../screen/mine/wallet/WalletSummary';
@@ -72,7 +72,7 @@ const Navigator: React.FC = () => {
       {token ? (
         <>
           <Stack.Screen name="Order" component={Order} options={commonScreenOptions} />
-          <Stack.Screen name="OrderList" component={OrderList} options={commonScreenOptions} />
+          {/* <Stack.Screen name="OrderList" component={OrderList} options={commonScreenOptions} /> */}
           <Stack.Screen name="OrderDetail" component={OrderDetail} options={commonScreenOptions} />
           <Stack.Screen name="Wallet" component={Wallet} options={commonScreenOptions} />
           <Stack.Screen name="WalletSummary" component={WalletSummary} options={commonScreenOptions} />

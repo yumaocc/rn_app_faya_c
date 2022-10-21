@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Animated, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
+import React, {useMemo} from 'react';
+import {View, Text, StyleSheet, ScrollView, Animated, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Icon as AIcon} from '@ant-design/react-native';
 import Icon from '../../component/Icon';
@@ -16,8 +16,8 @@ import OrderItem from './OrderItem';
 
 const OrderList: React.FC = () => {
   const [currentKey, setCurrentKey] = React.useState<string>('all');
-  const [searchName, setSearchName] = React.useState<string>('');
-  const [name, setName] = React.useState<string>('');
+  // const [searchName, setSearchName] = React.useState<string>('');
+  // const [name, setName] = React.useState<string>('');
 
   const orders = useSelector((state: RootState) => state.order.orders);
   const orderList = useMemo(() => orders.list, [orders]);
@@ -36,17 +36,17 @@ const OrderList: React.FC = () => {
     {title: ({active}) => <Text style={active ? styles.stepActive : styles.stepInactive}>待评价</Text>, key: '4'},
   ];
 
-  function handleBack() {
-    navigation.canGoBack() && navigation.goBack();
-  }
+  // function handleBack() {
+  //   navigation.canGoBack() && navigation.goBack();
+  // }
 
-  useEffect(() => {
-    orderDispatcher.loadOrders(currentKey, name, true);
-  }, [currentKey, name, orderDispatcher]);
+  // useEffect(() => {
+  //   orderDispatcher.loadOrders(currentKey, name, true);
+  // }, [currentKey, name, orderDispatcher]);
 
-  function searchOrder() {
-    setName(searchName);
-  }
+  // function searchOrder() {
+  //   setName(searchName);
+  // }
 
   function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
     var offsetY = e.nativeEvent.contentOffset.y; //滑动距离
@@ -55,7 +55,8 @@ const OrderList: React.FC = () => {
     const offset = 50;
     const isReachBottom = offsetY + scrollViewHeight + offset >= contentSizeHeight;
     if (isReachBottom) {
-      orderDispatcher.loadOrders(currentKey, name, false);
+      // todo: 搜索不带关键字
+      orderDispatcher.loadOrders(currentKey, '', false);
     }
   }
 
@@ -69,31 +70,6 @@ const OrderList: React.FC = () => {
   return (
     <>
       <SafeAreaView edges={['top']} style={{backgroundColor: '#fff', flex: 1}}>
-        <View style={[globalStyles.containerRow, {height: 50, backgroundColor: '#fff', paddingRight: globalStyleVariables.MODULE_SPACE}]}>
-          <TouchableOpacity activeOpacity={0.5} onPress={handleBack}>
-            <View style={styles.arrowContainer}>
-              <View style={styles.arrow} />
-            </View>
-          </TouchableOpacity>
-          {/* 搜索框 */}
-          <View style={[styles.searchBar]}>
-            <Icon name="all_input_search36" size={18} color="#999" style={{marginRight: globalStyleVariables.MODULE_SPACE}} />
-            <TextInput
-              style={styles.inputCore}
-              placeholder="搜索订单号/商品名称"
-              value={searchName}
-              onChangeText={setSearchName}
-              onSubmitEditing={searchOrder}
-              returnKeyType="search"
-              returnKeyLabel="搜索"
-              clearButtonMode="while-editing"
-            />
-            {/* <InputItem style={styles.inputCore} placeholder="搜索订单号/商品名称" /> */}
-          </View>
-          <TouchableOpacity activeOpacity={0.5} onPress={searchOrder}>
-            <Text style={[globalStyles.fontPrimary, {fontSize: 16}]}>搜索</Text>
-          </TouchableOpacity>
-        </View>
         <Steps steps={steps} style={styles.stepContainer} currentKey={currentKey} onChange={setCurrentKey} />
         <ScrollView style={{flex: 1, backgroundColor: '#f4f4f4'}} onMomentumScrollEnd={handleScrollEnd}>
           <View style={{padding: globalStyleVariables.MODULE_SPACE}}>

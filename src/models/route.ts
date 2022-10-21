@@ -8,7 +8,8 @@ export type RootStackParamList = {
   Tab: undefined;
   Home: undefined;
   Discover: undefined;
-  Notify: undefined;
+  // Notify: undefined;
+  OrderList: {state?: OrderStatus};
   Mine: undefined;
   WorkDetail: {
     id: string;
@@ -17,7 +18,6 @@ export type RootStackParamList = {
   WorkDetailList: {index: number};
   SPUDetail: IDBody;
   Order: IDBody;
-  OrderList: {state?: OrderStatus};
   OrderDetail: IDBody;
   Wallet: undefined;
   WalletSummary: undefined;

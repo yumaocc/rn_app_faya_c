@@ -6,7 +6,8 @@ import Home from '../home/Home';
 
 import Mine from '../mine/Mine';
 import Discover from '../discover/Discover';
-import Notify from '../notify/Notify';
+import OrderList from '../mine/OrderList';
+// import Notify from '../notify/Notify';
 
 import MiddleButton from './MiddleButton';
 import {globalStyleVariables} from '../../constants/styles';
@@ -60,11 +61,11 @@ const TabNavigator: React.FC = () => {
         }}
       />
       <Tab.Screen
-        name="Notify"
-        component={Notify}
+        name="OrderList"
+        component={OrderList}
         options={{
           headerShown: false,
-          tabBarLabel: '通知',
+          tabBarLabel: '订单',
           tabBarIcon: ({color, focused}: TabItemProps) =>
             focused ? <Icon name="home_xiaoxi_sel64" color={color} size={32} /> : <Icon name="home_xiaoxi_nor64" color={color} size={32} />,
         }}

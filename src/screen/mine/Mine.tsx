@@ -213,14 +213,14 @@ const Mine: React.FC = () => {
               <>
                 {/* 订单入口栏 */}
                 <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE, paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-                  <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={() => navigation.navigate('OrderList')}>
+                  {/* <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={() => navigation.navigate('OrderList')}>
                     <View style={[globalStyles.containerRow]}>
                       <View style={[globalStyles.containerCenter, styles.entry]}>
                         <Icon name="wode_dingdan48" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
                       </View>
                       <Text>订单</Text>
                     </View>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                   <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={() => navigation.navigate('Wallet')}>
                     <View style={[globalStyles.containerRow]}>
                       <View style={[globalStyles.containerCenter, styles.entry]}>
