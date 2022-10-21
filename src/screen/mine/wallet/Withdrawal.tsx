@@ -5,7 +5,7 @@ import Icon from '../../../component/Icon';
 import {Button, InputNumber, NavigationBar, Popup} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {stringToNumber} from '../../../fst/helper';
-import {useWalletSummary, useBankCards, useWallet, useCommonDispatcher, useAndroidBack} from '../../../helper/hooks';
+import {useWalletSummary, useBankCards, useWallet, useCommonDispatcher, useAndroidBack, useUserDispatcher} from '../../../helper/hooks';
 import Popover from 'react-native-popover-view';
 import {BankCardF, FakeNavigation, UserCertificationStatus} from '../../../models';
 import {useNavigation} from '@react-navigation/native';
@@ -22,6 +22,7 @@ const Withdrawal: React.FC = () => {
   const [wallet, updateWallet] = useWallet();
   const navigation = useNavigation<FakeNavigation>();
   const [commonDispatcher] = useCommonDispatcher();
+  const [userDispatcher] = useUserDispatcher();
   useAndroidBack();
 
   useEffect(() => {
@@ -57,6 +58,7 @@ const Withdrawal: React.FC = () => {
       await api.user.userWithDraw(cashMoney, selectBankCard.id);
       commonDispatcher.success('提现申请提交成功');
       updateWallet();
+      userDispatcher.getWalletSummary(); // 更新钱包详情
       navigation.canGoBack() && navigation.goBack();
     } catch (error) {
       commonDispatcher.error(error);
