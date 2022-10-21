@@ -9,6 +9,7 @@ export interface SPUState {
   currentSKUIsPackage?: boolean;
   spuListForWork: LoadListState<SPUF>;
   showCaseSPUList: LoadListState<SPUF>;
+  spuList: LoadListState<SPUF>;
   userShowcase: {
     [userId: string]: LoadListState<SPUF>;
   };
@@ -17,6 +18,11 @@ export interface SPUState {
 export const initialState: SPUState = {
   currentSKUIsPackage: false,
   spuListForWork: {
+    list: [],
+    index: 0,
+    status: 'none',
+  },
+  spuList: {
     list: [],
     index: 0,
     status: 'none',
@@ -106,6 +112,21 @@ export default (state: SPUState = initialState, action: SPUActions) => {
       return produce(state, draft => {
         const userId = action.payload;
         draft.userShowcase[userId].status = 'noMore';
+      });
+    case ActionType.LOAD_SPU_LIST:
+      return produce(state, draft => {
+        const {replace} = action.payload;
+        if (replace || draft.spuList.status !== 'noMore') {
+          draft.spuList.status = 'loading';
+        }
+      });
+    case ActionType.LOAD_SPU_LIST_SUCCESS:
+      return produce(state, draft => {
+        draft.spuList = action.payload;
+      });
+    case ActionType.LOAD_SPU_LIST_FAIL:
+      return produce(state, draft => {
+        draft.spuList.status = 'noMore';
       });
     case ActionType.RESET:
       return initialState;

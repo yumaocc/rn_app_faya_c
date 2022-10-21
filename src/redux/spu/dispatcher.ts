@@ -13,6 +13,7 @@ export interface SPUDispatcher {
   initOtherUserShowcase(userId: number): void;
   destroyOtherUserShowcase(userId: number): void;
   loadOtherUserShowcase(userId: number, search: SearchForm, replace?: boolean): void;
+  loadSPUList(search: SearchForm, replace?: boolean): void;
 }
 
 export const getSPUDispatcher = (dispatch: Dispatch): SPUDispatcher => ({
@@ -25,4 +26,5 @@ export const getSPUDispatcher = (dispatch: Dispatch): SPUDispatcher => ({
   initOtherUserShowcase: (userId: number) => dispatch(Actions.initOtherUserShowcase(userId)),
   destroyOtherUserShowcase: (userId: number) => dispatch(Actions.destroyOtherUserShowcase(userId)),
   loadOtherUserShowcase: (userId: number, search: SearchForm, replace?: boolean) => dispatch(Actions.loadOtherUserShowcase(userId, search, replace)),
+  loadSPUList: (search: SearchForm, replace?: boolean) => dispatch(Actions.loadSPUList(search, replace)),
 });

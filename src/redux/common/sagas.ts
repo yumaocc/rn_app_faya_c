@@ -20,8 +20,8 @@ function* initApp(): any {
   const config: SystemConfig = {
     token: (yield getItem('token')) || '',
     phone: (yield getItem('phone')) || '',
-    locationName: (yield getItem('locationName')) || '',
-    locationId: Number(yield getItem('locationId')) || null,
+    locationName: (yield getItem('locationName')) || '成都',
+    locationId: Number(yield getItem('locationId')) || 1563,
   };
   yield put(Actions.setConfig(config));
 

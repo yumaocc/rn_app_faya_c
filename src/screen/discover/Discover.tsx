@@ -1,37 +1,35 @@
 import React, {useCallback, useEffect} from 'react';
-import {View, StyleSheet, Text, ScrollView, Image, StatusBar} from 'react-native';
+import {View, StyleSheet, Text, ScrollView, Image, StatusBar, NativeSyntheticEvent, NativeScrollEvent, RefreshControl} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from '../../component/Icon';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import * as api from '../../apis';
-import {useCommonDispatcher, useDivideData} from '../../helper/hooks';
+import {useCommonDispatcher, useDivideData, useSPUDispatcher} from '../../helper/hooks';
 import {FakeNavigation, SPUF} from '../../models';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {getLocation} from '../../helper/system';
+import {getLocation, isReachBottom} from '../../helper/system';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
+import {dictLoadingState} from '../../helper/dictionary';
 
 const Discover: React.FC = () => {
-  const [spuList, setSpuList] = React.useState([]);
-  const [left, right] = useDivideData<SPUF>(spuList);
+  // const [spuList, setSpuList] = React.useState([]);
+  const spuList = useSelector((state: RootState) => state.spu.spuList);
+  const [left, right] = useDivideData<SPUF>(spuList.list);
   // const [locationName, setLocationName] = React.useState('定位中');
   const locationName = useSelector((state: RootState) => state.common.config.locationName);
   const locationId = useSelector((state: RootState) => state.common.config.locationId);
 
   const navigation = useNavigation<FakeNavigation>();
   const [commonDispatcher] = useCommonDispatcher();
+  const [spuDispatcher] = useSPUDispatcher();
 
   useEffect(() => {
-    async function f() {
-      console.log('request', locationId);
-      const res = await api.spu.getSpuList({pageIndex: 1, pageSize: 10, locationCompanyId: locationId});
-      setSpuList(res || []);
-    }
-    f();
-  }, [locationId]);
+    spuDispatcher.loadSPUList({locationId}, true);
+  }, [locationId, spuDispatcher]);
 
   const getCurrentLocation = useCallback(async () => {
     try {
@@ -60,6 +58,15 @@ const Discover: React.FC = () => {
   useEffect(() => {
     getCurrentLocation();
   }, [getCurrentLocation]);
+
+  function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
+    if (isReachBottom(e)) {
+      spuDispatcher.loadSPUList({locationId});
+    }
+  }
+  function handleRefresh() {
+    spuDispatcher.loadSPUList({locationId}, true);
+  }
 
   function renderSPU(spu: SPUF) {
     const {commissionRangeLeftMoneyYuan, commissionRangeRightMoneyYuan, salePrice, originPrice} = spu;
@@ -155,10 +162,16 @@ const Discover: React.FC = () => {
               </Text>
             </View>
           </View>
-          <ScrollView style={{flex: 1, marginTop: globalStyleVariables.MODULE_SPACE}}>
+          <ScrollView
+            style={{flex: 1, marginTop: globalStyleVariables.MODULE_SPACE}}
+            onMomentumScrollEnd={handleScrollEnd}
+            refreshControl={<RefreshControl refreshing={false} onRefresh={handleRefresh} />}>
             <View style={styles.spuContainer}>
               <View style={styles.spuLeft}>{left.map(renderSPU)}</View>
               <View style={styles.spuRight}>{right.map(renderSPU)}</View>
+            </View>
+            <View style={[globalStyles.containerCenter, {paddingVertical: 20}]}>
+              <Text style={[globalStyles.fontTertiary, {fontSize: 14}]}>{dictLoadingState(spuList.status)}</Text>
             </View>
           </ScrollView>
         </SafeAreaView>
