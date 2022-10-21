@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useForceUpdate} from '../../fst/hooks';
 import {BankCardF, CouponF, CouponFilterState, WalletInfo, WalletSummary} from '../../models';
@@ -78,4 +78,10 @@ export function useBankCards(): [BankCardF[], () => void] {
   }, [signal, userDispatcher]);
 
   return [bankList, force];
+}
+
+export function useIsLoggedIn(): boolean {
+  const token = useSelector((state: RootState) => state.common.config.token);
+  const isLoggedIn = useMemo(() => !!token, [token]);
+  return isLoggedIn;
 }

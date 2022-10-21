@@ -25,7 +25,7 @@ const Order: React.FC = () => {
   const sku = useSelector((state: RootState) => state.spu.currentSKU);
   const currentSkuIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
   // const payOrder = useSelector((state: RootState) => state.order.payOrder);
-  const token = useSelector((state: RootState) => state.common.token);
+  const token = useSelector((state: RootState) => state.common.config.token);
 
   const [isPaying, setIsPaying] = useState(false);
   const [checkOrderId, setCheckOrderId] = useState<string>('');

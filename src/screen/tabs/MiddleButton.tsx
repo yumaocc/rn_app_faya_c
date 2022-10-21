@@ -1,20 +1,18 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {useSelector} from 'react-redux';
 import {globalStyleVariables} from '../../constants/styles';
-import {useUserDispatcher} from '../../helper/hooks';
+import {useIsLoggedIn, useUserDispatcher} from '../../helper/hooks';
 import {FakeNavigation} from '../../models';
-import {RootState} from '../../redux/reducers';
 import Icon from '../../component/Icon';
 
 const MiddleButton: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
-  const token = useSelector((state: RootState) => state.common.token);
+  const isLoggedIn = useIsLoggedIn();
   const [userDispatcher] = useUserDispatcher();
 
   function handleClick() {
-    if (!token) {
+    if (!isLoggedIn) {
       userDispatcher.login({
         to: 'ShootVideo',
         redirect: true,

@@ -3,12 +3,10 @@ import React, {useCallback, useEffect, useMemo, useState, memo} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import Icon from '../../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
-import {useAppState, useCommonDispatcher, useDeviceDimensions} from '../../../helper/hooks';
+import {useAppState, useCommonDispatcher, useDeviceDimensions, useIsLoggedIn} from '../../../helper/hooks';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FakeNavigation, WorkDetailF, WorkF, WorkType} from '../../../models';
 import * as api from '../../../apis';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../../redux/reducers';
 import CustomTouchable from '../../../component/CustomTouchable';
 import {BoolEnum} from '../../../fst/models';
 import Player from './Player';
@@ -33,7 +31,7 @@ const VideoPage: React.FC<VideoPageProps> = props => {
   const [loadingLike, setLoadingLike] = useState(false);
   const [loadingCollect, setLoadingCollect] = useState(false);
 
-  const token = useSelector((state: RootState) => state.common.token);
+  const isLoggedIn = useIsLoggedIn();
 
   const {width, height} = useDeviceDimensions();
   const isFocused = useIsFocused();
@@ -247,7 +245,7 @@ const VideoPage: React.FC<VideoPageProps> = props => {
                   </View> */}
                 {/* 下面的框 */}
                 {/* 登录后可见评论框 */}
-                {!!token && (
+                {!!isLoggedIn && (
                   <CustomTouchable activeOpacity={0.7} onPress={openComment}>
                     <View style={{backgroundColor: '#000', padding: globalStyleVariables.MODULE_SPACE}}>
                       <View style={[styles.fakeInputComment]}>

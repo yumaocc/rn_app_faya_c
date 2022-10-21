@@ -13,7 +13,7 @@ export type {
   AgentHomeInfo,
   AgentTask,
 } from './user';
-export type {AppHeader, StylePropText, StylePropView, StylesProp, CacheKeys, LoadingState, LoadListState} from './common';
+export type {AppHeader, StylePropText, StylePropView, StylesProp, CacheKeys, LoadingState, LoadListState, LocationCity, SystemConfig} from './common';
 export type {
   WorkTab,
   WorkF,

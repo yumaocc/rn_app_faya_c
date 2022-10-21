@@ -1,4 +1,5 @@
 import produce from 'immer';
+import {SystemConfig} from '../../models';
 
 import {CommonActions} from './actions';
 import {ActionType} from './types';
@@ -6,23 +7,19 @@ import {ActionType} from './types';
 export interface CommonState {
   isLoading: boolean; // 是否正在初始化加载
   message: string; // 全局消息提示
-  token?: string; // 登录token
   messageType: 'error' | 'success' | 'info' | 'none';
-  preview: {
-    images?: string[];
-    currentIndex?: number;
-    show: boolean;
-  };
+  config: SystemConfig;
 }
 
 export const initialState: CommonState = {
   isLoading: true,
   message: '',
   messageType: 'none',
-  preview: {
-    images: [],
-    currentIndex: 0,
-    show: false,
+  config: {
+    token: '',
+    phone: '',
+    locationId: null,
+    locationName: '',
   },
 };
 
@@ -59,27 +56,13 @@ export default (state = initialState, action: CommonActions): CommonState => {
         draft.message = '';
         draft.messageType = 'none';
       });
-    case ActionType.PREVIEW_IMAGES:
+    case ActionType.SET_CONFIG:
       return produce(state, draft => {
         const {payload} = action;
-        draft.preview = {
-          images: payload.images || [],
-          currentIndex: payload.currentIndex || 0,
-          show: true,
+        draft.config = {
+          ...draft.config,
+          ...payload,
         };
-      });
-    case ActionType.PREVIEW_END:
-      return produce(state, draft => {
-        draft.preview = {
-          images: [],
-          currentIndex: 0,
-          show: false,
-        };
-      });
-    case ActionType.SET_TOKEN:
-      return produce(state, draft => {
-        const {payload} = action;
-        draft.token = payload;
       });
     case ActionType.RESET:
       return initialState;

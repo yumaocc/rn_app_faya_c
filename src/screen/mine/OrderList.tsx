@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {View, Text, StyleSheet, ScrollView, Animated, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Icon as AIcon} from '@ant-design/react-native';
@@ -40,9 +40,9 @@ const OrderList: React.FC = () => {
   //   navigation.canGoBack() && navigation.goBack();
   // }
 
-  // useEffect(() => {
-  //   orderDispatcher.loadOrders(currentKey, name, true);
-  // }, [currentKey, name, orderDispatcher]);
+  useEffect(() => {
+    orderDispatcher.loadOrders(currentKey, '', true);
+  }, [currentKey, orderDispatcher]);
 
   // function searchOrder() {
   //   setName(searchName);

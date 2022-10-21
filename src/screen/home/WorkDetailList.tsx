@@ -4,7 +4,7 @@ import {View, StyleSheet, FlatList, ListRenderItemInfo, StatusBar, RefreshContro
 import {useSelector} from 'react-redux';
 import {NavigationBar, Popup} from '../../component';
 import {useRefCallback} from '../../fst/hooks';
-import {useCommonDispatcher, useDeviceDimensions, useParams, useSPUDispatcher, useUserDispatcher, useWorkDispatcher} from '../../helper/hooks';
+import {useCommonDispatcher, useDeviceDimensions, useIsLoggedIn, useParams, useSPUDispatcher, useUserDispatcher, useWorkDispatcher} from '../../helper/hooks';
 import {FakeNavigation, PackageDetail, SKUDetail, WorkF} from '../../models';
 import {RootState} from '../../redux/reducers';
 import BuyBar from '../spu/BuyBar';
@@ -27,7 +27,7 @@ const WorkDetailList: React.FC = () => {
   const currentSPU = useSelector((state: RootState) => state.spu.currentSPU);
   const currentSKU = useSelector((state: RootState) => state.spu.currentSKU);
   const currentSKUIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
-  const token = useSelector((state: RootState) => state.common.token);
+  const isLoggedIn = useIsLoggedIn();
 
   const {height} = useDeviceDimensions();
   const [flatListRef, setRef, isReady] = useRefCallback(null);
@@ -77,7 +77,7 @@ const WorkDetailList: React.FC = () => {
 
   const handleBuy = useCallback(() => {
     setShowSPU(false);
-    if (!token) {
+    if (!isLoggedIn) {
       userDispatcher.login({
         to: 'Order',
         params: {index: params.index},
@@ -86,7 +86,7 @@ const WorkDetailList: React.FC = () => {
     } else {
       navigation.navigate('Order');
     }
-  }, [token, userDispatcher, params.index, navigation]);
+  }, [isLoggedIn, userDispatcher, params.index, navigation]);
 
   const handleChangeSKU = useCallback(
     (sku: SKUDetail | PackageDetail, isPackage: boolean) => {
@@ -102,7 +102,7 @@ const WorkDetailList: React.FC = () => {
   }
 
   function handleCollect() {
-    if (!token) {
+    if (!isLoggedIn) {
       navigation.replace('Login', {to: 'SPUDetail', params: {id: currentSPU?.id}});
     } else {
       if (isCollect || !currentSPU) {
@@ -124,7 +124,7 @@ const WorkDetailList: React.FC = () => {
   }
 
   function handleJoinShowCase() {
-    if (!token) {
+    if (!isLoggedIn) {
       navigation.replace('Login', {to: 'SPUDetail', params: {id: currentSPU?.id}});
     } else {
       if (isJoinShowCase || !currentSPU) {

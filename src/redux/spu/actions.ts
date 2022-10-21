@@ -35,6 +35,10 @@ export const Actions = {
     createAction(ActionType.LOAD_OTHER_USER_SHOWCASE_SUCCESS, {userId, list}),
   loadOtherUserShowcaseFail: (userId: number): ActionWithPayload<ActionType.LOAD_OTHER_USER_SHOWCASE_FAIL, number> =>
     createAction(ActionType.LOAD_OTHER_USER_SHOWCASE_FAIL, userId),
+  loadSPUList: (search: SearchForm, replace?: boolean): ActionWithPayload<ActionType.LOAD_SPU_LIST, {search: SearchForm; replace?: boolean}> =>
+    createAction(ActionType.LOAD_SPU_LIST, {search, replace}),
+  loadSPUListSuccess: (list: LoadListState<SPUF>): ActionWithPayload<ActionType.LOAD_SPU_LIST_SUCCESS, LoadListState<SPUF>> => createAction(ActionType.LOAD_SPU_LIST_SUCCESS, list),
+  loadSPUListFail: (): Action<ActionType.LOAD_SPU_LIST_FAIL> => createAction(ActionType.LOAD_SPU_LIST_FAIL),
 };
 
 export type SPUActions = ActionsUnion<typeof Actions>;

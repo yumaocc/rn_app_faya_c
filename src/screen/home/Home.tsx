@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, ScrollView, useWindowDimensions, TouchableOpacity, StatusBar} from 'react-native';
+import {View, StyleSheet, ScrollView, useWindowDimensions, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {Tabs} from '../../component';
@@ -9,7 +9,7 @@ import {useRefCallback} from '../../fst/hooks';
 import {useWorkDispatcher} from '../../helper/hooks';
 import {RootState} from '../../redux/reducers';
 import WorkList from './WorkList';
-import Icon from '../../component/Icon';
+// import Icon from '../../component/Icon';
 import {WorkTabType} from '../../models';
 import {useIsFocused} from '@react-navigation/native';
 
@@ -55,9 +55,9 @@ const Home: React.FC = () => {
     }
   }
 
-  function handleSearch() {
-    console.log(1);
-  }
+  // function handleSearch() {
+  //   console.log(1);
+  // }
 
   function loadWork(type: WorkTabType) {
     workDispatcher.loadWork(type);
@@ -73,11 +73,11 @@ const Home: React.FC = () => {
       <View style={styles.container}>
         <View style={{position: 'relative'}}>
           <Tabs styles={tabStyles} gap={30} currentKey={currentTab.type} tabs={tabs.map(tab => ({title: tab.title, key: tab.key}))} onChange={handleChangeTab} />
-          <View style={styles.searchIcon}>
+          {/* <View style={styles.searchIcon}>
             <TouchableOpacity activeOpacity={0.8} onPress={handleSearch}>
               <Icon name="all_input_search36" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
         <ScrollView ref={setRef} horizontal style={{flex: 1}} snapToInterval={width} showsHorizontalScrollIndicator={false} scrollEnabled={false}>
           <View style={{width}}>

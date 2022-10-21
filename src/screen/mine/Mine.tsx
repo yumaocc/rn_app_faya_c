@@ -8,14 +8,14 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {FakeNavigation, MyWorkTabType} from '../../models';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
-import {useCommonDispatcher, useUserDispatcher} from '../../helper/hooks';
+import {useCommonDispatcher, useIsLoggedIn, useUserDispatcher} from '../../helper/hooks';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import WorkList from './work/WorkList';
 import {TabsStyles} from '../../component/Tabs';
 
 const Mine: React.FC = () => {
   const detail = useSelector((state: RootState) => state.user.myDetail);
-  const token = useSelector((state: RootState) => state.common.token);
+  // const token = useSelector((state: RootState) => state.common.token);
   const tabs = useSelector((state: RootState) => state.user.myTabs);
   const items = useMemo(() => tabs.map(e => ({title: e.title, key: String(e.value)})), [tabs]);
   const currentTabKey = useSelector((state: RootState) => String(state.user.currentTabType));
@@ -24,6 +24,7 @@ const Mine: React.FC = () => {
   const [showFixTab, setShowFixTab] = useState(false);
 
   const navigation = useNavigation<FakeNavigation>();
+  const isLoggedIn = useIsLoggedIn();
   const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
   const isFocused = useIsFocused();
@@ -46,10 +47,10 @@ const Mine: React.FC = () => {
   // }, [currentTabKey, isReady, ref, width, tabs]);
 
   useEffect(() => {
-    if (token) {
+    if (isLoggedIn) {
       userDispatcher.getMyDetail();
     }
-  }, [userDispatcher, token]);
+  }, [userDispatcher, isLoggedIn]);
 
   function handleCopy() {
     if (detail?.account) {
@@ -111,7 +112,7 @@ const Mine: React.FC = () => {
   }
 
   useEffect(() => {
-    if (!token) {
+    if (!isLoggedIn) {
       return;
     }
     const workList = allWorks[currentTabKey];
@@ -119,7 +120,7 @@ const Mine: React.FC = () => {
     if (!list?.length && status === 'none') {
       userDispatcher.loadMyWork(Number(currentTabKey) as MyWorkTabType, true);
     }
-  }, [allWorks, currentTabKey, userDispatcher, token]);
+  }, [allWorks, currentTabKey, userDispatcher, isLoggedIn]);
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
@@ -142,7 +143,7 @@ const Mine: React.FC = () => {
           <View style={[globalStyles.containerLR, {position: 'absolute', top: top + 10, width: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             <Icon name="wode_scan48" size={24} color="#fff" />
             <View style={globalStyles.containerLR}>
-              {!!token && (
+              {!!isLoggedIn && (
                 <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('MyCode')}>
                   <Icon name="wode_erweima48" size={24} color="#fff" />
                 </TouchableOpacity>
@@ -188,7 +189,7 @@ const Mine: React.FC = () => {
                 <Text style={styles.userName} numberOfLines={1}>
                   {detail?.nickName}
                 </Text>
-                {!token && (
+                {!isLoggedIn && (
                   <TouchableOpacity activeOpacity={0.8} onPress={goLogin}>
                     <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_PRIMARY, marginLeft: globalStyleVariables.MODULE_SPACE}]}>立即登录</Text>
                   </TouchableOpacity>
@@ -209,7 +210,7 @@ const Mine: React.FC = () => {
               </View>
             </View>
 
-            {!!token && (
+            {!!isLoggedIn && (
               <>
                 {/* 订单入口栏 */}
                 <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE, paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>

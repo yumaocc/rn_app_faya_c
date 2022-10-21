@@ -1,42 +1,53 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {View, StyleSheet, Text, ScrollView, Image, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from '../../component/Icon';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import * as api from '../../apis';
-import {useDivideData} from '../../helper/hooks';
+import {useCommonDispatcher, useDivideData} from '../../helper/hooks';
 import {FakeNavigation, SPUF} from '../../models';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import {getLocation} from '../../helper/system';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../redux/reducers';
 
 const Discover: React.FC = () => {
   const [spuList, setSpuList] = React.useState([]);
   const [left, right] = useDivideData<SPUF>(spuList);
-  const [location] = React.useState('定位中');
+  // const [locationName, setLocationName] = React.useState('定位中');
+  const locationName = useSelector((state: RootState) => state.common.config.locationName);
+  const locationId = useSelector((state: RootState) => state.common.config.locationId);
 
   const navigation = useNavigation<FakeNavigation>();
+  const [commonDispatcher] = useCommonDispatcher();
 
   useEffect(() => {
     async function f() {
-      const res = await api.spu.getSpuList({pageIndex: 1, pageSize: 10});
-      console.log(res);
+      console.log('request', locationId);
+      const res = await api.spu.getSpuList({pageIndex: 1, pageSize: 10, locationCompanyId: locationId});
       setSpuList(res || []);
     }
     f();
-  }, []);
+  }, [locationId]);
 
-  async function getCurrentLocation() {
+  const getCurrentLocation = useCallback(async () => {
     try {
       const location = await getLocation();
-      console.log('location', location);
+      console.log('location', location.coords);
+      const {latitude, longitude} = location.coords;
+      const locationMaybe = await api.user.getLocationByGPS(latitude, longitude);
+      commonDispatcher.setConfig({
+        locationId: locationMaybe.id,
+        locationName: locationMaybe.name,
+      });
     } catch (error) {
       console.log('location error');
       console.log(error);
     }
-  }
+  }, [commonDispatcher]);
 
   function goSPUDetail(id: number) {
     navigation.navigate({
@@ -48,7 +59,7 @@ const Discover: React.FC = () => {
 
   useEffect(() => {
     getCurrentLocation();
-  }, []);
+  }, [getCurrentLocation]);
 
   function renderSPU(spu: SPUF) {
     const {commissionRangeLeftMoneyYuan, commissionRangeRightMoneyYuan, salePrice, originPrice} = spu;
@@ -131,9 +142,11 @@ const Discover: React.FC = () => {
           {/* 其他页面会默认此状态栏设置 */}
           <StatusBar backgroundColor="#fff" barStyle="dark-content" />
           <View style={[globalStyles.containerLR, {paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-            <View style={globalStyles.containerRow}>
+            <View style={[globalStyles.containerRow, {maxWidth: 110}]}>
               <Icon name="faxian_dingwei" size={15} color="#333" />
-              <Text>{location}</Text>
+              <View style={{marginLeft: 5}}>
+                <Text numberOfLines={1}>{locationName.repeat(3)}</Text>
+              </View>
               <Icon name="all_xiaosanjiaoD24" size={12} color="#333" />
             </View>
             <View style={styles.searchContainer}>
@@ -152,9 +165,6 @@ const Discover: React.FC = () => {
       </View>
     </>
   );
-};
-Discover.defaultProps = {
-  title: 'Discover',
 };
 export default Discover;
 const styles = StyleSheet.create({

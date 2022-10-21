@@ -3,7 +3,6 @@ import {all, call, fork, put, select, takeLatest} from 'redux-saga/effects';
 import {Actions as CommonActions} from '../common/actions';
 import {Actions} from './actions';
 import {ActionType} from './types';
-import {cache} from '../../helper/cache';
 import {ActionWithPayload} from '../types';
 import {GoLoginParams, MyWorkTabType, UserWorkTabType, WorkF, WorkList} from '../../models';
 import * as api from '../../apis';
@@ -12,13 +11,8 @@ import {RootState} from '../reducers';
 import {OrderActions, SPUActions, WorkActions} from '../actions';
 import {PagedData} from '../../fst/models';
 
-function* initUser(): any {
-  const phone = yield cache.user.getPhone();
-  yield put(Actions.initSuccess(phone || ''));
-}
-
 function* logout(): any {
-  yield put(CommonActions.setToken(''));
+  yield put(CommonActions.setConfig({token: ''}));
   yield put(CommonActions.reset());
   yield put(Actions.reset());
   yield put(WorkActions.reset());
@@ -32,7 +26,7 @@ function login() {
 
 function* loginSuccess(action: ActionWithPayload<ActionType, string>): any {
   const token = action.payload;
-  yield put(CommonActions.setToken(token));
+  yield put(CommonActions.setConfig({token}));
   yield put(Actions.getMyDetail());
   const params: GoLoginParams = yield select((state: RootState) => state.user.login);
   if (!params) {
@@ -158,7 +152,6 @@ function* loadOtherWork(action: ActionWithPayload<ActionType, {tabType: UserWork
 }
 
 function* watchUserSagas() {
-  yield takeLatest(ActionType.INIT, initUser);
   yield takeLatest(ActionType.LOGOUT, logout);
   yield takeLatest(ActionType.LOGIN, login);
   yield takeLatest(ActionType.LOGIN_SUCCESS, loginSuccess);

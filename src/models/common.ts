@@ -26,3 +26,19 @@ export type LoadListState<T> = {
   index: number;
   status: LoadingState;
 };
+
+// 发芽使用的站点城市
+export interface LocationCity {
+  province: string;
+  city: string;
+  area: string;
+  name: string;
+  id: number;
+}
+
+export interface SystemConfig {
+  token: string;
+  phone: string;
+  locationId: number;
+  locationName: string;
+}

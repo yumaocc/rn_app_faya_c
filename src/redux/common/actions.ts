@@ -1,6 +1,7 @@
 import {Action, ActionsUnion, ActionWithPayload, createAction} from '../types';
 import {ActionType} from './types';
-import {ErrorType, PreviewConfig} from '../../fst/models';
+import {ErrorType} from '../../fst/models';
+import {SystemConfig} from '../../models';
 
 export const Actions = {
   reset: (): Action<ActionType.RESET> => createAction(ActionType.RESET),
@@ -10,13 +11,7 @@ export const Actions = {
   info: (message: string): ActionWithPayload<ActionType.INFO, string> => createAction(ActionType.INFO, message),
   success: (message: string): ActionWithPayload<ActionType.SUCCESS, string> => createAction(ActionType.SUCCESS, message),
   dismissMessage: (): Action<ActionType.DISMISS_MESSAGE> => createAction(ActionType.DISMISS_MESSAGE),
-  previewImages: (config: PreviewConfig): ActionWithPayload<ActionType.PREVIEW_IMAGES, PreviewConfig> => {
-    return createAction(ActionType.PREVIEW_IMAGES, config);
-  },
-  closePreview: (): Action<ActionType.PREVIEW_END> => {
-    return createAction(ActionType.PREVIEW_END);
-  },
-  setToken: (token: string): ActionWithPayload<ActionType.SET_TOKEN, string> => createAction(ActionType.SET_TOKEN, token),
+  setConfig: (config: Partial<SystemConfig>): ActionWithPayload<ActionType.SET_CONFIG, Partial<SystemConfig>> => createAction(ActionType.SET_CONFIG, config),
 };
 
 export type CommonActions = ActionsUnion<typeof Actions>;

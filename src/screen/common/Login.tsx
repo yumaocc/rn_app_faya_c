@@ -18,7 +18,7 @@ const Login: React.FC = () => {
   const [loginState, setLoginState] = useState<LoginState>(LoginState.None);
   const [verifyCodeSend, setVerifyCodeSend] = useState(false);
   const [resendAfter, setResendAfter] = useState(0);
-  const suggestPhone = useSelector((state: RootState) => state.user.phone);
+  const suggestPhone = useSelector((state: RootState) => state.common.config.phone);
 
   const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();

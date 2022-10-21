@@ -24,7 +24,7 @@ const WaitPay: React.FC = () => {
   const appState = useAppState();
   useAndroidBack();
 
-  const token = useSelector((state: RootState) => state.common.token);
+  const token = useSelector((state: RootState) => state.common.config.token);
   const [restSeconds, setRestSeconds] = React.useState(0);
   const [expired, setExpired] = React.useState(false);
   const showTime = useMemo(() => {

@@ -46,9 +46,11 @@ import MyShowcase from '../screen/mine/spu/Showcase';
 import OtherShowcase from '../screen/mine/spu/OtherShowcase';
 
 import {RootStackParamList, ValidRoute} from '../models';
+import {useIsLoggedIn} from '../helper/hooks';
 
 const Navigator: React.FC = () => {
-  const token = useSelector((state: RootState) => state.common.token);
+  const isLoggedIn = useIsLoggedIn();
+  // const token = useSelector((state: RootState) => state.common.config.token);
   const isLogout = useSelector((state: RootState) => state.user.isLogout);
   // 注意路由顺序
   return (
@@ -69,7 +71,7 @@ const Navigator: React.FC = () => {
       <Stack.Screen name="TestPage" component={TestPage} options={commonScreenOptions} />
       <Stack.Screen name="User" component={User} options={commonScreenOptions} />
       <Stack.Screen name="WorkDetailList" component={WorkDetailList} options={commonScreenOptions} />
-      {token ? (
+      {isLoggedIn ? (
         <>
           <Stack.Screen name="Order" component={Order} options={commonScreenOptions} />
           {/* <Stack.Screen name="OrderList" component={OrderList} options={commonScreenOptions} /> */}

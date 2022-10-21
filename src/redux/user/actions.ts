@@ -3,9 +3,7 @@ import {ActionType} from './types';
 import {BankCardF, CouponF, GoLoginParams, MineDetail, MyWorkTabType, UserInfo, UserWorkTabType, WalletInfo, WalletSummary, WorkList} from '../../models';
 
 export const Actions = {
-  init: (): Action<ActionType.INIT> => createAction(ActionType.INIT),
   reset: (): Action<ActionType.RESET> => createAction(ActionType.RESET),
-  initSuccess: (phone: string): ActionWithPayload<ActionType.INIT_SUCCESS, string> => createAction(ActionType.INIT_SUCCESS, phone),
   setUserInfo: (userInfo?: UserInfo): ActionWithPayload<ActionType.SET_USER_INFO, UserInfo> => createAction(ActionType.SET_USER_INFO, userInfo),
   logout: (): Action<ActionType.LOGOUT> => createAction(ActionType.LOGOUT),
   getWalletInfo: (): Action<ActionType.GET_WALLET_INFO> => createAction(ActionType.GET_WALLET_INFO),

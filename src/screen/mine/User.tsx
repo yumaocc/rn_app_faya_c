@@ -7,7 +7,7 @@ import {FakeNavigation, OtherUserDetail, UserFollowState, UserWorkTabType} from 
 import * as api from '../../apis';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
-import {useCommonDispatcher, useParams, useUserDispatcher} from '../../helper/hooks';
+import {useCommonDispatcher, useIsLoggedIn, useParams, useUserDispatcher} from '../../helper/hooks';
 import Icon from '../../component/Icon';
 import {useForceUpdate} from '../../fst/hooks';
 import WorkList from './work/WorkList';
@@ -19,7 +19,7 @@ const User: React.FC = () => {
   const [userInfo, setUserInfo] = useState<OtherUserDetail>(null);
   const [showFixTab, setShowFixTab] = useState(false);
 
-  const token = useSelector((state: RootState) => state.common.token);
+  // const token = useSelector((state: RootState) => state.common.token);
   const userWorks = useSelector((state: RootState) => state.user.otherUserWorks[String(id)]);
   const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
@@ -27,6 +27,7 @@ const User: React.FC = () => {
   const [signal, updateSignal] = useForceUpdate();
   // const [ref, setRef, isReady] = useRefCallback();
   const isFocused = useIsFocused();
+  const isLoggedIn = useIsLoggedIn();
   const navigation = useNavigation<FakeNavigation>();
   // useLog('userWorks', userWorks);
 
@@ -99,7 +100,7 @@ const User: React.FC = () => {
   }, [currentKey, id, userDispatcher, userWorks?.works]);
 
   async function followUser() {
-    if (!token) {
+    if (!isLoggedIn) {
       userDispatcher.login({
         back: true,
       });

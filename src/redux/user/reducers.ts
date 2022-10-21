@@ -5,7 +5,7 @@ import {ActionType} from './types';
 import {BankCardF, CouponF, GoLoginParams, MineDetail, MyWorkTabType, UserCenterWork, UserInfo, UserWorkTabType, WalletInfo, WalletSummary, WorkList} from '../../models';
 
 export interface UserState {
-  phone: string;
+  // phone: string;
   isLogout: boolean;
   userInfo?: UserInfo;
   walletInfo?: WalletInfo;
@@ -28,7 +28,7 @@ export interface UserState {
 }
 
 export const initialState: UserState = {
-  phone: '',
+  // phone: '',
   isLogout: false,
   couponList: [],
   bankCards: [],
@@ -94,10 +94,6 @@ export default (state = initialState, action: UserActions): UserState => {
   const {type} = action;
 
   switch (type) {
-    case ActionType.INIT_SUCCESS:
-      return produce(state, draft => {
-        draft.phone = action.payload;
-      });
     case ActionType.SET_USER_INFO:
       return produce(state, draft => {
         draft.userInfo = action.payload;

@@ -1,6 +1,18 @@
 import RNFS from 'react-native-fs';
 import {post} from './helper';
-import {AgentHomeInfo, BankCardF, CouponF, CouponFilterState, MineDetail, OtherUserDetail, UserCertificationForm, UserInfo, WalletInfo, WalletSummary} from '../models';
+import {
+  AgentHomeInfo,
+  BankCardF,
+  CouponF,
+  CouponFilterState,
+  LocationCity,
+  MineDetail,
+  OtherUserDetail,
+  UserCertificationForm,
+  UserInfo,
+  WalletInfo,
+  WalletSummary,
+} from '../models';
 import {Platform} from 'react-native';
 
 export async function userLogin(phone: string, code: string): Promise<UserInfo> {
@@ -97,4 +109,8 @@ export async function userWithDraw(money: number, accountId: number): Promise<bo
 }
 export async function agentInfo(): Promise<AgentHomeInfo> {
   return await post('/user/agent/info');
+}
+
+export async function getLocationByGPS(latitude: number, longitude: number): Promise<LocationCity> {
+  return await post('/location/with/company/by/gps', {latitude, longitude});
 }

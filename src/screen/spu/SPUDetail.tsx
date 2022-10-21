@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View, StyleSheet, Text, ScrollView, StatusBar, NativeSyntheticEvent, NativeScrollEvent, Image, TouchableOpacity, TouchableWithoutFeedback} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useAndroidBack, useCommonDispatcher, useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
+import {useAndroidBack, useCommonDispatcher, useIsLoggedIn, useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
 import {FakeNavigation, PackageDetail, SKUDetail, SPUDetailF} from '../../models';
 import Modal from 'react-native-modal';
 
@@ -21,7 +21,7 @@ import {saveImageToGallery} from '../../helper/system';
 
 const SPUDetail: React.FC = () => {
   const {id} = useParams<{id: number}>();
-  const token = useSelector((state: RootState) => state.common.token);
+  const isLoggedIn = useIsLoggedIn();
   const spu: SPUDetailF = useSelector((state: RootState) => state.spu.currentSPU);
   const currentSKU: PackageDetail | SKUDetail = useSelector((state: RootState) => state.spu.currentSKU);
   const isPackage: boolean = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
@@ -75,7 +75,7 @@ const SPUDetail: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
 
   function handleBuy() {
-    if (!token) {
+    if (!isLoggedIn) {
       userDispatcher.login({
         to: 'Order',
         params: {id},
@@ -118,7 +118,7 @@ const SPUDetail: React.FC = () => {
   }
 
   function handleCollect() {
-    if (!token) {
+    if (!isLoggedIn) {
       navigation.replace('Login', {to: 'SPUDetail', params: {id}});
     } else {
       if (isCollect) {
@@ -140,7 +140,7 @@ const SPUDetail: React.FC = () => {
   }
 
   function handleJoinShowCase() {
-    if (!token) {
+    if (!isLoggedIn) {
       navigation.replace('Login', {to: 'SPUDetail', params: {id}});
     } else {
       if (isJoinShowCase) {

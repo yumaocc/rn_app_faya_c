@@ -6,8 +6,10 @@ import {ActionType} from './types';
 import {resetBaseURL, resetToken} from '../../apis/helper';
 import {ERROR_SHOW_TIME, getBaseURL} from '../../constants';
 import {wait} from '../../fst/helper';
-import {cache} from '../../helper/cache';
+// import {cache} from '../../helper/cache';
 import {ActionWithPayload} from '../types';
+import {getItem, setItem} from '../../helper/cache/helper';
+import {SystemConfig} from '../../models';
 // import * as api from '../../apis';
 // import {UserInfo} from '../../models';
 
@@ -15,13 +17,17 @@ function* initApp(): any {
   const url = getBaseURL();
   resetBaseURL(url);
 
-  yield put(UserActions.init()); // 去加载用户那边的缓存
+  const config: SystemConfig = {
+    token: (yield getItem('token')) || '',
+    phone: (yield getItem('phone')) || '',
+    locationName: (yield getItem('locationName')) || '',
+    locationId: Number(yield getItem('locationId')) || null,
+  };
+  yield put(Actions.setConfig(config));
 
-  const token = (yield cache.config.getToken()) || '';
-  resetToken(token);
-  yield put(Actions.setToken(token));
+  resetToken(config.token);
 
-  if (token) {
+  if (config.token) {
     yield put(UserActions.getMyDetail());
   }
   yield put(Actions.initAppSuccess());
@@ -32,10 +38,20 @@ function* dismissMessage() {
   yield put(Actions.dismissMessage());
 }
 
-function* setToken(action: ActionWithPayload<ActionType, string>) {
-  const token = action.payload;
-  resetToken(token);
-  yield cache.config.setToken(token);
+// function* setToken(action: ActionWithPayload<ActionType, string>) {
+//   const token = action.payload;
+//   resetToken(token);
+//   yield cache.config.setToken(token);
+// }
+
+function* setConfig(action: ActionWithPayload<ActionType, Partial<SystemConfig>>) {
+  const config = action.payload;
+  Object.keys(config).forEach(key => {
+    if (key === 'token') {
+      resetToken(config.token);
+    }
+    setItem(key, config[key]);
+  });
 }
 
 function* watchCommonSagas() {
@@ -43,7 +59,8 @@ function* watchCommonSagas() {
   yield takeLatest(ActionType.SUCCESS, dismissMessage);
   yield takeLatest(ActionType.INFO, dismissMessage);
   yield takeLatest(ActionType.INIT_APP, initApp);
-  yield takeLatest(ActionType.SET_TOKEN, setToken);
+  // yield takeLatest(ActionType.SET_TOKEN, setToken);
+  yield takeLatest(ActionType.SET_CONFIG, setConfig);
 }
 
 export default function* commonSagas() {
