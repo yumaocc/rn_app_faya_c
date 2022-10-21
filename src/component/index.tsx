@@ -11,6 +11,7 @@ import Picker from './Picker';
 import FormTitle from './FormTitle';
 import Modal from './Modal';
 import NavigationBar from './NavigationBar';
+import NavigationSearchBar from './NavigationSearchBar';
 import Button from './Button';
 
 import Form from './Form';
@@ -32,6 +33,7 @@ export {
   SectionGroup,
   OperateItem,
   NavigationBar,
+  NavigationSearchBar,
   Steps,
   Popup,
   DatePicker,

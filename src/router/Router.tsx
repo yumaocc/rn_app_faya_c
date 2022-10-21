@@ -44,6 +44,7 @@ import MyWorkDetailList from '../screen/mine/work/WorkDetailList';
 import WorkDetailListOther from '../screen/mine/work/WorkDetailListOther';
 import MyShowcase from '../screen/mine/spu/Showcase';
 import OtherShowcase from '../screen/mine/spu/OtherShowcase';
+import SearchSPU from '../screen/discover/SearchSPU';
 
 import {RootStackParamList, ValidRoute} from '../models';
 import {useIsLoggedIn} from '../helper/hooks';
@@ -66,6 +67,7 @@ const Navigator: React.FC = () => {
         }}
       />
       <Stack.Screen name="SPUDetail" component={SPUDetail} options={commonScreenOptions} />
+      <Stack.Screen name="SearchSPU" component={SearchSPU} options={{...commonScreenOptions, animation: 'fade'}} />
       {/* <Stack.Screen name="WorkDetail" component={WorkDetail} options={commonScreenOptions} /> */}
       <Stack.Screen name="Browser" component={Browser} options={commonScreenOptions} />
       <Stack.Screen name="TestPage" component={TestPage} options={commonScreenOptions} />

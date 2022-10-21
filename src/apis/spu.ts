@@ -3,7 +3,7 @@ import {DayBookingModelF, SPUDetailF, SPUF} from '../models';
 import {post} from './helper';
 
 export async function getSpuList(params: SearchParam): Promise<SPUF[]> {
-  console.log(params);
+  // console.log(params);
   return await post('/spu/list/with/recent', params);
 }
 

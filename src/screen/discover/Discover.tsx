@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {View, StyleSheet, Text, ScrollView, Image, StatusBar, NativeSyntheticEvent, NativeScrollEvent, RefreshControl} from 'react-native';
+import {View, StyleSheet, Text, ScrollView, Image, StatusBar, NativeSyntheticEvent, NativeScrollEvent, RefreshControl, TouchableWithoutFeedback} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from '../../component/Icon';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -134,6 +134,10 @@ const Discover: React.FC = () => {
     );
   }
 
+  function handleSearch() {
+    navigation.navigate('SearchSPU');
+  }
+
   return (
     <>
       <View style={styles.container}>
@@ -148,18 +152,18 @@ const Discover: React.FC = () => {
           {/* 其他页面会默认此状态栏设置 */}
           <StatusBar backgroundColor="#fff" barStyle="dark-content" />
           <View style={[globalStyles.containerLR, {paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-            <View style={[globalStyles.containerRow, {maxWidth: 110}]}>
+            <View style={[globalStyles.containerRow, {maxWidth: 110, marginRight: 20}]}>
               <Icon name="faxian_dingwei" size={15} color="#333" />
               <View style={{marginLeft: 5}}>
                 <Text numberOfLines={1}>{locationName.repeat(3)}</Text>
               </View>
               <Icon name="all_xiaosanjiaoD24" size={12} color="#333" />
             </View>
-            <View style={styles.searchContainer}>
-              <Text style={styles.spuName} numberOfLines={2}>
-                火锅
-              </Text>
-            </View>
+            <TouchableWithoutFeedback style={{flex: 1}} onPress={handleSearch}>
+              <View style={styles.searchContainer}>
+                <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>搜索商品</Text>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
           <ScrollView
             style={{flex: 1, marginTop: globalStyleVariables.MODULE_SPACE}}
@@ -188,10 +192,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f4f4f4',
     marginLeft: globalStyleVariables.MODULE_SPACE,
-    height: 40,
+    height: 35,
     borderRadius: 20,
     justifyContent: 'center',
-    paddingHorizontal: globalStyleVariables.MODULE_SPACE,
+    paddingLeft: 15,
   },
   spuContainer: {
     flexDirection: 'row',
@@ -214,10 +218,5 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: '100%',
     height: '100%',
-  },
-  spuName: {
-    fontSize: 14,
-    fontWeight: '600',
-    lineHeight: 18,
   },
 });

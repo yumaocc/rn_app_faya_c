@@ -19,7 +19,7 @@ interface NavigationBarProps {
 }
 
 // 延伸返回按钮的点击区域
-const hitSLop = {
+const hitSlop = {
   left: 15,
   right: 15,
   top: 15,
@@ -58,7 +58,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       return props.headerLeft;
     }
     return (
-      <TouchableOpacity activeOpacity={0.5} onPress={handleBack} hitSlop={hitSLop}>
+      <TouchableOpacity activeOpacity={0.5} onPress={handleBack} hitSlop={hitSlop}>
         <View style={styles.defaultLeft}>{props.leftIcon || <Icon name="nav_back48" width={11} height={24} color={props.color} />}</View>
       </TouchableOpacity>
     );

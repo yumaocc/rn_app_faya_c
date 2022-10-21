@@ -48,6 +48,7 @@ export type RootStackParamList = {
   UserWorkDetail: {id: number};
   MyShowcase: undefined;
   OtherShowcase: {id: number};
+  SearchSPU: undefined;
 };
 
 export type ValidRoute = keyof RootStackParamList;
