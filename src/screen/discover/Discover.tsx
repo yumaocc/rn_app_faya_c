@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -16,13 +16,13 @@ import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from '../../component/Icon';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import * as api from '../../apis';
+// import * as api from '../../apis';
 import {useCommonDispatcher, useDivideData, useGrid, useSPUDispatcher, useCityList} from '../../helper/hooks';
 import {FakeNavigation, LocationCity, SPUF} from '../../models';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-import {getLocation, isReachBottom} from '../../helper/system';
+import {isReachBottom} from '../../helper/system';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import {dictLoadingState} from '../../helper/dictionary';
@@ -46,20 +46,20 @@ const Discover: React.FC = () => {
     spuDispatcher.loadSPUList({locationId}, true);
   }, [locationId, spuDispatcher]);
 
-  const getCurrentLocation = useCallback(async () => {
-    try {
-      const location = await getLocation();
-      const {latitude, longitude} = location.coords;
-      const locationMaybe = await api.user.getLocationByGPS(latitude, longitude);
-      commonDispatcher.setConfig({
-        locationId: locationMaybe.id,
-        locationName: locationMaybe.name,
-      });
-    } catch (error) {
-      console.log('location error');
-      console.log(error);
-    }
-  }, [commonDispatcher]);
+  // const getCurrentLocation = useCallback(async () => {
+  //   try {
+  //     const location = await getLocation();
+  //     const {latitude, longitude} = location.coords;
+  //     const locationMaybe = await api.user.getLocationByGPS(latitude, longitude);
+  //     commonDispatcher.setConfig({
+  //       locationId: locationMaybe.id,
+  //       locationName: locationMaybe.name,
+  //     });
+  //   } catch (error) {
+  //     console.log('location error');
+  //     console.log(error);
+  //   }
+  // }, [commonDispatcher]);
 
   function goSPUDetail(id: number) {
     navigation.navigate({
@@ -69,9 +69,9 @@ const Discover: React.FC = () => {
     });
   }
 
-  useEffect(() => {
-    getCurrentLocation();
-  }, [getCurrentLocation]);
+  // useEffect(() => {
+  //   getCurrentLocation();
+  // }, [getCurrentLocation]);
 
   function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
     if (isReachBottom(e)) {
@@ -80,6 +80,22 @@ const Discover: React.FC = () => {
   }
   function handleRefresh() {
     spuDispatcher.loadSPUList({locationId}, true);
+  }
+
+  function handleSearch() {
+    navigation.navigate('SearchSPU');
+  }
+
+  function closeSelectCity() {
+    setShowSelectCity(false);
+  }
+
+  function selectCity(city: LocationCity) {
+    commonDispatcher.setConfig({
+      locationId: city.id,
+      locationName: city.name,
+    });
+    setShowSelectCity(false);
   }
 
   function renderSPU(spu: SPUF) {
@@ -147,22 +163,6 @@ const Discover: React.FC = () => {
         </View>
       </View>
     );
-  }
-
-  function handleSearch() {
-    navigation.navigate('SearchSPU');
-  }
-
-  function closeSelectCity() {
-    setShowSelectCity(false);
-  }
-
-  function selectCity(city: LocationCity) {
-    commonDispatcher.setConfig({
-      locationId: city.id,
-      locationName: city.name,
-    });
-    setShowSelectCity(false);
   }
 
   return (
