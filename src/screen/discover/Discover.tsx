@@ -1,12 +1,24 @@
 import React, {useCallback, useEffect} from 'react';
-import {View, StyleSheet, Text, ScrollView, Image, StatusBar, NativeSyntheticEvent, NativeScrollEvent, RefreshControl, TouchableWithoutFeedback} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Image,
+  StatusBar,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  RefreshControl,
+  TouchableWithoutFeedback,
+  TouchableHighlight,
+} from 'react-native';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from '../../component/Icon';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import * as api from '../../apis';
-import {useCommonDispatcher, useDivideData, useSPUDispatcher} from '../../helper/hooks';
-import {FakeNavigation, SPUF} from '../../models';
+import {useCommonDispatcher, useDivideData, useGrid, useSPUDispatcher, useCityList} from '../../helper/hooks';
+import {FakeNavigation, LocationCity, SPUF} from '../../models';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -14,18 +26,21 @@ import {getLocation, isReachBottom} from '../../helper/system';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import {dictLoadingState} from '../../helper/dictionary';
+import ReactNativeModal from 'react-native-modal';
 
 const Discover: React.FC = () => {
-  // const [spuList, setSpuList] = React.useState([]);
+  const [showSelectCity, setShowSelectCity] = React.useState(false);
   const spuList = useSelector((state: RootState) => state.spu.spuList);
   const [left, right] = useDivideData<SPUF>(spuList.list);
-  // const [locationName, setLocationName] = React.useState('定位中');
   const locationName = useSelector((state: RootState) => state.common.config.locationName);
   const locationId = useSelector((state: RootState) => state.common.config.locationId);
 
   const navigation = useNavigation<FakeNavigation>();
   const [commonDispatcher] = useCommonDispatcher();
   const [spuDispatcher] = useSPUDispatcher();
+  const {top} = useSafeAreaInsets();
+  const [cityList] = useCityList();
+  const cityWidth = useGrid({col: 3, space: 10, sideSpace: 10});
 
   useEffect(() => {
     spuDispatcher.loadSPUList({locationId}, true);
@@ -138,6 +153,18 @@ const Discover: React.FC = () => {
     navigation.navigate('SearchSPU');
   }
 
+  function closeSelectCity() {
+    setShowSelectCity(false);
+  }
+
+  function selectCity(city: LocationCity) {
+    commonDispatcher.setConfig({
+      locationId: city.id,
+      locationName: city.name,
+    });
+    setShowSelectCity(false);
+  }
+
   return (
     <>
       <View style={styles.container}>
@@ -152,12 +179,16 @@ const Discover: React.FC = () => {
           {/* 其他页面会默认此状态栏设置 */}
           <StatusBar backgroundColor="#fff" barStyle="dark-content" />
           <View style={[globalStyles.containerLR, {paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-            <View style={[globalStyles.containerRow, {maxWidth: 110, marginRight: 20}]}>
-              <Icon name="faxian_dingwei" size={15} color="#333" />
-              <View style={{marginLeft: 5}}>
-                <Text numberOfLines={1}>{locationName.repeat(3)}</Text>
-              </View>
-              <Icon name="all_xiaosanjiaoD24" size={12} color="#333" />
+            <View style={[{maxWidth: 110, marginRight: 20}]}>
+              <TouchableOpacity activeOpacity={0.8} onPress={() => setShowSelectCity(true)}>
+                <View style={[globalStyles.containerRow]}>
+                  <Icon name="faxian_dingwei" size={15} color="#333" />
+                  <View style={{marginLeft: 5}}>
+                    <Text numberOfLines={1}>{locationName}</Text>
+                  </View>
+                  <Icon name="all_xiaosanjiaoD24" size={12} color="#333" />
+                </View>
+              </TouchableOpacity>
             </View>
             <TouchableWithoutFeedback style={{flex: 1}} onPress={handleSearch}>
               <View style={styles.searchContainer}>
@@ -179,6 +210,35 @@ const Discover: React.FC = () => {
           </ScrollView>
         </SafeAreaView>
       </View>
+      <ReactNativeModal
+        style={styles.citySelectorModal}
+        isVisible={showSelectCity}
+        onBackdropPress={closeSelectCity}
+        onBackButtonPress={closeSelectCity}
+        animationIn="slideInDown"
+        animationOut="slideOutUp">
+        <View style={[styles.citySelector, {paddingTop: top}]}>
+          <View style={styles.citySection}>
+            <Text style={globalStyles.fontPrimary}>热门站点</Text>
+          </View>
+          <View style={styles.cityContainer}>
+            {cityList.map((city, index) => {
+              const marginRight = index % 3 === 2 ? 0 : 10;
+              const isActive = city.id === locationId;
+              return (
+                <View style={[styles.cityWrap, {width: cityWidth, marginRight}]} key={index}>
+                  <TouchableHighlight
+                    style={[styles.cityItem, isActive && {borderColor: globalStyleVariables.COLOR_PRIMARY, backgroundColor: globalStyleVariables.COLOR_PRIMARY + '1a'}]}
+                    underlayColor="#ddd"
+                    onPress={() => selectCity(city)}>
+                    <Text>{city.name}</Text>
+                  </TouchableHighlight>
+                </View>
+              );
+            })}
+          </View>
+        </View>
+      </ReactNativeModal>
     </>
   );
 };
@@ -218,5 +278,42 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: '100%',
     height: '100%',
+  },
+  citySelectorModal: {
+    margin: 0,
+    justifyContent: 'flex-start',
+  },
+  citySelector: {
+    backgroundColor: '#fff',
+    paddingBottom: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  cityContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 10,
+  },
+  citySection: {
+    backgroundColor: '#f4f4f4',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
+  cityItem: {
+    borderRadius: 5,
+    flex: 1,
+    backgroundColor: '#fff',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: globalStyleVariables.BORDER_COLOR,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    justifyContent: 'center',
+  },
+  cityWrap: {
+    height: 40,
+    marginBottom: 10,
   },
 });
