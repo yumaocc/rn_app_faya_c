@@ -182,6 +182,9 @@ const SPUDetail: React.FC = () => {
   function handleClosePreview() {
     setShowPreview(false);
   }
+  function handleCloseShare() {
+    setShowShare(false);
+  }
 
   return (
     <View style={styles.container}>
@@ -195,13 +198,13 @@ const SPUDetail: React.FC = () => {
       </View>
       {/* 海报弹窗 */}
       {showShare && (
-        <Popup visible={true} onClose={() => setShowShare(false)} round={10} useNativeDrive={false}>
+        <Popup visible={true} onClose={handleCloseShare} round={10} useNativeDrive={false}>
           <View style={styles.posterModal}>
             <View>
               <View style={globalStyles.containerCenter}>
                 <Text>分享海报</Text>
               </View>
-              <TouchableOpacity activeOpacity={0.8} style={{position: 'absolute', right: 0, top: 0}}>
+              <TouchableOpacity activeOpacity={0.8} style={{position: 'absolute', right: 0, top: 0}} onPress={handleCloseShare}>
                 <Icon name="all_popclose36" size={18} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
               </TouchableOpacity>
             </View>
