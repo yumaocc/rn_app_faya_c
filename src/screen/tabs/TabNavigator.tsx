@@ -67,7 +67,7 @@ const TabNavigator: React.FC = () => {
           headerShown: false,
           tabBarLabel: '订单',
           tabBarIcon: ({color, focused}: TabItemProps) =>
-            focused ? <Icon name="home_xiaoxi_sel64" color={color} size={32} /> : <Icon name="home_xiaoxi_nor64" color={color} size={32} />,
+            focused ? <Icon name="home_dingdan_sel64" color={color} size={32} /> : <Icon name="home_dingdan_nor64" color={color} size={32} />,
         }}
       />
       <Tab.Screen
