@@ -115,12 +115,8 @@ const Mine: React.FC = () => {
     if (!isLoggedIn) {
       return;
     }
-    const workList = allWorks[currentTabKey];
-    const {list, status} = workList;
-    if (!list?.length && status === 'none') {
-      userDispatcher.loadMyWork(Number(currentTabKey) as MyWorkTabType, true);
-    }
-  }, [allWorks, currentTabKey, userDispatcher, isLoggedIn]);
+    userDispatcher.loadMyWork(Number(currentTabKey) as MyWorkTabType, true);
+  }, [currentTabKey, isLoggedIn, userDispatcher]);
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
