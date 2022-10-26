@@ -33,7 +33,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
     } else {
       const sku = currentSelect as SKUDetail;
       return {
-        id: 'pkg_' + sku?.id,
+        id: 'sku_' + sku?.id,
         saleAmount: sku?.saleAmount,
         skuName: sku?.skuName,
         stockAmount: sku?.skuStockAmount,
@@ -189,7 +189,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
                 <Text style={[globalStyles.fontStrong]}>{shop.shopName}</Text>
                 <View style={[globalStyles.containerLR]}>
                   <View style={[{flex: 1}]}>
-                    <Text>{shop.addressDetail}</Text>
+                    <Text style={[globalStyles.fontTertiary]}>{shop.addressDetail}</Text>
                     {shop?.distanceFromMe && (
                       <View style={[globalStyles.tagWrapper, {backgroundColor: '#49A0FF1A'}]}>
                         <Text style={[globalStyles.tag, {color: '#49A0FF'}]}>{shop.distanceFromMe}</Text>

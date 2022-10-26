@@ -46,21 +46,6 @@ const Discover: React.FC = () => {
     spuDispatcher.loadSPUList({locationId}, true);
   }, [locationId, spuDispatcher]);
 
-  // const getCurrentLocation = useCallback(async () => {
-  //   try {
-  //     const location = await getLocation();
-  //     const {latitude, longitude} = location.coords;
-  //     const locationMaybe = await api.user.getLocationByGPS(latitude, longitude);
-  //     commonDispatcher.setConfig({
-  //       locationId: locationMaybe.id,
-  //       locationName: locationMaybe.name,
-  //     });
-  //   } catch (error) {
-  //     console.log('location error');
-  //     console.log(error);
-  //   }
-  // }, [commonDispatcher]);
-
   function goSPUDetail(id: number) {
     navigation.navigate({
       name: 'SPUDetail',
@@ -68,10 +53,6 @@ const Discover: React.FC = () => {
       key: 'SPUDetail-' + id,
     });
   }
-
-  // useEffect(() => {
-  //   getCurrentLocation();
-  // }, [getCurrentLocation]);
 
   function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
     if (isReachBottom(e)) {
