@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from '../../component/Icon';
 import {Button} from '../../component';
 import {globalStyleVariables} from '../../constants/styles';
 import {PackageDetail, SKUDetail, SKUSaleState, SPUDetailF} from '../../models';
 import {BoolEnum} from '../../fst/models';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../redux/reducers';
 
 interface BuyBarProps {
   hasCommission?: boolean;
@@ -19,6 +21,8 @@ interface BuyBarProps {
 
 const BuyBar: React.FC<BuyBarProps> = props => {
   const {sku, spu, onBuy, onShare, onAddToShopWindow, onCollect} = props;
+  const userInfo = useSelector((state: RootState) => state.user.myDetail);
+  const hasShowcase = useMemo(() => userInfo?.level > 0, [userInfo]);
 
   return (
     <View style={styles.container}>
@@ -38,21 +42,23 @@ const BuyBar: React.FC<BuyBarProps> = props => {
             )}
           </View>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.8} onPress={onAddToShopWindow}>
-          <View style={styles.action}>
-            {spu?.showcaseJoined === BoolEnum.TRUE ? (
-              <>
-                <Icon name="shangpin_addchuchaung_sel" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-                <Text style={styles.actionText}>已加入</Text>
-              </>
-            ) : (
-              <>
-                <Icon name="shangpin_addchuchaung_nor" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-                <Text style={styles.actionText}>加入橱窗</Text>
-              </>
-            )}
-          </View>
-        </TouchableOpacity>
+        {hasShowcase && (
+          <TouchableOpacity activeOpacity={0.8} onPress={onAddToShopWindow}>
+            <View style={styles.action}>
+              {spu?.showcaseJoined === BoolEnum.TRUE ? (
+                <>
+                  <Icon name="shangpin_addchuchaung_sel" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                  <Text style={styles.actionText}>已加入</Text>
+                </>
+              ) : (
+                <>
+                  <Icon name="shangpin_addchuchaung_nor" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                  <Text style={styles.actionText}>加入橱窗</Text>
+                </>
+              )}
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
       <View style={styles.buttons}>
         {!!sku?.userCommission && (

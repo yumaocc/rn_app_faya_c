@@ -20,6 +20,7 @@ const User: React.FC = () => {
   const [userInfo, setUserInfo] = useState<OtherUserDetail>(null);
   const publicMyLike = useMemo(() => userInfo?.userSettings?.publicMyLike === BoolEnum.TRUE, [userInfo?.userSettings?.publicMyLike]);
   const [showFixTab, setShowFixTab] = useState(false);
+  const userHasShowcase = useMemo(() => userInfo?.level > 0, [userInfo?.level]);
 
   // const token = useSelector((state: RootState) => state.common.token);
   const userWorks = useSelector((state: RootState) => state.user.otherUserWorks[String(id)]);
@@ -234,16 +235,18 @@ const User: React.FC = () => {
               {true && (
                 <>
                   {/* 订单入口栏 */}
-                  <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE, paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-                    <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={handleGoShowCase}>
-                      <View style={[globalStyles.containerRow]}>
-                        <View style={[globalStyles.containerCenter, styles.entry]}>
-                          <Icon name="wode_dingdan48" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
+                  {userHasShowcase && (
+                    <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE, paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
+                      <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={handleGoShowCase}>
+                        <View style={[globalStyles.containerRow]}>
+                          <View style={[globalStyles.containerCenter, styles.entry]}>
+                            <Icon name="wode_dingdan48" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
+                          </View>
+                          <Text>橱窗</Text>
                         </View>
-                        <Text>橱窗</Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
+                      </TouchableOpacity>
+                    </View>
+                  )}
 
                   {/* 作品分类 */}
                   <Tabs

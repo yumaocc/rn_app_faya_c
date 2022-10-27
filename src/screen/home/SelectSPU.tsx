@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useMemo, useRef} from 'react';
 import {View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, useWindowDimensions, Image} from 'react-native';
 import {NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -16,6 +16,8 @@ const SelectSPU: React.FC = () => {
   const [search, setSearch] = React.useState(''); // 文本框内容
   const [keyword, setKeyword] = React.useState(''); // 发起搜索时的关键字
   const searchInput = useRef<TextInput>(null);
+  const userInfo = useSelector((state: RootState) => state.user.myDetail);
+  const hasShowcase = useMemo(() => userInfo?.level > 0, [userInfo]);
 
   const spuList = useSelector((state: RootState) => state.spu.spuListForWork);
   const showCaseSpu = useSelector((state: RootState) => state.spu.showCaseSPUList);
@@ -141,11 +143,13 @@ const SelectSPU: React.FC = () => {
                 选择商品
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.8} onPress={() => setType('showcase')} style={{marginLeft: 20}}>
-              <Text style={[globalStyles.fontPrimary, {color: type === 'showcase' ? globalStyleVariables.TEXT_COLOR_PRIMARY : globalStyleVariables.TEXT_COLOR_TERTIARY}]}>
-                我的橱窗
-              </Text>
-            </TouchableOpacity>
+            {hasShowcase && (
+              <TouchableOpacity activeOpacity={0.8} onPress={() => setType('showcase')} style={{marginLeft: 20}}>
+                <Text style={[globalStyles.fontPrimary, {color: type === 'showcase' ? globalStyleVariables.TEXT_COLOR_PRIMARY : globalStyleVariables.TEXT_COLOR_TERTIARY}]}>
+                  我的橱窗
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         }
       />
@@ -170,11 +174,13 @@ const SelectSPU: React.FC = () => {
             <View style={{padding: globalStyleVariables.MODULE_SPACE}}>{spuList?.list.map(renderSPU)}</View>
           </ScrollView>
         </View>
-        <View style={{width}}>
-          <ScrollView style={{flex: 1}}>
-            <View style={{padding: globalStyleVariables.MODULE_SPACE}}>{showCaseSpu?.list?.map(renderSPU)}</View>
-          </ScrollView>
-        </View>
+        {hasShowcase && (
+          <View style={{width}}>
+            <ScrollView style={{flex: 1}}>
+              <View style={{padding: globalStyleVariables.MODULE_SPACE}}>{showCaseSpu?.list?.map(renderSPU)}</View>
+            </ScrollView>
+          </View>
+        )}
       </ScrollView>
     </View>
   );

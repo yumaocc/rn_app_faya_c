@@ -15,11 +15,11 @@ import {TabsStyles} from '../../component/Tabs';
 
 const Mine: React.FC = () => {
   const detail = useSelector((state: RootState) => state.user.myDetail);
-  // const token = useSelector((state: RootState) => state.common.token);
   const tabs = useSelector((state: RootState) => state.user.myTabs);
   const items = useMemo(() => tabs.map(e => ({title: e.title, key: String(e.value)})), [tabs]);
   const currentTabKey = useSelector((state: RootState) => String(state.user.currentTabType));
   const allWorks = useSelector((state: RootState) => state.user.myWorks);
+  const userHasShowcase = useMemo(() => detail?.level > 0, [detail]);
 
   const [showFixTab, setShowFixTab] = useState(false);
 
@@ -213,14 +213,6 @@ const Mine: React.FC = () => {
               <>
                 {/* 订单入口栏 */}
                 <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE, paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-                  {/* <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={() => navigation.navigate('OrderList')}>
-                    <View style={[globalStyles.containerRow]}>
-                      <View style={[globalStyles.containerCenter, styles.entry]}>
-                        <Icon name="wode_dingdan48" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
-                      </View>
-                      <Text>订单</Text>
-                    </View>
-                  </TouchableOpacity> */}
                   <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={() => navigation.navigate('Wallet')}>
                     <View style={[globalStyles.containerRow]}>
                       <View style={[globalStyles.containerCenter, styles.entry]}>
@@ -229,14 +221,19 @@ const Mine: React.FC = () => {
                       <Text>钱包</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={goMyShowcase}>
-                    <View style={[globalStyles.containerRow]}>
-                      <View style={[globalStyles.containerCenter, styles.entry]}>
-                        <Icon name="wode_chuchuang48" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
-                      </View>
-                      <Text>橱窗</Text>
-                    </View>
-                  </TouchableOpacity>
+                  <View style={{flex: 1}}>
+                    {userHasShowcase && (
+                      <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={goMyShowcase}>
+                        <View style={[globalStyles.containerRow]}>
+                          <View style={[globalStyles.containerCenter, styles.entry]}>
+                            <Icon name="wode_chuchuang48" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
+                          </View>
+                          <Text>橱窗</Text>
+                        </View>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                  {/* <View style={{flex: 1}} /> */}
                 </View>
 
                 {/* 作品分类 */}
