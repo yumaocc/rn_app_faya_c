@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View, StyleSheet, FlatList, ListRenderItemInfo, StatusBar, RefreshControl, ScrollView} from 'react-native';
 import {useSelector} from 'react-redux';
 import {NavigationBar, Popup} from '../../../component';
@@ -9,6 +9,7 @@ import {RootState} from '../../../redux/reducers';
 // import BuyBar from '../../spu/BuyBar';
 import SPUDetailView from '../../spu/SPUDetailView';
 import WorkPage from '../../home/work/WorkPage';
+import CommentModal, {CommentModalRef} from '../../home/work/CommentModal';
 // import * as api from '../../../apis';
 
 const WorkDetailList: React.FC = () => {
@@ -26,6 +27,7 @@ const WorkDetailList: React.FC = () => {
 
   const {height} = useDeviceDimensions();
   const [flatListRef, setRef, isReady] = useRefCallback(null);
+  const commentModalRef = useRef<CommentModalRef>(null);
 
   // const [workDispatcher] = useWorkDispatcher();
   const [spuDispatcher] = useSPUDispatcher();
@@ -75,10 +77,14 @@ const WorkDetailList: React.FC = () => {
     [spuDispatcher],
   );
 
+  function handleOpenComment(mainId: string, autoFocus = false) {
+    commentModalRef.current?.openComment(mainId, autoFocus);
+  }
+
   function renderVideoPage(info: ListRenderItemInfo<WorkF>) {
     const {item, index} = info;
     const shouldLoad = index === currentIndex || index === currentIndex + 1 || index === currentIndex - 1;
-    return <WorkPage item={item} paused={currentIndex !== index} shouldLoad={shouldLoad} onShowSPU={openSPU} />;
+    return <WorkPage item={item} paused={currentIndex !== index} shouldLoad={shouldLoad} onShowSPU={openSPU} onShowComment={handleOpenComment} />;
   }
 
   return (
@@ -111,6 +117,7 @@ const WorkDetailList: React.FC = () => {
           </View>
         </Popup>
       )}
+      <CommentModal ref={commentModalRef} />
     </View>
   );
 };
