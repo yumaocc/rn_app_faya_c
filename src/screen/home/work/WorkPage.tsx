@@ -17,6 +17,7 @@ interface VideoPageProps {
   paused: boolean;
   shouldLoad?: boolean;
   onShowSPU: (id: number) => void;
+  onShowComment?: (mainId: string, focus?: boolean) => void;
 }
 
 const VideoPage: React.FC<VideoPageProps> = props => {
@@ -79,10 +80,6 @@ const VideoPage: React.FC<VideoPageProps> = props => {
     }
   }
 
-  function openComment() {
-    console.log(1);
-  }
-
   function handleLoad() {
     setResourcesLoaded(true);
     if (!reportedStart) {
@@ -136,6 +133,13 @@ const VideoPage: React.FC<VideoPageProps> = props => {
     }
   }
 
+  function onOpenComment() {
+    props.onShowComment && props.onShowComment(props.item.mainId);
+  }
+
+  function openCommentInput() {
+    props.onShowComment && props.onShowComment(props.item.mainId, true);
+  }
   async function handleCollect() {
     if (!loadingCollect && !!workDetail) {
       const {collected, numberOfCollects, mainId} = workDetail;
@@ -194,7 +198,11 @@ const VideoPage: React.FC<VideoPageProps> = props => {
                     <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfLikes}</Text>
                   </View>
                   <View style={styles.sideItem}>
-                    <Icon name="zuopin_pinglun80" size={40} color="#fff" />
+                    <CustomTouchable onPress={onOpenComment}>
+                      <View>
+                        <Icon name="zuopin_pinglun80" size={40} color="#fff" />
+                      </View>
+                    </CustomTouchable>
                     <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfComments}</Text>
                   </View>
                   <View style={styles.sideItem}>
@@ -246,7 +254,7 @@ const VideoPage: React.FC<VideoPageProps> = props => {
                 {/* 下面的框 */}
                 {/* 登录后可见评论框 */}
                 {!!isLoggedIn && (
-                  <CustomTouchable activeOpacity={0.7} onPress={openComment}>
+                  <CustomTouchable activeOpacity={0.7} onPress={openCommentInput}>
                     <View style={{backgroundColor: '#000', padding: globalStyleVariables.MODULE_SPACE}}>
                       <View style={[styles.fakeInputComment]}>
                         <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.TEXT_COLOR_TERTIARY}]}>说点好听的</Text>
@@ -333,6 +341,10 @@ const styles = StyleSheet.create({
   },
   commentInput: {
     padding: 0,
+    margin: 0,
+    height: 30,
+    backgroundColor: '#000',
+    color: '#fff',
   },
   spuModel: {
     // height: 500,

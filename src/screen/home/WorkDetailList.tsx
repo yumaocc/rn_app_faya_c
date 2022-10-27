@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View, StyleSheet, FlatList, ListRenderItemInfo, StatusBar, RefreshControl, ScrollView} from 'react-native';
 import {useSelector} from 'react-redux';
 import {NavigationBar, Popup} from '../../component';
@@ -12,6 +12,8 @@ import SPUDetailView from '../spu/SPUDetailView';
 import WorkPage from './work/WorkPage';
 import * as api from '../../apis';
 import {BoolEnum} from '../../fst/models';
+import {globalStyleVariables} from '../../constants/styles';
+import CommentModal, {CommentModalRef} from './work/CommentModal';
 
 const WorkDetailList: React.FC = () => {
   const params = useParams<{index: number}>();
@@ -19,7 +21,7 @@ const WorkDetailList: React.FC = () => {
   const [showSPU, setShowSPU] = useState(false);
   const [isCollect, setIsCollect] = useState(false);
   const [isJoinShowCase, setIsJoinShowCase] = useState(false);
-
+  const commentModalRef = useRef<CommentModalRef>(null);
   const currentTabType = useSelector((state: RootState) => state.work.currentTab.type);
   const works = useSelector((state: RootState) => state.work.works[currentTabType]);
   const videos = useMemo(() => works.list, [works.list]);
@@ -58,7 +60,6 @@ const WorkDetailList: React.FC = () => {
   }
   const openSPU = useCallback(
     (id: number) => {
-      console.log(111, id);
       if (currentSPU?.id !== id) {
         spuDispatcher.viewSPU(id);
       }
@@ -70,7 +71,6 @@ const WorkDetailList: React.FC = () => {
   const handleChangViewableItems = React.useCallback(({viewableItems}: {viewableItems: any[]}) => {
     if (viewableItems.length === 1) {
       const i = viewableItems[0].index;
-      console.log('set index', i);
       setCurrentIndex(i);
     }
   }, []);
@@ -95,10 +95,14 @@ const WorkDetailList: React.FC = () => {
     [spuDispatcher],
   );
 
+  function openCommentModal(mainId: string, autoFocus = false) {
+    commentModalRef.current?.openComment(mainId, autoFocus);
+  }
+
   function renderVideoPage(info: ListRenderItemInfo<WorkF>) {
     const {item, index} = info;
     const shouldLoad = index === currentIndex || index === currentIndex + 1 || index === currentIndex - 1;
-    return <WorkPage item={item} paused={currentIndex !== index} shouldLoad={shouldLoad} onShowSPU={openSPU} />;
+    return <WorkPage item={item} paused={currentIndex !== index} shouldLoad={shouldLoad} onShowSPU={openSPU} onShowComment={openCommentModal} />;
   }
 
   function handleCollect() {
@@ -176,6 +180,8 @@ const WorkDetailList: React.FC = () => {
           </View>
         </Popup>
       )}
+
+      <CommentModal ref={commentModalRef} />
     </View>
   );
 };
@@ -193,4 +199,20 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   spuModel: {},
+  commentModel: {},
+  commentAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  commentInput: {
+    height: 40,
+    margin: 0,
+    padding: 0,
+    paddingHorizontal: globalStyleVariables.MODULE_SPACE,
+    flex: 1,
+    backgroundColor: '#0000000D',
+    borderRadius: 5,
+    marginRight: globalStyleVariables.MODULE_SPACE,
+  },
 });

@@ -13,6 +13,7 @@ interface PopupProps {
   round?: number;
   useNativeDrive?: boolean; // 设置为false减少闪屏，true提升性能
   onClose: () => void;
+  onShow?: () => void;
 }
 
 const Popup: React.FC<PopupProps> = props => {
@@ -31,12 +32,16 @@ const Popup: React.FC<PopupProps> = props => {
     return () => handler.remove();
   }, [handleClose]);
 
+  function handleOnShow() {
+    props.onShow && props.onShow();
+  }
+
   if (!props.visible) {
     return null;
   }
 
   return (
-    <Modal isVisible={true} style={styles.container} onBackdropPress={handleClose} onBackButtonPress={handleClose} useNativeDriver={props.useNativeDrive}>
+    <Modal isVisible={true} style={styles.container} onBackdropPress={handleClose} onBackButtonPress={handleClose} useNativeDriver={props.useNativeDrive} onShow={handleOnShow}>
       <View style={[styles.body, {paddingBottom: bottom, borderTopLeftRadius: round, borderTopRightRadius: round}, props.style]}>{props.children}</View>
     </Modal>
   );

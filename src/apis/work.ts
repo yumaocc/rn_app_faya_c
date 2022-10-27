@@ -6,6 +6,7 @@ import {
   UserWorkTabType,
   VideoUploadAuth,
   VideoUploadAuthParams,
+  WorkComment,
   WorkDetailF,
   WorkF,
   WorkPublishForm,
@@ -63,6 +64,14 @@ export async function getMyWorkList(type: MyWorkTabType, params: SearchParam): P
 }
 
 export async function getOtherUserWorkList(type: UserWorkTabType, params: SearchParam): Promise<PagedData<WorkF[]>> {
-  console.log({type, ...params});
   return await postPaged('/video/main/other/list', {type, ...params});
+}
+
+// 获取作品评论
+export async function getWorkCommentList(params: SearchParam): Promise<WorkComment[]> {
+  return await post('/video/comment/list/page', params);
+}
+
+export async function commentWork(params: SearchParam): Promise<boolean> {
+  return await post('/video/comment/one', params);
 }

@@ -148,3 +148,11 @@ export interface UserCenterWork {
     [UserWorkTabType.Like]: WorkList;
   };
 }
+
+export interface WorkComment {
+  mainId: string;
+  createdTime: string;
+  content: string;
+  avatar: string;
+  nickName: string;
+}
