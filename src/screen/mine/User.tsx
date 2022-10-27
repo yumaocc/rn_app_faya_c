@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, StatusBar, useWindowDimensions, Platform, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
+import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, StatusBar, Platform, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {NavigationBar, Tabs} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -13,17 +13,18 @@ import {useForceUpdate} from '../../fst/hooks';
 import WorkList from './work/WorkList';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {TabsStyles} from '../../component/Tabs';
+import {BoolEnum} from '../../fst/models';
 
 const User: React.FC = () => {
   const {id} = useParams<{id: number}>();
   const [userInfo, setUserInfo] = useState<OtherUserDetail>(null);
+  const publicMyLike = useMemo(() => userInfo?.userSettings?.publicMyLike === BoolEnum.TRUE, [userInfo?.userSettings?.publicMyLike]);
   const [showFixTab, setShowFixTab] = useState(false);
 
   // const token = useSelector((state: RootState) => state.common.token);
   const userWorks = useSelector((state: RootState) => state.user.otherUserWorks[String(id)]);
   const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
-  const {width} = useWindowDimensions();
   const [signal, updateSignal] = useForceUpdate();
   // const [ref, setRef, isReady] = useRefCallback();
   const isFocused = useIsFocused();
@@ -71,33 +72,22 @@ const User: React.FC = () => {
     };
   }, [id, userDispatcher]);
 
-  // useEffect(() => {
-  //   if (!isReady) {
-  //     return;
-  //   }
-  //   const index = tabs.findIndex(t => t.key === currentKey);
-  //   setTimeout(() => {
-  //     ref.current?.scrollTo({
-  //       x: width * index,
-  //       y: 0,
-  //       animated: true,
-  //     });
-  //   }, 0);
-  // }, [currentKey, isReady, ref, width, tabs]);
-
   useEffect(() => {
     const workList = userWorks?.works[currentKey];
     if (!workList) {
       return;
     }
     if (Number(currentKey) === UserWorkTabType.Like) {
-      // 喜欢不一定要加载
+      if (!publicMyLike) {
+        // 未公开喜欢，不加载
+        return;
+      }
     }
     const {list, status} = workList;
     if (!list?.length && status === 'none') {
       userDispatcher.loadOtherUserWork(Number(currentKey), id, true);
     }
-  }, [currentKey, id, userDispatcher, userWorks?.works]);
+  }, [currentKey, id, userDispatcher, userWorks?.works, publicMyLike]);
 
   async function followUser() {
     if (!isLoggedIn) {
@@ -152,9 +142,13 @@ const User: React.FC = () => {
   }
 
   function handleScrollEnd() {
-    if (isFocused) {
-      loadWork();
+    if (!isFocused) {
+      return;
     }
+    if (currentKey === String(UserWorkTabType.Like) && !publicMyLike) {
+      return;
+    }
+    loadWork();
   }
 
   function handleGoShowCase() {
@@ -192,14 +186,6 @@ const User: React.FC = () => {
                 </View>
               </TouchableOpacity>
             )}
-            {/* {true && (
-              <TouchableOpacity activeOpacity={0.7} onPress={sendMessage}>
-                <View style={[styles.userAction]}>
-                  <Icon name="wode_sixin30" color="#fff" size={15} />
-                  <Text style={[globalStyles.fontPrimary, {color: '#fff', marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}]}>发私信</Text>
-                </View>
-              </TouchableOpacity>
-            )} */}
           </View>
           <View style={[styles.container, {paddingTop: 0, marginTop: 20}]}>
             <View style={{borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: '#fff'}}>
@@ -271,28 +257,28 @@ const User: React.FC = () => {
                   <View>
                     {tabs.map(tab => {
                       const isCurrent = tab.key === currentKey;
-                      return isCurrent ? (
-                        <View style={{width}} key={tab.key}>
-                          <WorkList list={userWorks?.works[tab.key]} onClickWork={index => goWorkList(index)} />
-                        </View>
-                      ) : null;
-                    })}
-                  </View>
-                  {/* <ScrollView
-                    ref={setRef}
-                    horizontal
-                    style={{marginTop: globalStyleVariables.MODULE_SPACE}}
-                    snapToInterval={width}
-                    showsHorizontalScrollIndicator={false}
-                    scrollEnabled={false}>
-                    {tabs.map(tab => {
+                      if (!isCurrent) {
+                        return null;
+                      }
+                      if (currentKey === String(UserWorkTabType.Like) && !publicMyLike) {
+                        return (
+                          <View key={tab.key} style={[globalStyles.containerCenter, {paddingTop: 80}]}>
+                            <View style={[{width: 50, height: 50, borderRadius: 25, backgroundColor: '#0000000D'}, globalStyles.containerCenter]}>
+                              <Icon name="empty_lock" size={30} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                            </View>
+                            <View style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
+                              <Text>内容不可见</Text>
+                            </View>
+                          </View>
+                        );
+                      }
                       return (
-                        <View style={{width}} key={tab.key}>
+                        <View key={tab.key}>
                           <WorkList list={userWorks?.works[tab.key]} onClickWork={index => goWorkList(index)} />
                         </View>
                       );
                     })}
-                  </ScrollView> */}
+                  </View>
                 </>
               )}
             </View>

@@ -1,5 +1,5 @@
 import {Asset} from 'react-native-image-picker';
-import {DateTimeString} from '../fst/models';
+import {BoolEnum, DateTimeString} from '../fst/models';
 import {ValidRoute} from './route';
 
 export enum UserState {
@@ -89,6 +89,14 @@ export interface WalletInfo {
   details: UserCertificationDetail;
 }
 
+export interface UserSetting {
+  id: number;
+  publicMyFollow: BoolEnum; // 是否公开我的关注
+  publicMyLike: BoolEnum; // 是否公开我喜欢的作品
+  publicMyFans: BoolEnum; // 是否公开我的粉丝
+  openBrowse: BoolEnum; // 是否开启浏览记录
+  onlyFollowMsgMe: BoolEnum; // 只有关注我的人才能给我发消息
+}
 // 我的用户信息
 export interface MineDetail {
   account: string;
@@ -103,6 +111,7 @@ export interface MineDetail {
     followNums: number;
     likeNums: number;
   };
+  userSettings: UserSetting;
 }
 
 export enum UserFollowState {
