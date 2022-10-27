@@ -408,6 +408,10 @@ PODS:
   - RNSVG (13.1.0):
     - React-Core
   - SocketRocket (0.6.0)
+  - VisionCamera (2.15.0):
+    - React
+    - React-callinvoker
+    - React-Core
   - VODUpload (1.6.6):
     - AliyunOSSiOS
   - Yoga (1.14.0)
@@ -490,6 +494,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - VODUpload
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -618,6 +623,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  VisionCamera:
+    :path: "../node_modules/react-native-vision-camera"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -691,10 +698,11 @@ SPEC CHECKSUMS:
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
   RNSVG: 1153e8eeb34c788841016c517dba9f57f20b762f
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
+  VisionCamera: 9f2eaf9769cdd50b86016b01a0ac24d490c0e414
   VODUpload: 57651539af6a40a5d74c3e1b26165251b670a388
   Yoga: 236056dd74cda4d9d76c20306fd8c20bb087614d
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 696908e9c8e26e733aa54e35d29d661e13d7efb5
+PODFILE CHECKSUM: 7e667a46ee71536efa691506f1151dc95073051e
 
 COCOAPODS: 1.11.3
