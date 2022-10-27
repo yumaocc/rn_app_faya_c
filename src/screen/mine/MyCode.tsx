@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import {View, Text, TouchableOpacity, ScrollView, useWindowDimensions, StyleSheet, Image, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../component';
@@ -13,18 +13,24 @@ import {RootState} from '../../redux/reducers';
 
 const MyCode: React.FC = () => {
   const {type} = useParams<{type: 'friend' | 'share'}>();
-  const [currentType, setCurrentType] = React.useState<'friend' | 'share'>(type || 'friend');
+  const [currentType, setCurrentType] = React.useState<'friend' | 'share'>('friend');
   const {width: windowWidth} = useWindowDimensions();
   const [ref, setRef, isReady] = useRefCallback();
   const [codeInfo, setCodeInfo] = React.useState<{datingQrCodeUrl: string; shareQrCodeUrl: string}>();
   const userInfo = useSelector((state: RootState) => state.user.myDetail);
+  const hasShareCode = useMemo(() => !!codeInfo?.shareQrCodeUrl, [codeInfo]);
+
+  useEffect(() => {
+    if (type === 'share' && hasShareCode) {
+      setCurrentType('share');
+    }
+  }, [type, hasShareCode]);
 
   const [commonDispatcher] = useCommonDispatcher();
 
   const checkCode = useCallback(async () => {
     try {
       const res = await api.user.getCodeUrl();
-      // const {datingQrCodeUrl, shareQrCodeUrl} = res;
       setCodeInfo(res);
     } catch (error) {
       commonDispatcher.error(error);
@@ -52,7 +58,9 @@ const MyCode: React.FC = () => {
   function handleSwipe(direction: SwipeDirection) {
     switch (direction) {
       case SwipeDirection.LEFT:
-        setCurrentType('share');
+        if (hasShareCode) {
+          setCurrentType('share');
+        }
         break;
       case SwipeDirection.RIGHT:
         setCurrentType('friend');
@@ -71,11 +79,13 @@ const MyCode: React.FC = () => {
                 交友二维码
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.8} style={{marginLeft: globalStyleVariables.MODULE_SPACE_BIGGER}} onPress={() => setCurrentType('share')}>
-              <Text style={[globalStyles.fontPrimary, {color: currentType === 'share' ? globalStyleVariables.TEXT_COLOR_PRIMARY : globalStyleVariables.TEXT_COLOR_TERTIARY}]}>
-                推广码
-              </Text>
-            </TouchableOpacity>
+            {hasShareCode && (
+              <TouchableOpacity activeOpacity={0.8} style={{marginLeft: globalStyleVariables.MODULE_SPACE_BIGGER}} onPress={() => setCurrentType('share')}>
+                <Text style={[globalStyles.fontPrimary, {color: currentType === 'share' ? globalStyleVariables.TEXT_COLOR_PRIMARY : globalStyleVariables.TEXT_COLOR_TERTIARY}]}>
+                  推广码
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         }
       />
@@ -86,7 +96,7 @@ const MyCode: React.FC = () => {
             <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{userInfo?.nickName}</Text>
           </View>
           <View style={{marginTop: 30}}>
-            <QRCode value={codeInfo?.datingQrCodeUrl} size={250} />
+            <QRCode value={codeInfo?.datingQrCodeUrl || '发芽'} size={250} />
           </View>
           <View style={{marginTop: 20}}>
             <Text style={globalStyles.fontPrimary}>扫描二维码，立刻关注我</Text>
@@ -98,27 +108,29 @@ const MyCode: React.FC = () => {
             </View>
           </TouchableOpacity> */}
         </SwipeView>
-        <SwipeView style={[styles.codeContainer, {width: windowWidth}]} onSwipe={handleSwipe}>
-          {!userInfo?.avatar ? <Image style={styles.avatar} source={require('../../assets/avatar_def.png')} /> : <Image style={styles.avatar} source={{uri: userInfo.avatar}} />}
-          <View style={{marginTop: 20}}>
-            <Text style={[globalStyles.fontPrimary]}>{userInfo?.nickName}</Text>
-          </View>
-          <View style={{marginTop: 20}}>
-            <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>邀请你注册发芽</Text>
-          </View>
-          <View style={{marginTop: 30}}>
-            <QRCode value={codeInfo?.shareQrCodeUrl} size={250} />
-          </View>
-          <View style={{marginTop: 20}}>
-            <Text style={globalStyles.fontPrimary}>扫描二维码，开启美好生活</Text>
-          </View>
-          {/* <TouchableOpacity activeOpacity={0.8}>
+        {hasShareCode && (
+          <SwipeView style={[styles.codeContainer, {width: windowWidth}]} onSwipe={handleSwipe}>
+            {!userInfo?.avatar ? <Image style={styles.avatar} source={require('../../assets/avatar_def.png')} /> : <Image style={styles.avatar} source={{uri: userInfo.avatar}} />}
+            <View style={{marginTop: 20}}>
+              <Text style={[globalStyles.fontPrimary]}>{userInfo?.nickName}</Text>
+            </View>
+            <View style={{marginTop: 20}}>
+              <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>邀请你注册发芽</Text>
+            </View>
+            <View style={{marginTop: 30}}>
+              <QRCode value={codeInfo?.shareQrCodeUrl || '发芽'} size={250} />
+            </View>
+            <View style={{marginTop: 20}}>
+              <Text style={globalStyles.fontPrimary}>扫描二维码，开启美好生活</Text>
+            </View>
+            {/* <TouchableOpacity activeOpacity={0.8}>
             <View style={[styles.save]}>
               <MaterialIcon name="south" size={15} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />
               <Text style={[globalStyles.fontPrimary]}>保存到本地</Text>
             </View>
           </TouchableOpacity> */}
-        </SwipeView>
+          </SwipeView>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -18,7 +18,7 @@ const MiddleButton: React.FC = () => {
         redirect: true,
       });
     } else {
-      // navigation.navigate('ShootVideo');
+      navigation.navigate('ShootVideo');
       // navigation.navigate('TestPage');
       // navigation.navigate('SearchSPU');
       // navigation.navigate('WithdrawalRecords');
@@ -28,7 +28,8 @@ const MiddleButton: React.FC = () => {
       // navigation.navigate('MyShowcase');
       // navigation.navigate('Certification');
       // navigation.navigate('AddBankCard');
-      navigation.navigate('Publish');
+      // navigation.navigate('Publish');
+      // navigation.navigate('MyCode');
       // navigation.navigate('PublishVideo');
       // navigation.navigate('WaitPay');
       // navigation.navigate('SPUDetail', {id: 62});
