@@ -110,6 +110,9 @@ const Mine: React.FC = () => {
       loadWork();
     }
   }
+  function goMyShowcase() {
+    navigation.navigate('MyShowcase');
+  }
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -226,7 +229,7 @@ const Mine: React.FC = () => {
                       <Text>钱包</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={0.8} style={{flex: 1}}>
+                  <TouchableOpacity activeOpacity={0.8} style={{flex: 1}} onPress={goMyShowcase}>
                     <View style={[globalStyles.containerRow]}>
                       <View style={[globalStyles.containerCenter, styles.entry]}>
                         <Icon name="wode_chuchuang48" color={globalStyleVariables.TEXT_COLOR_PRIMARY} size={24} />
