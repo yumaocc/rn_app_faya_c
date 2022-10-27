@@ -106,7 +106,7 @@ const Discover: React.FC = () => {
             goSPUDetail(spu.spuId);
           }}>
           <View style={styles.spuCoverContainer}>
-            <Image source={{uri: spu.poster}} defaultSource={require('../../assets/sku_def_1_1.png')} style={styles.spuCover} />
+            <Image source={{uri: spu.poster}} defaultSource={require('../../assets/sku_def_180w.png')} style={styles.spuCover} />
           </View>
         </TouchableOpacity>
         <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE}}>
