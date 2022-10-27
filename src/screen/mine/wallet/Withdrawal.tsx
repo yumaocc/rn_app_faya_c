@@ -73,7 +73,7 @@ const Withdrawal: React.FC = () => {
   return (
     <>
       <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
         <NavigationBar
           title="提现"
           headerRight={

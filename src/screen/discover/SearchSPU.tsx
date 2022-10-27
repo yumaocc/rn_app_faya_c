@@ -132,7 +132,7 @@ const SearchSPU: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <NavigationSearchBar autoFocus onSearch={handleSearch} />
       <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag" onMomentumScrollEnd={handleScrollEnd}>
         <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, paddingBottom: bottom}}>{list.map(spu => renderSPU(spu))}</View>

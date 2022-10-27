@@ -11,7 +11,7 @@ const Settings: React.FC = () => {
   return (
     <View style={styles.container}>
       <NavigationBar title="设置" />
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <ScrollView style={{flex: 1}}>
         <OperateItem label="个人资料" showArrow />
         {/* <OperateItem label="隐私设置" showArrow /> */}

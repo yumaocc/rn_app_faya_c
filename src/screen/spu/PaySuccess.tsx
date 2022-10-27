@@ -12,7 +12,7 @@ const PaySuccess: React.FC = () => {
   }
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <NavigationBar title="支付结果" canBack={false} onBack={backToTab} />
       <ScrollView style={{flex: 1}}>
         <View style={[globalStyles.containerCenter, {marginTop: 60}]}>

@@ -306,7 +306,7 @@ const Order: React.FC = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#f4f4f4', position: 'relative'}}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <NavigationBar title="确认订单" style={{backgroundColor: '#fff'}} />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{flex: 1}}>
         <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">

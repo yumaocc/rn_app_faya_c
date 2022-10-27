@@ -45,7 +45,7 @@ const WithdrawalRecords: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <NavigationBar title="提现记录" />
       <ScrollView style={{flex: 1}} refreshControl={<RefreshControl refreshing={false} onRefresh={handleRefresh} />} onMomentumScrollEnd={handleScrollEnd}>
         <View>
