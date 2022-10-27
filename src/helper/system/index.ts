@@ -4,7 +4,7 @@ import ImageResizer from '@bam.tech/react-native-image-resizer';
 import RNFS from 'react-native-fs';
 import {displayName} from '../../../app.json';
 import {APP_SCHEMES} from '../../constants';
-import {AppInstallCheckType, ImageCompressOptions, ImageCompressResult} from '../../models';
+import {AppInstallCheckType, ImageCompressOptions, ImageCompressResult, QRCodeScanResult} from '../../models';
 import CameraRoll from '@react-native-community/cameraroll';
 
 export function getVideoNameByPath(videPath: string) {
@@ -178,4 +178,59 @@ export async function saveImageToGallery(uri: string) {
 
 export function getTempFilePath(fileName: string) {
   return `${RNFS.TemporaryDirectoryPath}/${fileName}`;
+}
+
+// 检查二维码
+export function readQRCodeContent(content: string): QRCodeScanResult {
+  const result: QRCodeScanResult = {
+    type: 'other',
+    content: content,
+    isURL: false,
+    scheme: '',
+  };
+  if (!content) {
+    return result;
+  }
+  const schemeReg = /^([a-zA-Z]+:\/\/)/;
+  const schemeMatch = content.match(schemeReg);
+  if (schemeMatch) {
+    result.scheme = schemeMatch[1];
+  }
+  if (content.startsWith('http://') || content.startsWith('https://')) {
+    result.isURL = true;
+  }
+  const friendCheck = checkFriendUrl(content);
+  if (friendCheck.result) {
+    result.type = 'friend';
+    result.data = {
+      userId: friendCheck.userId,
+    };
+    return result;
+  }
+  const shareCheck = checkShareUrl(content);
+  if (shareCheck.result) {
+    result.type = 'share';
+    result.data = {
+      agentId: shareCheck.agentId,
+    };
+    return result;
+  }
+  return result;
+}
+export function checkFriendUrl(content: string) {
+  const reg = /https:\/\/faya\.life\/user\/profile\/(\d+)/;
+  const userId = content.match(reg)?.[1];
+  return {
+    result: !!userId,
+    userId: userId,
+  };
+}
+
+export function checkShareUrl(content: string) {
+  const reg = /https:\/\/faya\.life\/agent\/(\d+)/;
+  const agentId = content.match(reg)?.[1];
+  return {
+    result: !!agentId,
+    agentId: agentId,
+  };
 }

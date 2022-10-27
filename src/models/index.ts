@@ -14,7 +14,7 @@ export type {
   AgentTask,
   WithdrawalRecord,
 } from './user';
-export type {AppHeader, StylePropText, StylePropView, StylesProp, CacheKeys, LoadingState, LoadListState, LocationCity, SystemConfig} from './common';
+export type {AppHeader, StylePropText, StylePropView, StylesProp, CacheKeys, LoadingState, LoadListState, LocationCity, SystemConfig, QRCodeScanResult} from './common';
 export type {
   WorkTab,
   WorkF,

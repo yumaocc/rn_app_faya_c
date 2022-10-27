@@ -1,3 +1,4 @@
+import 'react-native-reanimated';
 import React from 'react';
 import Main from './src/screen/Main';
 import {Provider as AntProvider} from '@ant-design/react-native';

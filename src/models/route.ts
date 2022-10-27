@@ -64,6 +64,7 @@ export type FakeNavigation = {
   goBack(): void;
   isFocused(): void;
   replace<Params = any>(name: keyof RootStackParamList, params?: Params): void;
+  replace<Params = any>(options: {name?: keyof RootStackParamList; params?: Params; key?: string}): void;
   popToTop(): void;
   getState(): any;
 };

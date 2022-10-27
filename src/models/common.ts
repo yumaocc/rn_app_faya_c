@@ -42,3 +42,11 @@ export interface SystemConfig {
   locationId: number;
   locationName: string;
 }
+
+export interface QRCodeScanResult {
+  content: string;
+  type: 'friend' | 'share' | 'other';
+  isURL: boolean;
+  scheme: string;
+  data?: any; // 如果是推广码或者好友码，可以带上对应的信息
+}
