@@ -124,7 +124,7 @@ export const navigationRef = createNavigationContainerRef();
 
 // 编程式导航
 export function goLogin() {
-  navigateTo('Login', null, true);
+  navigateTo('Login', null, false);
 }
 
 export function relaunch() {

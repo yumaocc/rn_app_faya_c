@@ -96,7 +96,11 @@ const Login: React.FC = () => {
 
   function skipLogin() {
     userDispatcher.clearLoginInfo();
-    navigation.canGoBack() && navigation.goBack();
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      navigation.replace('Home');
+    }
   }
 
   function openUserProtocol() {

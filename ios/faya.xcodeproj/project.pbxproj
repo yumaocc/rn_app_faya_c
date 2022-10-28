@@ -594,7 +594,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fylife.app;
 				PRODUCT_NAME = faya;
-				PROVISIONING_PROFILE_SPECIFIER = "faya main APP profile(distribution)";
+				PROVISIONING_PROFILE_SPECIFIER = faya_release;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
