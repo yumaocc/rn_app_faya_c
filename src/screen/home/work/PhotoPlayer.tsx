@@ -1,6 +1,7 @@
 import {Carousel} from '@ant-design/react-native';
 import React from 'react';
 import {View, Image, StyleSheet} from 'react-native';
+import CustomTouchable from '../../../component/CustomTouchable';
 import {StylePropView, WorkFile} from '../../../models';
 
 interface PhotoPlayerProps {
@@ -28,11 +29,13 @@ const PhotoPlayer: React.FC<PhotoPlayerProps> = props => {
 
   return (
     <View style={props.style}>
-      <Carousel autoplay={!paused} autoplayInterval={3000} infinite style={styles.full} afterChange={handleChange}>
-        {files?.map((file, i) => (
-          <Image onLoad={() => handleLoad(i)} key={i} source={{uri: file.videoUrl}} style={styles.full} resizeMode="cover" />
-        ))}
-      </Carousel>
+      <CustomTouchable>
+        <Carousel autoplay={!paused} autoplayInterval={3000} infinite style={styles.full} afterChange={handleChange} dots={false}>
+          {files?.map((file, i) => (
+            <Image onLoad={() => handleLoad(i)} key={i} source={{uri: file.videoUrl}} style={styles.full} resizeMode="contain" />
+          ))}
+        </Carousel>
+      </CustomTouchable>
     </View>
   );
 };
