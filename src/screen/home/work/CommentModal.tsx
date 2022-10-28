@@ -7,8 +7,7 @@ import {friendlyTime} from '../../../fst/helper/data';
 import {useCommonDispatcher, useIsLoggedIn} from '../../../helper/hooks';
 import * as api from '../../../apis';
 import {SearchParam} from '../../../fst/models';
-import {FakeNavigation, LoadListState, WorkComment} from '../../../models';
-import {useNavigation} from '@react-navigation/native';
+import {LoadListState, WorkComment} from '../../../models';
 import {goLogin} from '../../../router/Router';
 
 interface CommentModalProps {
@@ -31,7 +30,6 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
   const [commonDispatcher] = useCommonDispatcher();
   const isLoggedIn = useIsLoggedIn();
   const {height} = useWindowDimensions();
-  const navigation = useNavigation<FakeNavigation>();
 
   useImperativeHandle(ref, () => ({
     openComment: (mainId: string, focusInput = false) => {
