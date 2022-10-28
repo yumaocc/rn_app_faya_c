@@ -183,7 +183,13 @@ const VideoPage: React.FC<VideoPageProps> = props => {
               {workDetail && (
                 <View style={styles.side}>
                   <View style={styles.sideItem}>
-                    <Image source={require('../../../assets/avatar_def.png')} style={[styles.sideItem, styles.avatar]} />
+                    <CustomTouchable onPress={goAuthor}>
+                      {workDetail?.avatar ? (
+                        <Image source={{uri: workDetail?.avatar}} style={[styles.sideItem, styles.avatar]} />
+                      ) : (
+                        <Image source={require('../../../assets/avatar_def.png')} style={[styles.sideItem, styles.avatar]} />
+                      )}
+                    </CustomTouchable>
                   </View>
                   <View style={styles.sideItem}>
                     <CustomTouchable onPress={handleLike}>

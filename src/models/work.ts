@@ -82,7 +82,7 @@ export interface WorkDetailF {
   type: WorkType;
   userId: number;
   userName: string;
-  // TODO: 缺了用户头像，不过不着急，暂时也没有头像
+  avatar: string;
   content: string;
 }
 
