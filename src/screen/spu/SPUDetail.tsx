@@ -18,6 +18,7 @@ import Icon from '../../component/Icon';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {useLog} from '../../fst/hooks';
 import {saveImageToGallery} from '../../helper/system';
+import Loading from '../../component/Loading';
 
 const SPUDetail: React.FC = () => {
   const {id} = useParams<{id: number}>();
@@ -191,11 +192,13 @@ const SPUDetail: React.FC = () => {
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       {titleOpacity > 0.2 && <NavigationBar title="商品详情" style={[styles.navigation, {opacity: titleOpacity}]} />}
       <ScrollView style={{flex: 1}} onScroll={handleScroll} scrollEventThrottle={16}>
-        {spu ? <SPUDetailView isPackage={isPackage} currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} /> : <Text>loading...</Text>}
+        {spu ? <SPUDetailView isPackage={isPackage} currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} /> : <Loading style={{marginTop: 150}} />}
       </ScrollView>
-      <View style={[{paddingBottom: safeBottom, backgroundColor: '#fff'}]}>
-        <BuyBar spu={spu} sku={currentSKU} onBuy={handleBuy} onCollect={handleCollect} onAddToShopWindow={handleJoinShowCase} onShare={handleShare} />
-      </View>
+      {!!spu && (
+        <View style={[{paddingBottom: safeBottom, backgroundColor: '#fff'}]}>
+          <BuyBar spu={spu} sku={currentSKU} onBuy={handleBuy} onCollect={handleCollect} onAddToShopWindow={handleJoinShowCase} onShare={handleShare} />
+        </View>
+      )}
       {/* 海报弹窗 */}
       {showShare && (
         <Popup visible={true} onClose={handleCloseShare} round={10} useNativeDrive={false}>
@@ -253,6 +256,7 @@ export default SPUDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   navigation: {
     position: 'absolute',

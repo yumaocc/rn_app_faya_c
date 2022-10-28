@@ -7,7 +7,10 @@ const Loading: React.FC = () => {
   const [commonDispatcher] = useCommonDispatcher();
 
   useEffect(() => {
-    commonDispatcher.initApp();
+    setTimeout(() => {
+      //  显示品牌1s
+      commonDispatcher.initApp();
+    }, 1000);
   }, [commonDispatcher]);
 
   return (

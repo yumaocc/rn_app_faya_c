@@ -14,6 +14,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {navigateTo} from '../../router/Router';
 import {OrderPackage, OrderStatus} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
+import Loading from '../../component/Loading';
 
 const OrderDetail: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -170,7 +171,7 @@ const OrderDetail: React.FC = () => {
             </Popover>
           }
         />
-        {!orderDetail && <Text>loading...</Text>}
+        {!orderDetail && <Loading style={{marginTop: 150}} />}
         {orderDetail && (
           <>
             {renderOrderStatus()}

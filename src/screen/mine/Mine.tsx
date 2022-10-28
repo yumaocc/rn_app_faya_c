@@ -140,7 +140,9 @@ const Mine: React.FC = () => {
         <View style={[styles.container, {paddingTop: 170, paddingBottom: 20}]}>
           {/* 顶部扫码等按钮栏 */}
           <View style={[globalStyles.containerLR, {position: 'absolute', top: top + 10, width: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-            <Icon name="wode_scan48" size={24} color="#fff" />
+            <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('Scanner')}>
+              <Icon name="wode_scan48" size={24} color="#fff" />
+            </TouchableOpacity>
             <View style={globalStyles.containerLR}>
               {!!isLoggedIn && (
                 <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('MyCode')}>
