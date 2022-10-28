@@ -16,12 +16,28 @@ $ brew install cocoapods
 
 ```bash
 $ cd 项目根目录
-$ yarn install
-$ cd ios
-$ pod install
+$ yarn install # 安装js依赖
+$ ./script/install.sh # 安装iOS依赖
+
+# 如果启动安卓
+$ yarn android
+
+# 如果启动iOS
+$ yarn ios
+
 ```
 
-在Xcode中点击run，启动项目
+## 版本更新时
+
+先更新版本号和build
+ios: xcode中选中项目，填写版本号和build
+android: android/app/build.gradle中修改version和build
+package.json中修改version ***重要：此版本号会显示在app的关于页面，所以必须要保证三个版本号统一***
+
+ios：在xcode中，点击菜单栏Product -> Archive
+android： ./script/build.sh
+
+
 ## 相关文档/资料
 
 
