@@ -11,3 +11,7 @@ export async function uploadToOSS(uri: string, fileName: string): Promise<string
 export async function getAllCity(): Promise<LocationCity[]> {
   return await post('/location/with/company/all');
 }
+
+export async function getKFUrl(): Promise<string> {
+  return await post('/center/config/enterprise/wechat/customer/service');
+}

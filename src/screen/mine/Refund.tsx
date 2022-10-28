@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, TextInput} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, TextInput, StatusBar} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {Button, InputNumber, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -13,6 +13,7 @@ import * as api from '../../apis';
 import {navigateBack} from '../../router/Router';
 import {moneyToYuan} from '../../fst/helper';
 import Icon from '../../component/Icon';
+import KFModal from '../common/KFModal';
 
 const Refund: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -20,6 +21,7 @@ const Refund: React.FC = () => {
   const [showPreview, setShowPreview] = React.useState(false);
   const [previewIndex, setPreviewIndex] = React.useState(0);
   const [uploading, setUploading] = React.useState(false);
+  const [showKF, setShowKF] = React.useState(false);
   const [form, setFormField] = useSearch<OrderRefundForm>({
     fileList: [],
     _fileList: [],
@@ -98,11 +100,14 @@ const Refund: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <NavigationBar
         title="退款"
         headerRight={
           <View style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
-            <Icon name="nav_kefu" size={24} color="#333" />
+            <TouchableOpacity activeOpacity={0.8} onPress={() => setShowKF(true)}>
+              <Icon name="nav_kefu" size={24} color="#333" />
+            </TouchableOpacity>
           </View>
         }
       />
@@ -177,6 +182,7 @@ const Refund: React.FC = () => {
       <Modal visible={showPreview} transparent={true} animationType="fade" onRequestClose={() => setShowPreview(false)}>
         <ImageViewer imageUrls={form._fileList} index={previewIndex} enableSwipeDown={true} onSwipeDown={() => setShowPreview(false)} />
       </Modal>
+      <KFModal visible={showKF} onClose={() => setShowKF(false)} />
     </View>
   );
 };

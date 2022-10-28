@@ -50,6 +50,7 @@ import ScanResult from '../screen/common/ScanResult';
 
 import {RootStackParamList, ValidRoute} from '../models';
 import {useIsLoggedIn} from '../helper/hooks';
+import MyProfile from '../screen/mine/settings/MyProfile';
 
 const Navigator: React.FC = () => {
   const isLoggedIn = useIsLoggedIn();
@@ -109,6 +110,7 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="UserWorkDetail" component={WorkDetailListOther} options={commonScreenOptions} />
           <Stack.Screen name="MyShowcase" component={MyShowcase} options={commonScreenOptions} />
           <Stack.Screen name="OtherShowcase" component={OtherShowcase} options={commonScreenOptions} />
+          <Stack.Screen name="MyProfile" component={MyProfile} options={commonScreenOptions} />
         </>
       ) : (
         <></>

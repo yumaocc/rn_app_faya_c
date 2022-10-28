@@ -51,6 +51,7 @@ export type RootStackParamList = {
   SearchSPU: undefined;
   Scanner: undefined;
   ScanResult: {content: string};
+  MyProfile: undefined; // 个人资料修改
 };
 
 export type ValidRoute = keyof RootStackParamList;

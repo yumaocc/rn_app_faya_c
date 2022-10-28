@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
-import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, StatusBar} from 'react-native';
 import Icon from '../../component/Icon';
 import QRCode from 'react-native-qrcode-svg';
 import Popover from 'react-native-popover-view';
@@ -16,14 +16,16 @@ import {OrderPackage, OrderStatus} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
 import Loading from '../../component/Loading';
 import {useIsFocused} from '@react-navigation/native';
+import KFModal from '../common/KFModal';
 
 const OrderDetail: React.FC = () => {
   const {id} = useParams<{id: string}>();
-  const [orderDetail, setOrderDetail] = React.useState<OrderDetailF>();
-  const [showBatch, setShowBatch] = React.useState(false);
-  const [showCode, setShowCode] = React.useState(false);
-  const [currentCode, setCurrentCode] = React.useState<OrderPackageSKU>();
-  const [showMenu, setShowMenu] = React.useState(false);
+  const [orderDetail, setOrderDetail] = useState<OrderDetailF>();
+  const [showBatch, setShowBatch] = useState(false);
+  const [showCode, setShowCode] = useState(false);
+  const [currentCode, setCurrentCode] = useState<OrderPackageSKU>();
+  const [showMenu, setShowMenu] = useState(false);
+  const [showKF, setShowKF] = useState(false);
   const orderCompleted = orderDetail?.status === OrderStatus.Completed;
   const orderCanceled = orderDetail?.status === OrderStatus.Canceled;
   const orderCanUse = useMemo(() => [OrderStatus.Booked, OrderStatus.Paid].includes(orderDetail?.status), [orderDetail]);
@@ -147,6 +149,7 @@ const OrderDetail: React.FC = () => {
   return (
     <>
       <View style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
         <NavigationBar
           title="订单详情"
           headerRight={
@@ -333,6 +336,7 @@ const OrderDetail: React.FC = () => {
           </View>
         </Modal>
       )}
+      <KFModal visible={showKF} onClose={() => setShowKF(false)} />
     </>
   );
 };
