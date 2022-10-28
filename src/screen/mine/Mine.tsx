@@ -118,8 +118,10 @@ const Mine: React.FC = () => {
     if (!isLoggedIn) {
       return;
     }
-    userDispatcher.loadMyWork(Number(currentTabKey) as MyWorkTabType, true);
-  }, [currentTabKey, isLoggedIn, userDispatcher]);
+    if (isFocused) {
+      userDispatcher.loadMyWork(Number(currentTabKey) as MyWorkTabType, true);
+    }
+  }, [currentTabKey, isLoggedIn, userDispatcher, isFocused]);
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
