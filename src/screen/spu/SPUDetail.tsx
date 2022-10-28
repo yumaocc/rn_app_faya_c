@@ -19,6 +19,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import {useLog} from '../../fst/hooks';
 import {saveImageToGallery} from '../../helper/system';
 import Loading from '../../component/Loading';
+import {goLogin} from '../../router/Router';
 
 const SPUDetail: React.FC = () => {
   const {id} = useParams<{id: number}>();
@@ -120,7 +121,7 @@ const SPUDetail: React.FC = () => {
 
   function handleCollect() {
     if (!isLoggedIn) {
-      navigation.replace('Login', {to: 'SPUDetail', params: {id}});
+      goLogin();
     } else {
       if (isCollect) {
         return;
@@ -142,7 +143,7 @@ const SPUDetail: React.FC = () => {
 
   function handleJoinShowCase() {
     if (!isLoggedIn) {
-      navigation.replace('Login', {to: 'SPUDetail', params: {id}});
+      goLogin();
     } else {
       if (isJoinShowCase) {
         return;

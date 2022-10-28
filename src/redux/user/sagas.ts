@@ -6,7 +6,7 @@ import {ActionType} from './types';
 import {ActionWithPayload} from '../types';
 import {GoLoginParams, MyWorkTabType, UserWorkTabType, WorkF, WorkList} from '../../models';
 import * as api from '../../apis';
-import {navigateBack, navigateTo, relaunch} from '../../router/Router';
+import {goLogin, navigateBack, navigateTo, relaunch} from '../../router/Router';
 import {RootState} from '../reducers';
 import {OrderActions, SPUActions, WorkActions} from '../actions';
 import {PagedData} from '../../fst/models';
@@ -21,7 +21,7 @@ function* logout(): any {
 }
 
 function login() {
-  navigateTo('Login');
+  goLogin();
 }
 
 function* loginSuccess(action: ActionWithPayload<ActionType, string>): any {

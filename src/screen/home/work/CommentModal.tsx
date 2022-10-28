@@ -4,10 +4,12 @@ import {Popup} from '../../../component';
 import Icon from '../../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {friendlyTime} from '../../../fst/helper/data';
-import {useCommonDispatcher} from '../../../helper/hooks';
+import {useCommonDispatcher, useIsLoggedIn} from '../../../helper/hooks';
 import * as api from '../../../apis';
 import {SearchParam} from '../../../fst/models';
-import {LoadListState, WorkComment} from '../../../models';
+import {FakeNavigation, LoadListState, WorkComment} from '../../../models';
+import {useNavigation} from '@react-navigation/native';
+import {goLogin} from '../../../router/Router';
 
 interface CommentModalProps {
   // visible: boolean;
@@ -24,10 +26,12 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
   const [comment, setComment] = useState<LoadListState<WorkComment>>({list: [], status: 'none', index: 0});
   const [modalComment, setModalComment] = useState(''); // 弹窗上的评论输入框内容
   const [autoFocusComment, setAutoFocusComment] = useState(false); // 是否自动聚焦评论输入框
+
   const commentInputRef = useRef<TextInput>(null);
   const [commonDispatcher] = useCommonDispatcher();
-
+  const isLoggedIn = useIsLoggedIn();
   const {height} = useWindowDimensions();
+  const navigation = useNavigation<FakeNavigation>();
 
   useImperativeHandle(ref, () => ({
     openComment: (mainId: string, focusInput = false) => {
@@ -48,7 +52,6 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
             index,
           };
           setComment(newComments);
-          console.log(res);
         } catch (error) {
           commonDispatcher.error(error);
         }
@@ -73,6 +76,9 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
 
   const sendModelComment = useCallback(async () => {
     Keyboard.dismiss();
+    if (!isLoggedIn) {
+      goLogin();
+    }
     if (!modalComment) {
       return;
     }
@@ -83,7 +89,7 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
     } catch (error) {
       commonDispatcher.error(error);
     }
-  }, [commentMainId, commonDispatcher, loadComment, modalComment]);
+  }, [commentMainId, commonDispatcher, loadComment, modalComment, isLoggedIn]);
 
   const handleCommentModalShow = useCallback(() => {
     if (autoFocusComment) {
@@ -139,7 +145,9 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
           <View>
             <Text style={[globalStyles.fontPrimary]}>作品评论</Text>
           </View>
-          <Icon name="all_popclose36" size={18} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+          <TouchableOpacity activeOpacity={0.8} onPress={() => setShowComment(false)}>
+            <Icon name="all_popclose36" size={18} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+          </TouchableOpacity>
         </View>
         {/* <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{flex: 1}}> */}
         <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">

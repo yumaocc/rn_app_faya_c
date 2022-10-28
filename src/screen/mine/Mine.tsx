@@ -12,6 +12,7 @@ import {useCommonDispatcher, useIsLoggedIn, useUserDispatcher} from '../../helpe
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import WorkList from './work/WorkList';
 import {TabsStyles} from '../../component/Tabs';
+import {goLogin} from '../../router/Router';
 
 const Mine: React.FC = () => {
   const detail = useSelector((state: RootState) => state.user.myDetail);
@@ -58,8 +59,8 @@ const Mine: React.FC = () => {
       commonDispatcher.info('复制成功');
     }
   }
-  function goLogin() {
-    navigation.navigate('Login');
+  function loginIn() {
+    goLogin();
   }
 
   function goSettings() {
@@ -193,7 +194,7 @@ const Mine: React.FC = () => {
                   {detail?.nickName}
                 </Text>
                 {!isLoggedIn && (
-                  <TouchableOpacity activeOpacity={0.8} onPress={goLogin}>
+                  <TouchableOpacity activeOpacity={0.8} onPress={loginIn}>
                     <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_PRIMARY, marginLeft: globalStyleVariables.MODULE_SPACE}]}>立即登录</Text>
                   </TouchableOpacity>
                 )}

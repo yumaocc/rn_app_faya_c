@@ -124,7 +124,16 @@ export const navigationRef = createNavigationContainerRef();
 
 // 编程式导航
 export function goLogin() {
-  navigateTo('Login', null, false);
+  if (navigationRef.isReady()) {
+    const routes = navigationRef.getState()?.routes;
+    if (routes?.length) {
+      const last = routes[routes.length - 1];
+      if (last.name === 'Login') {
+        return; // 已经是登录页了
+      }
+    }
+    navigateTo('Login', null, false);
+  }
 }
 
 export function relaunch() {

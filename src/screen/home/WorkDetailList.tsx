@@ -14,6 +14,7 @@ import * as api from '../../apis';
 import {BoolEnum} from '../../fst/models';
 import {globalStyleVariables} from '../../constants/styles';
 import CommentModal, {CommentModalRef} from './work/CommentModal';
+import {goLogin} from '../../router/Router';
 
 const WorkDetailList: React.FC = () => {
   const params = useParams<{index: number}>();
@@ -107,7 +108,7 @@ const WorkDetailList: React.FC = () => {
 
   function handleCollect() {
     if (!isLoggedIn) {
-      navigation.replace('Login', {to: 'SPUDetail', params: {id: currentSPU?.id}});
+      goLogin();
     } else {
       if (isCollect || !currentSPU) {
         return;
@@ -129,7 +130,7 @@ const WorkDetailList: React.FC = () => {
 
   function handleJoinShowCase() {
     if (!isLoggedIn) {
-      navigation.replace('Login', {to: 'SPUDetail', params: {id: currentSPU?.id}});
+      goLogin();
     } else {
       if (isJoinShowCase || !currentSPU) {
         return;
