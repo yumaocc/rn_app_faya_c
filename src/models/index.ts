@@ -13,6 +13,7 @@ export type {
   AgentHomeInfo,
   AgentTask,
   WithdrawalRecord,
+  ModifyProfileForm,
 } from './user';
 export type {AppHeader, StylePropText, StylePropView, StylesProp, CacheKeys, LoadingState, LoadListState, LocationCity, SystemConfig, QRCodeScanResult} from './common';
 export type {

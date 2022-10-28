@@ -114,6 +114,14 @@ export interface MineDetail {
   userSettings: UserSetting;
 }
 
+// 修改个人资料弹窗
+export interface ModifyProfileForm {
+  avatar: string;
+  backgroudPic: string;
+  nickName: string;
+  say: string;
+}
+
 export enum UserFollowState {
   FOLLOW_STRANGER = 0, // 互相都未关注
   FOLLOWED_ME = 1, // 我未关注对方，但对方关注了我

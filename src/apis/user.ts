@@ -7,6 +7,7 @@ import {
   CouponFilterState,
   LocationCity,
   MineDetail,
+  ModifyProfileForm,
   OtherUserDetail,
   UserCertificationForm,
   UserInfo,
@@ -119,4 +120,7 @@ export async function getLocationByGPS(latitude: number, longitude: number): Pro
 
 export async function getWithdrawRecord(params: SearchParam): Promise<WithdrawalRecord[]> {
   return await post('/user/withdrawal/log/page', params);
+}
+export async function modifyProfile(params: ModifyProfileForm): Promise<boolean> {
+  return await post('/user/modify/info', params);
 }

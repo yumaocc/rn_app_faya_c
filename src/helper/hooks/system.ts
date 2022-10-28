@@ -1,5 +1,5 @@
-import {useEffect, useMemo} from 'react';
-import {BackHandler, Dimensions, Platform, useWindowDimensions} from 'react-native';
+import {useEffect, useMemo, useState} from 'react';
+import {BackHandler, Dimensions, Keyboard, Platform, useWindowDimensions} from 'react-native';
 import {navigateBack} from '../../router/Router';
 
 export function useAndroidBack() {
@@ -28,4 +28,21 @@ export function useDeviceDimensions(): {width: number; height: number} {
   }, [height]);
 
   return {width, height: screenHeight};
+}
+
+export function useKeyboardHeight(): number {
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', e => {
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardHeight(0);
+    });
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+  return keyboardHeight;
 }
