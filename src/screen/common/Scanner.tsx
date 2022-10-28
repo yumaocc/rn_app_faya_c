@@ -43,7 +43,7 @@ const Scanner: React.FC = () => {
   useEffect(() => {
     if (barcodes.length) {
       const res = readQRCodeContent(barcodes[0].displayValue);
-      const {type, data} = res;
+      const {type, data, isURL} = res;
       switch (type) {
         case 'share':
           // todo: 推广码，去注册
@@ -54,15 +54,16 @@ const Scanner: React.FC = () => {
           return;
         case 'friend':
           stopScan();
-          // navigation.canGoBack() && navigation.goBack();
-          // navigation.na('User', {id: data.userId});
           navigation.navigate({
             name: 'User',
             params: {id: data.userId},
-            key: 'User-' + data.userId,
+            // key: 'User-' + data.userId,
           });
           return;
         case 'other':
+          if (isURL) {
+            navigation.navigate('Browser', {url: res.content});
+          }
           break;
       }
       stopScan();

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, StatusBar} from 'react-native';
 import {NavigationBar} from '../../component';
 import {useParams} from '../../helper/hooks';
 import {WebView} from 'react-native-webview';
@@ -9,6 +9,7 @@ const Browser: React.FC = () => {
   const [title, setTitle] = React.useState('');
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       <NavigationBar title={title} />
       <WebView
         source={{uri: url}}
