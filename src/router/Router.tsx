@@ -46,6 +46,7 @@ import MyShowcase from '../screen/mine/spu/Showcase';
 import OtherShowcase from '../screen/mine/spu/OtherShowcase';
 import SearchSPU from '../screen/discover/SearchSPU';
 import Scanner from '../screen/common/Scanner';
+import ScanResult from '../screen/common/ScanResult';
 
 import {RootStackParamList, ValidRoute} from '../models';
 import {useIsLoggedIn} from '../helper/hooks';
@@ -75,6 +76,7 @@ const Navigator: React.FC = () => {
       <Stack.Screen name="User" component={User} options={commonScreenOptions} />
       <Stack.Screen name="WorkDetailList" component={WorkDetailList} options={commonScreenOptions} />
       <Stack.Screen name="Scanner" component={Scanner} options={commonScreenOptions} />
+      <Stack.Screen name="ScanResult" component={ScanResult} options={commonScreenOptions} />
       {isLoggedIn ? (
         <>
           <Stack.Screen name="Order" component={Order} options={commonScreenOptions} />

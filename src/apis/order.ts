@@ -40,3 +40,8 @@ export async function skuBookingDetail(orderSmallId: string): Promise<OrderBooki
 export async function booking(bookingForm: OrderBookingForm) {
   return await post('/order/booking/order', bookingForm);
 }
+
+// 取消预约
+export async function cancelBooking(orderSmallId: string): Promise<boolean> {
+  return await post('/order/booking/cancel', {orderSmallId});
+}

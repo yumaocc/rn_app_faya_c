@@ -8,7 +8,7 @@ import {Step} from '../../component/Steps';
 
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {FakeNavigation} from '../../models';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useInfinityRotate, useOrderDispatcher} from '../../helper/hooks';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
@@ -27,6 +27,7 @@ const OrderList: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
   const rotateDeg = useInfinityRotate();
   const [orderDispatcher] = useOrderDispatcher();
+  const isFocused = useIsFocused();
 
   const steps: Step[] = [
     {title: ({active}) => <Text style={active ? styles.stepActive : styles.stepInactive}>全部</Text>, key: 'all'},
@@ -41,8 +42,10 @@ const OrderList: React.FC = () => {
   // }
 
   useEffect(() => {
-    orderDispatcher.loadOrders(currentKey, '', true);
-  }, [currentKey, orderDispatcher]);
+    if (isFocused) {
+      orderDispatcher.loadOrders(currentKey, '', true);
+    }
+  }, [currentKey, orderDispatcher, isFocused]);
 
   // function searchOrder() {
   //   setName(searchName);

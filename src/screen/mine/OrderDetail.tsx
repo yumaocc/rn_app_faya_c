@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
 import Icon from '../../component/Icon';
 import QRCode from 'react-native-qrcode-svg';
@@ -15,6 +15,7 @@ import {navigateTo} from '../../router/Router';
 import {OrderPackage, OrderStatus} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
 import Loading from '../../component/Loading';
+import {useIsFocused} from '@react-navigation/native';
 
 const OrderDetail: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -28,14 +29,21 @@ const OrderDetail: React.FC = () => {
   const orderCanUse = useMemo(() => [OrderStatus.Booked, OrderStatus.Paid].includes(orderDetail?.status), [orderDetail]);
 
   const {bottom} = useSafeAreaInsets();
+  const isFocused = useIsFocused();
+
+  const loadingDetail = useCallback(async () => {
+    if (!id) {
+      return;
+    }
+    const res = await api.order.getOrderDetail(id);
+    setOrderDetail(res);
+  }, [id]);
 
   useEffect(() => {
-    async function f() {
-      const res = await api.order.getOrderDetail(id);
-      setOrderDetail(res);
+    if (isFocused) {
+      loadingDetail();
     }
-    id && f();
-  }, [id]);
+  }, [isFocused, loadingDetail]);
 
   function handleShowCode(code: OrderPackageSKU) {
     if (code.code && code.codeUrl) {
@@ -99,7 +107,7 @@ const OrderDetail: React.FC = () => {
                     <View style={globalStyles.containerLR}>
                       <View style={{flex: 1}}>
                         <Text numberOfLines={1} style={[globalStyles.fontTertiary, {color: '#ffffffb2'}]}>
-                          王大一 2022.04.12 型号名称型号名称型号名称型号名称型号名称
+                          {sku.bookingDateAndShopAndModel}
                         </Text>
                       </View>
                       <TouchableOpacity activeOpacity={0.8} onPress={() => goBooking(sku.orderSmallId)}>

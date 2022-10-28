@@ -173,4 +173,6 @@ export interface OrderBookingDetailF {
   reserved: BoolEnum;
   skuId: number;
   skuModelName: string;
+  skuModelId: number;
+  shopId: number;
 }

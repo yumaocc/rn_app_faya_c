@@ -50,6 +50,7 @@ export type RootStackParamList = {
   OtherShowcase: {id: number};
   SearchSPU: undefined;
   Scanner: undefined;
+  ScanResult: {content: string};
 };
 
 export type ValidRoute = keyof RootStackParamList;

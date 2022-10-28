@@ -20,6 +20,7 @@ const MiddleButton: React.FC = () => {
     } else {
       // navigation.navigate('ShootVideo');
       navigation.navigate('Scanner');
+      // navigation.navigate('ScanResult', {content: '你好啊'});
       // navigation.navigate('TestPage');
       // navigation.navigate('SearchSPU');
       // navigation.navigate('WithdrawalRecords');

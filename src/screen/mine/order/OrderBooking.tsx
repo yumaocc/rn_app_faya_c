@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {View, StyleSheet, ScrollView, Text, TextInput, TextInputProps, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Button, NavigationBar} from '../../../component';
+import {Button, Modal, NavigationBar} from '../../../component';
 import FormItem from '../../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useSearch} from '../../../fst/hooks';
@@ -21,6 +21,7 @@ const OrderBooking: React.FC = () => {
   const [bookingModel, setBookingModel] = useState<BookingModelF>();
   const [bookingDetail, setBookingDetail] = useState<OrderBookingDetailF>();
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   const booked = useMemo(() => bookingDetail?.reserved === BoolEnum.TRUE, [bookingDetail]);
   const skuId = useMemo(() => bookingDetail?.skuId, [bookingDetail]);
@@ -73,21 +74,32 @@ const OrderBooking: React.FC = () => {
     if (!contactPhone) {
       return '请输入手机号';
     }
-    if (!bookingModel) {
-      return '请选择预约时间';
-    }
   }
   async function handleSubmit() {
     const errorMsg = check();
     if (errorMsg) {
       return commonDispatcher.error(errorMsg);
     }
-    const {shopId, stockDateInt, skuModelId} = bookingModel;
+    let modelInfo: Partial<OrderBookingForm> = {};
+    if (!bookingModel) {
+      modelInfo = {
+        skuModelId: bookingDetail?.skuModelId,
+        bizShopId: bookingDetail?.shopId,
+        stockDateInt: bookingDetail?.bookingDateInt,
+      };
+    } else {
+      modelInfo = {
+        skuModelId: bookingModel?.skuModelId,
+        bizShopId: bookingModel?.shopId,
+        stockDateInt: bookingModel?.stockDateInt,
+      };
+    }
+    if (!modelInfo.bizShopId || !modelInfo.skuModelId || !modelInfo.stockDateInt) {
+      return commonDispatcher.error('请选择预约时间');
+    }
     const submitData: OrderBookingForm = {
       ...form,
-      bizShopId: shopId,
-      stockDateInt,
-      skuModelId: skuModelId,
+      ...modelInfo,
       orderSmallId: params.id,
     };
     console.log(submitData);
@@ -99,8 +111,18 @@ const OrderBooking: React.FC = () => {
       commonDispatcher.error(error);
     }
   }
-  function handleCancel() {
-    console.log(1);
+  function openCancel() {
+    setShowCancelModal(true);
+  }
+  async function handleCancel() {
+    setShowCancelModal(false);
+    try {
+      await api.order.cancelBooking(params.id);
+      commonDispatcher.success('已取消预约');
+      navigateBack();
+    } catch (error) {
+      commonDispatcher.error(error);
+    }
   }
 
   function renderBookingInfo() {
@@ -131,7 +153,7 @@ const OrderBooking: React.FC = () => {
           headerRight={
             <View style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
               {canCancel && (
-                <TouchableOpacity onPress={handleCancel}>
+                <TouchableOpacity onPress={openCancel}>
                   <Text>取消预约</Text>
                 </TouchableOpacity>
               )}
@@ -179,9 +201,16 @@ const OrderBooking: React.FC = () => {
           </View>
         </ScrollView>
         <View style={[{padding: globalStyleVariables.MODULE_SPACE}]}>
-          <Button title={booked ? '修改预约' : '立即预约'} style={{height: 40}} onPress={handleSubmit} />
+          <Button type="primary" title={booked ? '修改预约' : '立即预约'} style={{height: 40}} onPress={handleSubmit} />
         </View>
         {showBookingModal && <BookingModal month={month} visible={true} skuId={skuId} onClose={() => setShowBookingModal(false)} onSelect={setBookingModel} />}
+        {showCancelModal && (
+          <Modal title="提示" onClose={() => setShowCancelModal(false)} visible={true} showCancel okText="取消预约" cancelText="关闭" onOk={handleCancel}>
+            <View style={[{paddingVertical: 20, paddingHorizontal: 20}]}>
+              <Text>确定要取消预约吗？</Text>
+            </View>
+          </Modal>
+        )}
       </SafeAreaView>
     </View>
   );
