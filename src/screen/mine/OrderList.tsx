@@ -3,16 +3,18 @@ import {View, Text, StyleSheet, ScrollView, Animated, NativeScrollEvent, NativeS
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Icon as AIcon} from '@ant-design/react-native';
 import Icon from '../../component/Icon';
-import {Steps} from '../../component';
+import {Button, Steps} from '../../component';
 import {Step} from '../../component/Steps';
 
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {FakeNavigation} from '../../models';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {useInfinityRotate, useOrderDispatcher} from '../../helper/hooks';
+import {useInfinityRotate, useIsLoggedIn, useOrderDispatcher} from '../../helper/hooks';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import OrderItem from './OrderItem';
+import {goLogin} from '../../router/Router';
+import {isReachBottom} from '../../helper/system';
 
 const OrderList: React.FC = () => {
   const [currentKey, setCurrentKey] = React.useState<string>('all');
@@ -21,8 +23,9 @@ const OrderList: React.FC = () => {
 
   const orders = useSelector((state: RootState) => state.order.orders);
   const orderList = useMemo(() => orders.list, [orders]);
-  const showEmpty = useMemo(() => orders.list.length === 0 && orders.status !== 'loading', [orders]);
-  const showNoMore = useMemo(() => !showEmpty && orders.status === 'noMore', [orders, showEmpty]);
+  const isLoggedIn = useIsLoggedIn();
+  const showEmpty = useMemo(() => orders.list.length === 0 && orders.status !== 'loading' && isLoggedIn, [orders, isLoggedIn]);
+  const showNoMore = useMemo(() => !showEmpty && orders.status === 'noMore' && isLoggedIn, [orders, showEmpty, isLoggedIn]);
 
   const navigation = useNavigation<FakeNavigation>();
   const rotateDeg = useInfinityRotate();
@@ -42,23 +45,17 @@ const OrderList: React.FC = () => {
   // }
 
   useEffect(() => {
-    if (isFocused) {
+    if (isFocused && isLoggedIn) {
       orderDispatcher.loadOrders(currentKey, '', true);
     }
-  }, [currentKey, orderDispatcher, isFocused]);
+  }, [currentKey, orderDispatcher, isFocused, isLoggedIn]);
 
   // function searchOrder() {
   //   setName(searchName);
   // }
 
   function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
-    var offsetY = e.nativeEvent.contentOffset.y; //滑动距离
-    var contentSizeHeight = e.nativeEvent.contentSize.height; //scrollView contentSize高度
-    var scrollViewHeight = e.nativeEvent.layoutMeasurement.height; //scrollView高度
-    const offset = 50;
-    const isReachBottom = offsetY + scrollViewHeight + offset >= contentSizeHeight;
-    if (isReachBottom) {
-      // todo: 搜索不带关键字
+    if (isReachBottom(e) && isLoggedIn) {
       orderDispatcher.loadOrders(currentKey, '', false);
     }
   }
@@ -76,6 +73,15 @@ const OrderList: React.FC = () => {
         <Steps steps={steps} style={styles.stepContainer} currentKey={currentKey} onChange={setCurrentKey} />
         <ScrollView style={{flex: 1, backgroundColor: '#f4f4f4'}} onMomentumScrollEnd={handleScrollEnd}>
           <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
+            {!isLoggedIn && (
+              <View style={[globalStyles.containerCenter, styles.emptyContainer]}>
+                <View style={[globalStyles.containerCenter, {width: 50, height: 50, borderRadius: 50, backgroundColor: '#0000000D', marginBottom: 15}]}>
+                  <Icon name="empty_dingdan" size={30} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                </View>
+                <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>登录后可查看订单</Text>
+                <Button style={{marginTop: 10}} title="去登录" type="primary" onPress={goLogin} />
+              </View>
+            )}
             {showEmpty && (
               <View style={[globalStyles.containerCenter, styles.emptyContainer]}>
                 <View style={[globalStyles.containerCenter, {width: 50, height: 50, borderRadius: 50, backgroundColor: '#0000000D', marginBottom: 15}]}>

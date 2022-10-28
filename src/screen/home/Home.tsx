@@ -2,16 +2,17 @@ import React, {useEffect} from 'react';
 import {View, StyleSheet, ScrollView, useWindowDimensions, StatusBar} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
-import {Tabs} from '../../component';
+import {Button, Tabs} from '../../component';
 import {TabsStyles} from '../../component/Tabs';
-import {globalStyleVariables} from '../../constants/styles';
+import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useRefCallback} from '../../fst/hooks';
-import {useWorkDispatcher} from '../../helper/hooks';
+import {useIsLoggedIn, useWorkDispatcher} from '../../helper/hooks';
 import {RootState} from '../../redux/reducers';
 import WorkList from './WorkList';
 // import Icon from '../../component/Icon';
 import {WorkTabType} from '../../models';
 import {useIsFocused} from '@react-navigation/native';
+import {goLogin} from '../../router/Router';
 
 const Home: React.FC = () => {
   const currentTab = useSelector((state: RootState) => state.work.currentTab);
@@ -24,6 +25,7 @@ const Home: React.FC = () => {
   const {width} = useWindowDimensions();
   const [ref, setRef, isReady] = useRefCallback();
   const isFocused = useIsFocused();
+  const isLoggedIn = useIsLoggedIn();
 
   const [workDispatcher] = useWorkDispatcher();
 
@@ -61,9 +63,17 @@ const Home: React.FC = () => {
   // }
 
   function loadWork(type: WorkTabType) {
+    if (type === WorkTabType.Follow && !isLoggedIn) {
+      // 未登录不加载关注列表
+      return;
+    }
     workDispatcher.loadWork(type);
   }
   function refreshWork(type: WorkTabType) {
+    if (type === WorkTabType.Follow && !isLoggedIn) {
+      // 未登录不加载关注列表
+      return;
+    }
     workDispatcher.loadWork(type, true);
     return Promise.resolve();
   }
@@ -82,15 +92,21 @@ const Home: React.FC = () => {
         </View>
         <ScrollView ref={setRef} horizontal style={{flex: 1}} snapToInterval={width} showsHorizontalScrollIndicator={false} scrollEnabled={false}>
           <View style={{width}}>
-            <WorkList
-              list={followWorks}
-              onRefresh={() => refreshWork(WorkTabType.Follow)}
-              onLoadMore={() => {
-                if (currentTab.type === WorkTabType.Follow) {
-                  loadWork(WorkTabType.Follow);
-                }
-              }}
-            />
+            {isLoggedIn ? (
+              <WorkList
+                list={followWorks}
+                onRefresh={() => refreshWork(WorkTabType.Follow)}
+                onLoadMore={() => {
+                  if (currentTab.type === WorkTabType.Follow) {
+                    loadWork(WorkTabType.Follow);
+                  }
+                }}
+              />
+            ) : (
+              <View style={[{paddingTop: 40}, globalStyles.containerCenter]}>
+                <Button style={{marginTop: 10}} title="请先登录" type="primary" onPress={goLogin} />
+              </View>
+            )}
           </View>
           <View style={{width}}>
             <WorkList
