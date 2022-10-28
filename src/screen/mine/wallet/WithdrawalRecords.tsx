@@ -64,11 +64,11 @@ const WithdrawalRecords: React.FC = () => {
                     <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>提现</Text>
                     <Text style={[globalStyles.fontTertiary, {color: statusColor}]}> {dictWithdrawState(record.status)}</Text>
                   </Text>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{record.money}</Text>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{record.moneyYuan}</Text>
                 </View>
                 <View style={[globalStyles.containerLR, {marginTop: 10}]}>
                   <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>{record.createdTime}</Text>
-                  <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>余额：{record.canWithdrawalMoney}</Text>
+                  <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>余额：{record.canWithdrawalMoneyYuan}</Text>
                 </View>
               </View>
             );
