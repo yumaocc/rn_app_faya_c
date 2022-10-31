@@ -86,9 +86,9 @@ const Refund: React.FC = () => {
         success = await api.order.orderRefund(form);
       }
       if (success) {
-        commonDispatcher.info('发布成功');
+        commonDispatcher.info('退款申请已提交');
       } else {
-        commonDispatcher.error('发布失败');
+        commonDispatcher.error('退款申请失败');
       }
       setUploading(false);
       navigateBack();
