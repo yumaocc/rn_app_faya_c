@@ -1,11 +1,11 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {View, StyleSheet, ScrollView, StatusBar} from 'react-native';
 import {FakeNavigation, PackageDetail, SKUDetail, WorkDetailF} from '../../../models';
 import * as api from '../../../apis';
 import {useCommonDispatcher, useDeviceDimensions, useIsLoggedIn, useParams, useSPUDispatcher} from '../../../helper/hooks';
 import {useLog} from '../../../fst/hooks';
 import WorkPage from './WorkPage';
-import {Popup} from '../../../component';
+import {NavigationBar, Popup} from '../../../component';
 import SPUDetailView from '../../spu/SPUDetailView';
 import BuyBar from '../../spu/BuyBar';
 import CommentModal, {CommentModalRef} from './CommentModal';
@@ -123,12 +123,15 @@ const SingleWorkDetail: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+      <NavigationBar color="#fff" style={styles.nav} />
       {workDetail && (
         <WorkPage
           coverImage={workDetail.coverImage}
           videoUrl={workDetail?.videoUrl}
           mainId={workDetail.mainId}
           paused={false}
+          shouldLoad={true}
           onShowSPU={openSPU}
           onShowComment={openCommentModal}
         />
@@ -154,5 +157,11 @@ export default SingleWorkDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  nav: {
+    width: '100%',
+    position: 'absolute',
+    top: 0,
+    zIndex: 2,
   },
 });
