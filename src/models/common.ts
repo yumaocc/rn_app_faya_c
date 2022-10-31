@@ -43,6 +43,8 @@ export interface SystemConfig {
   locationName: string;
   shareUserId: string;
   touristId: number;
+  buyUserName: string;
+  buyUserPhone: string;
 }
 
 export interface QRCodeScanResult {

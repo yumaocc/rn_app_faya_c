@@ -5,6 +5,7 @@ import {AppHeader} from '../models';
 import {Platform} from 'react-native';
 import packageJSON from '../../package.json';
 import {goLogin} from '../router/Router';
+import Crypto from '../helper/crypto';
 
 const currentHeader = axios.defaults.headers.common || {};
 const headers: AppHeader = {
@@ -13,7 +14,7 @@ const headers: AppHeader = {
   platform: 'APP',
   project: 'FAYA',
 };
-axios.defaults.headers.common = {...currentHeader, ...headers};
+axios.defaults.headers.common = {...currentHeader, ...headers, 'Content-Type': 'application/json'};
 
 // console.log('headers', headers);
 
@@ -26,15 +27,46 @@ export function resetToken(token: string) {
   axios.defaults.headers.common.token = token;
 }
 
-// axios.interceptors.request.use((config: AxiosRequestConfig) => {
-//   // const {baseURL, url, data} = config;
-//   console.log(`发起请求, url=${config.url}, data=`);
-//   console.log(config.data);
-//   return config;
-// });
+export function getPublicKey() {
+  const key = Crypto.enc.Base64.parse('MDEyMzQ1Njc4OUFCSEFFUQ==');
+  const iv = Crypto.enc.Base64.parse('RFlnakNFSU1WcmoyVzl4Tg==');
+  return [key, iv];
+}
+
+export function encrypt(data: any) {
+  const str = JSON.stringify(data);
+  const [key, iv] = getPublicKey();
+  const encrypted = Crypto.AES.encrypt(str, key, {iv});
+  // return encrypted.toString(Crypto.format.Hex);
+  return encrypted.toString();
+}
+
+export function decrypt(str: string) {
+  try {
+    const [key, iv] = getPublicKey();
+    const decrypted = Crypto.AES.decrypt(str, key, {iv}).toString(Crypto.enc.Utf8);
+    return JSON.parse(decrypted);
+  } catch (error) {
+    return null;
+  }
+}
+
+axios.interceptors.request.use((config: AxiosRequestConfig) => {
+  config.headers = {
+    ...config.headers,
+    'Content-Type': 'application/json',
+  };
+  config.data = encrypt(config.data);
+  // console.log(config.headers);
+  console.log(config);
+  // test();
+  // console.log('ccccc=====', config.data);
+  return config;
+});
 
 axios.interceptors.response.use((response: AxiosResponse) => {
-  const {data} = response;
+  let {data} = response;
+  console.log(data);
   console.log(`接口： ${response.config.url}请求成功：`);
   if (!response.data?.data?.content) {
     console.log('response data:', response.data);
@@ -62,7 +94,12 @@ export async function getPaged<T>(url: string, config?: AxiosRequestConfig): Pro
 export async function postPaged<T, P>(url: string, data?: P, config?: AxiosRequestConfig): Promise<PagedData<T>> {
   const res = await axios.post<Response<T>>(url, data, config);
   if (res.data.code === 1) {
-    return res.data.data;
+    const data = res.data.data;
+    return {
+      ...data,
+      content: decrypt(data.content),
+    };
+    // return res.data.data;
   }
   throw new CustomError(res.data.msg, res.data.code);
 }

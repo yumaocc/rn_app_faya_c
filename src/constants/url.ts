@@ -1,5 +1,7 @@
 export function getBaseURL(): string {
-  return 'https://api-beta.faya.life'; // 生产环境
+  // 生产环境
+  // return 'https://api.faya.life';
+  return 'https://api-beta.faya.life';
 }
 
 // 隐私政策网址

@@ -27,6 +27,7 @@ const Order: React.FC = () => {
   // const payOrder = useSelector((state: RootState) => state.order.payOrder);
   const token = useSelector((state: RootState) => state.common.config.token);
   const shareUserId = useSelector((state: RootState) => state.common.config.shareUserId);
+  const commonConfig = useSelector((state: RootState) => state.common.config);
 
   const [isPaying, setIsPaying] = useState(false);
   const [checkOrderId, setCheckOrderId] = useState<string>('');
@@ -162,6 +163,15 @@ const Order: React.FC = () => {
     setFormField('skuId', id);
     // form.setFieldValue('skuId', id);
   }, [sku, currentSkuIsPackage, setFormField]);
+
+  useEffect(() => {
+    if (!form.name) {
+      setFormField('name', commonConfig.buyUserName || '');
+    }
+    if (!form.telephone) {
+      setFormField('telephone', commonConfig.buyUserPhone || '');
+    }
+  }, [commonConfig, form, setFormField]);
 
   useEffect(() => {
     async function f() {

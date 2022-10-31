@@ -24,6 +24,8 @@ function* initApp(): any {
     locationId: Number(yield getItem('locationId')) || 19,
     shareUserId: (yield getItem('shareUserId')) || null,
     touristId: Number(yield getItem('touristId')) || null,
+    buyUserName: (yield getItem('buyUserName')) || '',
+    buyUserPhone: (yield getItem('buyUserPhone')) || '',
   };
   if (!config.touristId) {
     try {
