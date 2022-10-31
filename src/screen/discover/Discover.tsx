@@ -1,17 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  ScrollView,
-  Image,
-  StatusBar,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-  RefreshControl,
-  TouchableWithoutFeedback,
-  TouchableHighlight,
-} from 'react-native';
+import {View, StyleSheet, Text, ScrollView, Image, NativeSyntheticEvent, NativeScrollEvent, RefreshControl, TouchableWithoutFeedback, TouchableHighlight} from 'react-native';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from '../../component/Icon';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -27,6 +15,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import {dictLoadingState} from '../../helper/dictionary';
 import ReactNativeModal from 'react-native-modal';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const Discover: React.FC = () => {
   const [showSelectCity, setShowSelectCity] = React.useState(false);
@@ -158,7 +147,7 @@ const Discover: React.FC = () => {
         {/* 地址 + 搜索 */}
         <SafeAreaView edges={['top']} style={{flex: 1}}>
           {/* 其他页面会默认此状态栏设置 */}
-          <StatusBar backgroundColor="#fff" barStyle="dark-content" />
+          <MyStatusBar barStyle="dark-content" />
           <View style={[globalStyles.containerLR, {paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
             <View style={[{maxWidth: 110, marginRight: 20}]}>
               <TouchableOpacity activeOpacity={0.8} onPress={() => setShowSelectCity(true)}>

@@ -15,6 +15,7 @@ import {RootState} from '../../redux/reducers';
 import OrderItem from './OrderItem';
 import {goLogin} from '../../router/Router';
 import {isReachBottom} from '../../helper/system';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const OrderList: React.FC = () => {
   const [currentKey, setCurrentKey] = React.useState<string>('all');
@@ -70,6 +71,7 @@ const OrderList: React.FC = () => {
   return (
     <>
       <SafeAreaView edges={['top']} style={{backgroundColor: '#fff', flex: 1}}>
+        <MyStatusBar />
         <Steps steps={steps} style={styles.stepContainer} currentKey={currentKey} onChange={setCurrentKey} />
         <ScrollView style={{flex: 1, backgroundColor: '#f4f4f4'}} onMomentumScrollEnd={handleScrollEnd}>
           <View style={{padding: globalStyleVariables.MODULE_SPACE}}>

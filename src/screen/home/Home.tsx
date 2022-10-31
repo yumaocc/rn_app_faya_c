@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, ScrollView, useWindowDimensions, StatusBar} from 'react-native';
+import {View, StyleSheet, ScrollView, useWindowDimensions} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {Button, Tabs} from '../../component';
@@ -13,6 +13,7 @@ import WorkList from './WorkList';
 import {WorkTabType} from '../../models';
 import {useIsFocused} from '@react-navigation/native';
 import {goLogin} from '../../router/Router';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const Home: React.FC = () => {
   const currentTab = useSelector((state: RootState) => state.work.currentTab);
@@ -80,7 +81,8 @@ const Home: React.FC = () => {
 
   return (
     <SafeAreaView edges={['top']} style={{flex: 1, backgroundColor: '#f4f4f4'}}>
-      {isFocused && <StatusBar barStyle="dark-content" backgroundColor="#f4f4f4" />}
+      {isFocused && <MyStatusBar barStyle="dark-content" hasHeight={false} />}
+      {/* {isFocused && <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />} */}
       <View style={styles.container}>
         <View style={{position: 'relative'}}>
           <Tabs styles={tabStyles} gap={30} currentKey={currentTab.type} tabs={tabs.map(tab => ({title: tab.title, key: tab.key}))} onChange={handleChangeTab} />

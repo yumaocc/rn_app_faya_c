@@ -1,6 +1,6 @@
 import Icon from '../../component/Icon';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, StatusBar, TouchableWithoutFeedback, Platform, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, TouchableWithoutFeedback, Platform, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {Tabs} from '../../component';
@@ -13,6 +13,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import WorkList from './work/WorkList';
 import {TabsStyles} from '../../component/Tabs';
 import {goLogin} from '../../router/Router';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const Mine: React.FC = () => {
   const detail = useSelector((state: RootState) => state.user.myDetail);
@@ -99,7 +100,8 @@ const Mine: React.FC = () => {
   }
 
   function renderStatusBar() {
-    return Platform.OS === 'ios' ? <StatusBar barStyle={showFixTab ? 'dark-content' : 'light-content'} /> : <StatusBar barStyle="dark-content" backgroundColor="#fff" />;
+    return <MyStatusBar barStyle="light-content" />;
+    // return Platform.OS === 'ios' ? <StatusBar barStyle={showFixTab ? 'dark-content' : 'light-content'} /> : <StatusBar barStyle="dark-content" backgroundColor="#fff" />;
   }
 
   function loadWork() {
