@@ -22,6 +22,8 @@ function* initApp(): any {
     phone: (yield getItem('phone')) || '',
     locationName: (yield getItem('locationName')) || '成都',
     locationId: Number(yield getItem('locationId')) || 19,
+    shareUserId: Number(yield getItem('shareUserId')) || null,
+    touristId: Number(yield getItem('touristId')) || null,
   };
   yield put(Actions.setConfig(config));
 

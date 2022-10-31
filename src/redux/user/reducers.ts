@@ -63,6 +63,7 @@ export const initialState: UserState = {
       followNums: 0,
       likeNums: 0,
     },
+    userSettings: null,
   },
   myWorks: {
     [MyWorkTabType.Work]: {

@@ -52,6 +52,7 @@ export type RootStackParamList = {
   Scanner: undefined;
   ScanResult: {content: string};
   MyProfile: undefined; // 个人资料修改
+  SingleWorkDetail: {id: string};
 };
 
 export type ValidRoute = keyof RootStackParamList;

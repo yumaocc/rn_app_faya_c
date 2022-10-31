@@ -1,11 +1,14 @@
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {View, Text, StyleSheet, StatusBar} from 'react-native';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {useScanBarcodes, BarcodeFormat} from 'vision-camera-code-scanner';
 import {Button, NavigationBar} from '../../component';
-import {readQRCodeContent} from '../../helper/system';
-import {FakeNavigation} from '../../models';
+import {parseLink} from '../../helper/system';
+import {FakeNavigation, URLParseRule} from '../../models';
+import * as api from '../../apis';
+import {useCommonDispatcher} from '../../helper/hooks';
+import qs from 'qs';
 
 const Scanner: React.FC = () => {
   const [active, setActive] = React.useState(true);
@@ -15,6 +18,19 @@ const Scanner: React.FC = () => {
   const devices = useCameraDevices();
   const device = devices.back;
   const [hasPermission, setHasPermission] = React.useState<boolean>(false);
+  const [urlParserRule, setUrlParserRule] = React.useState<URLParseRule>(null);
+  const [ruleIsReady, setRuleIsReady] = React.useState<boolean>(false);
+  const [commonDispatcher] = useCommonDispatcher();
+
+  const saveShareUser = useCallback(
+    (userId: string | number) => {
+      userId = Number(userId);
+      if (userId) {
+        commonDispatcher.setConfig({shareUserId: userId});
+      }
+    },
+    [commonDispatcher],
+  );
 
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
     checkInverted: true,
@@ -36,38 +52,85 @@ const Scanner: React.FC = () => {
     };
   }, [isFocused]);
 
-  useEffect(() => {
-    if (barcodes.length) {
-      const res = readQRCodeContent(barcodes[0].displayValue);
-      const {type, data, isURL, content} = res;
-      switch (type) {
-        case 'share':
-          // todo: 推广码，去注册
-          // navigation.replace({
-          //   name: 'Login',
-          //   params: {id: data.userId},
-          // });
-          return;
-        case 'friend':
-          navigation.navigate({
-            name: 'User',
-            params: {id: data.userId},
-            // key: 'User-' + data.userId,
-          });
-          return;
-        case 'other':
-          if (isURL) {
-            navigation.navigate('Browser', {url: res.content});
-          }
-          break;
-      }
-      if (content) {
+  const checkScanContent = useCallback(
+    (content: string) => {
+      let query: any = {};
+      // 扫码结果如果有分享人的ID，保存
+      try {
+        const search = content.split('#')[0].split('?')[1];
+        query = qs.parse(search, {ignoreQueryPrefix: true});
+        saveShareUser(query.a);
+      } catch (error) {}
+
+      if (urlParserRule) {
+        const res = parseLink(content, urlParserRule);
+        const {type, data, isURL} = res;
+        commonDispatcher.setConfig({
+          shareUserId: data.a || data.userId,
+        });
+        switch (type) {
+          case 'invite':
+            navigation.navigate('Login');
+            return;
+          case 'friend':
+            navigation.navigate({
+              name: 'User',
+              params: {id: data.userId},
+            });
+            return;
+          case 'spu':
+            const spuId = data.spuId;
+            navigation.navigate({
+              name: 'SPUDetail',
+              params: {id: spuId},
+              key: 'SPUDetail-' + spuId,
+            });
+            return;
+          case 'work':
+            const workId = data.workId;
+            navigation.navigate('SingleWorkDetail', {id: workId});
+            return;
+          case 'home':
+            navigation.canGoBack() && navigation.goBack();
+            return;
+          case 'unknown':
+            if (isURL) {
+              navigation.navigate('Browser', {url: res.content});
+            } else {
+              navigation.navigate('ScanResult', {content});
+            }
+            return;
+        }
+      } else {
         navigation.navigate('ScanResult', {content});
       }
-    }
-  }, [barcodes, navigation]);
+    },
+    [commonDispatcher, navigation, saveShareUser, urlParserRule],
+  );
 
-  if (!device || !hasPermission) {
+  useEffect(() => {
+    api.common
+      .getURLParser()
+      .then(rule => {
+        setUrlParserRule(rule);
+        setRuleIsReady(true);
+        const link = 'https://m.faya.life?i=10&a=23#asfhjkhfj';
+        // checkScanContent();
+        console.log(parseLink(link, rule));
+      })
+      .catch(() => {
+        setRuleIsReady(true);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (barcodes.length) {
+      const text = barcodes[0].displayValue;
+      checkScanContent(text);
+    }
+  }, [barcodes, checkScanContent]);
+
+  if (!device || !hasPermission || !ruleIsReady) {
     return (
       <View style={styles.loading}>
         <Text>未找到可用相机或您未开启相机使用权限</Text>

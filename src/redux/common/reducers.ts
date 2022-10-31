@@ -20,6 +20,8 @@ export const initialState: CommonState = {
     phone: '',
     locationId: null,
     locationName: '',
+    shareUserId: null,
+    touristId: null,
   },
 };
 

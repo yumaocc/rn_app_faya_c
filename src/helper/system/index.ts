@@ -4,7 +4,7 @@ import ImageResizer from '@bam.tech/react-native-image-resizer';
 import RNFS from 'react-native-fs';
 import {displayName} from '../../../app.json';
 import {APP_SCHEMES} from '../../constants';
-import {AppInstallCheckType, ImageCompressOptions, ImageCompressResult, QRCodeScanResult} from '../../models';
+import {AppInstallCheckType, ImageCompressOptions, ImageCompressResult, QRCodeScanResult, URLParseRule} from '../../models';
 import CameraRoll from '@react-native-community/cameraroll';
 
 export function getVideoNameByPath(videPath: string) {
@@ -180,57 +180,79 @@ export function getTempFilePath(fileName: string) {
   return `${RNFS.TemporaryDirectoryPath}/${fileName}`;
 }
 
-// 检查二维码
-export function readQRCodeContent(content: string): QRCodeScanResult {
-  const result: QRCodeScanResult = {
-    type: 'other',
-    content: content,
-    isURL: false,
-    scheme: '',
-  };
-  if (!content) {
-    return result;
-  }
+export function parseLink(content: string, parseRule: URLParseRule): QRCodeScanResult {
+  const {home, invite, friend, spu, work} = parseRule;
   const schemeReg = /^([a-zA-Z]+:\/\/)/;
-  const schemeMatch = content.match(schemeReg);
-  if (schemeMatch) {
-    result.scheme = schemeMatch[1];
+  const scheme = content.match(schemeReg)[1];
+  const homeMatch = content.match(new RegExp(home));
+  const inviteMatch = content.match(new RegExp(invite));
+  const friendMatch = content.match(new RegExp(friend));
+  const spuMatch = content.match(new RegExp(spu));
+  const workMatch = content.match(new RegExp(work));
+  if (friendMatch) {
+    const userId = Number(friendMatch[2]);
+    if (userId) {
+      return {
+        type: 'friend',
+        content,
+        isURL: true,
+        scheme,
+        data: {userId},
+      };
+    }
   }
-  if (content.startsWith('http://') || content.startsWith('https://')) {
-    result.isURL = true;
+  if (inviteMatch) {
+    const userId = Number(inviteMatch[2]);
+    console.log(inviteMatch);
+    if (userId) {
+      return {
+        type: 'invite',
+        content,
+        isURL: true,
+        scheme,
+        data: {userId},
+      };
+    }
   }
-  const friendCheck = checkFriendUrl(content);
-  if (friendCheck.result) {
-    result.type = 'friend';
-    result.data = {
-      userId: friendCheck.userId,
+  if (spuMatch) {
+    const spuId = Number(spuMatch[2]);
+    if (spuId) {
+      return {
+        type: 'spu',
+        content,
+        isURL: true,
+        scheme,
+        data: {spuId},
+      };
+    }
+  }
+  if (workMatch) {
+    const workId = Number(workMatch[2]);
+    if (workId) {
+      return {
+        type: 'work',
+        content,
+        isURL: true,
+        scheme,
+        data: {workId},
+      };
+    }
+  }
+  if (homeMatch) {
+    return {
+      type: 'home',
+      content,
+      isURL: true,
+      scheme,
+      data: {},
     };
-    return result;
   }
-  const shareCheck = checkShareUrl(content);
-  if (shareCheck.result) {
-    result.type = 'share';
-    result.data = {
-      agentId: shareCheck.agentId,
-    };
-    return result;
-  }
-  return result;
-}
-export function checkFriendUrl(content: string) {
-  const reg = /https:\/\/faya\.life\/user\/profile\/(\d+)/;
-  const userId = content.match(reg)?.[1];
+  const urlReg = /^https?:\/\//;
   return {
-    result: !!userId,
-    userId: userId,
-  };
-}
-
-export function checkShareUrl(content: string) {
-  const reg = /https:\/\/faya\.life\/agent\/(\d+)/;
-  const agentId = content.match(reg)?.[1];
-  return {
-    result: !!agentId,
-    agentId: agentId,
+    type: 'unknown',
+    content,
+    isURL: urlReg.test(content),
+    scheme,
+    data: {},
   };
 }

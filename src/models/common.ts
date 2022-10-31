@@ -41,12 +41,22 @@ export interface SystemConfig {
   phone: string;
   locationId: number;
   locationName: string;
+  shareUserId: number;
+  touristId: number;
 }
 
 export interface QRCodeScanResult {
   content: string;
-  type: 'friend' | 'share' | 'other';
+  type: 'friend' | 'invite' | 'spu' | 'work' | 'home' | 'unknown';
   isURL: boolean;
   scheme: string;
   data?: any; // 如果是推广码或者好友码，可以带上对应的信息
+}
+
+export interface URLParseRule {
+  invite: string;
+  friend: string;
+  spu: string;
+  work: string;
+  home: string;
 }

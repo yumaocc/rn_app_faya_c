@@ -1,4 +1,4 @@
-import {LocationCity} from '../models';
+import {LocationCity, URLParseRule} from '../models';
 import {post} from './helper';
 
 export async function uploadToOSS(uri: string, fileName: string): Promise<string> {
@@ -14,4 +14,8 @@ export async function getAllCity(): Promise<LocationCity[]> {
 
 export async function getKFUrl(): Promise<string> {
   return await post('/center/config/enterprise/wechat/customer/service');
+}
+
+export async function getURLParser(): Promise<URLParseRule> {
+  return await post('/common/app/scan/rules');
 }
