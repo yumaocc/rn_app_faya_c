@@ -87,7 +87,7 @@ const Login: React.FC = () => {
       const res = await api.user.userLogin({
         telephone: phone,
         code,
-        shareSnowId: shareUserId,
+        shareUserId: shareUserId,
         touristsSnowId,
       });
       cache.user.setPhone(phone);

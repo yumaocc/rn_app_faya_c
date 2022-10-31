@@ -123,8 +123,8 @@ export async function modifyProfile(params: ModifyProfileForm): Promise<boolean>
 }
 
 // 注册达人
-export async function agentRegister(shareSnowId: string): Promise<number> {
-  return await post('/user/become/talent', {shareSnowId});
+export async function agentRegister(shareUserId: string): Promise<number> {
+  return await post('/user/become/talent', {shareUserId});
 }
 
 // 游客id
