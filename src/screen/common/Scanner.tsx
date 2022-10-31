@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, StatusBar} from 'react-native';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {useScanBarcodes, BarcodeFormat} from 'vision-camera-code-scanner';
-import {Button} from '../../component';
+import {Button, NavigationBar} from '../../component';
 import {readQRCodeContent} from '../../helper/system';
 import {FakeNavigation} from '../../models';
 
@@ -79,6 +79,7 @@ const Scanner: React.FC = () => {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
       <Camera style={styles.camera} device={device} isActive={active} frameProcessorFps={5} frameProcessor={frameProcessor} />
+      <NavigationBar title="扫一扫" color="#fff" />
     </View>
   );
 };
