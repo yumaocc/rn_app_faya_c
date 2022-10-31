@@ -10,13 +10,16 @@ import SwipeView, {SwipeDirection} from '../../component/SwipeView';
 import * as api from '../../apis';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
+import Icon from '../../component/Icon';
+import {saveImageToGallery} from '../../helper/system';
+import {MyCodeUrl} from '../../models';
 
 const MyCode: React.FC = () => {
   const {type} = useParams<{type: 'friend' | 'share'}>();
   const [currentType, setCurrentType] = React.useState<'friend' | 'share'>('friend');
   const {width: windowWidth} = useWindowDimensions();
   const [ref, setRef, isReady] = useRefCallback();
-  const [codeInfo, setCodeInfo] = React.useState<{datingQrCodeUrl: string; shareQrCodeUrl: string}>();
+  const [codeInfo, setCodeInfo] = React.useState<MyCodeUrl>();
   const userInfo = useSelector((state: RootState) => state.user.myDetail);
   const hasShareCode = useMemo(() => !!codeInfo?.shareQrCodeUrl, [codeInfo]);
 
@@ -68,6 +71,15 @@ const MyCode: React.FC = () => {
     }
   }
 
+  async function downloadCode(url: string) {
+    try {
+      await saveImageToGallery(url);
+      commonDispatcher.info('保存成功');
+    } catch (error) {
+      commonDispatcher.error(error);
+    }
+  }
+
   return (
     <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -96,17 +108,17 @@ const MyCode: React.FC = () => {
             <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{userInfo?.nickName}</Text>
           </View>
           <View style={{marginTop: 30}}>
-            <QRCode value={codeInfo?.datingQrCodeUrl || '发芽'} size={250} />
+            <QRCode value={codeInfo?.datingQrCodeUrlReal || '发芽'} size={250} />
           </View>
           <View style={{marginTop: 20}}>
             <Text style={globalStyles.fontPrimary}>扫描二维码，立刻关注我</Text>
           </View>
-          {/* <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity activeOpacity={0.8} onPress={() => downloadCode(codeInfo?.datingQrCodeUrl)}>
             <View style={[styles.save]}>
-              <MaterialIcon name="south" size={15} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />
+              <Icon name="zuopin_pop_xiazai" size={15} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />
               <Text style={[globalStyles.fontPrimary]}>保存到本地</Text>
             </View>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </SwipeView>
         {hasShareCode && (
           <SwipeView style={[styles.codeContainer, {width: windowWidth}]} onSwipe={handleSwipe}>
@@ -118,17 +130,17 @@ const MyCode: React.FC = () => {
               <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>邀请你注册发芽</Text>
             </View>
             <View style={{marginTop: 30}}>
-              <QRCode value={codeInfo?.shareQrCodeUrl || '发芽'} size={250} />
+              <QRCode value={codeInfo?.shareQrCodeUrlReal || '发芽'} size={250} />
             </View>
             <View style={{marginTop: 20}}>
               <Text style={globalStyles.fontPrimary}>扫描二维码，开启美好生活</Text>
             </View>
-            {/* <TouchableOpacity activeOpacity={0.8}>
-            <View style={[styles.save]}>
-              <MaterialIcon name="south" size={15} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />
-              <Text style={[globalStyles.fontPrimary]}>保存到本地</Text>
-            </View>
-          </TouchableOpacity> */}
+            <TouchableOpacity activeOpacity={0.8} onPress={() => downloadCode(codeInfo?.shareQrCodeUrl)}>
+              <View style={[styles.save]}>
+                <Icon name="zuopin_pop_xiazai" size={15} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />
+                <Text style={[globalStyles.fontPrimary]}>保存到本地</Text>
+              </View>
+            </TouchableOpacity>
           </SwipeView>
         )}
       </ScrollView>

@@ -8,6 +8,7 @@ import {
   LocationCity,
   MineDetail,
   ModifyProfileForm,
+  MyCodeUrl,
   OtherUserDetail,
   UserCertificationForm,
   UserInfo,
@@ -45,7 +46,7 @@ export async function getMineDetail(): Promise<MineDetail> {
   return await post('/user/mine/info');
 }
 
-export async function getCodeUrl(): Promise<{datingQrCodeUrl: string; shareQrCodeUrl: string}> {
+export async function getCodeUrl(): Promise<MyCodeUrl> {
   return await post('/user/qr/result');
 }
 

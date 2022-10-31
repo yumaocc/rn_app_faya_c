@@ -208,3 +208,10 @@ export interface WithdrawalRecord {
   canWithdrawalMoney: number;
   canWithdrawalMoneyYuan: string;
 }
+
+export interface MyCodeUrl {
+  datingQrCodeUrl: string; // 二维码图片地址
+  shareQrCodeUrl: string;
+  datingQrCodeUrlReal: string; // 链接
+  shareQrCodeUrlReal: string; // 链接
+}

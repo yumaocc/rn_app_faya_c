@@ -14,6 +14,7 @@ export type {
   AgentTask,
   WithdrawalRecord,
   ModifyProfileForm,
+  MyCodeUrl,
 } from './user';
 export type {
   AppHeader,
