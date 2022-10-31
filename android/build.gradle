@@ -33,6 +33,14 @@ buildscript {
 
 allprojects {
     repositories {
+        all { ArtifactRepository repo ->
+            println repo.url.toString()
+            if (repo.url.toString().startsWith("https://jcenter.bintray.com/")) {
+                project.logger.warn "Repository \${repo.url} removed."
+                remove repo
+                mavenCentral()
+            }
+        }
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url("$rootDir/../node_modules/react-native/android")
