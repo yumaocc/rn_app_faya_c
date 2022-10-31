@@ -24,7 +24,7 @@ const Scanner: React.FC = () => {
 
   const saveShareUser = useCallback(
     (userId: string | number) => {
-      userId = Number(userId);
+      userId = String(userId);
       if (userId) {
         commonDispatcher.setConfig({shareUserId: userId});
       }
@@ -70,7 +70,7 @@ const Scanner: React.FC = () => {
         });
         switch (type) {
           case 'invite':
-            navigation.navigate('Login');
+            navigation.navigate('Invite', {userId: data.userId});
             return;
           case 'friend':
             navigation.navigate({
@@ -114,9 +114,8 @@ const Scanner: React.FC = () => {
       .then(rule => {
         setUrlParserRule(rule);
         setRuleIsReady(true);
-        const link = 'https://m.faya.life?i=10&a=23#asfhjkhfj';
-        // checkScanContent();
-        console.log(parseLink(link, rule));
+        // const link = 'https://m.faya.life?i=10&a=23#/invite/12';
+        // console.log(parseLink(link, rule));
       })
       .catch(() => {
         setRuleIsReady(true);

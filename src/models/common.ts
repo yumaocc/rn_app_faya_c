@@ -41,7 +41,7 @@ export interface SystemConfig {
   phone: string;
   locationId: number;
   locationName: string;
-  shareUserId: number;
+  shareUserId: string;
   touristId: number;
 }
 

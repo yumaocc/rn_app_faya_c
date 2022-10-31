@@ -190,7 +190,7 @@ export function parseLink(content: string, parseRule: URLParseRule): QRCodeScanR
   const spuMatch = content.match(new RegExp(spu));
   const workMatch = content.match(new RegExp(work));
   if (friendMatch) {
-    const userId = Number(friendMatch[2]);
+    const userId = friendMatch[2];
     if (userId) {
       return {
         type: 'friend',
@@ -202,8 +202,7 @@ export function parseLink(content: string, parseRule: URLParseRule): QRCodeScanR
     }
   }
   if (inviteMatch) {
-    const userId = Number(inviteMatch[2]);
-    console.log(inviteMatch);
+    const userId = inviteMatch[2];
     if (userId) {
       return {
         type: 'invite',
@@ -215,7 +214,7 @@ export function parseLink(content: string, parseRule: URLParseRule): QRCodeScanR
     }
   }
   if (spuMatch) {
-    const spuId = Number(spuMatch[2]);
+    const spuId = spuMatch[2];
     if (spuId) {
       return {
         type: 'spu',
@@ -227,7 +226,7 @@ export function parseLink(content: string, parseRule: URLParseRule): QRCodeScanR
     }
   }
   if (workMatch) {
-    const workId = Number(workMatch[2]);
+    const workId = workMatch[2];
     if (workId) {
       return {
         type: 'work',

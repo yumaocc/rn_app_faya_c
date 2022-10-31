@@ -124,3 +124,6 @@ export async function getWithdrawRecord(params: SearchParam): Promise<Withdrawal
 export async function modifyProfile(params: ModifyProfileForm): Promise<boolean> {
   return await post('/user/modify/info', params);
 }
+export async function agentRegister(shareSnowId: string): Promise<number> {
+  return await post('/user/become/talent', {shareSnowId});
+}

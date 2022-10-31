@@ -17,11 +17,13 @@ const MiddleButton: React.FC = () => {
         to: 'ShootVideo',
         redirect: true,
       });
+      // navigation.navigate('Invite', {userId: '1574958869138587643'});
     } else {
-      // navigation.navigate('ShootVideo');
+      navigation.navigate('ShootVideo');
       // navigation.navigate('Scanner');
-      navigation.navigate('SingleWorkDetail', {id: '1575447541069455360'});
-      // navigation.navigate('ScanResult', {content: '你好啊'});
+      // navigation.navigate('SingleWorkDetail', {id: '1575447541069455360'});
+      // navigation.navigate('ScanResult', {content: '你好'});
+      // navigation.navigate('Invite', {userId: '1574958869138587643'});
       // navigation.navigate('TestPage');
       // navigation.navigate('SearchSPU');
       // navigation.navigate('WithdrawalRecords');
