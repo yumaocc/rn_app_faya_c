@@ -18,3 +18,11 @@ export function cleanOrderForm(formData: any): OrderForm {
     payWay,
   };
 }
+
+export function getShareSPULink(spuId: number, userId: string): string {
+  return `https://m.faya.life/?a=${userId}#/spu/detail/${spuId}`;
+}
+
+export function getShareWorkLink(workId: number, userId: string): string {
+  return `https://m.faya.life/?a=${userId}#/work/detail/${workId}`;
+}

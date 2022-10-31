@@ -16,17 +16,12 @@ import {BoolEnum} from '../../fst/models';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import Icon from '../../component/Icon';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import {useLog} from '../../fst/hooks';
 import {saveImageToGallery} from '../../helper/system';
 import Loading from '../../component/Loading';
 import {goLogin} from '../../router/Router';
 
 const SPUDetail: React.FC = () => {
   const {id} = useParams<{id: number}>();
-  const isLoggedIn = useIsLoggedIn();
-  const spu: SPUDetailF = useSelector((state: RootState) => state.spu.currentSPU);
-  const currentSKU: PackageDetail | SKUDetail = useSelector((state: RootState) => state.spu.currentSKU);
-  const isPackage: boolean = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
   const [titleOpacity, setTitleOpacity] = useState(0);
   const [isCollect, setIsCollect] = useState(false);
   const [isJoinShowCase, setIsJoinShowCase] = useState(false);
@@ -34,8 +29,11 @@ const SPUDetail: React.FC = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [posterUrl, setPosterUrl] = useState('');
 
-  useLog('posterUrl', posterUrl);
+  const spu: SPUDetailF = useSelector((state: RootState) => state.spu.currentSPU);
+  const currentSKU: PackageDetail | SKUDetail = useSelector((state: RootState) => state.spu.currentSKU);
+  const isPackage: boolean = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
 
+  const isLoggedIn = useIsLoggedIn();
   const posterRef = useRef<Image>(null);
   const [userDispatcher] = useUserDispatcher();
   const [spuDispatcher] = useSPUDispatcher();
