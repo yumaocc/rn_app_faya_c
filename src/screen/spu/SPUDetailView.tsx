@@ -7,6 +7,8 @@ import {PackageDetail, SKUBuyNotice, SKUDetail, SKUSaleState, SKUShowInfo, SPUDe
 import Icon from '../../component/Icon';
 import {useWhyDidYouUpdate} from '../../fst/hooks';
 import {convertSKUBuyNotice} from '../../helper/order';
+import {callPhone} from '../../helper/system';
+import CustomTouchable from '../../component/CustomTouchable';
 
 interface SPUDetailViewProps {
   spu: SPUDetailF;
@@ -263,11 +265,13 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
                         <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
                       </View>
                     </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.9}>
-                      <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                        <Icon name="shangpin_dianpu_dianhua" size={16} color="#48db94" />
-                      </View>
-                    </TouchableOpacity>
+                    {shop.contactPhone && (
+                      <CustomTouchable onPress={() => callPhone(shop.contactPhone)}>
+                        <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
+                          <Icon name="shangpin_dianpu_dianhua" size={16} color="#48db94" />
+                        </View>
+                      </CustomTouchable>
+                    )}
                   </View>
                 </View>
               </View>

@@ -271,3 +271,10 @@ export function parseLink(content: string, parseRule: URLParseRule): QRCodeScanR
     data: {},
   };
 }
+
+// 拨打电话
+
+export function callPhone(phone: string) {
+  console.log('phone', phone);
+  Linking.openURL(`tel:${phone}`);
+}
