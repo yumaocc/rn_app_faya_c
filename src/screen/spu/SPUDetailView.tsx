@@ -9,6 +9,7 @@ import {useWhyDidYouUpdate} from '../../fst/hooks';
 import {convertSKUBuyNotice} from '../../helper/order';
 import {callPhone} from '../../helper/system';
 import CustomTouchable from '../../component/CustomTouchable';
+import RichText from '../../component/RichText';
 
 interface SPUDetailViewProps {
   spu: SPUDetailF;
@@ -204,6 +205,8 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         <View>
           <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>{spu?.subName}</Text>
         </View>
+
+        {spu?.spuHtml && <RichText content={spu.spuHtml} style={{marginTop: 10}} />}
 
         {!!buyNotice?.USE_RULE?.length && (
           <View style={styles.buyNoticeItem}>

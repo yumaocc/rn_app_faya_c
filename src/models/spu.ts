@@ -125,6 +125,7 @@ export interface SPUDetailF {
   spuPurchaseNoticeVOS: SKUBuyNoticeF[];
   showcaseJoined: BoolEnum; // 是否加入橱窗
   collected: BoolEnum; // 是否已收藏
+  spuHtml: string;
 }
 
 // BOOKING 预约须知，SALE_TIME售卖、营业时间，USE_RULE使用规则，TIPS温馨提示，POLICY取消政策

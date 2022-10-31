@@ -6306,6 +6306,14 @@ react-native-animatable@1.3.3:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-autoheight-webview@^1.6.5:
+  version "1.6.5"
+  resolved "https://registry.npmmirror.com/react-native-autoheight-webview/-/react-native-autoheight-webview-1.6.5.tgz#ff87e8971a5f8ba8aa8c0abf1e439ab88468adb1"
+  integrity sha512-EJhzpiG7jD5euMxyLcb0CNqxB7Scw4qfNGO7JIptPYXVP9mNxTtCuzOvewai+KctR0SUtD4hmspNNDYxE6KiOQ==
+  dependencies:
+    deprecated-react-native-prop-types "^2.3.0"
+    prop-types "^15.7.2"
+
 react-native-codegen@^0.0.7:
   version "0.0.7"
   resolved "https://registry.npmmirror.com/react-native-codegen/-/react-native-codegen-0.0.7.tgz#86651c5c5fec67a8077ef7f4e36f7ed459043e14"

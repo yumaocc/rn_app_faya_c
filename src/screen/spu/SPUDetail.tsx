@@ -158,7 +158,6 @@ const SPUDetail: React.FC = () => {
           spuDispatcher.changeCurrentSPU({...spu, showcaseJoined: currentIsShowCase ? BoolEnum.FALSE : BoolEnum.TRUE});
         })
         .catch(() => {
-          // console.log(e);
           setIsJoinShowCase(false);
         });
     }
@@ -188,10 +187,10 @@ const SPUDetail: React.FC = () => {
   //   setShowShare(false);
   // }
 
-  async function goNavigation(locationInfo: LocationNavigateInfo) {
+  const goNavigation = useCallback((locationInfo: LocationNavigateInfo) => {
     setNavigationInfo(locationInfo);
     setShowSelectMap(true);
-  }
+  }, []);
 
   return (
     <View style={styles.container}>
