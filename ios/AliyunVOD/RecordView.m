@@ -6,7 +6,8 @@
 //
 #import <React/RCTViewManager.h>
 #import <React/RCTUIManager.h>
-#import <AliyunVideoSDKPro/AliyunVideoSDKPro.h>
+// #import <AliyunVideoSDKPro/AliyunVideoSDKPro.h>
+#import <AliyunVideoSDKBasic/AliyunVideoSDKBasic.h>
 //#import "RecordView.h"
 #import "Util.h"
 #import "SMNView.h"

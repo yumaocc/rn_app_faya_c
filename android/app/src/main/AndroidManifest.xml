@@ -35,7 +35,7 @@
       </activity>
       <meta-data
         android:name="com.aliyun.alivc_license.licensekey"
-        android:value="zobVj4U4Eo0gm5B1I3372f0c7b5e2414090e86094149b240f"/>
+        android:value="QodZYwdNIN4a54Xgh776b2e49e4974f09b91738b41e910829"/>
       <meta-data
         android:name="com.aliyun.alivc_license.licensefile"
         android:value="assets/AlivcCert.crt"/>

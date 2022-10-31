@@ -7,7 +7,8 @@
 
 #import <UIKit/UIKit.h>
 #import <React/RCTComponent.h>
-#import <AliyunVideoSDKPro/AliyunVideoSDKPro.h>
+// #import <AliyunVideoSDKPro/AliyunVideoSDKPro.h>
+#import <AliyunVideoSDKBasic/AliyunVideoSDKBasic.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

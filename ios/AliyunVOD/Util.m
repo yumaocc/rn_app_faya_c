@@ -6,7 +6,8 @@
 //
 
 #import "Util.h"
-#import <AliyunVideoSDKPro/AliyunVideoSDKPro.h>
+//#import <AliyunVideoSDKPro/AliyunVideoSDKPro.h>
+#import <AliyunVideoSDKBasic/AliyunVideoSDKBasic.h>
 
 @implementation Util
 

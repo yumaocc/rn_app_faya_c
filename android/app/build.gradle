@@ -294,7 +294,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-    implementation 'com.aliyun.video.android:svideostandard:3.34.0'//标准版短视频SDK必须依赖。
+    // implementation 'com.aliyun.video.android:svideostandard:3.34.0'//标准版短视频SDK必须依赖。
+    implementation 'com.aliyun.video.android:svideosnap:3.34.0'//基础版短视频SDK必须依赖。
     implementation 'com.aliyun.video.android:core:1.2.2' //核心库必须依赖。
     //AlivcFFmpeg必须依赖,且版本需要在4.3.0及以上，在以下两个版本中选择一个版本进行依赖。
     // implementation 'com.aliyun.video.android:AlivcFFmpeg:4.3.2.0-part' // 短视频SDK专用，包size较小。
