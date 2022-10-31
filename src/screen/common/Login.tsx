@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, StatusBar} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {InputItem, Button} from '@ant-design/react-native';
 import {useSelector} from 'react-redux';
 import {useCommonDispatcher, useUserDispatcher} from '../../helper/hooks';
@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../models';
 import {PRIVACY_POLICY_URL, USER_AGREEMENT_URL} from '../../constants';
 import {cache} from '../../helper/cache';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const Login: React.FC = () => {
   const [phone, setPhone] = useState('');
@@ -123,7 +124,8 @@ const Login: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
+      <MyStatusBar />
       <Text style={styles.title}>登录/注册</Text>
       <View style={styles.form}>
         <View style={styles.formItem}>

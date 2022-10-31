@@ -29,6 +29,10 @@ const KFModal: React.FC<KFModalProps> = props => {
   useEffect(() => {
     api.common.getKFUrl().then(setUrl).catch(commonDispatcher.error);
   }, [commonDispatcher]);
+
+  if (!visible) {
+    return null;
+  }
   return (
     <Modal title="" visible={visible} onClose={onClose} showCancel okText="保存到相册" cancelText="关闭" onOk={handleSavePoster}>
       <View style={[globalStyles.containerCenter, styles.imgContainer]}>{url && <Image source={{uri: url}} resizeMode="contain" style={styles.img} />}</View>

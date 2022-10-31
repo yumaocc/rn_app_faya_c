@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Text, ScrollView, StyleSheet, TouchableOpacity, StatusBar} from 'react-native';
+import {View, Text, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../../component';
 import {useUserDispatcher, useWallet} from '../../../helper/hooks';
@@ -9,6 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../../models';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../../redux/reducers';
+import MyStatusBar from '../../../component/MyStatusBar';
 
 const Wallet: React.FC = () => {
   const [wallet] = useWallet();
@@ -35,7 +36,7 @@ const Wallet: React.FC = () => {
 
   return (
     <SafeAreaView edges={['top', 'bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationBar
         title="我的钱包"
         safeTop={false}

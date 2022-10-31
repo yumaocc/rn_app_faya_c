@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, StatusBar, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {Button, NavigationBar, OperateItem} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import pkg from '../../../../package.json';
@@ -7,6 +7,7 @@ import {useUserDispatcher} from '../../../helper/hooks';
 import KFModal from '../../common/KFModal';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../../models';
+import MyStatusBar from '../../../component/MyStatusBar';
 
 const Settings: React.FC = () => {
   const [showKF, setShowKF] = React.useState(false);
@@ -17,7 +18,8 @@ const Settings: React.FC = () => {
   return (
     <View style={styles.container}>
       <NavigationBar title="设置" />
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
+      <MyStatusBar />
       <ScrollView style={{flex: 1}}>
         <OperateItem label="个人资料" showArrow onPress={() => navigation.navigate('MyProfile')} />
         {/* <OperateItem label="隐私设置" showArrow /> */}

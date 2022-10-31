@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useRef} from 'react';
-import {View, Text, StyleSheet, StatusBar, ScrollView, TextInput, TouchableOpacity, Image, RefreshControl, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Image, RefreshControl, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import {NavigationBar} from '../../../component';
@@ -10,6 +10,7 @@ import {useSPUDispatcher} from '../../../helper/hooks';
 import {isReachBottom} from '../../../helper/system';
 import {FakeNavigation, SPUF} from '../../../models';
 import {RootState} from '../../../redux/reducers';
+import MyStatusBar from '../../../component/MyStatusBar';
 
 const Showcase: React.FC = () => {
   const [search, setSearch] = React.useState(''); // 文本框内容
@@ -123,7 +124,7 @@ const Showcase: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationBar title="我的橱窗" />
       <View style={styles.searchContainer}>
         <View style={styles.searchBar}>

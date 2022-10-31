@@ -161,7 +161,7 @@ const Refund: React.FC = () => {
                     </View>
                   );
                 })}
-                {form._fileList.length < 9 && (
+                {form._fileList.length < 3 && (
                   <TouchableOpacity activeOpacity={0.6} onPress={selectPhoto}>
                     <View style={[globalStyles.containerCenter, styles.camera]}>
                       <Icon name="all_uptupian64" size={32} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
@@ -179,9 +179,11 @@ const Refund: React.FC = () => {
         </View>
       </SafeAreaView>
 
-      <Modal visible={showPreview} transparent={true} animationType="fade" onRequestClose={() => setShowPreview(false)}>
-        <ImageViewer imageUrls={form._fileList} index={previewIndex} enableSwipeDown={true} onSwipeDown={() => setShowPreview(false)} />
-      </Modal>
+      {showPreview && (
+        <Modal visible={true} transparent={true} animationType="fade" onRequestClose={() => setShowPreview(false)}>
+          <ImageViewer imageUrls={form._fileList} index={previewIndex} enableSwipeDown={true} onSwipeDown={() => setShowPreview(false)} />
+        </Modal>
+      )}
       <KFModal visible={showKF} onClose={() => setShowKF(false)} />
     </View>
   );

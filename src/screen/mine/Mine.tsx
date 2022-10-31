@@ -150,13 +150,15 @@ const Mine: React.FC = () => {
             </TouchableOpacity>
             <View style={globalStyles.containerLR}>
               {!!isLoggedIn && (
-                <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('MyCode')}>
-                  <Icon name="wode_erweima48" size={24} color="#fff" />
-                </TouchableOpacity>
+                <>
+                  <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('MyCode')}>
+                    <Icon name="wode_erweima48" size={24} color="#fff" />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{marginLeft: globalStyleVariables.MODULE_SPACE}} activeOpacity={0.8} onPress={goSettings}>
+                    <Icon name="wode_hanbao48" size={24} color="#fff" />
+                  </TouchableOpacity>
+                </>
               )}
-              <TouchableOpacity style={{marginLeft: globalStyleVariables.MODULE_SPACE}} activeOpacity={0.8} onPress={goSettings}>
-                <Icon name="wode_hanbao48" size={24} color="#fff" />
-              </TouchableOpacity>
             </View>
           </View>
           <View style={{borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: '#fff'}}>

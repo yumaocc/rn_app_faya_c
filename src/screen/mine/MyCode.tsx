@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
-import {View, Text, TouchableOpacity, ScrollView, useWindowDimensions, StyleSheet, Image, StatusBar} from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView, useWindowDimensions, StyleSheet, Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -13,6 +13,7 @@ import {RootState} from '../../redux/reducers';
 import Icon from '../../component/Icon';
 import {saveImageToGallery} from '../../helper/system';
 import {MyCodeUrl} from '../../models';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const MyCode: React.FC = () => {
   const {type} = useParams<{type: 'friend' | 'share'}>();
@@ -82,7 +83,8 @@ const MyCode: React.FC = () => {
 
   return (
     <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
+      <MyStatusBar />
       <NavigationBar
         title={
           <View style={globalStyles.containerRow}>
@@ -159,7 +161,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: '#6cf',
+    backgroundColor: '#f4f4f4',
     marginTop: 40,
   },
   save: {

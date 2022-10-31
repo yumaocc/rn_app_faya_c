@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, StatusBar} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
 import Icon from '../../component/Icon';
 import QRCode from 'react-native-qrcode-svg';
 import Popover from 'react-native-popover-view';
@@ -17,6 +17,7 @@ import {BoolEnum} from '../../fst/models';
 import Loading from '../../component/Loading';
 import {useIsFocused} from '@react-navigation/native';
 import KFModal from '../common/KFModal';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const OrderDetail: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -149,7 +150,8 @@ const OrderDetail: React.FC = () => {
   return (
     <>
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+        <MyStatusBar />
+        {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
         <NavigationBar
           title="订单详情"
           headerRight={
