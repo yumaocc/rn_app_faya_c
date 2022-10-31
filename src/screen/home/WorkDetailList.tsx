@@ -15,6 +15,8 @@ import {BoolEnum} from '../../fst/models';
 import {globalStyleVariables} from '../../constants/styles';
 import CommentModal, {CommentModalRef} from './work/CommentModal';
 import {goLogin} from '../../router/Router';
+import SPUShareModal from '../mine/agent/SPUShareModal';
+import {getShareSPULink} from '../../helper/order';
 
 const WorkDetailList: React.FC = () => {
   const params = useParams<{index: number}>();
@@ -22,6 +24,9 @@ const WorkDetailList: React.FC = () => {
   const [showSPU, setShowSPU] = useState(false);
   const [isCollect, setIsCollect] = useState(false);
   const [isJoinShowCase, setIsJoinShowCase] = useState(false);
+  const [showShare, setShowShare] = useState(false);
+  const [posterUrl, setPosterUrl] = useState('');
+
   const commentModalRef = useRef<CommentModalRef>(null);
   const currentTabType = useSelector((state: RootState) => state.work.currentTab.type);
   const works = useSelector((state: RootState) => state.work.works[currentTabType]);
@@ -30,8 +35,10 @@ const WorkDetailList: React.FC = () => {
   const currentSPU = useSelector((state: RootState) => state.spu.currentSPU);
   const currentSKU = useSelector((state: RootState) => state.spu.currentSKU);
   const currentSKUIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
-  const isLoggedIn = useIsLoggedIn();
+  const userId = useSelector((state: RootState) => state.user.myDetail?.userId);
+  const shareLink = useMemo(() => getShareSPULink(currentSPU?.id, userId), [currentSPU?.id, userId]); // 分享链接
 
+  const isLoggedIn = useIsLoggedIn();
   const {height} = useDeviceDimensions();
   const [flatListRef, setRef, isReady] = useRefCallback(null);
   const navigation = useNavigation<FakeNavigation>();
@@ -40,6 +47,19 @@ const WorkDetailList: React.FC = () => {
   const [spuDispatcher] = useSPUDispatcher();
   const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
+
+  useEffect(() => {
+    if (showShare && !posterUrl && currentSPU?.id) {
+      api.spu
+        .getSharePoster(currentSPU?.id, 2)
+        .then(res => {
+          if (res) {
+            setPosterUrl(res);
+          }
+        })
+        .catch(commonDispatcher.error);
+    }
+  }, [commonDispatcher, showShare, currentSPU, posterUrl]);
 
   useEffect(() => {
     if (currentIndex > videos.length - 3) {
@@ -61,7 +81,7 @@ const WorkDetailList: React.FC = () => {
   }
   const openSPU = useCallback(
     (id: number) => {
-      if (currentSPU?.id !== id) {
+      if (currentSPU?.id !== Number(id)) {
         spuDispatcher.viewSPU(id);
       }
       setShowSPU(true);
@@ -98,6 +118,11 @@ const WorkDetailList: React.FC = () => {
 
   function openCommentModal(mainId: string, autoFocus = false) {
     commentModalRef.current?.openComment(mainId, autoFocus);
+  }
+
+  function openShareModal() {
+    setShowSPU(false);
+    setShowShare(true);
   }
 
   function renderVideoPage(info: ListRenderItemInfo<WorkF>) {
@@ -187,12 +212,13 @@ const WorkDetailList: React.FC = () => {
             <ScrollView style={{flex: 1}} bounces={false}>
               <SPUDetailView currentSelect={currentSKU} spu={currentSPU} isPackage={currentSKUIsPackage} onChangeSelect={handleChangeSKU} />
             </ScrollView>
-            <BuyBar spu={currentSPU} sku={currentSKU} onBuy={handleBuy} onCollect={handleCollect} onAddToShopWindow={handleJoinShowCase} />
+            <BuyBar spu={currentSPU} sku={currentSKU} onBuy={handleBuy} onCollect={handleCollect} onAddToShopWindow={handleJoinShowCase} onShare={openShareModal} />
           </View>
         </Popup>
       )}
 
       <CommentModal ref={commentModalRef} />
+      {showShare && <SPUShareModal visible={true} poster={posterUrl} link={shareLink} onClose={() => setShowShare(false)} />}
     </View>
   );
 };

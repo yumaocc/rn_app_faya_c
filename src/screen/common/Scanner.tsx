@@ -129,11 +129,16 @@ const Scanner: React.FC = () => {
     }
   }, [barcodes, checkScanContent]);
 
+  function handleBack() {
+    navigation.canGoBack() && navigation.goBack();
+    // checkScanContent('https://m.faya.life/?a=2#/spu/detail/62');
+  }
+
   if (!device || !hasPermission || !ruleIsReady) {
     return (
       <View style={styles.loading}>
         <Text>未找到可用相机或您未开启相机使用权限</Text>
-        <Button style={{marginTop: 30}} type="primary" onPress={() => navigation.canGoBack() && navigation.goBack()} title="返回" />
+        <Button style={{marginTop: 30}} type="primary" onPress={handleBack} title="返回" />
       </View>
     );
   }

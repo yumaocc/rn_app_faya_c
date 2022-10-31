@@ -101,6 +101,7 @@ export interface UserSetting {
 export interface MineDetail {
   account: string;
   nickName: string;
+  userId: string;
   age: string;
   avatar: string;
   backgroudPic: string;

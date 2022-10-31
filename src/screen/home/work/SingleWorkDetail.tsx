@@ -1,9 +1,8 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {View, StyleSheet, ScrollView, StatusBar} from 'react-native';
 import {FakeNavigation, PackageDetail, SKUDetail, WorkDetailF} from '../../../models';
 import * as api from '../../../apis';
 import {useCommonDispatcher, useDeviceDimensions, useIsLoggedIn, useParams, useSPUDispatcher} from '../../../helper/hooks';
-import {useLog} from '../../../fst/hooks';
 import WorkPage from './WorkPage';
 import {NavigationBar, Popup} from '../../../component';
 import SPUDetailView from '../../spu/SPUDetailView';
@@ -14,24 +13,30 @@ import {RootState} from '../../../redux/reducers';
 import {BoolEnum} from '../../../fst/models';
 import {goLogin} from '../../../router/Router';
 import {useNavigation} from '@react-navigation/native';
+import {getShareSPULink} from '../../../helper/order';
+import SPUShareModal from '../../mine/agent/SPUShareModal';
 
 const SingleWorkDetail: React.FC = () => {
   const [workDetail, setWorkDetail] = useState<WorkDetailF>(null);
   const [showSPU, setShowSPU] = useState(false);
   const [isCollect, setIsCollect] = useState(false);
   const [isJoinShowCase, setIsJoinShowCase] = useState(false);
+  const [showShare, setShowShare] = useState(false);
+  const [posterUrl, setPosterUrl] = useState('');
+
   const currentSPU = useSelector((state: RootState) => state.spu.currentSPU);
   const currentSKU = useSelector((state: RootState) => state.spu.currentSKU);
   const currentSKUIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
-  const isLoggedIn = useIsLoggedIn();
+
+  const userId = useSelector((state: RootState) => state.user.myDetail?.userId);
+  const shareLink = useMemo(() => getShareSPULink(currentSPU?.id, userId), [currentSPU?.id, userId]); // 分享链接
 
   const {id} = useParams<{id: string}>();
   const {height} = useDeviceDimensions();
   const commentModalRef = useRef<CommentModalRef>(null);
 
-  // const [workDispatcher] = useWorkDispatcher();
+  const isLoggedIn = useIsLoggedIn();
   const [spuDispatcher] = useSPUDispatcher();
-  // const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
   const navigation = useNavigation<FakeNavigation>();
 
@@ -44,11 +49,22 @@ const SingleWorkDetail: React.FC = () => {
       .catch(commonDispatcher.error);
   }, [commonDispatcher.error, id]);
 
-  useLog('workDetail', workDetail);
+  useEffect(() => {
+    if (showShare && !posterUrl && currentSPU?.id) {
+      api.spu
+        .getSharePoster(currentSPU?.id, 2)
+        .then(res => {
+          if (res) {
+            setPosterUrl(res);
+          }
+        })
+        .catch(commonDispatcher.error);
+    }
+  }, [commonDispatcher, showShare, currentSPU, posterUrl]);
 
   const openSPU = useCallback(
     (id: number) => {
-      if (currentSPU?.id !== id) {
+      if (currentSPU?.id !== Number(id)) {
         spuDispatcher.viewSPU(id);
       }
       setShowSPU(true);
@@ -121,6 +137,11 @@ const SingleWorkDetail: React.FC = () => {
     commentModalRef.current?.openComment(mainId, autoFocus);
   }
 
+  function openShareModal() {
+    setShowSPU(false);
+    setShowShare(true);
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
@@ -142,12 +163,13 @@ const SingleWorkDetail: React.FC = () => {
             <ScrollView style={{flex: 1}} bounces={false}>
               <SPUDetailView currentSelect={currentSKU} spu={currentSPU} isPackage={currentSKUIsPackage} onChangeSelect={handleChangeSKU} />
             </ScrollView>
-            <BuyBar spu={currentSPU} sku={currentSKU} onBuy={handleBuy} onCollect={handleCollect} onAddToShopWindow={handleJoinShowCase} />
+            <BuyBar spu={currentSPU} sku={currentSKU} onBuy={handleBuy} onCollect={handleCollect} onAddToShopWindow={handleJoinShowCase} onShare={openShareModal} />
           </View>
         </Popup>
       )}
 
       <CommentModal ref={commentModalRef} />
+      {showShare && <SPUShareModal visible={true} poster={posterUrl} link={shareLink} onClose={() => setShowShare(false)} />}
     </View>
   );
 };

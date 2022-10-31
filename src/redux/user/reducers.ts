@@ -53,6 +53,7 @@ export const initialState: UserState = {
   myDetail: {
     account: '',
     nickName: '游客',
+    userId: null,
     age: '',
     avatar: '',
     backgroudPic: '',
