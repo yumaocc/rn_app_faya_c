@@ -16,7 +16,8 @@ import {globalStyleVariables} from '../../constants/styles';
 import CommentModal, {CommentModalRef} from './work/CommentModal';
 import {goLogin} from '../../router/Router';
 import SPUShareModal from '../mine/agent/SPUShareModal';
-import {getShareSPULink} from '../../helper/order';
+import {getShareSPULink, getShareWorkLink} from '../../helper/order';
+import WorkShareModal from '../mine/agent/WorkShareModal';
 
 const WorkDetailList: React.FC = () => {
   const params = useParams<{index: number}>();
@@ -26,6 +27,9 @@ const WorkDetailList: React.FC = () => {
   const [isJoinShowCase, setIsJoinShowCase] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [posterUrl, setPosterUrl] = useState('');
+  const [showShareWork, setShowShareWork] = useState(false);
+  const [workSharePosterUrl, setWorkSharePosterUrl] = useState('');
+  const [workShareLink, setWorkShareLink] = useState('');
 
   const commentModalRef = useRef<CommentModalRef>(null);
   const currentTabType = useSelector((state: RootState) => state.work.currentTab.type);
@@ -36,7 +40,7 @@ const WorkDetailList: React.FC = () => {
   const currentSKU = useSelector((state: RootState) => state.spu.currentSKU);
   const currentSKUIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
   const userId = useSelector((state: RootState) => state.user.myDetail?.userId);
-  const shareLink = useMemo(() => getShareSPULink(currentSPU?.id, userId), [currentSPU?.id, userId]); // 分享链接
+  const shareLink = useMemo(() => getShareSPULink(currentSPU?.id, userId), [currentSPU?.id, userId]); // 商品分享链接
 
   const isLoggedIn = useIsLoggedIn();
   const {height} = useDeviceDimensions();
@@ -136,6 +140,7 @@ const WorkDetailList: React.FC = () => {
         paused={currentIndex !== index}
         shouldLoad={shouldLoad}
         onShowSPU={openSPU}
+        onShowShare={handleShareWork}
         onShowComment={openCommentModal}
       />
     );
@@ -186,6 +191,20 @@ const WorkDetailList: React.FC = () => {
     }
   }
 
+  function handleShareWork(mainId: string) {
+    setWorkShareLink(getShareWorkLink(mainId, userId));
+
+    api.spu
+      .getSharePoster(mainId, 1)
+      .then(res => {
+        if (res) {
+          setWorkSharePosterUrl(res);
+          setShowShareWork(true);
+        }
+      })
+      .catch(commonDispatcher.error);
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
@@ -219,6 +238,7 @@ const WorkDetailList: React.FC = () => {
 
       <CommentModal ref={commentModalRef} />
       {showShare && <SPUShareModal visible={true} poster={posterUrl} link={shareLink} onClose={() => setShowShare(false)} />}
+      {showShareWork && <WorkShareModal visible={true} poster={workSharePosterUrl} link={workShareLink} onClose={() => setShowShareWork(false)} />}
     </View>
   );
 };

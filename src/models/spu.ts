@@ -120,9 +120,25 @@ export interface SPUDetailF {
   skuList: SKUDetail[];
   tags: string[];
   packageDetailsList: PackageDetail[];
+  spuPurchaseNoticeVOS: SKUBuyNoticeF[];
   showcaseJoined: BoolEnum; // 是否加入橱窗
   collected: BoolEnum; // 是否已收藏
 }
+
+// BOOKING 预约须知，SALE_TIME售卖、营业时间，USE_RULE使用规则，TIPS温馨提示，POLICY取消政策
+export type SKUBuyNoticeType = 'BOOKING' | 'SALE_TIME' | 'USE_RULE' | 'TIPS' | 'POLICY';
+
+// 购买须知，后端返回的
+export interface SKUBuyNoticeF {
+  id?: number;
+  type: SKUBuyNoticeType;
+  content: string;
+}
+
+// 组织成这个格式
+export type SKUBuyNotice = {
+  [key in SKUBuyNoticeType]: string[];
+};
 
 export enum PayChannel {
   WECHAT = 'WECHAT',

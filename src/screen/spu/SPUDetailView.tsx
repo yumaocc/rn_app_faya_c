@@ -1,11 +1,12 @@
 import {Carousel} from '@ant-design/react-native';
 import {PaginationProps} from '@ant-design/react-native/lib/carousel';
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {PackageDetail, SKUDetail, SKUSaleState, SKUShowInfo, SPUDetailF} from '../../models';
+import {PackageDetail, SKUBuyNotice, SKUDetail, SKUSaleState, SKUShowInfo, SPUDetailF} from '../../models';
 import Icon from '../../component/Icon';
 import {useWhyDidYouUpdate} from '../../fst/hooks';
+import {convertSKUBuyNotice} from '../../helper/order';
 
 interface SPUDetailViewProps {
   spu: SPUDetailF;
@@ -16,6 +17,7 @@ interface SPUDetailViewProps {
 
 const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
   const {spu, currentSelect, isPackage} = props;
+  const [buyNotice, setBuyNotice] = useState<SKUBuyNotice>(null);
 
   const currentSKU: SKUShowInfo = useMemo(() => {
     if (isPackage) {
@@ -44,6 +46,15 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
       };
     }
   }, [currentSelect, isPackage]);
+
+  useEffect(() => {
+    const notices = spu?.spuPurchaseNoticeVOS;
+    if (!notices) {
+      return;
+    }
+    const cleaned = convertSKUBuyNotice(notices);
+    setBuyNotice(cleaned);
+  }, [spu]);
 
   useWhyDidYouUpdate('SPUDetailView', {...props, currentSKU});
 
@@ -100,6 +111,14 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
     } else {
       return renderSKUNode(pkg.packageName, isActive, disabled);
     }
+  }
+
+  function renderTips(text: string, index: number) {
+    return (
+      <View style={[{paddingLeft: 6}]} key={index}>
+        <Text style={[globalStyles.fontPrimary, {fontSize: 12, lineHeight: 18}]}>·{text}</Text>
+      </View>
+    );
   }
 
   return (
@@ -173,6 +192,48 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         </View>
       </View>
 
+      {/* 商品详情 */}
+      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+        <View>
+          <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>{spu?.subName}</Text>
+        </View>
+
+        {!!buyNotice?.USE_RULE?.length && (
+          <View style={styles.buyNoticeItem}>
+            <Text style={globalStyles.fontStrong}>使用规则</Text>
+            <View style={{marginTop: 5}}>{buyNotice?.USE_RULE.map(renderTips)}</View>
+          </View>
+        )}
+
+        {!!buyNotice?.BOOKING?.length && (
+          <View style={styles.buyNoticeItem}>
+            <Text style={globalStyles.fontStrong}>预约须知</Text>
+            <View style={{marginTop: 5}}>{buyNotice?.BOOKING.map(renderTips)}</View>
+          </View>
+        )}
+
+        {!!buyNotice?.SALE_TIME?.length && (
+          <View style={styles.buyNoticeItem}>
+            <Text style={globalStyles.fontStrong}>营业时间</Text>
+            <View style={{marginTop: 5}}>{buyNotice?.SALE_TIME.map(renderTips)}</View>
+          </View>
+        )}
+
+        {!!buyNotice?.POLICY?.length && (
+          <View style={styles.buyNoticeItem}>
+            <Text style={globalStyles.fontStrong}>取消政策</Text>
+            <View style={{marginTop: 5}}>{buyNotice?.POLICY.map(renderTips)}</View>
+          </View>
+        )}
+
+        {!!buyNotice?.TIPS?.length && (
+          <View style={styles.buyNoticeItem}>
+            <Text style={globalStyles.fontStrong}>温馨提示</Text>
+            <View style={{marginTop: 5}}>{buyNotice?.TIPS.map(renderTips)}</View>
+          </View>
+        )}
+      </View>
+
       {/* 可用门店 */}
       <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
         <View style={[globalStyles.containerLR, {height: 24}]}>
@@ -214,8 +275,6 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
           })}
         </View>
       </View>
-
-      {/* 商品详情 */}
     </View>
   );
 };
@@ -291,5 +350,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#0000000D',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buyNoticeItem: {
+    marginTop: globalStyleVariables.MODULE_SPACE,
+    backgroundColor: '#f4f4f4',
+    borderRadius: 5,
+    padding: globalStyleVariables.MODULE_SPACE,
   },
 });

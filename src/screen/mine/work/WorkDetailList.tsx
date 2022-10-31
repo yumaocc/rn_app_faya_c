@@ -15,8 +15,9 @@ import * as api from '../../../apis';
 import {goLogin} from '../../../router/Router';
 import {BoolEnum} from '../../../fst/models';
 import {useNavigation} from '@react-navigation/native';
-import {getShareSPULink} from '../../../helper/order';
+import {getShareSPULink, getShareWorkLink} from '../../../helper/order';
 import SPUShareModal from '../agent/SPUShareModal';
+import WorkShareModal from '../agent/WorkShareModal';
 
 const WorkDetailList: React.FC = () => {
   const params = useParams<{index: number}>();
@@ -26,6 +27,9 @@ const WorkDetailList: React.FC = () => {
   const [isJoinShowCase, setIsJoinShowCase] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [posterUrl, setPosterUrl] = useState('');
+  const [showShareWork, setShowShareWork] = useState(false);
+  const [workSharePosterUrl, setWorkSharePosterUrl] = useState('');
+  const [workShareLink, setWorkShareLink] = useState('');
 
   const currentTabType = useSelector((state: RootState) => state.user.currentTabType);
   const works = useSelector((state: RootState) => state.user.myWorks[currentTabType]);
@@ -80,7 +84,6 @@ const WorkDetailList: React.FC = () => {
   }
   const openSPU = useCallback(
     (id: number) => {
-      console.log(111, id);
       if (currentSPU?.id !== id) {
         spuDispatcher.viewSPU(id);
       }
@@ -112,6 +115,19 @@ const WorkDetailList: React.FC = () => {
     setShowSPU(false);
     setShowShare(true);
   }
+  function handleShareWork(mainId: string) {
+    setWorkShareLink(getShareWorkLink(mainId, userId));
+
+    api.spu
+      .getSharePoster(mainId, 1)
+      .then(res => {
+        if (res) {
+          setWorkSharePosterUrl(res);
+          setShowShareWork(true);
+        }
+      })
+      .catch(commonDispatcher.error);
+  }
 
   function renderVideoPage(info: ListRenderItemInfo<WorkF>) {
     const {item, index} = info;
@@ -124,6 +140,7 @@ const WorkDetailList: React.FC = () => {
         paused={currentIndex !== index}
         shouldLoad={shouldLoad}
         onShowSPU={openSPU}
+        onShowShare={handleShareWork}
         onShowComment={handleOpenComment}
       />
     );
@@ -215,6 +232,7 @@ const WorkDetailList: React.FC = () => {
       )}
       <CommentModal ref={commentModalRef} />
       {showShare && <SPUShareModal visible={true} poster={posterUrl} link={shareLink} onClose={() => setShowShare(false)} />}
+      {showShareWork && <WorkShareModal visible={true} poster={workSharePosterUrl} link={workShareLink} onClose={() => setShowShareWork(false)} />}
     </View>
   );
 };

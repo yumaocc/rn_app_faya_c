@@ -80,7 +80,6 @@ const Withdrawal: React.FC = () => {
             <Popover
               isVisible={showMenu}
               onRequestClose={() => {
-                console.log('111');
                 setShowMenu(false);
               }}
               animationConfig={{

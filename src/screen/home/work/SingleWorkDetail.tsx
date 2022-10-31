@@ -13,8 +13,9 @@ import {RootState} from '../../../redux/reducers';
 import {BoolEnum} from '../../../fst/models';
 import {goLogin} from '../../../router/Router';
 import {useNavigation} from '@react-navigation/native';
-import {getShareSPULink} from '../../../helper/order';
+import {getShareSPULink, getShareWorkLink} from '../../../helper/order';
 import SPUShareModal from '../../mine/agent/SPUShareModal';
+import WorkShareModal from '../../mine/agent/WorkShareModal';
 
 const SingleWorkDetail: React.FC = () => {
   const [workDetail, setWorkDetail] = useState<WorkDetailF>(null);
@@ -23,6 +24,9 @@ const SingleWorkDetail: React.FC = () => {
   const [isJoinShowCase, setIsJoinShowCase] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [posterUrl, setPosterUrl] = useState('');
+  const [showShareWork, setShowShareWork] = useState(false);
+  const [workSharePosterUrl, setWorkSharePosterUrl] = useState('');
+  const [workShareLink, setWorkShareLink] = useState('');
 
   const currentSPU = useSelector((state: RootState) => state.spu.currentSPU);
   const currentSKU = useSelector((state: RootState) => state.spu.currentSKU);
@@ -141,6 +145,19 @@ const SingleWorkDetail: React.FC = () => {
     setShowSPU(false);
     setShowShare(true);
   }
+  function handleShareWork(mainId: string) {
+    setWorkShareLink(getShareWorkLink(mainId, userId));
+
+    api.spu
+      .getSharePoster(mainId, 1)
+      .then(res => {
+        if (res) {
+          setWorkSharePosterUrl(res);
+          setShowShareWork(true);
+        }
+      })
+      .catch(commonDispatcher.error);
+  }
 
   return (
     <View style={styles.container}>
@@ -154,6 +171,7 @@ const SingleWorkDetail: React.FC = () => {
           paused={false}
           shouldLoad={true}
           onShowSPU={openSPU}
+          onShowShare={handleShareWork}
           onShowComment={openCommentModal}
         />
       )}
@@ -170,6 +188,7 @@ const SingleWorkDetail: React.FC = () => {
 
       <CommentModal ref={commentModalRef} />
       {showShare && <SPUShareModal visible={true} poster={posterUrl} link={shareLink} onClose={() => setShowShare(false)} />}
+      {showShareWork && <WorkShareModal visible={true} poster={workSharePosterUrl} link={workShareLink} onClose={() => setShowShareWork(false)} />}
     </View>
   );
 };

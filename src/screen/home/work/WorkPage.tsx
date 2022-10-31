@@ -21,6 +21,7 @@ interface VideoPageProps {
   shouldLoad?: boolean;
   onShowSPU: (id: number) => void;
   onShowComment?: (mainId: string, focus?: boolean) => void;
+  onShowShare?: (mainId: string) => void;
 }
 
 const VideoPage: React.FC<VideoPageProps> = props => {
@@ -34,6 +35,9 @@ const VideoPage: React.FC<VideoPageProps> = props => {
   const [reportedEnd, setReportedEnd] = useState(false); // 是否已经上报过结束播放
   const [loadingLike, setLoadingLike] = useState(false);
   const [loadingCollect, setLoadingCollect] = useState(false);
+
+  // const userId = useSelector((state: RootState) => state.user.myDetail?.userId);
+  // const shareLink = useMemo(() => getShareWorkLink(props.mainId, userId), [props.mainId, userId]);
 
   const isLoggedIn = useIsLoggedIn();
 
@@ -162,6 +166,9 @@ const VideoPage: React.FC<VideoPageProps> = props => {
       }
     }
   }
+  function handleShare() {
+    props.onShowShare && props.onShowShare(props.mainId);
+  }
 
   return (
     <View style={[{width, height}, styles.container]}>
@@ -181,6 +188,49 @@ const VideoPage: React.FC<VideoPageProps> = props => {
                   <Icon name="zuopin_shipin_zanting200" color="#ffffffcc" size={100} />
                 </View>
               ) : null}
+
+              <View style={[styles.bottom]}>
+                <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+                  {/* 发布人 */}
+                  {hasSpu && (
+                    <CustomTouchable activeOpacity={0.5} onPress={openSPU} style={{width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}}>
+                      <View style={[globalStyles.containerRow]}>
+                        <Icon name="zuopin_shangping" color={globalStyleVariables.COLOR_WARNING} size={24} />
+                        <Text style={[globalStyles.fontTertiary, {flex: 1, color: '#fff'}]} numberOfLines={1}>
+                          {workDetail?.spuName}
+                        </Text>
+                      </View>
+                    </CustomTouchable>
+                  )}
+                  {workDetail?.userName && (
+                    <CustomTouchable activeOpacity={0.8} onPress={goAuthor}>
+                      <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@{workDetail?.userName}</Text>
+                    </CustomTouchable>
+                  )}
+                  <View style={{marginVertical: globalStyleVariables.MODULE_SPACE}}>
+                    <Text style={[globalStyles.fontPrimary, {color: '#fff'}]} numberOfLines={5}>
+                      {workDetail?.content}
+                    </Text>
+                  </View>
+                </View>
+                {/* 进度条 */}
+                {/* <View style={{backgroundColor: '#000', height: 2, position: 'relative'}}>
+                    <View style={[styles.progressBar, {backgroundColor: '#999', width: seekedPercent + '%'}]} />
+                    <View style={[styles.progressBar, {backgroundColor: '#fff', width: playPercent + '%'}]} />
+                  </View> */}
+                {/* 下面的框 */}
+                {/* 登录后可见评论框 */}
+                {!!isLoggedIn && (
+                  <CustomTouchable activeOpacity={0.7} onPress={openCommentInput}>
+                    <View style={{backgroundColor: '#000', padding: globalStyleVariables.MODULE_SPACE}}>
+                      <View style={[styles.fakeInputComment]}>
+                        <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.TEXT_COLOR_TERTIARY}]}>说点好听的</Text>
+                      </View>
+                    </View>
+                  </CustomTouchable>
+                )}
+                <View style={{backgroundColor: '#000', height: bottom}} />
+              </View>
               {workDetail && (
                 <View style={styles.side}>
                   <View style={styles.sideItem}>
@@ -225,52 +275,14 @@ const VideoPage: React.FC<VideoPageProps> = props => {
                     <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfCollects}</Text>
                   </View>
                   <View style={styles.sideItem}>
-                    <Icon name="zuopin_share80" size={32} color="#fff" />
+                    <CustomTouchable onPress={handleShare}>
+                      <View>
+                        <Icon name="zuopin_share80" size={32} color="#fff" />
+                      </View>
+                    </CustomTouchable>
                   </View>
                 </View>
               )}
-              <View style={[styles.bottom]}>
-                <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
-                  {/* 发布人 */}
-                  {hasSpu && (
-                    <CustomTouchable activeOpacity={0.5} onPress={openSPU} style={{width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}}>
-                      <View style={[globalStyles.containerRow]}>
-                        <Icon name="zuopin_shangping" color={globalStyleVariables.COLOR_WARNING} size={24} />
-                        <Text style={[globalStyles.fontTertiary, {flex: 1, color: '#fff'}]} numberOfLines={1}>
-                          {workDetail?.spuName}
-                        </Text>
-                      </View>
-                    </CustomTouchable>
-                  )}
-                  {workDetail?.userName && (
-                    <CustomTouchable activeOpacity={0.8} onPress={goAuthor}>
-                      <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@{workDetail?.userName}</Text>
-                    </CustomTouchable>
-                  )}
-                  <View style={{marginVertical: globalStyleVariables.MODULE_SPACE}}>
-                    <Text style={[globalStyles.fontPrimary, {color: '#fff'}]} numberOfLines={5}>
-                      {workDetail?.content}
-                    </Text>
-                  </View>
-                </View>
-                {/* 进度条 */}
-                {/* <View style={{backgroundColor: '#000', height: 2, position: 'relative'}}>
-                    <View style={[styles.progressBar, {backgroundColor: '#999', width: seekedPercent + '%'}]} />
-                    <View style={[styles.progressBar, {backgroundColor: '#fff', width: playPercent + '%'}]} />
-                  </View> */}
-                {/* 下面的框 */}
-                {/* 登录后可见评论框 */}
-                {!!isLoggedIn && (
-                  <CustomTouchable activeOpacity={0.7} onPress={openCommentInput}>
-                    <View style={{backgroundColor: '#000', padding: globalStyleVariables.MODULE_SPACE}}>
-                      <View style={[styles.fakeInputComment]}>
-                        <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.TEXT_COLOR_TERTIARY}]}>说点好听的</Text>
-                      </View>
-                    </View>
-                  </CustomTouchable>
-                )}
-                <View style={{backgroundColor: '#000', height: bottom}} />
-              </View>
             </View>
           </CustomTouchable>
         </SafeAreaView>

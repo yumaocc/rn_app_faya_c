@@ -156,6 +156,18 @@ export function isReachBottom(e: NativeSyntheticEvent<NativeScrollEvent>, offset
   return offsetY + scrollViewHeight + offset >= contentSizeHeight;
 }
 
+async function hasAndroidStoragePermission() {
+  const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+
+  const hasPermission = await PermissionsAndroid.check(permission);
+  if (hasPermission) {
+    return true;
+  }
+
+  const status = await PermissionsAndroid.request(permission);
+  return status === 'granted';
+}
+
 export async function saveImageToGallery(uri: string) {
   const isRemote = uri.startsWith('http');
   if (isRemote) {
@@ -164,11 +176,15 @@ export async function saveImageToGallery(uri: string) {
       return await CameraRoll.save(uri, {type: 'auto'});
     } else {
       const fileName = getFileNameByPath(uri);
-      const toPath = RNFS.DownloadDirectoryPath + '/' + fileName;
+      const toPath = RNFS.CachesDirectoryPath + '/' + fileName;
       await RNFS.downloadFile({
         fromUrl: uri,
         toFile: toPath,
       }).promise;
+      const hasPermission = await hasAndroidStoragePermission();
+      if (!hasPermission) {
+        return Promise.reject(new Error('请允许发芽访问您的相册'));
+      }
       return await CameraRoll.save(toPath, {type: 'auto'});
     }
   } else {
