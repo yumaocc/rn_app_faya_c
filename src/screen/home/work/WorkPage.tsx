@@ -195,9 +195,9 @@ const VideoPage: React.FC<VideoPageProps> = props => {
                     <CustomTouchable onPress={handleLike}>
                       <View>
                         {workDetail?.liked === BoolEnum.TRUE ? (
-                          <Icon name="zuopin_zan80" size={40} color={globalStyleVariables.COLOR_LIKE_RED} />
+                          <Icon name="zuopin_zan80" size={32} color={globalStyleVariables.COLOR_LIKE_RED} />
                         ) : (
-                          <Icon name="zuopin_zan80" size={40} color="#fff" />
+                          <Icon name="zuopin_zan80" size={32} color="#fff" />
                         )}
                       </View>
                     </CustomTouchable>
@@ -206,7 +206,7 @@ const VideoPage: React.FC<VideoPageProps> = props => {
                   <View style={styles.sideItem}>
                     <CustomTouchable onPress={onOpenComment}>
                       <View>
-                        <Icon name="zuopin_pinglun80" size={40} color="#fff" />
+                        <Icon name="zuopin_pinglun80" size={32} color="#fff" />
                       </View>
                     </CustomTouchable>
                     <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfComments}</Text>
@@ -215,16 +215,16 @@ const VideoPage: React.FC<VideoPageProps> = props => {
                     <CustomTouchable onPress={handleCollect}>
                       <View>
                         {workDetail?.collected === BoolEnum.TRUE ? (
-                          <Icon name="zuopin_shoucang80" size={40} color={globalStyleVariables.COLOR_COLLECT_YELLOW} />
+                          <Icon name="zuopin_shoucang80" size={32} color={globalStyleVariables.COLOR_COLLECT_YELLOW} />
                         ) : (
-                          <Icon name="zuopin_shoucang80" size={40} color="#fff" />
+                          <Icon name="zuopin_shoucang80" size={32} color="#fff" />
                         )}
                       </View>
                     </CustomTouchable>
                     <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfCollects}</Text>
                   </View>
                   <View style={styles.sideItem}>
-                    <Icon name="zuopin_share80" size={40} color="#fff" />
+                    <Icon name="zuopin_share80" size={32} color="#fff" />
                   </View>
                 </View>
               )}
