@@ -5,7 +5,7 @@ import Icon from '../../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useAppState, useCommonDispatcher, useDeviceDimensions, useIsLoggedIn} from '../../../helper/hooks';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import {FakeNavigation, WorkDetailF, WorkF, WorkType} from '../../../models';
+import {FakeNavigation, WorkDetailF, WorkType} from '../../../models';
 import * as api from '../../../apis';
 import CustomTouchable from '../../../component/CustomTouchable';
 import {BoolEnum} from '../../../fst/models';
@@ -13,7 +13,10 @@ import Player from './Player';
 import PhotoPlayer from './PhotoPlayer';
 
 interface VideoPageProps {
-  item: WorkF;
+  // item: WorkF;
+  videoUrl?: string;
+  coverImage: string;
+  mainId: string;
   paused: boolean;
   shouldLoad?: boolean;
   onShowSPU: (id: number) => void;
@@ -44,13 +47,13 @@ const VideoPage: React.FC<VideoPageProps> = props => {
 
   useEffect(() => {
     if (shouldLoad) {
-      if (videoUrl !== props.item.videoUrl) {
-        setVideoUrl(props.item.videoUrl);
+      if (videoUrl !== props.videoUrl) {
+        setVideoUrl(props.videoUrl);
       }
     } else {
       // setVideoUrl('');
     }
-  }, [shouldLoad, props.item.videoUrl, videoUrl]);
+  }, [shouldLoad, props.videoUrl, videoUrl]);
 
   useEffect(() => {
     if (isFocused && appState === 'active' && !props.paused) {
@@ -62,9 +65,9 @@ const VideoPage: React.FC<VideoPageProps> = props => {
 
   useEffect(() => {
     if (!workDetail && !props.paused) {
-      api.work.getWorkDetail(props.item.mainId).then(setWorkDetail).catch(commonDispatcher.error);
+      api.work.getWorkDetail(props.mainId).then(setWorkDetail).catch(commonDispatcher.error);
     }
-  }, [props.paused, props.item, workDetail, commonDispatcher]);
+  }, [props.paused, props.mainId, workDetail, commonDispatcher]);
 
   useEffect(() => {
     setPaused(props.paused);
@@ -134,11 +137,11 @@ const VideoPage: React.FC<VideoPageProps> = props => {
   }
 
   function onOpenComment() {
-    props.onShowComment && props.onShowComment(props.item.mainId);
+    props.onShowComment && props.onShowComment(props.mainId);
   }
 
   function openCommentInput() {
-    props.onShowComment && props.onShowComment(props.item.mainId, true);
+    props.onShowComment && props.onShowComment(props.mainId, true);
   }
   async function handleCollect() {
     if (!loadingCollect && !!workDetail) {
@@ -162,11 +165,9 @@ const VideoPage: React.FC<VideoPageProps> = props => {
 
   return (
     <View style={[{width, height}, styles.container]}>
-      {workDetail?.type === WorkType.Video && (
-        <Player style={[styles.full]} videoUri={videoUrl} paused={paused} poster={props.item.coverImage} onLoad={handleLoad} onEnd={handleEnd} />
-      )}
+      {workDetail?.type === WorkType.Video && <Player style={[styles.full]} videoUri={videoUrl} paused={paused} poster={props.coverImage} onLoad={handleLoad} onEnd={handleEnd} />}
       {workDetail?.type === WorkType.Photo && <PhotoPlayer style={[styles.full]} files={workDetail?.fileList} paused={paused} onLoad={handleLoad} onEnd={handleEnd} />}
-      {showPoster && <Image style={[styles.full]} source={{uri: props.item.coverImage}} resizeMode="cover" />}
+      {showPoster && <Image style={[styles.full]} source={{uri: props.coverImage}} resizeMode="cover" />}
 
       {/* 视频上覆盖的所有页面 */}
 

@@ -19,7 +19,8 @@ const MiddleButton: React.FC = () => {
       });
     } else {
       // navigation.navigate('ShootVideo');
-      navigation.navigate('Scanner');
+      // navigation.navigate('Scanner');
+      navigation.navigate('SingleWorkDetail', {id: '1575447541069455360'});
       // navigation.navigate('ScanResult', {content: '你好啊'});
       // navigation.navigate('TestPage');
       // navigation.navigate('SearchSPU');

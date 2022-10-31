@@ -83,7 +83,17 @@ const WorkDetailListOther: React.FC = () => {
   function renderVideoPage(info: ListRenderItemInfo<WorkF>) {
     const {item, index} = info;
     const shouldLoad = index === currentIndex || index === currentIndex + 1 || index === currentIndex - 1;
-    return <WorkPage item={item} paused={currentIndex !== index} shouldLoad={shouldLoad} onShowSPU={openSPU} onShowComment={handleOpenComment} />;
+    return (
+      <WorkPage
+        videoUrl={item.videoUrl}
+        coverImage={item.coverImage}
+        mainId={item.mainId}
+        paused={currentIndex !== index}
+        shouldLoad={shouldLoad}
+        onShowSPU={openSPU}
+        onShowComment={handleOpenComment}
+      />
+    );
   }
 
   return (

@@ -84,6 +84,8 @@ export interface WorkDetailF {
   userName: string;
   avatar: string;
   content: string;
+  videoUrl: string;
+  coverImage: string;
 }
 
 export interface VideoInfo {
