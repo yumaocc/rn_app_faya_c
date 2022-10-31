@@ -19,6 +19,8 @@ const Login: React.FC = () => {
   const [verifyCodeSend, setVerifyCodeSend] = useState(false);
   const [resendAfter, setResendAfter] = useState(0);
   const suggestPhone = useSelector((state: RootState) => state.common.config.phone);
+  const shareUserId = useSelector((state: RootState) => state.common.config.shareUserId);
+  const touristsSnowId = useSelector((state: RootState) => state.common.config.touristId);
 
   const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
@@ -82,7 +84,12 @@ const Login: React.FC = () => {
   async function login() {
     setLoginState(LoginState.Loading);
     try {
-      const res = await api.user.userLogin(phone, code);
+      const res = await api.user.userLogin({
+        telephone: phone,
+        code,
+        shareSnowId: shareUserId,
+        touristsSnowId,
+      });
       cache.user.setPhone(phone);
       if (res) {
         setLoginState(LoginState.Success);

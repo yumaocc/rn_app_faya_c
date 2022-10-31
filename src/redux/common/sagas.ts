@@ -1,4 +1,4 @@
-import {all, put, takeLatest} from 'redux-saga/effects';
+import {all, call, put, takeLatest} from 'redux-saga/effects';
 
 import {Actions as UserActions} from '../user/actions';
 import {Actions} from './actions';
@@ -10,7 +10,7 @@ import {wait} from '../../fst/helper';
 import {ActionWithPayload} from '../types';
 import {getItem, setItem} from '../../helper/cache/helper';
 import {SystemConfig} from '../../models';
-// import * as api from '../../apis';
+import * as api from '../../apis';
 // import {UserInfo} from '../../models';
 
 function* initApp(): any {
@@ -25,6 +25,12 @@ function* initApp(): any {
     shareUserId: (yield getItem('shareUserId')) || null,
     touristId: Number(yield getItem('touristId')) || null,
   };
+  if (!config.touristId) {
+    try {
+      const touristId = yield call(api.user.getTouristId);
+      config.touristId = touristId;
+    } catch (error) {}
+  }
   yield put(Actions.setConfig(config));
 
   resetToken(config.token);

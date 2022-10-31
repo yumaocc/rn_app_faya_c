@@ -18,11 +18,8 @@ import {
 import {Platform} from 'react-native';
 import {SearchParam} from '../fst/models';
 
-export async function userLogin(phone: string, code: string): Promise<UserInfo> {
-  return await post<UserInfo, {code: string; telephone: string}>('/user/login', {
-    telephone: phone,
-    code,
-  });
+export async function userLogin(params: SearchParam): Promise<UserInfo> {
+  return await post<UserInfo, SearchParam>('/user/login', params);
 }
 
 // 发送验证码
@@ -124,6 +121,14 @@ export async function getWithdrawRecord(params: SearchParam): Promise<Withdrawal
 export async function modifyProfile(params: ModifyProfileForm): Promise<boolean> {
   return await post('/user/modify/info', params);
 }
+
+// 注册达人
 export async function agentRegister(shareSnowId: string): Promise<number> {
   return await post('/user/become/talent', {shareSnowId});
+}
+
+// 游客id
+export async function getTouristId(): Promise<string> {
+  const res = await post<{touristsSnowId: string}, unknown>('/user/tourists/create/one');
+  return res?.touristsSnowId;
 }

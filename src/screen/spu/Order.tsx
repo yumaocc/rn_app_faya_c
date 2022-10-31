@@ -26,6 +26,7 @@ const Order: React.FC = () => {
   const currentSkuIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
   // const payOrder = useSelector((state: RootState) => state.order.payOrder);
   const token = useSelector((state: RootState) => state.common.config.token);
+  const shareUserId = useSelector((state: RootState) => state.common.config.shareUserId);
 
   const [isPaying, setIsPaying] = useState(false);
   const [checkOrderId, setCheckOrderId] = useState<string>('');
@@ -236,6 +237,7 @@ const Order: React.FC = () => {
   }
   async function submit() {
     const formData = cleanOrderForm(form);
+    formData.agentUserId = shareUserId; // 达人分享
     const {channel} = formData;
     const errorMsg = check(formData);
     if (bookingModel && canBooking) {
