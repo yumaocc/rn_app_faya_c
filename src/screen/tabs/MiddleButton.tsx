@@ -17,7 +17,6 @@ const MiddleButton: React.FC = () => {
         to: 'ShootVideo',
         redirect: true,
       });
-      // navigation.navigate('Invite', {userId: '1574958869138587643'});
     } else {
       navigation.navigate('ShootVideo');
       // navigation.navigate('Scanner');

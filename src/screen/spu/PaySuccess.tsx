@@ -20,7 +20,7 @@ const PaySuccess: React.FC = () => {
           <Text style={{marginTop: 10}}>支付成功</Text>
           <View style={[globalStyles.containerRow, {marginTop: 30}]}>
             <Button type="ghost" title="继续购买" onPress={backToTab} style={styles.button} />
-            <Button title="查看订单" type="primary" style={[{marginLeft: 20}, styles.button]} onPress={() => navigation.replace('OrderList')} />
+            <Button title="查看订单" type="primary" style={[{marginLeft: 20}, styles.button]} onPress={() => navigation.navigate('OrderList')} />
           </View>
         </View>
       </ScrollView>
