@@ -1,3 +1,4 @@
+import {cleanPrivateProperty} from '../fst/helper';
 import {SearchParam} from '../fst/models';
 import {OrderBookingForm, OrderF} from '../models';
 import {OrderDetailF} from '../models';
@@ -20,7 +21,7 @@ export async function checkOrderPayState(id: string, type = 0): Promise<{status:
 }
 
 export async function orderRefund(params: OrderRefundForm): Promise<boolean> {
-  return await post('/order/refund', params);
+  return await post('/order/refund', cleanPrivateProperty(params));
 }
 export async function getOrderTempId(): Promise<string> {
   return await post('/order/paid/temp/id');

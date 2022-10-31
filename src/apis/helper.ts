@@ -16,8 +16,6 @@ const headers: AppHeader = {
 };
 axios.defaults.headers.common = {...currentHeader, ...headers, 'Content-Type': 'application/json'};
 
-// console.log('headers', headers);
-
 axios.defaults.timeout = REQUEST_TIMEOUT;
 
 export function resetBaseURL(baseURL: string) {
@@ -52,26 +50,17 @@ export function decrypt(str: string) {
 }
 
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
-  config.headers = {
-    ...config.headers,
-    'Content-Type': 'application/json',
-  };
-  config.data = encrypt(config.data);
-  // console.log(config.headers);
   console.log(config);
-  // test();
-  // console.log('ccccc=====', config.data);
   return config;
 });
 
 axios.interceptors.response.use((response: AxiosResponse) => {
   let {data} = response;
-  console.log(data);
   console.log(`接口： ${response.config.url}请求成功：`);
   if (!response.data?.data?.content) {
-    console.log('response data:', response.data);
+    // console.log('response data:', response.data);
   } else {
-    console.log('response content: ', response.data.data.content);
+    // console.log('response content: ', response.data.data.content);
   }
 
   switch (data.code) {
@@ -91,15 +80,25 @@ export async function getPaged<T>(url: string, config?: AxiosRequestConfig): Pro
   throw new CustomError(res.data.msg, res.data.code);
 }
 
-export async function postPaged<T, P>(url: string, data?: P, config?: AxiosRequestConfig): Promise<PagedData<T>> {
-  const res = await axios.post<Response<T>>(url, data, config);
+export async function postPaged<T, P>(url: string, data?: P, config: AxiosRequestConfig = {}): Promise<PagedData<T>> {
+  const mergedConfig = {headers: {'Content-Type': 'application/json'}, ...config};
+  const contentType = mergedConfig.headers['Content-Type'];
+  let requestData = data;
+  const needEncrypt = contentType === 'application/json';
+
+  if (needEncrypt && requestData) {
+    requestData = encrypt(requestData);
+  }
+  const res = await axios.post<Response<T>>(url, requestData, mergedConfig);
   if (res.data.code === 1) {
     const data = res.data.data;
-    return {
-      ...data,
-      content: decrypt(data.content),
-    };
-    // return res.data.data;
+    if (needEncrypt) {
+      return {
+        ...data,
+        content: decrypt(data.content),
+      };
+    }
+    return res.data.data;
   }
   throw new CustomError(res.data.msg, res.data.code);
 }

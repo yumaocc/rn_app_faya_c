@@ -51,7 +51,7 @@ const Refund: React.FC = () => {
       });
       if (result?.assets?.length) {
         const files = result.assets.map(asset => {
-          console.log(asset.fileSize);
+          // console.log(asset.fileSize);
           return {
             url: asset.uri,
             fileName: getFileNameByPath(asset.uri),

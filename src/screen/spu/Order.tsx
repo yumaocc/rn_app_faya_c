@@ -13,7 +13,7 @@ import {RootState} from '../../redux/reducers';
 import * as api from '../../apis';
 import {cleanOrderForm} from '../../helper/order';
 import {useNavigation} from '@react-navigation/native';
-import {useSearch} from '../../fst/hooks';
+import {useSearch, useWhyDidYouUpdate} from '../../fst/hooks';
 import {OrderForm} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
 import {getAliPayUrl, getWechatPayUrl} from '../../constants';
@@ -62,7 +62,7 @@ const Order: React.FC = () => {
     return (sku as SKUDetail)?.id;
   }, [canBooking, currentSkuIsPackage, sku]);
 
-  const payChannel = useMemo(() => form.channel, [form]);
+  const payChannel = useMemo(() => form.channel, [form.channel]);
 
   // 可以切换的sku
   const flatSKUList = useMemo(() => {
@@ -139,12 +139,14 @@ const Order: React.FC = () => {
     return sku?.userCommissionYuan || '';
   }, [sku]);
 
+  // useWhyDidYouUpdate('Order', {form, sku, spu, currentSkuIsPackage, totalPrice, totalSaved, shouldPay, canUseCoupons, commission});
+
   // 总金额变更导致当前优惠券不满足条件，则取消优惠券
   useEffect(() => {
     if (currentSelectedCoupon && currentSelectedCoupon.amountThreshold > totalPrice) {
       setFormField('couponId', null);
     }
-  }, [currentSelectedCoupon, form, setFormField, totalPrice]);
+  }, [currentSelectedCoupon, setFormField, totalPrice]);
 
   // 获取封面
   const poster = useMemo(() => {
@@ -165,13 +167,13 @@ const Order: React.FC = () => {
   }, [sku, currentSkuIsPackage, setFormField]);
 
   useEffect(() => {
-    if (!form.name) {
-      setFormField('name', commonConfig.buyUserName || '');
+    if (!form.name && commonConfig.buyUserName) {
+      setFormField('name', commonConfig.buyUserName);
     }
-    if (!form.telephone) {
-      setFormField('telephone', commonConfig.buyUserPhone || '');
+    if (!form.telephone && commonConfig.buyUserPhone) {
+      setFormField('telephone', commonConfig.buyUserPhone);
     }
-  }, [commonConfig, form, setFormField]);
+  }, [commonConfig, form.name, form.telephone, setFormField]);
 
   useEffect(() => {
     async function f() {
@@ -206,7 +208,7 @@ const Order: React.FC = () => {
         })
         .finally(() => {});
     }
-  }, [appState, isPaying, commonDispatcher, navigation, checkOrderId, checkOrderType]);
+  }, [appState, checkOrderId, checkOrderType, commonDispatcher, isPaying, navigation]);
 
   // 用户换了套餐，这里同步到redux
   function handleSKUChange(e = '') {
