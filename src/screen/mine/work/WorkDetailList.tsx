@@ -3,19 +3,25 @@ import {View, StyleSheet, FlatList, ListRenderItemInfo, StatusBar, RefreshContro
 import {useSelector} from 'react-redux';
 import {NavigationBar, Popup} from '../../../component';
 import {useRefCallback} from '../../../fst/hooks';
-import {useDeviceDimensions, useParams, useSPUDispatcher, useUserDispatcher} from '../../../helper/hooks';
-import {PackageDetail, SKUDetail, WorkF} from '../../../models';
+import {useCommonDispatcher, useDeviceDimensions, useIsLoggedIn, useParams, useSPUDispatcher, useUserDispatcher} from '../../../helper/hooks';
+import {FakeNavigation, PackageDetail, SKUDetail, WorkF} from '../../../models';
 import {RootState} from '../../../redux/reducers';
 // import BuyBar from '../../spu/BuyBar';
 import SPUDetailView from '../../spu/SPUDetailView';
 import WorkPage from '../../home/work/WorkPage';
 import CommentModal, {CommentModalRef} from '../../home/work/CommentModal';
-// import * as api from '../../../apis';
+import BuyBar from '../../spu/BuyBar';
+import * as api from '../../../apis';
+import {goLogin} from '../../../router/Router';
+import {BoolEnum} from '../../../fst/models';
+import {useNavigation} from '@react-navigation/native';
 
 const WorkDetailList: React.FC = () => {
   const params = useParams<{index: number}>();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showSPU, setShowSPU] = useState(false);
+  const [isCollect, setIsCollect] = useState(false);
+  const [isJoinShowCase, setIsJoinShowCase] = useState(false);
 
   const currentTabType = useSelector((state: RootState) => state.user.currentTabType);
   const works = useSelector((state: RootState) => state.user.myWorks[currentTabType]);
@@ -28,10 +34,12 @@ const WorkDetailList: React.FC = () => {
   const {height} = useDeviceDimensions();
   const [flatListRef, setRef, isReady] = useRefCallback(null);
   const commentModalRef = useRef<CommentModalRef>(null);
+  const navigation = useNavigation<FakeNavigation>();
+  const isLoggedIn = useIsLoggedIn();
 
-  // const [workDispatcher] = useWorkDispatcher();
   const [spuDispatcher] = useSPUDispatcher();
   const [userDispatcher] = useUserDispatcher();
+  const [commonDispatcher] = useCommonDispatcher();
 
   useEffect(() => {
     if (currentIndex > videos.length - 3) {
@@ -97,6 +105,60 @@ const WorkDetailList: React.FC = () => {
     );
   }
 
+  function handleCollect() {
+    if (!isLoggedIn) {
+      goLogin();
+    } else {
+      if (isCollect || !currentSPU) {
+        return;
+      }
+      const {collected} = currentSPU;
+      const currentIsCollect = collected === BoolEnum.TRUE;
+      api.spu
+        .collectSPU(currentSPU?.id)
+        .then(() => {
+          setIsCollect(false);
+          commonDispatcher.info(currentIsCollect ? '已取消收藏' : '收藏成功');
+          spuDispatcher.changeCurrentSPU({...currentSPU, collected: currentIsCollect ? BoolEnum.FALSE : BoolEnum.TRUE});
+        })
+        .catch(() => {
+          setIsCollect(false);
+        });
+    }
+  }
+
+  function handleJoinShowCase() {
+    if (!isLoggedIn) {
+      goLogin();
+    } else {
+      if (isJoinShowCase || !currentSPU) {
+        return;
+      }
+      const {showcaseJoined} = currentSPU;
+      const currentIsShowCase = showcaseJoined === BoolEnum.TRUE;
+      api.spu
+        .joinToShowCase(currentSPU?.id)
+        .then(() => {
+          setIsJoinShowCase(false);
+          commonDispatcher.info(currentIsShowCase ? '已取消展示' : '展示成功');
+          spuDispatcher.changeCurrentSPU({...currentSPU, showcaseJoined: currentIsShowCase ? BoolEnum.FALSE : BoolEnum.TRUE});
+        })
+        .catch(() => {
+          // console.log(e);
+          setIsJoinShowCase(false);
+        });
+    }
+  }
+
+  const handleBuy = useCallback(() => {
+    setShowSPU(false);
+    if (!isLoggedIn) {
+      goLogin();
+    } else {
+      navigation.navigate('Order');
+    }
+  }, [isLoggedIn, navigation]);
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
@@ -123,7 +185,7 @@ const WorkDetailList: React.FC = () => {
             <ScrollView style={{flex: 1}} bounces={false}>
               <SPUDetailView currentSelect={currentSKU} spu={currentSPU} isPackage={currentSKUIsPackage} onChangeSelect={handleChangeSKU} />
             </ScrollView>
-            {/* <BuyBar spu={currentSPU} sku={currentSKU} onBuy={handleBuy} /> */}
+            <BuyBar spu={currentSPU} sku={currentSKU} onBuy={handleBuy} onCollect={handleCollect} onAddToShopWindow={handleJoinShowCase} />
           </View>
         </Popup>
       )}
