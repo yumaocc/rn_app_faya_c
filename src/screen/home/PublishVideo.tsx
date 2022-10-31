@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Text, StyleSheet, StatusBar} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {Button, NavigationBar} from '../../component';
 import {useCommonDispatcher} from '../../helper/hooks';
@@ -10,6 +10,7 @@ import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {getValidPercent} from '../../fst/helper';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../models';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const PublishVideo: React.FC = () => {
   const publishConfig = useSelector((state: RootState) => state.work.publishConfig);
@@ -92,7 +93,7 @@ const PublishVideo: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationBar title="发布" headerLeft={false} canBack={false} />
       <View style={styles.progressContainer}>
         {percent < 100 ? (

@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {View, Text, StyleSheet, StatusBar, ScrollView, NativeSyntheticEvent, NativeScrollEvent, TouchableOpacity, Image, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, NativeSyntheticEvent, NativeScrollEvent, TouchableOpacity, Image, ActivityIndicator} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {NavigationSearchBar} from '../../component';
@@ -11,6 +11,7 @@ import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import Icon from '../../component/Icon';
 import {useNavigation} from '@react-navigation/native';
 import {dictLoadingState} from '../../helper/dictionary';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const SearchSPU: React.FC = () => {
   const [keyword, setKeyword] = React.useState('');
@@ -132,7 +133,7 @@ const SearchSPU: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationSearchBar autoFocus onSearch={handleSearch} />
       <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag" onMomentumScrollEnd={handleScrollEnd}>
         <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, paddingBottom: bottom}}>{list.map(spu => renderSPU(spu))}</View>

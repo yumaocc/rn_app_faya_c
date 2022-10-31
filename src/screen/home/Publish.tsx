@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Image, StatusBar} from 'react-native';
+import {View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar, Popup, Switch} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useCommonDispatcher, useWorkDispatcher} from '../../helper/hooks';
 import {BoolEnum} from '../../fst/models';
 import Icon from '../../component/Icon';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const Publish: React.FC = () => {
   const workType = WorkType.Video;
@@ -64,7 +65,7 @@ const Publish: React.FC = () => {
   return (
     <>
       <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
-        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+        <MyStatusBar />
         <NavigationBar title="发布" style={{backgroundColor: '#fff'}} />
         <ScrollView style={{flex: 1}} keyboardShouldPersistTaps="never">
           <View>

@@ -1,10 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useRef} from 'react';
-import {View, Text, StyleSheet, StatusBar, ScrollView, TextInput, TouchableOpacity, Image, RefreshControl, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Image, RefreshControl, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import {NavigationBar} from '../../../component';
 import Icon from '../../../component/Icon';
+import MyStatusBar from '../../../component/MyStatusBar';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useLog} from '../../../fst/hooks';
 import {useParams, useSPUDispatcher} from '../../../helper/hooks';
@@ -136,7 +137,7 @@ const Showcase: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationBar title="橱窗" />
       <View style={styles.searchContainer}>
         <View style={styles.searchBar}>

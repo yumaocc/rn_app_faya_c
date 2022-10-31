@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView, Image, StatusBar} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image} from 'react-native';
 import {Button, NavigationBar} from '../../component';
 import {globalStyles} from '../../constants/styles';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../models';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const PaySuccess: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
@@ -12,7 +13,7 @@ const PaySuccess: React.FC = () => {
   }
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationBar title="支付结果" canBack={false} onBack={backToTab} />
       <ScrollView style={{flex: 1}}>
         <View style={[globalStyles.containerCenter, {marginTop: 60}]}>

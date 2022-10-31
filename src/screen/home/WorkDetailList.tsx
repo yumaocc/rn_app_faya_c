@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {View, StyleSheet, FlatList, ListRenderItemInfo, StatusBar, RefreshControl, ScrollView} from 'react-native';
+import {View, StyleSheet, FlatList, ListRenderItemInfo, RefreshControl, ScrollView} from 'react-native';
 import {useSelector} from 'react-redux';
 import {NavigationBar, Popup} from '../../component';
 import {useRefCallback} from '../../fst/hooks';
@@ -18,6 +18,7 @@ import {goLogin} from '../../router/Router';
 import SPUShareModal from '../mine/agent/SPUShareModal';
 import {getShareSPULink, getShareWorkLink} from '../../helper/order';
 import WorkShareModal from '../mine/agent/WorkShareModal';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const WorkDetailList: React.FC = () => {
   const params = useParams<{index: number}>();
@@ -207,7 +208,7 @@ const WorkDetailList: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+      <MyStatusBar barStyle="light-content" />
       <NavigationBar canBack={true} style={styles.nav} color="#fff" />
       <FlatList
         style={{backgroundColor: '#000', flex: 1}}

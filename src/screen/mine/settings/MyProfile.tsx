@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {View, StyleSheet, StatusBar, Image, TouchableOpacity, Text, TextInput, Platform, ActivityIndicator} from 'react-native';
+import {View, StyleSheet, Image, TouchableOpacity, Text, TextInput, Platform, ActivityIndicator} from 'react-native';
 import {useSelector} from 'react-redux';
 import {NavigationBar, OperateItem, Popup} from '../../../component';
 import Icon from '../../../component/Icon';
@@ -11,6 +11,7 @@ import * as api from '../../../apis';
 import {useForceUpdate} from '../../../fst/hooks';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {getFileNameByPath} from '../../../helper/system';
+import MyStatusBar from '../../../component/MyStatusBar';
 
 const MyProfile: React.FC = () => {
   const userInfo = useSelector((state: RootState) => state.user.myDetail);
@@ -113,7 +114,7 @@ const MyProfile: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationBar title="个人资料" />
 
       <View>

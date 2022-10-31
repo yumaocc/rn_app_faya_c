@@ -18,7 +18,6 @@ const Settings: React.FC = () => {
   return (
     <View style={styles.container}>
       <NavigationBar title="设置" />
-      {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
       <MyStatusBar />
       <ScrollView style={{flex: 1}}>
         <OperateItem label="个人资料" showArrow onPress={() => navigation.navigate('MyProfile')} />

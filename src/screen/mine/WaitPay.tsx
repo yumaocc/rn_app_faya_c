@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo} from 'react';
-import {View, Text, Modal, StyleSheet, TouchableOpacity, ScrollView, Image, Linking, StatusBar} from 'react-native';
+import {View, Text, Modal, StyleSheet, TouchableOpacity, ScrollView, Image, Linking} from 'react-native';
 import {Button, NavigationBar} from '../../component';
 import Icon from '../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -12,6 +12,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import {getAliPayUrl, getWechatPayUrl} from '../../constants';
 import moment from 'moment';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const WaitPay: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
@@ -142,7 +143,7 @@ const WaitPay: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationBar
         title=""
         canBack={false}

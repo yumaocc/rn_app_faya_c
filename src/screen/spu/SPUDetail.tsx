@@ -18,6 +18,7 @@ import SPUShareModal from '../mine/agent/SPUShareModal';
 import {getShareSPULink} from '../../helper/order';
 import {openMap} from '../../helper/system';
 import NavigationModal from '../common/NavigateModal';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const SPUDetail: React.FC = () => {
   const {id} = useParams<{id: number}>();
@@ -194,7 +195,7 @@ const SPUDetail: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      <MyStatusBar barStyle="light-content" />
       {titleOpacity > 0.2 && <NavigationBar title="商品详情" style={[styles.navigation, {opacity: titleOpacity}]} />}
       <ScrollView style={{flex: 1}} onScroll={handleScroll} scrollEventThrottle={16}>
         {spu ? (

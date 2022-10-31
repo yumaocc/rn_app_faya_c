@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, TextInput, StatusBar} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, TextInput} from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {Button, InputNumber, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -14,6 +14,7 @@ import {navigateBack} from '../../router/Router';
 import {moneyToYuan} from '../../fst/helper';
 import Icon from '../../component/Icon';
 import KFModal from '../common/KFModal';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const Refund: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -100,7 +101,7 @@ const Refund: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationBar
         title="退款"
         headerRight={

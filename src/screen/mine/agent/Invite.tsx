@@ -1,11 +1,12 @@
 import React, {useEffect, useMemo} from 'react';
-import {View, Text, StyleSheet, Image, StatusBar} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import {Button, NavigationBar} from '../../../component';
 import * as api from '../../../apis';
 import {useCommonDispatcher, useIsLoggedIn, useParams, useUserDispatcher} from '../../../helper/hooks';
 import {globalStyles} from '../../../constants/styles';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../../models';
+import MyStatusBar from '../../../component/MyStatusBar';
 
 const Invite: React.FC = () => {
   const [inviteCode, setInviteCode] = React.useState<number>(null);
@@ -39,7 +40,7 @@ const Invite: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <MyStatusBar />
       <NavigationBar title="" />
       {success && (
         <View style={globalStyles.containerCenter}>

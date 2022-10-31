@@ -83,7 +83,6 @@ const MyCode: React.FC = () => {
 
   return (
     <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
-      {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
       <MyStatusBar />
       <NavigationBar
         title={

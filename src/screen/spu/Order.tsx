@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal, StatusBar, TextInput, KeyboardAvoidingView, Platform, TextInputProps} from 'react-native';
+import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal, TextInput, KeyboardAvoidingView, Platform, TextInputProps} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from '../../component/Icon';
 import {useSelector} from 'react-redux';
@@ -13,12 +13,13 @@ import {RootState} from '../../redux/reducers';
 import * as api from '../../apis';
 import {cleanOrderForm} from '../../helper/order';
 import {useNavigation} from '@react-navigation/native';
-import {useSearch, useWhyDidYouUpdate} from '../../fst/hooks';
+import {useSearch} from '../../fst/hooks';
 import {OrderForm} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
 import {getAliPayUrl, getWechatPayUrl} from '../../constants';
 import {checkAppInstall} from '../../helper/system';
 import BookingModal from '../../component/BookingModal';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const Order: React.FC = () => {
   const spu = useSelector((state: RootState) => state.spu.currentSPU);
@@ -320,7 +321,7 @@ const Order: React.FC = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: '#f4f4f4', position: 'relative'}}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationBar title="确认订单" style={{backgroundColor: '#fff'}} />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{flex: 1}}>
         <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">

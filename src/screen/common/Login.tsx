@@ -124,7 +124,6 @@ const Login: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
       <MyStatusBar />
       <Text style={styles.title}>登录/注册</Text>
       <View style={styles.form}>

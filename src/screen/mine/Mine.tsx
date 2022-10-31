@@ -101,7 +101,6 @@ const Mine: React.FC = () => {
 
   function renderStatusBar() {
     return <MyStatusBar barStyle="light-content" />;
-    // return Platform.OS === 'ios' ? <StatusBar barStyle={showFixTab ? 'dark-content' : 'light-content'} /> : <StatusBar barStyle="dark-content" backgroundColor="#fff" />;
   }
 
   function loadWork() {

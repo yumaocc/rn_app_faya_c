@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, Text, StyleSheet, StatusBar} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {Button, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useCommonDispatcher, useParams} from '../../helper/hooks';
 import Clipboard from '@react-native-clipboard/clipboard';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const ScanResult: React.FC = () => {
   const params = useParams<{content: string}>();
@@ -18,7 +19,7 @@ const ScanResult: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationBar title="扫描结果" />
       <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, marginTop: 10}}>
         <Text>此内容不是由发芽提供，如需使用，请复制内容</Text>

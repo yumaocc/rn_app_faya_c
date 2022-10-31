@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
-import {View, Image, StyleSheet, StatusBar} from 'react-native';
+import {View, Image, StyleSheet} from 'react-native';
+import MyStatusBar from '../../component/MyStatusBar';
 import {useCommonDispatcher} from '../../helper/hooks';
 // import LottieView from 'lottie-react-native';
 
@@ -15,7 +16,7 @@ const Loading: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+      <MyStatusBar barStyle="light-content" />
       <Image source={require('../../assets/slogan_white.png')} style={styles.slogan} />
       {/* <LottieView style={styles.anim} source={require('../../lotties/loading.json')} autoPlay loop /> */}
     </View>

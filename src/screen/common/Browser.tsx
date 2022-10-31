@@ -1,15 +1,16 @@
 import React from 'react';
-import {View, StyleSheet, StatusBar} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {NavigationBar} from '../../component';
 import {useParams} from '../../helper/hooks';
 import {WebView} from 'react-native-webview';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const Browser: React.FC = () => {
   const {url} = useParams<{url: string}>();
   const [title, setTitle] = React.useState('');
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationBar title={title} />
       <WebView
         source={{uri: url}}

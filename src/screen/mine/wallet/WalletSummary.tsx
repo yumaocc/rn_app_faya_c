@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, ScrollView, StatusBar} from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
@@ -7,6 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useWalletSummary} from '../../../helper/hooks';
 import {FakeNavigation} from '../../../models';
 import Icon from '../../../component/Icon';
+import MyStatusBar from '../../../component/MyStatusBar';
 
 const WalletSummary: React.FC = () => {
   const [showReal, setShowReal] = React.useState(true);
@@ -16,7 +17,7 @@ const WalletSummary: React.FC = () => {
 
   return (
     <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationBar
         title="我的芽"
         headerRight={

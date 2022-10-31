@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {View, Text, StyleSheet, StatusBar, ScrollView, TouchableWithoutFeedback, Image, TouchableHighlight, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Image, TouchableHighlight, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {NavigationBar, OperateItem} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
@@ -9,6 +9,7 @@ import {AgentHomeInfo} from '../../../models';
 import * as api from '../../../apis';
 import {dictAgentLevel} from '../../../helper/dictionary';
 import {getValidPercent} from '../../../fst/helper';
+import MyStatusBar from '../../../component/MyStatusBar';
 
 const Profile: React.FC = () => {
   const [agentInfo, setAgentInfo] = useState<AgentHomeInfo>(null);
@@ -77,7 +78,7 @@ const Profile: React.FC = () => {
   return (
     <View style={styles.container}>
       <NavigationBar title="达人主页" color={navigationColor} style={[{position: 'absolute', top: 0, left: 0, width: '100%', zIndex: 3, backgroundColor: navigationBg}]} />
-      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+      <MyStatusBar barStyle="light-content" />
       <ScrollView style={{flex: 1}} onScroll={handleScroll} scrollEventThrottle={16} contentContainerStyle={{position: 'relative'}} bounces={false}>
         {agentInfo?.level === 1 && <Image source={require('../../../assets/img_darenbg_xinshou.png')} style={styles.cover} />}
         {agentInfo?.level === 2 && <Image source={require('../../../assets/img_darenbg_jinjie.png')} style={styles.cover} />}

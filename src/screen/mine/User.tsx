@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, StatusBar, Platform, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
+import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Platform, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {NavigationBar, Tabs} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -14,6 +14,7 @@ import WorkList from './work/WorkList';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {TabsStyles} from '../../component/Tabs';
 import {BoolEnum} from '../../fst/models';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const User: React.FC = () => {
   const {id} = useParams<{id: number}>();
@@ -167,7 +168,7 @@ const User: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+      <MyStatusBar barStyle="light-content" />
       <ScrollView style={{flex: 1}} contentContainerStyle={{position: 'relative'}} onScroll={handleScroll} scrollEventThrottle={16} onMomentumScrollEnd={handleScrollEnd}>
         <Image source={require('../../assets/mine-bg.png')} style={styles.cover} />
         <View style={{flex: 1, paddingBottom: 30}}>

@@ -1,6 +1,6 @@
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect} from 'react';
-import {View, Text, StyleSheet, StatusBar} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {useScanBarcodes, BarcodeFormat} from 'vision-camera-code-scanner';
 import {Button, NavigationBar} from '../../component';
@@ -9,6 +9,7 @@ import {FakeNavigation, URLParseRule} from '../../models';
 import * as api from '../../apis';
 import {useCommonDispatcher} from '../../helper/hooks';
 import qs from 'qs';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const Scanner: React.FC = () => {
   const [active, setActive] = React.useState(true);
@@ -144,7 +145,7 @@ const Scanner: React.FC = () => {
   }
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+      <MyStatusBar barStyle="light-content" />
       <Camera style={styles.camera} device={device} isActive={active} frameProcessorFps={5} frameProcessor={frameProcessor} />
       <NavigationBar title="扫一扫" color="#fff" />
     </View>

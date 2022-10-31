@@ -1,6 +1,6 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useMemo, useRef} from 'react';
-import {View, StyleSheet, NativeSyntheticEvent, Text, TouchableOpacity, Platform, StatusBar} from 'react-native';
+import {View, StyleSheet, NativeSyntheticEvent, Text, TouchableOpacity, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -12,6 +12,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import PublishManager from '../../native-modules/PublishManager';
 import {copyFileUrl, getVideoNameByPath} from '../../helper/system';
 import Icon from '../../component/Icon';
+import MyStatusBar from '../../component/MyStatusBar';
 
 const ShootVideo: React.FC = () => {
   const recorder = useRef<RecorderViewRef>(null);
@@ -128,7 +129,7 @@ const ShootVideo: React.FC = () => {
   return (
     <>
       <View style={styles.container}>
-        <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+        <MyStatusBar barStyle="light-content" />
         <RecorderView
           style={styles.record}
           ref={recorder}

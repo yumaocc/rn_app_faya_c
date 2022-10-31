@@ -151,7 +151,6 @@ const OrderDetail: React.FC = () => {
     <>
       <View style={styles.container}>
         <MyStatusBar />
-        {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
         <NavigationBar
           title="订单详情"
           headerRight={

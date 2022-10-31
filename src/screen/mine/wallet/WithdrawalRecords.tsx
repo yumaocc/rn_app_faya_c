@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
-import {View, Text, StyleSheet, ScrollView, RefreshControl, NativeSyntheticEvent, NativeScrollEvent, ActivityIndicator, StatusBar} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, RefreshControl, NativeSyntheticEvent, NativeScrollEvent, ActivityIndicator} from 'react-native';
 import {NavigationBar} from '../../../component';
 import {LoadingState, WithdrawalRecord} from '../../../models';
 import * as api from '../../../apis';
@@ -7,6 +7,7 @@ import {SearchParam} from '../../../fst/models';
 import {isReachBottom} from '../../../helper/system';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {dictLoadingState, dictWithdrawState} from '../../../helper/dictionary';
+import MyStatusBar from '../../../component/MyStatusBar';
 
 const WithdrawalRecords: React.FC = () => {
   const [list, setList] = React.useState<WithdrawalRecord[]>([]);
@@ -45,7 +46,7 @@ const WithdrawalRecords: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <MyStatusBar />
       <NavigationBar title="提现记录" />
       <ScrollView style={{flex: 1}} refreshControl={<RefreshControl refreshing={false} onRefresh={handleRefresh} />} onMomentumScrollEnd={handleScrollEnd}>
         <View>
