@@ -27,6 +27,8 @@ export type {
   SystemConfig,
   QRCodeScanResult,
   URLParseRule,
+  LocationNavigateInfo,
+  SupportMapAppName,
 } from './common';
 export type {
   WorkTab,

@@ -4,7 +4,7 @@ import ImageResizer from '@bam.tech/react-native-image-resizer';
 import RNFS from 'react-native-fs';
 import {displayName} from '../../../app.json';
 import {APP_SCHEMES} from '../../constants';
-import {AppInstallCheckType, ImageCompressOptions, ImageCompressResult, QRCodeScanResult, URLParseRule} from '../../models';
+import {AppInstallCheckType, ImageCompressOptions, ImageCompressResult, LocationNavigateInfo, QRCodeScanResult, URLParseRule} from '../../models';
 import CameraRoll from '@react-native-community/cameraroll';
 
 export function getVideoNameByPath(videPath: string) {
@@ -275,6 +275,45 @@ export function parseLink(content: string, parseRule: URLParseRule): QRCodeScanR
 // 拨打电话
 
 export function callPhone(phone: string) {
-  console.log('phone', phone);
   Linking.openURL(`tel:${phone}`);
+}
+
+export async function openMap(locationInfo: LocationNavigateInfo, targetAppName: 'amap' | 'baidu' | 'qq' | 'apple') {
+  const {longitude: lon, latitude: lat, name} = locationInfo;
+  let scheme = '';
+  let webUrl = '';
+  switch (targetAppName) {
+    case 'amap':
+      scheme = Platform.select({
+        ios: `iosamap://path?sourceApplication=faya&dev=0&m=0&t=1&dlon=${lon}&dlat=${lat}&dname=${name}`,
+        android: `androidamap://route?sourceApplication=faya&dev=0&m=0&t=1&dlon=${lon}&dlat=${lat}&dname=${name}`,
+      });
+      webUrl = `http://uri.amap.com/navigation?to=${lon},${lat},${name}&mode=bus&coordinate=gaode`;
+      break;
+    case 'baidu':
+      scheme = Platform.select({
+        ios: `baidumap://map/direction?destination=name:${name}|latlng:${lat},${lon}&mode=transit&coord_type=gcj02&src=thirdapp.navi.mybaoxiu.wxy#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end`,
+        android: `baidumap://map/direction?destination=name:${name}|latlng:${lat},${lon}&mode=walking&coord_type=bd09ll&src=thirdapp.navi.mybaoxiu.wxy#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end`,
+      });
+      webUrl = `http://api.map.baidu.com/direction?destination=latlng:${lat},${lon}|name=${name}&mode=transit&coord_type=gcj02&output=html&src=mybaoxiu|wxy`;
+      break;
+    case 'qq':
+      scheme = `qqmap://map/routeplan?type=drive&to=${name}&tocoord=${lat},${lon}&referer=GNYBZ-EL5WD-VDH4F-HFEVA-3COUH-ONBLW`;
+      webUrl = `https://apis.map.qq.com/uri/v1/routeplan?type=drive&to=${name}&tocoord=${lat},${lon}&policy=0&referer=GNYBZ-EL5WD-VDH4F-HFEVA-3COUH-ONBLW`;
+      break;
+    case 'apple':
+      scheme = `http://maps.apple.com/?daddr=${lat},${lon}&dirflg=d`;
+      webUrl = scheme;
+      break;
+  }
+
+  Linking.canOpenURL(scheme)
+    .then(supported => {
+      if (!supported) {
+        return Linking.openURL(webUrl).catch(e => console.warn(e));
+      } else {
+        return Linking.openURL(scheme).catch(e => console.warn(e));
+      }
+    })
+    .catch(err => console.error('An error occurred', err));
 }

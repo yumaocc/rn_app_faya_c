@@ -60,3 +60,12 @@ export interface URLParseRule {
   work: string;
   home: string;
 }
+
+export interface LocationNavigateInfo {
+  latitude: number;
+  longitude: number;
+  name: string;
+  address: string;
+}
+
+export type SupportMapAppName = 'amap' | 'qq' | 'baidu' | 'apple';

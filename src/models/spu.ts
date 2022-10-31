@@ -49,6 +49,8 @@ export interface SPUShop {
   contactPhone: string;
   shopName: string;
   distanceFromMe: string;
+  latitude: number;
+  longitude: number;
 }
 export interface PackageDetail {
   hasShow: BoolEnum;

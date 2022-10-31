@@ -3,7 +3,7 @@ import {PaginationProps} from '@ant-design/react-native/lib/carousel';
 import React, {useEffect, useMemo, useState} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {PackageDetail, SKUBuyNotice, SKUDetail, SKUSaleState, SKUShowInfo, SPUDetailF} from '../../models';
+import {LocationNavigateInfo, PackageDetail, SKUBuyNotice, SKUDetail, SKUSaleState, SKUShowInfo, SPUDetailF} from '../../models';
 import Icon from '../../component/Icon';
 import {useWhyDidYouUpdate} from '../../fst/hooks';
 import {convertSKUBuyNotice} from '../../helper/order';
@@ -14,6 +14,7 @@ interface SPUDetailViewProps {
   spu: SPUDetailF;
   currentSelect: SKUDetail | PackageDetail;
   isPackage: boolean;
+  onNavigation?: (locationInfo: LocationNavigateInfo) => void; // 导航
   onChangeSelect: (sku: SKUDetail | PackageDetail, isPackage: boolean) => void;
 }
 
@@ -68,6 +69,10 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
 
   function handleClick(select: SKUDetail | PackageDetail, isPackage = false) {
     props.onChangeSelect(select, isPackage);
+  }
+
+  function handleNavigation(locationInfo: LocationNavigateInfo) {
+    props.onNavigation && props.onNavigation(locationInfo);
   }
 
   function renderIndicator({current, count}: PaginationProps): React.ReactNode {
@@ -246,6 +251,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         {/* 所有店铺 */}
         <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
           {spu?.shopList?.map((shop, index) => {
+            const showNavigation = shop.latitude && shop.longitude;
             return (
               <View key={index}>
                 {index !== 0 && <View style={[globalStyles.lineHorizontal, {height: StyleSheet.hairlineWidth, marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />}
@@ -260,11 +266,22 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
                     )}
                   </View>
                   <View style={[globalStyles.containerRow, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                    <TouchableOpacity activeOpacity={0.9}>
-                      <View style={styles.shopAction}>
-                        <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
-                      </View>
-                    </TouchableOpacity>
+                    {showNavigation && (
+                      <CustomTouchable
+                        onPress={() =>
+                          handleNavigation({
+                            latitude: shop.latitude,
+                            longitude: shop.longitude,
+                            name: shop.shopName,
+                            address: shop.addressDetail,
+                          })
+                        }>
+                        <View style={styles.shopAction}>
+                          <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
+                        </View>
+                      </CustomTouchable>
+                    )}
+
                     {shop.contactPhone && (
                       <CustomTouchable onPress={() => callPhone(shop.contactPhone)}>
                         <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>

@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, StyleSheet, ScrollView, StatusBar, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useAndroidBack, useCommonDispatcher, useIsLoggedIn, useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
-import {FakeNavigation, PackageDetail, SKUDetail, SPUDetailF} from '../../models';
+import {FakeNavigation, LocationNavigateInfo, PackageDetail, SKUDetail, SPUDetailF} from '../../models';
 
 import SPUDetailView from './SPUDetailView';
 import BuyBar from './BuyBar';
@@ -16,7 +16,8 @@ import Loading from '../../component/Loading';
 import {goLogin} from '../../router/Router';
 import SPUShareModal from '../mine/agent/SPUShareModal';
 import {getShareSPULink} from '../../helper/order';
-import {useLog} from '../../fst/hooks';
+import {openMap} from '../../helper/system';
+import NavigationModal from '../common/NavigateModal';
 
 const SPUDetail: React.FC = () => {
   const {id} = useParams<{id: number}>();
@@ -25,6 +26,8 @@ const SPUDetail: React.FC = () => {
   const [isJoinShowCase, setIsJoinShowCase] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [posterUrl, setPosterUrl] = useState('');
+  const [showSelectMap, setShowSelectMap] = useState(false);
+  const [navigationInfo, setNavigationInfo] = useState<LocationNavigateInfo>(null);
   // const [showPreview, setShowPreview] = useState(false);
 
   const spu: SPUDetailF = useSelector((state: RootState) => state.spu.currentSPU);
@@ -32,8 +35,6 @@ const SPUDetail: React.FC = () => {
   const isPackage: boolean = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
   const userId = useSelector((state: RootState) => state.user.myDetail?.userId);
   const shareLink = useMemo(() => getShareSPULink(id, userId), [id, userId]); // 分享链接
-
-  useLog('shareLink', shareLink);
 
   const isLoggedIn = useIsLoggedIn();
   const [userDispatcher] = useUserDispatcher();
@@ -187,12 +188,21 @@ const SPUDetail: React.FC = () => {
   //   setShowShare(false);
   // }
 
+  async function goNavigation(locationInfo: LocationNavigateInfo) {
+    setNavigationInfo(locationInfo);
+    setShowSelectMap(true);
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       {titleOpacity > 0.2 && <NavigationBar title="商品详情" style={[styles.navigation, {opacity: titleOpacity}]} />}
       <ScrollView style={{flex: 1}} onScroll={handleScroll} scrollEventThrottle={16}>
-        {spu ? <SPUDetailView isPackage={isPackage} currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} /> : <Loading style={{marginTop: 150}} />}
+        {spu ? (
+          <SPUDetailView isPackage={isPackage} currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} onNavigation={goNavigation} />
+        ) : (
+          <Loading style={{marginTop: 150}} />
+        )}
       </ScrollView>
       {!!spu && (
         <View style={[{paddingBottom: safeBottom, backgroundColor: '#fff'}]}>
@@ -206,6 +216,7 @@ const SPUDetail: React.FC = () => {
           <ImageViewer imageUrls={[{url: posterUrl, originUrl: posterUrl}]} index={0} enableSwipeDown={true} onSwipeDown={handleClosePreview} />
         </Modal>
       )} */}
+      {showSelectMap && <NavigationModal visible={true} onClose={() => setShowSelectMap(false)} onSelect={app => openMap(navigationInfo, app)} />}
     </View>
   );
 };
