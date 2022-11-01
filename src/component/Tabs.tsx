@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     // backgroundColor: '#6cf',
     justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     height: 40,
   },
   tabContainer: {

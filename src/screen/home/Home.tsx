@@ -80,7 +80,7 @@ const Home: React.FC = () => {
   }
 
   return (
-    <SafeAreaView edges={['top']} style={{flex: 1, backgroundColor: '#f4f4f4'}}>
+    <SafeAreaView edges={['top']} style={{flex: 1, backgroundColor: '#fff'}}>
       {isFocused && <MyStatusBar barStyle="dark-content" />}
       <View style={styles.container}>
         <View style={{position: 'relative'}}>

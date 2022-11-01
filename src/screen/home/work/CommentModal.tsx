@@ -177,7 +177,15 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
         </ScrollView>
         {/* </KeyboardAvoidingView> */}
         <View style={[globalStyles.containerRow, {padding: globalStyleVariables.MODULE_SPACE}]}>
-          <TextInput value={modalComment} onChangeText={setModalComment} style={styles.commentInput} placeholder="评论一下吧" ref={commentInputRef} />
+          <TextInput
+            value={modalComment}
+            onChangeText={setModalComment}
+            style={styles.commentInput}
+            placeholder="评论一下吧"
+            ref={commentInputRef}
+            returnKeyType="send"
+            onSubmitEditing={sendModelComment}
+          />
           <TouchableOpacity activeOpacity={0.8} style={{}} onPress={sendModelComment}>
             <Text style={[globalStyles.fontPrimary]}>发送</Text>
           </TouchableOpacity>

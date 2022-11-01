@@ -87,18 +87,18 @@ const Publish: React.FC = () => {
             <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('SelectSPU')}>
               <View style={styles.formItem}>
                 <View style={[globalStyles.containerRow]}>
-                  <Icon name="fabu_shangping48" size={24} color={globalStyleVariables.COLOR_PRIMARY} />
-                  <Text style={[globalStyles.fontPrimary, {marginHorizontal: globalStyleVariables.MODULE_SPACE}]}>添加商品</Text>
+                  <Icon name="fabu_shangping48" size={24} color={globalStyleVariables.COLOR_PRIMARY} style={{marginRight: globalStyleVariables.MODULE_SPACE}} />
                   {!spu && (
-                    <View style={[globalStyles.tagWrapper, {backgroundColor: '#0000000D'}]}>
-                      <Text style={[globalStyles.tag, {color: globalStyleVariables.TEXT_COLOR_PRIMARY}]}>添加与视频相关的商品链接</Text>
+                    <View>
+                      <Text style={[globalStyles.fontPrimary]}>添加商品</Text>
+                      <Text style={[globalStyles.fontTertiary, {marginTop: 5}]}>添加与视频相关的商品链接</Text>
                     </View>
                   )}
                 </View>
                 <View style={[globalStyles.containerRow, {flex: 1}]}>
                   {!!spu && (
                     <View style={[globalStyles.containerRow, styles.showSPUContainer]}>
-                      <Image source={{uri: spu.poster}} style={{width: 30, height: 30, borderRadius: 30, marginRight: 5}} />
+                      <Image source={{uri: spu.poster}} style={{width: 30, height: 30, borderRadius: 5, marginRight: 5}} />
                       <View style={{flex: 1}}>
                         <Text style={globalStyles.fontPrimary} numberOfLines={1}>
                           {spu.spuName}
@@ -135,7 +135,7 @@ const Publish: React.FC = () => {
             </TouchableOpacity>
           </View>
         </ScrollView>
-        <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, paddingBottom: globalStyleVariables.MODULE_SPACE}}>
+        <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER, paddingBottom: globalStyleVariables.MODULE_SPACE}}>
           <Button type="primary" title="发布" style={{height: 40}} onPress={handlePublish} />
         </View>
       </SafeAreaView>
@@ -215,7 +215,8 @@ const styles = StyleSheet.create({
   },
   showSPUContainer: {
     paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingRight: 10,
+    paddingLeft: 5,
     width: 200,
     borderRadius: 5,
     backgroundColor: '#0000000D',

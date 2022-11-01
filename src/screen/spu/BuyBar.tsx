@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: '#fff',
+    height: 60,
     paddingHorizontal: globalStyleVariables.MODULE_SPACE,
   },
   actions: {

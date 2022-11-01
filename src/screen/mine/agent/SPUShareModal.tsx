@@ -43,7 +43,7 @@ const SPUShareModal: React.FC<SPUShareModalProps> = props => {
   }
 
   return (
-    <Popup visible={visible} onClose={handleCloseShare} round={10} useNativeDrive={false}>
+    <Popup visible={visible} onClose={handleCloseShare} round={10} useNativeDrive={false} style={{backgroundColor: '#f4f4f4'}}>
       <View style={styles.posterModal}>
         <View>
           <View style={globalStyles.containerCenter}>
@@ -54,16 +54,16 @@ const SPUShareModal: React.FC<SPUShareModalProps> = props => {
           </TouchableOpacity>
         </View>
         <View style={[globalStyles.containerCenter, {marginTop: 20}]}>
-          <View style={{width: 192, height: 394, backgroundColor: '#f4f4f4'}}>
+          <View style={{width: 205, height: 360, backgroundColor: '#f4f4f4'}}>
             {poster && (
               <TouchableWithoutFeedback onPress={handlePreviewPoster}>
-                <Image source={{uri: poster}} style={{width: '100%', height: '100%'}} />
+                <Image source={{uri: poster}} style={{width: '100%', height: '100%'}} resizeMode="contain" />
               </TouchableWithoutFeedback>
             )}
           </View>
 
           <View style={[globalStyles.containerRow, {marginTop: 20}]}>
-            <View style={{marginRight: 20}}>
+            <View style={[globalStyles.containerCenter, {marginRight: 40}]}>
               <TouchableOpacity activeOpacity={0.8} onPress={handleSavePoster}>
                 <View style={[styles.posterButton, {backgroundColor: '#FF6A6A'}]}>
                   <Icon name="zuopin_pop_xiazai" size={24} color="#fff" />
@@ -71,7 +71,7 @@ const SPUShareModal: React.FC<SPUShareModalProps> = props => {
               </TouchableOpacity>
               <Text style={[globalStyles.fontPrimary, {fontSize: 11, marginTop: 7}]}>保存到相册</Text>
             </View>
-            <View>
+            <View style={[globalStyles.containerCenter]}>
               <TouchableOpacity activeOpacity={0.8} onPress={handleCopyLink}>
                 <View style={[styles.posterButton, {backgroundColor: '#8990CD'}]}>
                   <Icon name="zuopin_pop_link" size={24} color="#fff" />
@@ -91,7 +91,7 @@ export default SPUShareModal;
 const styles = StyleSheet.create({
   posterModal: {
     // alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#f4f4f4',
     paddingVertical: 20,
     paddingHorizontal: 15,
   },

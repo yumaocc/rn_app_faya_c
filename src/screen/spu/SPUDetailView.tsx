@@ -169,9 +169,9 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
             <Text style={[globalStyles.fontPrimary, {paddingLeft: 5, fontSize: 12}]}>{spu?.bizName}</Text>
           </View>
           <View style={[globalStyles.containerRow]}>
-            <Text>收藏{spu?.collectAmount}</Text>
-            <Text style={{marginHorizontal: globalStyleVariables.MODULE_SPACE}}>·</Text>
-            <Text>已售{currentSKU?.saleAmount}</Text>
+            <Text style={[globalStyles.fontTertiary]}>收藏{spu?.collectAmount}</Text>
+            <Text style={{marginHorizontal: globalStyleVariables.MODULE_SPACE_SMALLER, color: globalStyleVariables.TEXT_COLOR_TERTIARY}}>·</Text>
+            <Text style={[globalStyles.fontTertiary]}>已售{currentSKU?.saleAmount}</Text>
           </View>
         </View>
         <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
@@ -187,7 +187,16 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
       </View>
 
       {/* 选择套餐 */}
-      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+      <View
+        style={[
+          {
+            marginTop: globalStyleVariables.MODULE_SPACE,
+            backgroundColor: '#fff',
+            paddingTop: globalStyleVariables.MODULE_SPACE_BIGGER,
+            paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER,
+            paddingBottom: 5,
+          },
+        ]}>
         <Text style={globalStyles.fontStrong}>套餐规格</Text>
         <View style={[{flexDirection: 'row', flexWrap: 'wrap', marginTop: globalStyleVariables.MODULE_SPACE}]}>
           {spu?.skuList?.map(sku => {
@@ -201,9 +210,9 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
       </View>
 
       {/* 商品详情 */}
-      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
         <View>
-          <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>{spu?.subName}</Text>
+          <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 22}]}>{spu?.subName}</Text>
         </View>
 
         {spu?.spuHtml && <RichText content={spu.spuHtml} style={{marginTop: 10}} />}
@@ -245,7 +254,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
       </View>
 
       {/* 可用门店 */}
-      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
         <View style={[globalStyles.containerLR, {height: 24}]}>
           <Text style={[globalStyles.fontStrong]}>可用门店{spu?.shopList?.length ? `（${spu?.shopList.length}）` : ''}</Text>
           {spu?.shopList?.length > 1 && <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
@@ -322,6 +331,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: globalStyleVariables.MODULE_SPACE,
     bottom: 44,
+    backgroundColor: '#00000033',
+    padding: 5,
+    borderRadius: 5,
   },
   banner: {
     height: '100%',

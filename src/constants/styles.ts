@@ -151,4 +151,17 @@ export const globalStyles = StyleSheet.create({
     fontSize: 10,
     color: '#FFB443',
   },
+  discountTagWrapper: {
+    padding: 2,
+    flexDirection: 'row',
+    backgroundColor: '#FFB44333',
+    // alignSelf: 'flex-start',
+    alignItems: 'center',
+    borderRadius: 3,
+    // borderRightColor: '#f00',
+  },
+  discountTag: {
+    fontSize: 10,
+    color: globalStyleVariables.COLOR_WARNING_YELLOW,
+  },
 });
