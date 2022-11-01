@@ -31,7 +31,7 @@ const PublishVideo: React.FC = () => {
         setPercent(getValidPercent(percent));
       } else {
         const percent = Math.floor(90 + (uploaded / total) * 10);
-        setPercent(getValidPercent(percent));
+        setPercent(getValidPercent(percent - 1)); // 不到100%，防止出现错误没有提示就显示成功了
       }
     });
     return () => {

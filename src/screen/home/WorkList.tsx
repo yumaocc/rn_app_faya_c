@@ -164,12 +164,12 @@ const styles = StyleSheet.create({
   cover: {
     width: '100%',
     height: 220,
-    borderRadius: 5,
+    borderRadius: 8,
   },
   smallCover: {
     width: '100%',
     height: 124,
-    borderRadius: 5,
+    borderRadius: 8,
   },
   avatar: {
     width: 22,

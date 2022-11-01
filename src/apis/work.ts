@@ -75,3 +75,7 @@ export async function getWorkCommentList(params: SearchParam): Promise<WorkComme
 export async function commentWork(params: SearchParam): Promise<boolean> {
   return await post('/video/comment/one', params);
 }
+
+export async function checkWorkPublishContent(content: string): Promise<boolean> {
+  return await post('/video/main/vod/content/check', {content});
+}

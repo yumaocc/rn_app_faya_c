@@ -250,7 +250,9 @@ const Order: React.FC = () => {
   }
   async function submit() {
     const formData = cleanOrderForm(form);
-    formData.agentUserId = shareUserId; // 达人分享
+    if (shareUserId) {
+      formData.agentUserId = shareUserId; // 达人分享
+    }
     const {channel} = formData;
     const errorMsg = check(formData);
     if (bookingModel && canBooking) {

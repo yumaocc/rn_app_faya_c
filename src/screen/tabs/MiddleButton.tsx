@@ -32,7 +32,6 @@ const MiddleButton: React.FC = () => {
       // navigation.navigate('MyShowcase');
       // navigation.navigate('Certification');
       // navigation.navigate('AddBankCard');
-      // navigation.navigate('Publish');
       // navigation.navigate('MyCode');
       // navigation.navigate('PublishVideo');
       // navigation.navigate('WaitPay');

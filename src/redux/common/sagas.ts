@@ -60,6 +60,10 @@ function* setConfig(action: ActionWithPayload<ActionType, Partial<SystemConfig>>
     if (key === 'token') {
       resetToken(config.token);
     }
+    const val = config[key];
+    if (val === null || val === undefined) {
+      return;
+    }
     setItem(key, config[key]);
   });
 }

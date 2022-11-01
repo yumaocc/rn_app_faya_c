@@ -9,7 +9,6 @@ interface MyStatusBarProps {
 
 const MyStatusBar: React.FC<MyStatusBarProps> = props => {
   const height = StatusBar.currentHeight || 0;
-  console.log('height', height);
 
   return (
     <View style={[styles.container, {height: props.hasHeight ? height : 0}]}>

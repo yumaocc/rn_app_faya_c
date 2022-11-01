@@ -12,6 +12,7 @@ import {useCommonDispatcher, useWorkDispatcher} from '../../helper/hooks';
 import {BoolEnum} from '../../fst/models';
 import Icon from '../../component/Icon';
 import MyStatusBar from '../../component/MyStatusBar';
+import * as api from '../../apis';
 
 const Publish: React.FC = () => {
   const workType = WorkType.Video;
@@ -45,11 +46,15 @@ const Publish: React.FC = () => {
     }
   }
 
-  function handlePublish() {
-    // TODO: 检查必填项
+  async function handlePublish() {
     const res = check();
     if (res) {
       return commonDispatcher.error(res);
+    }
+    try {
+      await api.work.checkWorkPublishContent(content);
+    } catch (error) {
+      return commonDispatcher.error(error);
     }
     workDispatcher.setPublishConfig({
       content: content,

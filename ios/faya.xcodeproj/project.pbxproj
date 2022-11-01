@@ -547,7 +547,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = faya/faya.entitlements;
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = 5Q64234526;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = faya/Info.plist;
@@ -563,7 +563,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fylife.app;
 				PRODUCT_NAME = faya;
-				PROVISIONING_PROFILE_SPECIFIER = "faya main APP profile(dev)";
+				PROVISIONING_PROFILE_SPECIFIER = dev_yue;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -579,7 +579,7 @@
 				CODE_SIGN_ENTITLEMENTS = faya/faya.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = 5Q64234526;
 				INFOPLIST_FILE = faya/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

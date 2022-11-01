@@ -169,8 +169,8 @@ const Mine: React.FC = () => {
                     {!!detail.avatar && <Image style={[styles.avatar]} source={{uri: detail.avatar}} />}
                     {!detail.avatar && <Image style={[styles.avatar]} source={require('../../assets/avatar_def.png')} />}
                     {detail?.level === 1 && <Image source={require('../../assets/tag_darensign_xinshou.png')} style={styles.agentBadge} />}
-                    {detail?.level === 2 && <Image source={require('../../assets/tag_darensign_zishen.png')} style={styles.agentBadge} />}
-                    {detail?.level === 3 && <Image source={require('../../assets/tag_darensign_jinjie.png')} style={styles.agentBadge} />}
+                    {detail?.level === 2 && <Image source={require('../../assets/tag_darensign_jinjie.png')} style={styles.agentBadge} />}
+                    {detail?.level === 3 && <Image source={require('../../assets/tag_darensign_zishen.png')} style={styles.agentBadge} />}
                   </View>
                 </TouchableWithoutFeedback>
               </View>

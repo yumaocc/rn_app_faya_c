@@ -5,16 +5,19 @@ import {NavigationBar, OperateItem} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useCommonDispatcher} from '../../../helper/hooks';
 import Icon from '../../../component/Icon';
-import {AgentHomeInfo} from '../../../models';
+import {AgentHomeInfo, FakeNavigation} from '../../../models';
 import * as api from '../../../apis';
 import {dictAgentLevel} from '../../../helper/dictionary';
 import {getValidPercent} from '../../../fst/helper';
 import MyStatusBar from '../../../component/MyStatusBar';
+import {useNavigation} from '@react-navigation/native';
 
 const Profile: React.FC = () => {
   const [agentInfo, setAgentInfo] = useState<AgentHomeInfo>(null);
   const {bottom} = useSafeAreaInsets();
   const [opacity, setOpacity] = useState(0);
+
+  const navigation = useNavigation<FakeNavigation>();
   const navigationBg = useMemo(() => {
     return `rgba(255, 255, 255, ${opacity})`;
   }, [opacity]);
@@ -115,12 +118,12 @@ const Profile: React.FC = () => {
               {/* 团队情况 */}
               {hasLevel2Right && (
                 <View style={[styles.card]}>
-                  <OperateItem label="我的推广码" showArrow>
+                  <OperateItem label="我的推广码" showArrow onPress={() => navigation.navigate('MyCode', {type: 'share'})}>
                     <Icon name="wode_erweima48" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                   </OperateItem>
                   <View style={globalStyles.lineHorizontal} />
                   <OperateItem label="我的团队">
-                    <Text style={globalStyles.fontPrimary}>{agentInfo?.developNewUsers || '-'}人</Text>
+                    <Text style={globalStyles.fontPrimary}>{agentInfo?.developNewUsers ?? '-'}人</Text>
                   </OperateItem>
                 </View>
               )}
