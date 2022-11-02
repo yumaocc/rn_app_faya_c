@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
   itemContainer: {
     // flex: 1,
     flexDirection: 'row',
-    // backgroundColor: '#6cf',
     paddingHorizontal: globalStyleVariables.MODULE_SPACE,
     width: '100%',
   },
@@ -104,7 +103,6 @@ const styles = StyleSheet.create({
   item: {
     width: '100%',
     marginTop: 10,
-    // backgroundColor: '#6cf',
   },
   cover: {
     width: '100%',

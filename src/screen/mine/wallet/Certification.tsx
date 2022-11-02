@@ -325,12 +325,10 @@ const styles = StyleSheet.create({
   formItemInput: {
     padding: 0,
     fontSize: 15,
-    // paddingRight: globalStyleVariables.MODULE_SPACE,
     textAlign: 'right',
     width: '100%',
     flex: 1,
     height: 20,
-    // backgroundColor: '#6cf',
   },
   idCard: {
     width: 200,

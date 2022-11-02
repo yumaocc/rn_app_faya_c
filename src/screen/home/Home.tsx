@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
   },
   workContainer: {
     flex: 1,
-    // backgroundColor: '#6cf',
   },
 });
 
@@ -161,7 +160,6 @@ const tabStyles: Partial<TabsStyles> = {
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#6cf',
   },
   tab: {
     alignItems: 'flex-end',

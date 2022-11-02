@@ -343,7 +343,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    backgroundColor: '#6cf',
   },
   priceTag: {
     position: 'absolute',

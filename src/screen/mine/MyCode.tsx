@@ -152,8 +152,6 @@ export default MyCode;
 
 const styles = StyleSheet.create({
   codeContainer: {
-    // backgroundColor: '#6cf',
-    // justifyContent: 'center',
     alignItems: 'center',
   },
   avatar: {

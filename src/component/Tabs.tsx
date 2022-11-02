@@ -79,7 +79,6 @@ export default Tabs;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    // backgroundColor: '#6cf',
     justifyContent: 'space-around',
     alignItems: 'flex-end',
     height: 40,

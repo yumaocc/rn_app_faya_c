@@ -196,7 +196,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: globalStyleVariables.MODULE_SPACE,
   },
   search: {
-    // backgroundColor: '#6cf',
     marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER,
     flex: 1,
     height: 35,

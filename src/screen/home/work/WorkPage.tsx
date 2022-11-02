@@ -311,7 +311,6 @@ const styles = StyleSheet.create({
   cover: {
     flex: 1,
     width: '100%',
-    // backgroundColor: '#6cf',
   },
   side: {
     position: 'absolute',

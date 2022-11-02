@@ -212,7 +212,6 @@ const styles = StyleSheet.create({
   },
   record: {
     flex: 1,
-    // backgroundColor: '#6cf',
   },
   coverContainer: {
     position: 'absolute',
@@ -235,6 +234,5 @@ const styles = StyleSheet.create({
   bottomControl: {
     width: 78,
     height: 78,
-    // backgroundColor: '#6cf',
   },
 });

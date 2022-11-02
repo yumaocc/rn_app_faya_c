@@ -26,7 +26,5 @@ MyStatusBar.defaultProps = {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#6cf',
-  },
+  container: {},
 });
