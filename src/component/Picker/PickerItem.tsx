@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {globalStyles} from '../../constants/styles';
 
 export interface PickerItemProps {
   label: string;
@@ -10,7 +11,7 @@ export const PICKER_ITEM_HEIGHT = 40;
 const PickerItem: React.FC<PickerItemProps> = props => {
   return (
     <View style={styles.container}>
-      <Text>{props.label}</Text>
+      <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{props.label}</Text>
     </View>
   );
 };

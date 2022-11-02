@@ -21,6 +21,7 @@ export const globalStyleVariables = {
   MODULE_SPACE_SMALLER: 5,
   MODULE_SPACE_BIGGER: 15,
   COLOR_PAGE_BACKGROUND: '#f4f4f4',
+  RADIUS_MODAL: 10,
 };
 
 export const globalStyles = StyleSheet.create({

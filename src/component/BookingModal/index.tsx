@@ -16,6 +16,7 @@ interface BookingModalProps {
   visible: boolean;
   skuId: number;
   month?: Moment;
+  selectDay?: Moment;
   onClose: () => void;
   onSelect?: (model: BookingModelF) => void;
 }
@@ -26,7 +27,7 @@ const BookingModal: React.FC<BookingModalProps> = props => {
   const [bookingModels, setBookingModels] = useState<DayBookingModelF[]>([]);
   const [currentBookingModel, setCurrentBookingModel] = useState<DayBookingModelF>();
   const [showCalendar, setShowCalendar] = useState(true);
-  const [selectDay, setSelectDay] = useState<Moment>(null);
+  const [selectDay, setSelectDay] = useState<Moment>(props.selectDay || null);
   const [selectShop, setSelectShop] = useState<GroupedShopBookingModel>(null);
   const [selectModal, setSelectModal] = useState<BookingModelF>(null);
 
@@ -109,12 +110,13 @@ const BookingModal: React.FC<BookingModalProps> = props => {
       stockText = '-';
     } else {
       const {usedStock, allStock} = foundModel;
+      const rest = allStock - usedStock;
       if (usedStock >= allStock) {
         stockText = '满';
         isFull = true;
       } else {
         hasRest = true;
-        stockText = `余:${allStock - usedStock}`;
+        stockText = `余:${rest > 999 ? '999+' : rest}`;
       }
     }
     const stockColor = isFull ? globalStyleVariables.COLOR_WARNING_RED : globalStyleVariables.TEXT_COLOR_PRIMARY;
@@ -129,7 +131,9 @@ const BookingModal: React.FC<BookingModalProps> = props => {
           }}>
           <View style={[styles.day]}>
             <Text style={[globalStyles.fontPrimary, {fontSize: dayFontSize, lineHeight: 18, color: dayColor}]}>{isToday ? '今日' : day.date()}</Text>
-            <Text style={[globalStyles.fontPrimary, {fontSize: 12, color: stockColor}]}>{stockText}</Text>
+            <Text numberOfLines={1} style={[globalStyles.fontPrimary, {fontSize: 12, color: stockColor}]}>
+              {stockText}
+            </Text>
           </View>
         </TouchableOpacity>
       );
@@ -161,10 +165,10 @@ const BookingModal: React.FC<BookingModalProps> = props => {
           onPress={() => {
             setShowCalendar(!showCalendar);
           }}>
-          <View style={[globalStyles.containerLR, {paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
+          <View style={[globalStyles.containerLR, {paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
             <View>
               <Text style={[globalStyles.fontSecondary]}>时间</Text>
-              <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{selectDay?.format('YYYY-MM-DD') || '请选择'}</Text>
+              <Text style={[globalStyles.fontPrimary, {fontSize: 20, marginTop: 5}]}>{selectDay?.format('YYYY-MM-DD') || '请选择'}</Text>
             </View>
             <Animated.View style={[styles.arrowIconContainer, {transform: [{rotate: arrowRotation.current.interpolate({inputRange: [0, 1], outputRange: ['0deg', '180deg']})}]}]}>
               <Icon name="all_xiaosanjiaoD24" size={12} color="#000" />
@@ -172,63 +176,68 @@ const BookingModal: React.FC<BookingModalProps> = props => {
           </View>
         </TouchableOpacity>
         {showCalendar && (
-          <View>
-            <View style={styles.dateBar}>
-              <TouchableOpacity onPress={() => setMonth(month.clone().subtract(1, 'month'))}>
-                <Text style={globalStyles.fontPrimary}>上一月</Text>
-              </TouchableOpacity>
-              <View style={[globalStyles.containerCenter, {flex: 1}]}>
-                <Text style={globalStyles.fontPrimary}>{month.format('YYYY年MM月')}</Text>
+          <View style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
+            <View style={[{paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
+              <View style={styles.dateBar}>
+                <TouchableOpacity onPress={() => setMonth(month.clone().subtract(1, 'month'))}>
+                  <Text style={globalStyles.fontPrimary}>上一月</Text>
+                </TouchableOpacity>
+                <View style={[globalStyles.containerCenter, {flex: 1}]}>
+                  <Text style={globalStyles.fontPrimary}>{month.format('YYYY年MM月')}</Text>
+                </View>
+                <TouchableOpacity onPress={() => setMonth(month.clone().add(1, 'month'))}>
+                  <Text style={globalStyles.fontPrimary}>下一月</Text>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity onPress={() => setMonth(month.clone().add(1, 'month'))}>
-                <Text style={globalStyles.fontPrimary}>下一月</Text>
-              </TouchableOpacity>
             </View>
+
             <Calendar value={month} styles={{row: {marginTop: 10}}} startAtSunday={true} renderDay={renderDay} style={styles.calendar} />
           </View>
         )}
-        {!!selectDay && (
-          <View>
-            <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE}]} />
-            <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
-              <Text style={[globalStyles.fontSecondary]}>选择店铺</Text>
+        <View style={[{paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+          {!!selectDay && (
+            <View>
+              <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE}]} />
+              <View style={{paddingTop: globalStyleVariables.MODULE_SPACE}}>
+                <Text style={[globalStyles.fontSecondary]}>选择店铺</Text>
+              </View>
+              <View style={styles.modelItemContainer}>
+                {shops.map(shop => {
+                  const active = shop.id === selectShop?.id;
+                  return (
+                    <TouchableOpacity activeOpacity={0.8} key={shop.id} onPress={() => setSelectShop(shop)}>
+                      <View style={[styles.modelItem, active && styles.modelItemActive]}>
+                        <Text style={[styles.modelText, active && styles.modelTextActive]}>{shop.name}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
             </View>
-            <View style={styles.modelItemContainer}>
-              {shops.map(shop => {
-                const active = shop.id === selectShop?.id;
-                return (
-                  <TouchableOpacity activeOpacity={0.8} key={shop.id} onPress={() => setSelectShop(shop)}>
-                    <View style={[styles.modelItem, active && styles.modelItemActive]}>
-                      <Text style={[styles.modelText, active && styles.modelTextActive]}>{shop.name}</Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
+          )}
+          {!!selectShop && (
+            <View>
+              <View style={[globalStyles.lineHorizontal]} />
+              <View style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
+                <Text style={[globalStyles.fontSecondary]}>选择预约型号</Text>
+              </View>
+              <View style={styles.modelItemContainer}>
+                {selectShop?.list.map(item => {
+                  const active = item.id === selectModal?.id;
+                  return (
+                    <TouchableOpacity activeOpacity={0.8} key={item.id} onPress={() => setSelectModal(item)}>
+                      <View style={[styles.modelItem, active && styles.modelItemActive]}>
+                        <Text style={[styles.modelText, active && styles.modelTextActive]}>{item.name}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
             </View>
-          </View>
-        )}
-        {!!selectShop && (
-          <View>
-            <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE}]} />
-            <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
-              <Text style={[globalStyles.fontSecondary]}>选择预约型号</Text>
-            </View>
-            <View style={styles.modelItemContainer}>
-              {selectShop?.list.map(item => {
-                const active = item.id === selectModal?.id;
-                return (
-                  <TouchableOpacity activeOpacity={0.8} key={item.id} onPress={() => setSelectModal(item)}>
-                    <View style={[styles.modelItem, active && styles.modelItemActive]}>
-                      <Text style={[styles.modelText, active && styles.modelTextActive]}>{item.name}</Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          </View>
-        )}
+          )}
+        </View>
       </ScrollView>
-      <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
+      <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER}}>
         <Button type="primary" disabled={!selectModal} title="保存" style={{height: 40}} onPress={handleSubmit} />
       </View>
     </Popup>
@@ -246,12 +255,12 @@ BookingModal.defaultProps = {
 
 const styles = StyleSheet.create({
   container: {
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    paddingTop: 10,
+    borderTopLeftRadius: globalStyleVariables.RADIUS_MODAL,
+    borderTopRightRadius: globalStyleVariables.RADIUS_MODAL,
   },
   modalTitle: {
     paddingHorizontal: globalStyleVariables.MODULE_SPACE,
+    paddingVertical: 12,
   },
   modelIcon: {
     width: 24,
@@ -282,7 +291,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: globalStyleVariables.MODULE_SPACE,
+    paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER,
     height: 35,
   },
   arrowIconContainer: {
@@ -297,7 +306,8 @@ const styles = StyleSheet.create({
   modelItemContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: globalStyleVariables.MODULE_SPACE,
+    // paddingHorizontal: globalStyleVariables.MODULE_SPACE,
+    marginTop: globalStyleVariables.MODULE_SPACE,
   },
   modelItem: {
     padding: 10,

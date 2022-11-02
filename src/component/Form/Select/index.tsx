@@ -33,7 +33,7 @@ const Select: React.FC<SelectProps> = props => {
 
       return (
         <View style={styles.childrenWrapper}>
-          {!showPlaceholder ? <Text>{foundOption?.label || value}</Text> : <Text style={styles.placeholder}>{props.placeholder}</Text>}
+          {!showPlaceholder ? <Text style={[globalStyles.fontPrimary]}>{foundOption?.label || value}</Text> : <Text style={styles.placeholder}>{props.placeholder}</Text>}
           <Icon name="all_xiaosanjiaoD24" size={12} style={styles.arrow} />
         </View>
       );
@@ -64,15 +64,15 @@ const Select: React.FC<SelectProps> = props => {
         {renderChildren()}
       </TouchableOpacity>
       {show && (
-        <Popup visible={true} onClose={handleClose}>
+        <Popup visible={true} onClose={handleClose} style={styles.popup}>
           <View style={styles.container}>
             <View style={[globalStyles.borderBottom, styles.headerWrapper]}>
               <TouchableOpacity onPress={handleClose}>
-                <Text>取消</Text>
+                <Text style={[globalStyles.fontPrimary]}>取消</Text>
               </TouchableOpacity>
               <Text style={styles.title}>{props.title}</Text>
               <TouchableOpacity onPress={handleOk}>
-                <Text style={styles.ok}>确定</Text>
+                <Text style={[globalStyles.fontPrimary, styles.ok, {fontSize: 15}]}>确定</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.pickerContainer}>
@@ -92,6 +92,11 @@ Select.defaultProps = {
 };
 export default Select;
 const styles = StyleSheet.create({
+  popup: {
+    borderTopLeftRadius: globalStyleVariables.RADIUS_MODAL,
+    borderTopRightRadius: globalStyleVariables.RADIUS_MODAL,
+    overflow: 'hidden',
+  },
   container: {
     backgroundColor: '#fff',
   },
@@ -100,7 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
     backgroundColor: '#fff',

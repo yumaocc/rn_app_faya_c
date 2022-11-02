@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   },
   right: {
     position: 'absolute',
-    right: 0,
+    right: 5,
     top: 0,
     height: '100%',
     flexDirection: 'row',
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
-    paddingLeft: globalStyleVariables.MODULE_SPACE,
+    paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER,
   },
   titleText: {
     fontSize: 16,

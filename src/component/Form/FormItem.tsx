@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   label: {
-    fontSize: 16,
+    fontSize: 15,
   },
   children: {
     flex: 1,

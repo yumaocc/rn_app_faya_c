@@ -20,6 +20,7 @@ import {getAliPayUrl, getWechatPayUrl} from '../../constants';
 import {checkAppInstall} from '../../helper/system';
 import BookingModal from '../../component/BookingModal';
 import MyStatusBar from '../../component/MyStatusBar';
+import moment from 'moment';
 
 const Order: React.FC = () => {
   const spu = useSelector((state: RootState) => state.spu.currentSPU);
@@ -36,6 +37,12 @@ const Order: React.FC = () => {
   const [canUseAlipay, setCanUseAlipay] = useState(false);
   const [showBooking, setShowBooking] = useState(false);
   const [bookingModel, setBookingModel] = useState<BookingModelF>(null);
+  const bookingDate = useMemo(() => {
+    if (!bookingModel?.stockDateInt) {
+      return null;
+    }
+    return moment(bookingModel.stockDateInt, 'YYYYMMDD');
+  }, [bookingModel]);
   const [showSelectCoupon, setShowSelectCoupon] = useState(false);
   // useLog('checkid', checkOrderId);
   useAndroidBack();
@@ -299,11 +306,11 @@ const Order: React.FC = () => {
   function renderCouponEntry() {
     const hasValidCoupons = canUseCoupons?.length > 0;
     if (!hasValidCoupons) {
-      return <Text>{getCouponText()}</Text>;
+      return <Text style={[globalStyles.fontTertiary, {fontSize: 15, fontWeight: 'normal'}]}>{getCouponText()}</Text>;
     } else {
       return (
         <TouchableOpacity onPress={() => setShowSelectCoupon(true)}>
-          <Text>{getCouponText()}</Text>
+          <Text style={globalStyles.fontPrimary}>{getCouponText()}</Text>
         </TouchableOpacity>
       );
     }
@@ -329,7 +336,7 @@ const Order: React.FC = () => {
         <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">
           {/* <Form form={form} itemStyle={{children: styles.formChildren, container: styles.formItem}} hiddenLine> */}
 
-          <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}}>
+          <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER, paddingTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}}>
             <View style={[{flexDirection: 'row'}]}>
               <Image source={poster ? {uri: poster} : require('../../assets/sku_def_1_1.png')} style={{width: 60, height: 60, borderRadius: 5}} />
               <View style={{flex: 1, marginLeft: globalStyleVariables.MODULE_SPACE}}>
@@ -353,12 +360,9 @@ const Order: React.FC = () => {
                 <Text style={[globalStyles.fontStrong]} numberOfLines={2}>
                   {spu?.name}
                 </Text>
-                <View style={{alignItems: 'flex-end'}}>
-                  <Text style={globalStyles.fontPrimary}>¥{moneyToYuan(salePrice)}</Text>
-                </View>
               </View>
             </View>
-            <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
+            <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
 
             {/* <FormItem label="规格" name="skuId">
             <Select options={flatSKUList} placeholder="请选择规格" onChange={handleSKUChange} />
@@ -369,7 +373,7 @@ const Order: React.FC = () => {
             <FormItem label="数量" {...formItemProps}>
               <InputNumber digit={0} value={form.amount} onChange={val => setFormField('amount', val)} min={minPurchaseAmount} max={maxPurchaseAmount} />
             </FormItem>
-            <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
+            <View style={[globalStyles.lineHorizontal]} />
             <FormItem label="商品总价" {...formItemProps}>
               <Text style={globalStyles.fontPrimary}>¥{moneyToYuan(totalPrice)}</Text>
             </FormItem>
@@ -378,7 +382,7 @@ const Order: React.FC = () => {
                 <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_BUD}]}>订单完成可返{commission}芽</Text>
               </FormItem>
             )}
-            <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
+            <View style={[globalStyles.lineHorizontal]} />
             <FormItem label="姓名" {...formItemProps}>
               <TextInput
                 onSubmitEditing={() => phoneRef.current.focus()}
@@ -412,18 +416,17 @@ const Order: React.FC = () => {
                 />
               </FormItem>
             )}
+            <View style={[globalStyles.lineHorizontal]} />
             <FormItem
               {...formItemProps}
               label={
                 <View style={globalStyles.containerRow}>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 16}]}>使用芽抵扣</Text>
-                  <View style={[globalStyles.tagWrapper, {backgroundColor: '#0000001A', marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                    <Text style={[globalStyles.tag, {color: globalStyleVariables.TEXT_COLOR_PRIMARY}]}>{wallet?.money ? `余${wallet?.moneyYuan}` : '余额为0'}</Text>
-                  </View>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 15}]}>使用芽抵扣</Text>
+                  <Text style={[globalStyles.fontTertiary]}>{wallet?.money ? `余${wallet?.moneyYuan}` : '余额为0'}</Text>
                 </View>
               }>
               <InputNumber
-                styles={{container: {flex: 1}, inputContainer: {flex: 1}, input: {textAlign: 'right', width: '100%'}}}
+                styles={{container: {flex: 1}, inputContainer: {flex: 1}, input: {textAlign: 'right', width: '100%', fontSize: 15}}}
                 controls={false}
                 min={0}
                 digit={2}
@@ -452,13 +455,13 @@ const Order: React.FC = () => {
 
           {/* 预约信息 */}
           {canBooking && (
-            <View style={[globalStyles.moduleMarginTop, {backgroundColor: '#fff', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
+            <View style={[globalStyles.moduleMarginTop, {backgroundColor: '#fff', paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
               <TouchableOpacity activeOpacity={0.8} onPress={openBooking}>
-                <View style={[globalStyles.containerLR, {height: 50, paddingHorizontal: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}]}>
-                  <Text>预约信息</Text>
+                <View style={[globalStyles.containerLR, {height: 50, backgroundColor: '#fff'}]}>
+                  <Text style={globalStyles.fontPrimary}>预约信息</Text>
                   <View style={[globalStyles.containerRow, {flex: 1, justifyContent: 'flex-end', marginLeft: 10}]}>
                     {!bookingModel ? (
-                      <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>非必填</Text>
+                      <Text style={[globalStyles.fontTertiary, {fontSize: 15, fontWeight: 'normal'}]}>非必填</Text>
                     ) : (
                       <Text numberOfLines={2} style={[globalStyles.fontPrimary, {flex: 1, fontSize: 15, textAlign: 'right'}]}>
                         {`${bookingModel?.stockDateInt} ${bookingModel?.name} ${bookingModel?.shopName}`}
@@ -472,7 +475,7 @@ const Order: React.FC = () => {
           )}
 
           {/* 支付方式 */}
-          <View style={[globalStyles.moduleMarginTop, {backgroundColor: '#fff', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
+          <View style={[globalStyles.moduleMarginTop, {backgroundColor: '#fff', paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
             {/* 微信 */}
             <TouchableOpacity activeOpacity={0.8} onPress={() => setFormField('channel', PayChannel.WECHAT)}>
               <View style={[globalStyles.containerLR]}>
@@ -533,7 +536,7 @@ const Order: React.FC = () => {
       )}
 
       {/* 预约弹窗 */}
-      {showBooking && <BookingModal visible={true} skuId={skuId} onClose={() => setShowBooking(false)} onSelect={setBookingModel} />}
+      {showBooking && <BookingModal month={bookingDate} selectDay={bookingDate} visible={true} skuId={skuId} onClose={() => setShowBooking(false)} onSelect={setBookingModel} />}
 
       {/* 优惠券弹窗 */}
       {showSelectCoupon && (
@@ -597,7 +600,7 @@ export const styles = StyleSheet.create({
     height: 20,
   },
   formItem: {
-    paddingVertical: 7,
+    paddingVertical: 12,
   },
   formItemInput: {
     fontSize: 15,

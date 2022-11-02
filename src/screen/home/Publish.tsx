@@ -78,7 +78,7 @@ const Publish: React.FC = () => {
               <View style={styles.videoContainer}>
                 <TextInput value={content} onChangeText={setContent} multiline={true} style={styles.videoInput} placeholder="使用合适的标题，能让更多人看到~" />
                 {!!videoInfo?.coverPath && <Image style={styles.videoCover} source={{uri: 'file://' + videoInfo.coverPath}} />}
-                {!videoInfo?.coverPath && <Image style={styles.videoCover} source={{uri: 'https://fakeimg.pl/100?text=loading'}} />}
+                {!videoInfo?.coverPath && <Image style={styles.videoCover} source={require('../../assets/sku_def_180w.png')} />}
               </View>
             )}
           </View>
