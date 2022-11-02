@@ -4,5 +4,6 @@
     "SPUF"
   ],
   "editor.formatOnSave": true,
-  "eslint.format.enable": true
+  "eslint.format.enable": true,
+  "java.configuration.updateBuildConfiguration": "disabled"
 }
