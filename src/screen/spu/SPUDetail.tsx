@@ -72,7 +72,7 @@ const SPUDetail: React.FC = () => {
     return () => {
       spuDispatcher.closeViewSPU();
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [spuDispatcher]);
 
   const {bottom: safeBottom} = useSafeAreaInsets();
   const navigation = useNavigation<FakeNavigation>();

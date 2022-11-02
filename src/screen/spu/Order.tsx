@@ -8,7 +8,7 @@ import FormItem from '../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {fenToYuan, findItem, moneyToYuan} from '../../fst/helper';
 import {useAndroidBack, useAppState, useCommonDispatcher, useCoupons, useSPUDispatcher, useWallet} from '../../helper/hooks';
-import {BookingModelF, BookingType, CouponState, FakeNavigation, OrderPayState, PackageDetail, PayChannel, SKUDetail} from '../../models';
+import {BookingModelF, BookingType, CouponState, FakeNavigation, OrderPayState, PackageDetail, PayChannel, SKUDetail, SKUSaleState} from '../../models';
 import {RootState} from '../../redux/reducers';
 import * as api from '../../apis';
 import {cleanOrderForm} from '../../helper/order';
@@ -68,21 +68,25 @@ const Order: React.FC = () => {
   // 可以切换的sku
   const flatSKUList = useMemo(() => {
     const skuList =
-      spu?.skuList?.map(e => {
-        return {
-          value: 'sku_' + e.id,
-          label: e.skuName,
-          isPackage: false,
-        };
-      }) || [];
+      spu?.skuList
+        ?.filter(pkg => pkg.saleStatus === SKUSaleState.ON_SALE)
+        .map(e => {
+          return {
+            value: 'sku_' + e.id,
+            label: e.skuName,
+            isPackage: false,
+          };
+        }) || [];
     const packages =
-      spu?.packageDetailsList?.map(e => {
-        return {
-          value: 'pkg_' + e.packageId,
-          label: e.packageName,
-          isPackage: true,
-        };
-      }) || [];
+      spu?.packageDetailsList
+        ?.filter(pkg => pkg.saleStatus === SKUSaleState.ON_SALE)
+        .map(e => {
+          return {
+            value: 'pkg_' + e.packageId,
+            label: e.packageName,
+            isPackage: true,
+          };
+        }) || [];
     return [...skuList, ...packages];
   }, [spu]);
 
@@ -327,8 +331,6 @@ const Order: React.FC = () => {
       <NavigationBar title="确认订单" style={{backgroundColor: '#fff'}} />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{flex: 1}} keyboardVerticalOffset={-bottom}>
         <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">
-          {/* <Form form={form} itemStyle={{children: styles.formChildren, container: styles.formItem}} hiddenLine> */}
-
           <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER, paddingTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}}>
             <View style={[{flexDirection: 'row'}]}>
               <Image source={poster ? {uri: poster} : require('../../assets/sku_def_1_1.png')} style={{width: 60, height: 60, borderRadius: 5}} />
@@ -357,9 +359,6 @@ const Order: React.FC = () => {
             </View>
             <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
 
-            {/* <FormItem label="规格" name="skuId">
-            <Select options={flatSKUList} placeholder="请选择规格" onChange={handleSKUChange} />
-          </FormItem> */}
             <FormItem label="规格" {...formItemProps}>
               <Select value={form.skuId} options={flatSKUList} placeholder="请选择规格" onChange={handleSKUChange} />
             </FormItem>

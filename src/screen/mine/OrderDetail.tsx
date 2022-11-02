@@ -7,18 +7,19 @@ import Popover from 'react-native-popover-view';
 import {Modal, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useParams} from '../../helper/hooks';
-import {OrderDetailF, OrderPackageSKU, PayChannel} from '../../models';
+import {LocationNavigateInfo, OrderDetailF, OrderPackageSKU, PayChannel} from '../../models';
 import * as api from '../../apis';
 import {StylePropView} from '../../models';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {navigateTo} from '../../router/Router';
-import {OrderPackage, OrderStatus} from '../../models/order';
+import {OrderPackage, OrderShop, OrderStatus} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
 import Loading from '../../component/Loading';
 import {useIsFocused} from '@react-navigation/native';
 import KFModal from '../common/KFModal';
 import MyStatusBar from '../../component/MyStatusBar';
-import {callPhone} from '../../helper/system';
+import {callPhone, openMap} from '../../helper/system';
+import NavigationModal from '../common/NavigateModal';
 
 const OrderDetail: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -28,6 +29,8 @@ const OrderDetail: React.FC = () => {
   const [currentCode, setCurrentCode] = useState<OrderPackageSKU>();
   const [showMenu, setShowMenu] = useState(false);
   const [showKF, setShowKF] = useState(false);
+  const [showSelectMap, setShowSelectMap] = useState(false);
+  const [navigationInfo, setNavigationInfo] = useState<LocationNavigateInfo>(null);
   const orderCompleted = orderDetail?.status === OrderStatus.Completed;
   const orderCanceled = orderDetail?.status === OrderStatus.Canceled;
   const orderCanUse = useMemo(() => [OrderStatus.Booked, OrderStatus.Paid].includes(orderDetail?.status), [orderDetail]);
@@ -64,6 +67,16 @@ const OrderDetail: React.FC = () => {
   function goBooking(orderSmallId: string) {
     navigateTo('OrderBooking', {id: orderSmallId});
   }
+
+  const goNavigation = useCallback((shop: OrderShop) => {
+    setNavigationInfo({
+      name: shop.shopName,
+      address: shop.shopAddress,
+      latitude: shop.latitude,
+      longitude: shop.longitude,
+    });
+    setShowSelectMap(true);
+  }, []);
 
   function renderCodeItem(orderPackage: OrderPackage, index: number) {
     return (
@@ -228,6 +241,7 @@ const OrderDetail: React.FC = () => {
                       {/* 店铺列表 */}
                       <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
                         {orderDetail.canUseShops?.map((shop, index) => {
+                          const showNavigation = shop.latitude && shop.longitude;
                           return (
                             <View key={index}>
                               {index !== 0 && (
@@ -239,11 +253,13 @@ const OrderDetail: React.FC = () => {
                                   <Text>{shop.shopAddress}</Text>
                                 </View>
                                 <View style={[globalStyles.containerRow, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                                  <TouchableOpacity activeOpacity={0.9}>
-                                    <View style={styles.shopAction}>
-                                      <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
-                                    </View>
-                                  </TouchableOpacity>
+                                  {showNavigation && (
+                                    <TouchableOpacity activeOpacity={0.9} onPress={() => goNavigation(shop)}>
+                                      <View style={styles.shopAction}>
+                                        <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
+                                      </View>
+                                    </TouchableOpacity>
+                                  )}
                                   {shop.shopContactPhone && (
                                     <TouchableOpacity activeOpacity={0.9} onPress={() => callPhone(shop.shopContactPhone)}>
                                       <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
@@ -344,6 +360,7 @@ const OrderDetail: React.FC = () => {
           </View>
         </Modal>
       )}
+      {showSelectMap && <NavigationModal visible={true} onClose={() => setShowSelectMap(false)} onSelect={app => openMap(navigationInfo, app)} />}
       <KFModal visible={showKF} onClose={() => setShowKF(false)} />
     </>
   );

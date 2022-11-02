@@ -124,6 +124,8 @@ export interface OrderShop {
   shopName: string;
   shopAddress: string;
   shopContactPhone: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface OrderCommentForm {
