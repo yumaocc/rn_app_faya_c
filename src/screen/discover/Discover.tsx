@@ -16,6 +16,7 @@ import {RootState} from '../../redux/reducers';
 import {dictLoadingState} from '../../helper/dictionary';
 import ReactNativeModal from 'react-native-modal';
 import MyStatusBar from '../../component/MyStatusBar';
+import {getSPUNavigateParam} from '../../helper/spu';
 
 const Discover: React.FC = () => {
   const [showSelectCity, setShowSelectCity] = React.useState(false);
@@ -36,11 +37,7 @@ const Discover: React.FC = () => {
   }, [locationId, spuDispatcher]);
 
   function goSPUDetail(id: number) {
-    navigation.navigate({
-      name: 'SPUDetail',
-      params: {id},
-      key: 'SPUDetail-' + id,
-    });
+    navigation.navigate(getSPUNavigateParam(id));
   }
 
   function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
@@ -189,7 +186,7 @@ const Discover: React.FC = () => {
         animationOut="slideOutUp">
         <View style={[styles.citySelector, {paddingTop: top}]}>
           <View style={styles.citySection}>
-            <Text style={globalStyles.fontPrimary}>热门站点</Text>
+            <Text style={globalStyles.fontPrimary}>热门城市</Text>
           </View>
           <View style={styles.cityContainer}>
             {cityList.map((city, index) => {

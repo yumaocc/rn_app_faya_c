@@ -1,4 +1,5 @@
 import {StyleProp, TextStyle, ViewStyle} from 'react-native';
+import {RootStackParamList} from './route';
 
 export type OSType = 'ios' | 'android' | 'windows' | 'macos' | 'N/A';
 
@@ -71,3 +72,9 @@ export interface LocationNavigateInfo {
 }
 
 export type SupportMapAppName = 'amap' | 'qq' | 'baidu' | 'apple';
+
+export interface DeepNavigationParam {
+  name: keyof RootStackParamList;
+  params?: any;
+  key: string;
+}

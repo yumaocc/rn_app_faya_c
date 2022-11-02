@@ -167,7 +167,7 @@ const Mine: React.FC = () => {
               <View style={styles.avatarContainer}>
                 <TouchableWithoutFeedback onPress={goAgentProfile}>
                   <View style={{alignItems: 'center'}}>
-                    {!!detail.avatar && <Image style={[styles.avatar]} source={{uri: detail.avatar}} />}
+                    {!!detail.avatar && <Image style={[styles.avatar]} source={{uri: detail.avatar}} defaultSource={require('../../assets/avatar_def.png')} />}
                     {!detail.avatar && <Image style={[styles.avatar]} source={require('../../assets/avatar_def.png')} />}
                     {detail?.level === 1 && <Image source={require('../../assets/tag_darensign_xinshou.png')} style={styles.agentBadge} />}
                     {detail?.level === 2 && <Image source={require('../../assets/tag_darensign_jinjie.png')} style={styles.agentBadge} />}

@@ -18,6 +18,7 @@ import Loading from '../../component/Loading';
 import {useIsFocused} from '@react-navigation/native';
 import KFModal from '../common/KFModal';
 import MyStatusBar from '../../component/MyStatusBar';
+import {callPhone} from '../../helper/system';
 
 const OrderDetail: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -243,11 +244,13 @@ const OrderDetail: React.FC = () => {
                                       <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
                                     </View>
                                   </TouchableOpacity>
-                                  <TouchableOpacity activeOpacity={0.9}>
-                                    <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                                      <Icon name="shangpin_dianpu_dianhua" size={16} color="#48db94" />
-                                    </View>
-                                  </TouchableOpacity>
+                                  {shop.shopContactPhone && (
+                                    <TouchableOpacity activeOpacity={0.9} onPress={() => callPhone(shop.shopContactPhone)}>
+                                      <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
+                                        <Icon name="shangpin_dianpu_dianhua" size={16} color="#48db94" />
+                                      </View>
+                                    </TouchableOpacity>
+                                  )}
                                 </View>
                               </View>
                             </View>

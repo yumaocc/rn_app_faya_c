@@ -259,7 +259,7 @@ const Certification: React.FC = () => {
                   </View>
                 ) : (
                   <TouchableOpacity activeOpacity={0.8} onPress={() => selectIDCard(true)}>
-                    <View style={styles.idCard} />
+                    <Image source={require('../../../assets/id_card_front.png')} style={styles.idCard} />
                   </TouchableOpacity>
                 )}
               </View>
@@ -285,7 +285,7 @@ const Certification: React.FC = () => {
                   </View>
                 ) : (
                   <TouchableOpacity activeOpacity={0.8} onPress={() => selectIDCard(false)}>
-                    <View style={styles.idCard} />
+                    <Image source={require('../../../assets/id_card_back.png')} style={styles.idCard} />
                   </TouchableOpacity>
                 )}
               </View>
@@ -331,8 +331,8 @@ const styles = StyleSheet.create({
     height: 20,
   },
   idCard: {
-    width: 200,
-    height: 150,
+    width: 210,
+    height: 128,
     borderRadius: 5,
     backgroundColor: '#d9d9d9',
   },

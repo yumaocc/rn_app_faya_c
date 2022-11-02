@@ -18,7 +18,7 @@ const MiddleButton: React.FC = () => {
         redirect: true,
       });
     } else {
-      // navigation.navigate('ShootVideo');
+      navigation.navigate('ShootVideo');
       // navigation.navigate('Scanner');
       // navigation.navigate('SingleWorkDetail', {id: '1575447541069455360'});
       // navigation.navigate('ScanResult', {content: '你好'});
@@ -31,7 +31,7 @@ const MiddleButton: React.FC = () => {
       // navigation.navigate('Profile');
       // navigation.navigate('PaySuccess');
       // navigation.navigate('MyShowcase');
-      navigation.navigate('Certification');
+      // navigation.navigate('Certification');
       // navigation.navigate('AddBankCard');
       // navigation.navigate('MyCode');
       // navigation.navigate('PublishVideo');
