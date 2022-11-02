@@ -5,10 +5,10 @@ export function getBaseURL(): string {
 }
 
 // 隐私政策网址
-export const PRIVACY_POLICY_URL = 'https://manually-file-prod.faya.life/privacy.html';
+export const PRIVACY_POLICY_URL = 'https://faya-manually-file.faya.life/protocol/faya-privacy.html';
 
 // 用户协议
-export const USER_AGREEMENT_URL = 'https://manually-file-prod.faya.life/user-agreement.html';
+export const USER_AGREEMENT_URL = 'https://faya-manually-file.faya.life/protocol/faya-user.html';
 
 export function getAliPayUrl(code: string) {
   return `alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=${code}&_s=web-other`;
