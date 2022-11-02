@@ -100,7 +100,7 @@ const Modal: React.FC<ModalProps> = props => {
           <View style={[styles.mask, props.maskStyle]} />
         </TouchableWithoutFeedback>
         <View style={[styles.body, {width: windowSize.width - 80}, props.styles.body, props.style]}>
-          <View style={[globalStyles.borderBottom, styles.header]}>
+          <View style={[styles.header]}>
             <View style={[styles.title]}>
               <Text style={[globalStyles.fontPrimary, styles.titleText]}>{props.title}</Text>
             </View>

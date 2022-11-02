@@ -15,7 +15,6 @@ import {navigateBack} from '../../../router/Router';
 import Icon from '../../../component/Icon';
 
 const OrderBooking: React.FC = () => {
-  // todo: 进来直接点修改预约？
   const params = useParams<{id: string}>();
   const [form, setFormField, setFormFields] = useSearch<OrderBookingForm>();
   const [bookingModel, setBookingModel] = useState<BookingModelF>();
@@ -133,11 +132,12 @@ const OrderBooking: React.FC = () => {
         </Text>
       );
     }
-    const {skuModelName, bizName, bookingDateInt} = bookingDetail || {};
-    if (skuModelName && bizName && bookingDateInt) {
+    const {skuModelName, shopName, bookingDateInt} = bookingDetail || {};
+    if (skuModelName && shopName && bookingDateInt) {
+      const formatDate = moment(String(bookingDateInt), 'YYYYMMDD').format('YYYY-MM-DD');
       return (
         <Text numberOfLines={2} style={[globalStyles.fontPrimary, styles.bookingInfo]}>
-          {`${bookingDateInt} ${skuModelName} ${bizName}`}
+          {`${formatDate} ${skuModelName} ${shopName}`}
         </Text>
       );
     }
@@ -146,7 +146,7 @@ const OrderBooking: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#f4f4f4'}}>
+      <SafeAreaView edges={['bottom']} style={{flex: 1, backgroundColor: '#fff'}}>
         <NavigationBar
           title="预约信息"
           style={{backgroundColor: '#fff'}}
@@ -161,13 +161,14 @@ const OrderBooking: React.FC = () => {
           }
         />
         <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">
-          <View style={{backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE}}>
+          <View style={{backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}}>
             {/* <View>
               <Text>预约信息</Text>
             </View> */}
             <FormItem label="姓名" {...formItemProps}>
               <TextInput {...formItemInputProps} value={form.name} onChangeText={text => setFormField('name', text)} placeholder="请输入使用人姓名" />
             </FormItem>
+            <View style={globalStyles.lineHorizontal} />
             <FormItem label="手机号" {...formItemProps}>
               <TextInput
                 {...formItemInputProps}
@@ -177,6 +178,7 @@ const OrderBooking: React.FC = () => {
                 placeholder="请输入使用人手机号"
               />
             </FormItem>
+            <View style={globalStyles.lineHorizontal} />
             <TouchableOpacity activeOpacity={0.8} onPress={openBooking}>
               <View style={[globalStyles.containerLR, {height: 50}]}>
                 <Text style={[globalStyles.fontPrimary, {fontSize: 16}]}>预约信息</Text>
@@ -186,6 +188,7 @@ const OrderBooking: React.FC = () => {
                 </View>
               </View>
             </TouchableOpacity>
+            <View style={globalStyles.lineHorizontal} />
             <FormItem label="备注" {...formItemProps} vertical>
               <View style={styles.memo}>
                 <TextInput
@@ -200,7 +203,7 @@ const OrderBooking: React.FC = () => {
             </FormItem>
           </View>
         </ScrollView>
-        <View style={[{padding: globalStyleVariables.MODULE_SPACE}]}>
+        <View style={[{padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
           <Button type="primary" title={booked ? '修改预约' : '立即预约'} style={{height: 40}} onPress={handleSubmit} />
         </View>
         {showBookingModal && <BookingModal month={month} visible={true} skuId={skuId} onClose={() => setShowBookingModal(false)} onSelect={setBookingModel} />}
@@ -245,7 +248,7 @@ const formItemProps = {
   hiddenBorderTop: true,
   styles: {
     container: {
-      paddingVertical: 7,
+      paddingVertical: 12,
     },
     children: {
       height: 20,

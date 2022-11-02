@@ -80,6 +80,7 @@ const Withdrawal: React.FC = () => {
           headerRight={
             <Popover
               isVisible={showMenu}
+              popoverStyle={{borderRadius: globalStyleVariables.RADIUS_MODAL}}
               onRequestClose={() => {
                 setShowMenu(false);
               }}

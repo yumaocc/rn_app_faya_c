@@ -175,4 +175,5 @@ export interface OrderBookingDetailF {
   skuModelName: string;
   skuModelId: number;
   shopId: number;
+  shopName: string;
 }

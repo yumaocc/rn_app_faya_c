@@ -173,24 +173,8 @@ const User: React.FC = () => {
         <Image source={require('../../assets/mine-bg.png')} style={styles.cover} />
         <View style={{flex: 1, paddingBottom: 30}}>
           <NavigationBar title="" color="#fff" />
-          <View style={[styles.userActions]}>
-            {!followed && (
-              <TouchableOpacity activeOpacity={0.7} onPress={followUser}>
-                <View style={[styles.userAction]}>
-                  <Text style={[globalStyles.fontPrimary, {color: '#fff'}]}>{userInfo?.hasCare === UserFollowState.FOLLOWED_ME ? '回关' : '关注'}</Text>
-                </View>
-              </TouchableOpacity>
-            )}
-            {followed && (
-              <TouchableOpacity activeOpacity={0.7} onPress={followUser}>
-                <View style={[globalStyles.containerCenter, styles.userAction, {backgroundColor: 'transparent', paddingHorizontal: 10}]}>
-                  <Icon name="wode_yiguanzhu48" size={24} color="#fff" />
-                </View>
-              </TouchableOpacity>
-            )}
-          </View>
-          <View style={[styles.container, {paddingTop: 0, marginTop: 20}]}>
-            <View style={{borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: '#fff'}}>
+          <View style={[styles.container, {paddingTop: 0, marginTop: 100}]}>
+            <View style={{borderTopLeftRadius: 10, borderTopRightRadius: 10, marginTop: -20, backgroundColor: '#fff'}}>
               {/* 头像栏 */}
               <View style={[styles.userData]}>
                 {!!userInfo?.avatar && <Image style={[styles.avatar]} source={{uri: userInfo.avatar}} />}
@@ -213,19 +197,39 @@ const User: React.FC = () => {
 
               {/* 用户基本信息栏 */}
               <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER, paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
-                <View style={globalStyles.containerRow}>
-                  <Text style={styles.userName} numberOfLines={1}>
-                    {userInfo?.nickName}
-                  </Text>
-                </View>
-                {!!userInfo?.account && (
-                  <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop]}>
-                    <Text style={[globalStyles.fontPrimary]}>发芽号：{userInfo?.account}</Text>
-                    <TouchableOpacity activeOpacity={0.8} onPress={handleCopy}>
-                      <Icon name="all_copy" size={18} color="#ccc" style={{marginLeft: 10}} />
-                    </TouchableOpacity>
+                <View style={[globalStyles.containerRow]}>
+                  <View style={{flex: 1}}>
+                    <View style={globalStyles.containerRow}>
+                      <Text style={styles.userName} numberOfLines={1}>
+                        {userInfo?.nickName}
+                      </Text>
+                    </View>
+                    {!!userInfo?.account && (
+                      <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop]}>
+                        <Text style={[globalStyles.fontPrimary]}>发芽号：{userInfo?.account}</Text>
+                        <TouchableOpacity activeOpacity={0.8} onPress={handleCopy}>
+                          <Icon name="all_copy" size={18} color="#ccc" style={{marginLeft: 10}} />
+                        </TouchableOpacity>
+                      </View>
+                    )}
                   </View>
-                )}
+                  <View style={[styles.userActions]}>
+                    {!followed && (
+                      <TouchableOpacity activeOpacity={0.7} onPress={followUser}>
+                        <View style={[styles.userAction]}>
+                          <Text style={[globalStyles.fontPrimary, {color: '#fff'}]}>{userInfo?.hasCare === UserFollowState.FOLLOWED_ME ? '回关' : '关注'}</Text>
+                        </View>
+                      </TouchableOpacity>
+                    )}
+                    {followed && (
+                      <TouchableOpacity activeOpacity={0.7} onPress={followUser}>
+                        <View style={[globalStyles.containerCenter, styles.userAction, {backgroundColor: 'transparent', paddingHorizontal: 10}]}>
+                          <Icon name="wode_yiguanzhu48" size={24} color="#fff" />
+                        </View>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                </View>
                 <View style={globalStyles.halfModuleMarginTop}>
                   <Text style={globalStyles.fontSecondary} numberOfLines={1}>
                     {userInfo?.say}
@@ -308,7 +312,6 @@ const styles = StyleSheet.create({
   },
   userActions: {
     height: 35,
-    marginTop: 30,
     paddingHorizontal: globalStyleVariables.MODULE_SPACE,
     justifyContent: 'flex-end',
     flexDirection: 'row',

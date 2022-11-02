@@ -37,6 +37,22 @@ const OrderItem: React.FC<OrderItemProps> = props => {
     }
   }
 
+  function renderOrderState() {
+    let color = '';
+    switch (order.status) {
+      case OrderStatus.Paid:
+        color = globalStyleVariables.COLOR_PRIMARY;
+        break;
+      case OrderStatus.Canceled:
+        color = globalStyleVariables.TEXT_COLOR_TERTIARY;
+        break;
+      default:
+        color = globalStyleVariables.TEXT_COLOR_PRIMARY;
+        break;
+    }
+    return <Text style={[{color}]}>{dictOrderState(order.status)}</Text>;
+  }
+
   return (
     <View style={styles.order}>
       <TouchableOpacity activeOpacity={0.8} onPress={handleClickOrder}>
@@ -46,11 +62,9 @@ const OrderItem: React.FC<OrderItemProps> = props => {
             <View style={[globalStyles.containerLR]}>
               <View style={globalStyles.containerRow}>
                 <Icon name="shangpin_shanghu24" size={15} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-                <Text style={[globalStyles.fontPrimary, globalStyles.moduleMarginLeft]}>{order.bizName}</Text>
+                <Text style={[globalStyles.fontPrimary, {fontSize: 12, marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}]}>{order.bizName}</Text>
               </View>
-              <View>
-                <Text style={[order.status === OrderStatus.Paid && {color: globalStyleVariables.COLOR_PRIMARY}]}>{dictOrderState(order.status)}</Text>
-              </View>
+              <View>{renderOrderState()}</View>
             </View>
             <Text style={[globalStyles.fontPrimary, {lineHeight: 20, marginTop: globalStyleVariables.MODULE_SPACE}]}>{order.skuName}</Text>
             <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
@@ -95,7 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginBottom: globalStyleVariables.MODULE_SPACE,
     borderRadius: 5,
-    padding: globalStyleVariables.MODULE_SPACE,
+    padding: globalStyleVariables.MODULE_SPACE_BIGGER,
   },
   orderCover: {
     width: 60,

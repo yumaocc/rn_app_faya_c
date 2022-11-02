@@ -31,7 +31,7 @@ const WorkList: React.FC<WorkListProps> = props => {
       <View style={styles.item} key={`${work.mainId}-${index}-${left ? 'l' : 'r'}`}>
         <TouchableOpacity activeOpacity={0.9} onPress={() => handleClickWork(index)}>
           <View style={{width: '100%', position: 'relative'}}>
-            <Image source={{uri: work?.coverImage}} defaultSource={require('../../../assets/sku_def_1_1.png')} style={true ? styles.cover : styles.smallCover} />
+            <Image source={{uri: work?.coverImage}} defaultSource={require('../../../assets/sku_def_180w.png')} style={true ? styles.cover : styles.smallCover} />
             {work.type === WorkType.Video && (
               <View style={[styles.playIcon]}>
                 <Image source={require('../../../assets/zuopin_tag_video.png')} style={styles.palyIconImage} />

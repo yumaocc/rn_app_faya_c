@@ -16,7 +16,8 @@ interface BookingModalProps {
   visible: boolean;
   skuId: number;
   month?: Moment;
-  selectDay?: Moment;
+  // selectDay?: Moment;
+  bindModel?: BookingModelF;
   onClose: () => void;
   onSelect?: (model: BookingModelF) => void;
 }
@@ -27,13 +28,23 @@ const BookingModal: React.FC<BookingModalProps> = props => {
   const [bookingModels, setBookingModels] = useState<DayBookingModelF[]>([]);
   const [currentBookingModel, setCurrentBookingModel] = useState<DayBookingModelF>();
   const [showCalendar, setShowCalendar] = useState(true);
-  const [selectDay, setSelectDay] = useState<Moment>(props.selectDay || null);
+  const [selectDay, setSelectDay] = useState<Moment>(null);
   const [selectShop, setSelectShop] = useState<GroupedShopBookingModel>(null);
   const [selectModal, setSelectModal] = useState<BookingModelF>(null);
 
   const arrowRotation = useRef(new Animated.Value(0));
   const [commonDispatcher] = useCommonDispatcher();
   const {height} = useWindowDimensions();
+
+  useEffect(() => {
+    if (!props.bindModel) {
+      return;
+    }
+    const {stockDateInt} = props.bindModel;
+    setMonth(moment(stockDateInt, 'YYYYMMDD'));
+    setSelectDay(moment(stockDateInt, 'YYYYMMDD'));
+    // todo: 优化
+  }, [props.bindModel]);
 
   const shops: GroupedShopBookingModel[] = useMemo(() => {
     const list = currentBookingModel?.list || [];

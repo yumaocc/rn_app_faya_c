@@ -20,7 +20,6 @@ import {getAliPayUrl, getWechatPayUrl} from '../../constants';
 import {checkAppInstall} from '../../helper/system';
 import BookingModal from '../../component/BookingModal';
 import MyStatusBar from '../../component/MyStatusBar';
-import moment from 'moment';
 
 const Order: React.FC = () => {
   const spu = useSelector((state: RootState) => state.spu.currentSPU);
@@ -37,12 +36,6 @@ const Order: React.FC = () => {
   const [canUseAlipay, setCanUseAlipay] = useState(false);
   const [showBooking, setShowBooking] = useState(false);
   const [bookingModel, setBookingModel] = useState<BookingModelF>(null);
-  const bookingDate = useMemo(() => {
-    if (!bookingModel?.stockDateInt) {
-      return null;
-    }
-    return moment(bookingModel.stockDateInt, 'YYYYMMDD');
-  }, [bookingModel]);
   const [showSelectCoupon, setShowSelectCoupon] = useState(false);
   // useLog('checkid', checkOrderId);
   useAndroidBack();
@@ -332,7 +325,7 @@ const Order: React.FC = () => {
     <View style={{flex: 1, backgroundColor: '#f4f4f4', position: 'relative'}}>
       <MyStatusBar />
       <NavigationBar title="确认订单" style={{backgroundColor: '#fff'}} />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{flex: 1}}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{flex: 1}} keyboardVerticalOffset={-bottom}>
         <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">
           {/* <Form form={form} itemStyle={{children: styles.formChildren, container: styles.formItem}} hiddenLine> */}
 
@@ -536,7 +529,7 @@ const Order: React.FC = () => {
       )}
 
       {/* 预约弹窗 */}
-      {showBooking && <BookingModal month={bookingDate} selectDay={bookingDate} visible={true} skuId={skuId} onClose={() => setShowBooking(false)} onSelect={setBookingModel} />}
+      {showBooking && <BookingModal bindModel={bookingModel} visible={true} skuId={skuId} onClose={() => setShowBooking(false)} onSelect={setBookingModel} />}
 
       {/* 优惠券弹窗 */}
       {showSelectCoupon && (

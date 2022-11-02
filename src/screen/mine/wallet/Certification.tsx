@@ -11,11 +11,11 @@ import {UserCertificationForm} from '../../../models';
 import * as api from '../../../apis';
 import {compressImageUntil, getFileNameByPath} from '../../../helper/system';
 import {useNavigation} from '@react-navigation/native';
-import Radio from '../../../component/Form/Radio';
+// import Radio from '../../../component/Form/Radio';
 
 const Certification: React.FC = () => {
   const [form, setFormField, setFormFields] = useSearch<UserCertificationForm>();
-  const [agree, setAgree] = React.useState(false);
+  // const [agree, setAgree] = React.useState(false);
   const [showPreview, setShowPreview] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [previewIndex, setPreviewIndex] = React.useState(0);
@@ -127,9 +127,6 @@ const Certification: React.FC = () => {
     if (!form._idCardBack) {
       return '请上传身份证人像面';
     }
-    if (!agree) {
-      return '请阅读并同意《用户认证协议》';
-    }
     return '';
   }
 
@@ -192,7 +189,7 @@ const Certification: React.FC = () => {
       <NavigationBar title="实名认证" />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{flex: 1}}>
         <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">
-          <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
+          <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER}}>
             <Text style={[globalStyles.fontTertiary]}>首次添加银行卡需要实名认证。认证信息将用于收益提现，与账号唯一绑定。我们会对信息进行严格保密，认证后不可解绑</Text>
             {rejectReason && (
               <View style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
@@ -240,7 +237,8 @@ const Certification: React.FC = () => {
                 )}
               </View>
             </FormItem>
-            <FormItem label="身份证人像面" {...formItemProps} style={{marginTop: 20}}>
+            <View style={[globalStyles.lineHorizontal, {marginBottom: globalStyleVariables.MODULE_SPACE}]} />
+            <FormItem label="身份证人像面" {...formItemProps} vertical>
               <View style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
                 {form._idCardFront ? (
                   <View style={[styles.idCard]}>
@@ -266,7 +264,7 @@ const Certification: React.FC = () => {
                 )}
               </View>
             </FormItem>
-            <FormItem label="身份证国徽面" {...formItemProps} style={{marginTop: 20}}>
+            <FormItem label="身份证国徽面" {...formItemProps} vertical>
               <View style={{paddingRight: globalStyleVariables.MODULE_SPACE}}>
                 {form._idCardBack ? (
                   <View style={[styles.idCard]}>
@@ -294,9 +292,9 @@ const Certification: React.FC = () => {
             </FormItem>
 
             {/* 协议 */}
-            <Radio checked={agree} onChange={setAgree} style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
+            {/* <Radio checked={agree} onChange={setAgree} style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
               已阅读并同意《实名认证服务协议》
-            </Radio>
+            </Radio> */}
             <View style={{marginTop: 20}}>
               <Button cash loading={loading} disabled={loading} title="提交" style={styles.submit} onPress={submit} />
             </View>
@@ -327,7 +325,7 @@ const styles = StyleSheet.create({
   formItemInput: {
     padding: 0,
     fontSize: 15,
-    paddingRight: globalStyleVariables.MODULE_SPACE,
+    // paddingRight: globalStyleVariables.MODULE_SPACE,
     textAlign: 'right',
     width: '100%',
     flex: 1,
@@ -335,8 +333,8 @@ const styles = StyleSheet.create({
     // backgroundColor: '#6cf',
   },
   idCard: {
-    width: 50,
-    height: 50,
+    width: 200,
+    height: 150,
     borderRadius: 5,
     backgroundColor: '#d9d9d9',
   },
@@ -348,6 +346,8 @@ const styles = StyleSheet.create({
   remove: {
     width: 24,
     height: 24,
+    borderRadius: 24,
+    backgroundColor: '#fff',
     position: 'absolute',
     top: -12,
     right: -12,

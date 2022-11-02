@@ -153,7 +153,8 @@ const Mine: React.FC = () => {
                   <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('MyCode')}>
                     <Icon name="wode_erweima48" size={24} color="#fff" />
                   </TouchableOpacity>
-                  <TouchableOpacity style={{marginLeft: globalStyleVariables.MODULE_SPACE}} activeOpacity={0.8} onPress={goSettings}>
+                  <View style={[globalStyles.lineVertical, {height: 10, backgroundColor: '#ffffff33', marginHorizontal: globalStyleVariables.MODULE_SPACE}]} />
+                  <TouchableOpacity activeOpacity={0.8} onPress={goSettings}>
                     <Icon name="wode_hanbao48" size={24} color="#fff" />
                   </TouchableOpacity>
                 </>
