@@ -66,9 +66,13 @@ const Scanner: React.FC = () => {
       if (urlParserRule) {
         const res = parseLink(content, urlParserRule);
         const {type, data, isURL} = res;
-        commonDispatcher.setConfig({
-          shareUserId: data.a || data.userId,
-        });
+        const a = data.a || data.userId;
+        if (a) {
+          commonDispatcher.setConfig({
+            shareUserId: data.a || data.userId,
+          });
+        }
+
         switch (type) {
           case 'invite':
             navigation.navigate('Invite', {userId: data.userId});
@@ -132,7 +136,7 @@ const Scanner: React.FC = () => {
 
   function handleBack() {
     navigation.canGoBack() && navigation.goBack();
-    // checkScanContent('https://m.faya.life/?a=2#/spu/detail/62');
+    // checkScanContent('https://m.faya.life/?a=22#/spu/detail/65');
   }
 
   if (!device || !hasPermission || !ruleIsReady) {
