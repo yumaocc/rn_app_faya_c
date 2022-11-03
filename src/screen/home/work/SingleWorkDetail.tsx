@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, useWindowDimensions} from 'react-native';
 import {FakeNavigation, WorkDetailF} from '../../../models';
 import * as api from '../../../apis';
 import {useCommonDispatcher, useParams} from '../../../helper/hooks';
@@ -27,6 +27,7 @@ const SingleWorkDetail: React.FC = () => {
 
   const [commonDispatcher] = useCommonDispatcher();
   const navigation = useNavigation<FakeNavigation>();
+  const {width, height} = useWindowDimensions();
 
   useEffect(() => {
     api.work
@@ -38,12 +39,8 @@ const SingleWorkDetail: React.FC = () => {
   }, [commonDispatcher.error, id]);
 
   const openSPU = useCallback(
-    (id: number) => {
-      // if (currentSPU?.id !== Number(id)) {
-      //   spuDispatcher.viewSPU(id);
-      // }
-      // setShowSPU(true);
-      navigation.navigate(getSPUNavigateParam(id));
+    (id: number, mainId: string) => {
+      navigation.navigate(getSPUNavigateParam(id, mainId));
     },
     [navigation],
   );
@@ -72,12 +69,14 @@ const SingleWorkDetail: React.FC = () => {
       <NavigationBar color="#fff" style={styles.nav} />
       {workDetail && (
         <WorkPage
+          width={width}
+          height={height}
           coverImage={workDetail.coverImage}
           videoUrl={workDetail?.videoUrl}
           mainId={workDetail.mainId}
           paused={false}
           shouldLoad={true}
-          onShowSPU={openSPU}
+          onShowSPU={spuId => openSPU(spuId, workDetail.mainId)}
           onShowShare={handleShareWork}
           onShowComment={openCommentModal}
         />

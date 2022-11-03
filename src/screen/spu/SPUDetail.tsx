@@ -21,7 +21,7 @@ import NavigationModal from '../common/NavigateModal';
 import MyStatusBar from '../../component/MyStatusBar';
 
 const SPUDetail: React.FC = () => {
-  const {id} = useParams<{id: number}>();
+  const {id, workMainId} = useParams<{id: number; workMainId: string}>();
   const [titleOpacity, setTitleOpacity] = useState(0);
   const [isCollect, setIsCollect] = useState(false);
   const [isJoinShowCase, setIsJoinShowCase] = useState(false);
@@ -81,11 +81,11 @@ const SPUDetail: React.FC = () => {
     if (!isLoggedIn) {
       userDispatcher.login({
         to: 'Order',
-        params: {id},
+        params: {workMainId},
         redirect: true,
       });
     } else {
-      navigation.navigate('Order', {id});
+      navigation.navigate('Order', {workMainId});
     }
   }
 

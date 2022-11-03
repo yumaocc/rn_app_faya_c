@@ -58,8 +58,8 @@ const WorkDetailListOther: React.FC = () => {
     userDispatcher.loadOtherUserWork(currentTabType, params.userId, true);
   }
   const openSPU = useCallback(
-    (id: number) => {
-      navigation.navigate(getSPUNavigateParam(id));
+    (id: number, mainId: string) => {
+      navigation.navigate(getSPUNavigateParam(id, mainId));
     },
     [navigation],
   );
@@ -122,7 +122,7 @@ const WorkDetailListOther: React.FC = () => {
         mainId={item.mainId}
         paused={currentIndex !== index}
         shouldLoad={shouldLoad}
-        onShowSPU={openSPU}
+        onShowSPU={spuId => openSPU(spuId, item.mainId)}
         onShowShare={handleShareWork}
         onShowComment={handleOpenComment}
       />

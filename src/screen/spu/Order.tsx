@@ -7,7 +7,7 @@ import {InputNumber, NavigationBar, Popup, Select, Button} from '../../component
 import FormItem from '../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {fenToYuan, findItem, moneyToYuan} from '../../fst/helper';
-import {useAndroidBack, useAppState, useCommonDispatcher, useCoupons, useSPUDispatcher, useWallet} from '../../helper/hooks';
+import {useAndroidBack, useAppState, useCommonDispatcher, useCoupons, useParams, useSPUDispatcher, useWallet} from '../../helper/hooks';
 import {BookingModelF, BookingType, CouponState, FakeNavigation, OrderPayState, PackageDetail, PayChannel, SKUDetail, SKUSaleState} from '../../models';
 import {RootState} from '../../redux/reducers';
 import * as api from '../../apis';
@@ -41,6 +41,7 @@ const Order: React.FC = () => {
   useAndroidBack();
 
   const appState = useAppState();
+  const {workMainId} = useParams<{workMainId: string}>();
   const navigation = useNavigation<FakeNavigation>();
   const [wallet] = useWallet();
   const [couponList] = useCoupons();
@@ -256,6 +257,9 @@ const Order: React.FC = () => {
     const formData = cleanOrderForm(form);
     if (shareUserId) {
       formData.agentUserId = shareUserId; // 达人分享
+    }
+    if (workMainId) {
+      formData.videoId = workMainId; // 视频分享
     }
     const {channel} = formData;
     const errorMsg = check(formData);
