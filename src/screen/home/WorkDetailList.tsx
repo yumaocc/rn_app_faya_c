@@ -1,21 +1,16 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {View, StyleSheet, FlatList, ListRenderItemInfo, RefreshControl} from 'react-native';
+import {View, StyleSheet, FlatList, ListRenderItemInfo, RefreshControl, LayoutChangeEvent} from 'react-native';
 import {useSelector} from 'react-redux';
 import {NavigationBar} from '../../component';
 import {useRefCallback} from '../../fst/hooks';
 import {useCommonDispatcher, useDeviceDimensions, useParams, useWorkDispatcher} from '../../helper/hooks';
 import {FakeNavigation, WorkF} from '../../models';
 import {RootState} from '../../redux/reducers';
-// import BuyBar from '../spu/BuyBar';
-// import SPUDetailView from '../spu/SPUDetailView';
 import WorkPage from './work/WorkPage';
 import * as api from '../../apis';
-// import {BoolEnum} from '../../fst/models';
 import {globalStyleVariables} from '../../constants/styles';
 import CommentModal, {CommentModalRef} from './work/CommentModal';
-// import {goLogin} from '../../router/Router';
-// import SPUShareModal from '../mine/agent/SPUShareModal';
 import {getShareWorkLink} from '../../helper/order';
 import WorkShareModal from '../mine/agent/WorkShareModal';
 import MyStatusBar from '../../component/MyStatusBar';
@@ -25,48 +20,23 @@ import {inRange} from 'lodash';
 const WorkDetailList: React.FC = () => {
   const params = useParams<{index: number}>();
   const [currentIndex, setCurrentIndex] = useState(0);
-  // const [showSPU, setShowSPU] = useState(false);
-  // const [isCollect, setIsCollect] = useState(false);
-  // const [isJoinShowCase, setIsJoinShowCase] = useState(false);
-  // const [showShare, setShowShare] = useState(false);
-  // const [posterUrl, setPosterUrl] = useState('');
   const [showShareWork, setShowShareWork] = useState(false);
   const [workSharePosterUrl, setWorkSharePosterUrl] = useState('');
   const [workShareLink, setWorkShareLink] = useState('');
+  const [dimension, setDimension] = useState({width: 0, height: 0, ready: false});
 
   const commentModalRef = useRef<CommentModalRef>(null);
   const currentTabType = useSelector((state: RootState) => state.work.currentTab.type);
   const works = useSelector((state: RootState) => state.work.works[currentTabType]);
   const videos = useMemo(() => works.list, [works.list]);
-  const refreshing = useMemo(() => works.status === 'loading', [works.status]);
-  // const currentSPU = useSelector((state: RootState) => state.spu.currentSPU);
-  // const currentSKU = useSelector((state: RootState) => state.spu.currentSKU);
-  // const currentSKUIsPackage = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
   const userId = useSelector((state: RootState) => state.user.myDetail?.userId);
-  // const shareLink = useMemo(() => getShareSPULink(currentSPU?.id, userId), [currentSPU?.id, userId]); // 商品分享链接
 
-  // const isLoggedIn = useIsLoggedIn();
-  const {height, width} = useDeviceDimensions();
-  const [flatListRef, setRef, isReady] = useRefCallback(null);
+  const windowDimensions = useDeviceDimensions();
+  const [flatListRef, setRef] = useRefCallback<FlatList>(null);
   const navigation = useNavigation<FakeNavigation>();
 
   const [workDispatcher] = useWorkDispatcher();
-  // const [spuDispatcher] = useSPUDispatcher();
-  // const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
-
-  // useEffect(() => {
-  //   if (showShare && !posterUrl && currentSPU?.id) {
-  //     api.spu
-  //       .getSharePoster(currentSPU?.id, 2)
-  //       .then(res => {
-  //         if (res) {
-  //           setPosterUrl(res);
-  //         }
-  //       })
-  //       .catch(commonDispatcher.error);
-  //   }
-  // }, [commonDispatcher, showShare, currentSPU, posterUrl]);
 
   useEffect(() => {
     if (currentIndex > videos.length - 3) {
@@ -74,25 +44,21 @@ const WorkDetailList: React.FC = () => {
     }
   }, [currentIndex, currentTabType, workDispatcher, videos.length]);
   useEffect(() => {
-    if (isReady) {
+    if (dimension.ready) {
       setTimeout(() => {
         const index = params.index || 0;
         flatListRef.current?.scrollToIndex({index, animated: false});
         setCurrentIndex(index);
       }, 0);
     }
-  }, [params.index, flatListRef, isReady]);
+  }, [params.index, flatListRef, dimension.ready]);
 
   async function handleRefresh() {
     workDispatcher.loadWork(currentTabType, true);
   }
   const openSPU = useCallback(
     (id: number) => {
-      // if (currentSPU?.id !== Number(id)) {
-      //   spuDispatcher.viewSPU(id);
-      // }
       navigation.navigate(getSPUNavigateParam(id));
-      // setShowSPU(true);
     },
     [navigation],
   );
@@ -104,44 +70,26 @@ const WorkDetailList: React.FC = () => {
     }
   }, []);
 
-  // const handleBuy = useCallback(() => {
-  //   setShowSPU(false);
-  //   if (!isLoggedIn) {
-  //     userDispatcher.login({
-  //       to: 'Order',
-  //       params: {index: params.index},
-  //       redirect: true,
-  //     });
-  //   } else {
-  //     navigation.navigate('Order');
-  //   }
-  // }, [isLoggedIn, userDispatcher, params.index, navigation]);
-
-  // const handleChangeSKU = useCallback(
-  //   (sku: SKUDetail | PackageDetail, isPackage: boolean) => {
-  //     spuDispatcher.changeSKU(sku, isPackage);
-  //   },
-  //   [spuDispatcher],
-  // );
-
   function openCommentModal(mainId: string, autoFocus = false) {
     commentModalRef.current?.openComment(mainId, autoFocus);
   }
-
-  // function openShareModal() {
-  //   setShowSPU(false);
-  //   setShowShare(true);
-  // }
 
   function renderVideoPage(info: ListRenderItemInfo<WorkF>) {
     const {item, index} = info;
     const shouldLoad = index === currentIndex || index === currentIndex + 1 || index === currentIndex - 1;
     const shouldRender = inRange(index, currentIndex - 2, currentIndex + 3);
+    let {height, width} = windowDimensions;
+    if (dimension.ready) {
+      height = dimension.height;
+      width = dimension.width;
+    }
     if (!shouldRender) {
       return <View style={{backgroundColor: '#000', height, width}} />;
     }
     return (
       <WorkPage
+        width={width}
+        height={height}
         videoUrl={item.videoUrl}
         coverImage={item.coverImage}
         mainId={item.mainId}
@@ -153,51 +101,6 @@ const WorkDetailList: React.FC = () => {
       />
     );
   }
-
-  // function handleCollect() {
-  //   if (!isLoggedIn) {
-  //     goLogin();
-  //   } else {
-  //     if (isCollect || !currentSPU) {
-  //       return;
-  //     }
-  //     const {collected} = currentSPU;
-  //     const currentIsCollect = collected === BoolEnum.TRUE;
-  //     api.spu
-  //       .collectSPU(currentSPU?.id)
-  //       .then(() => {
-  //         setIsCollect(false);
-  //         commonDispatcher.info(currentIsCollect ? '已取消收藏' : '收藏成功');
-  //         spuDispatcher.changeCurrentSPU({...currentSPU, collected: currentIsCollect ? BoolEnum.FALSE : BoolEnum.TRUE});
-  //       })
-  //       .catch(() => {
-  //         setIsCollect(false);
-  //       });
-  //   }
-  // }
-
-  // function handleJoinShowCase() {
-  //   if (!isLoggedIn) {
-  //     goLogin();
-  //   } else {
-  //     if (isJoinShowCase || !currentSPU) {
-  //       return;
-  //     }
-  //     const {showcaseJoined} = currentSPU;
-  //     const currentIsShowCase = showcaseJoined === BoolEnum.TRUE;
-  //     api.spu
-  //       .joinToShowCase(currentSPU?.id)
-  //       .then(() => {
-  //         setIsJoinShowCase(false);
-  //         commonDispatcher.info(currentIsShowCase ? '已取消展示' : '展示成功');
-  //         spuDispatcher.changeCurrentSPU({...currentSPU, showcaseJoined: currentIsShowCase ? BoolEnum.FALSE : BoolEnum.TRUE});
-  //       })
-  //       .catch(() => {
-  //         // console.log(e);
-  //         setIsJoinShowCase(false);
-  //       });
-  //   }
-  // }
 
   function handleShareWork(mainId: string) {
     setWorkShareLink(getShareWorkLink(mainId, userId));
@@ -213,39 +116,42 @@ const WorkDetailList: React.FC = () => {
       .catch(commonDispatcher.error);
   }
 
+  function handleLayout(e: LayoutChangeEvent) {
+    const {width, height} = e.nativeEvent.layout;
+    setDimension({width, height, ready: true});
+  }
+
+  function getItemLayout(item: WorkF[], index: number) {
+    let height = windowDimensions.height;
+    if (dimension.ready) {
+      height = dimension.height;
+    }
+    return {length: height, offset: dimension.height * index, index};
+  }
+
   return (
     <View style={styles.container}>
       <MyStatusBar barStyle="light-content" />
       <NavigationBar canBack={true} style={styles.nav} color="#fff" />
       <FlatList
+        onLayout={handleLayout}
         style={{backgroundColor: '#000', flex: 1}}
         data={videos}
         ref={setRef}
         renderItem={renderVideoPage}
         onMoveShouldSetResponder={() => true}
         pagingEnabled={true}
-        getItemLayout={(item, index) => ({length: height, offset: height * index, index})}
+        getItemLayout={getItemLayout}
         onViewableItemsChanged={handleChangViewableItems}
         keyExtractor={(_, index) => index.toString()}
         showsVerticalScrollIndicator={false}
         viewabilityConfig={{
           viewAreaCoveragePercentThreshold: 50,
         }}
-        refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={refreshing} colors={['#fff']} tintColor="#fff" title="正在刷新" titleColor="#fff" />}
+        refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={false} colors={['#fff']} tintColor="#fff" title="正在刷新" titleColor="#fff" />}
       />
-      {/* {showSPU && (
-        <Popup visible={true} onClose={() => setShowSPU(false)} style={[styles.spuModel, {height: height * 0.7}]} useNativeDrive={false}>
-          <View style={{flex: 1}}>
-            <ScrollView style={{flex: 1}} bounces={false}>
-              <SPUDetailView currentSelect={currentSKU} spu={currentSPU} isPackage={currentSKUIsPackage} onChangeSelect={handleChangeSKU} />
-            </ScrollView>
-            <BuyBar spu={currentSPU} sku={currentSKU} onBuy={handleBuy} onCollect={handleCollect} onAddToShopWindow={handleJoinShowCase} onShare={openShareModal} />
-          </View>
-        </Popup>
-      )} */}
 
       <CommentModal ref={commentModalRef} />
-      {/* {showShare && <SPUShareModal visible={true} poster={posterUrl} link={shareLink} onClose={() => setShowShare(false)} />} */}
       {showShareWork && <WorkShareModal visible={true} poster={workSharePosterUrl} link={workShareLink} onClose={() => setShowShareWork(false)} />}
     </View>
   );

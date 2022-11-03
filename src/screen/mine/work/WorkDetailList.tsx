@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {View, StyleSheet, FlatList, ListRenderItemInfo, RefreshControl} from 'react-native';
+import {View, StyleSheet, FlatList, ListRenderItemInfo, RefreshControl, LayoutChangeEvent} from 'react-native';
 import {useSelector} from 'react-redux';
 import {NavigationBar} from '../../../component';
 import {useRefCallback} from '../../../fst/hooks';
@@ -23,15 +23,15 @@ const WorkDetailList: React.FC = () => {
   const [showShareWork, setShowShareWork] = useState(false);
   const [workSharePosterUrl, setWorkSharePosterUrl] = useState('');
   const [workShareLink, setWorkShareLink] = useState('');
+  const [dimension, setDimension] = useState({width: 0, height: 0, ready: false});
 
   const currentTabType = useSelector((state: RootState) => state.user.currentTabType);
   const works = useSelector((state: RootState) => state.user.myWorks[currentTabType]);
   const videos = useMemo(() => works.list, [works.list]);
-  const refreshing = useMemo(() => works.status === 'loading', [works.status]);
   const userId = useSelector((state: RootState) => state.user.myDetail?.userId);
 
-  const {height, width} = useDeviceDimensions();
-  const [flatListRef, setRef, isReady] = useRefCallback(null);
+  const windowDimensions = useDeviceDimensions();
+  const [flatListRef, setRef] = useRefCallback(null);
   const commentModalRef = useRef<CommentModalRef>(null);
   const navigation = useNavigation<FakeNavigation>();
 
@@ -44,14 +44,14 @@ const WorkDetailList: React.FC = () => {
     }
   }, [currentIndex, currentTabType, userDispatcher, videos.length]);
   useEffect(() => {
-    if (isReady) {
+    if (dimension.ready) {
       setTimeout(() => {
         const index = params.index || 0;
         flatListRef.current?.scrollToIndex({index, animated: false});
         setCurrentIndex(index);
       }, 0);
     }
-  }, [params.index, flatListRef, isReady]);
+  }, [params.index, flatListRef, dimension.ready]);
 
   async function handleRefresh() {
     userDispatcher.loadMyWork(currentTabType, true);
@@ -88,15 +88,36 @@ const WorkDetailList: React.FC = () => {
       .catch(commonDispatcher.error);
   }
 
+  function handleLayout(e: LayoutChangeEvent) {
+    const {width, height} = e.nativeEvent.layout;
+    setDimension({width, height, ready: true});
+  }
+
+  function getItemLayout(item: WorkF[], index: number) {
+    let height = windowDimensions.height;
+    if (dimension.ready) {
+      height = dimension.height;
+    }
+    return {length: height, offset: dimension.height * index, index};
+  }
+
   function renderVideoPage(info: ListRenderItemInfo<WorkF>) {
     const {item, index} = info;
     const shouldLoad = index === currentIndex || index === currentIndex + 1 || index === currentIndex - 1;
     const shouldRender = inRange(index, currentIndex - 2, currentIndex + 3);
+    let {height, width} = windowDimensions;
+    if (dimension.ready) {
+      height = dimension.height;
+      width = dimension.width;
+    }
+
     if (!shouldRender) {
       return <View style={{backgroundColor: '#000', height, width}} />;
     }
     return (
       <WorkPage
+        height={height}
+        width={width}
         videoUrl={item.videoUrl}
         coverImage={item.coverImage}
         mainId={item.mainId}
@@ -115,18 +136,19 @@ const WorkDetailList: React.FC = () => {
       <FlatList
         style={{backgroundColor: '#000', flex: 1}}
         data={videos}
+        onLayout={handleLayout}
         ref={setRef}
         renderItem={renderVideoPage}
         onMoveShouldSetResponder={() => true}
         pagingEnabled={true}
-        getItemLayout={(item, index) => ({length: height, offset: height * index, index})}
+        getItemLayout={getItemLayout}
         onViewableItemsChanged={handleChangViewableItems}
         keyExtractor={(_, index) => index.toString()}
         showsVerticalScrollIndicator={false}
         viewabilityConfig={{
           viewAreaCoveragePercentThreshold: 50,
         }}
-        refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={refreshing} colors={['#fff']} tintColor="#fff" title="正在刷新" titleColor="#fff" />}
+        refreshControl={<RefreshControl onRefresh={handleRefresh} refreshing={false} colors={['#fff']} tintColor="#fff" title="正在刷新" titleColor="#fff" />}
       />
       {/* {showSPU && (
         <Popup visible={true} onClose={() => setShowSPU(false)} style={[styles.spuModel, {height: height * 0.7}]} useNativeDrive={false}>

@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useMemo, useState, memo} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import Icon from '../../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
-import {useAppState, useCommonDispatcher, useDeviceDimensions, useIsLoggedIn} from '../../../helper/hooks';
+import {useAppState, useCommonDispatcher, useIsLoggedIn} from '../../../helper/hooks';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FakeNavigation, WorkDetailF, WorkType} from '../../../models';
 import * as api from '../../../apis';
@@ -14,6 +14,8 @@ import PhotoPlayer from './PhotoPlayer';
 
 interface WorkPageProps {
   // item: WorkF;
+  width: number;
+  height: number;
   videoUrl?: string;
   coverImage: string;
   mainId: string;
@@ -25,7 +27,7 @@ interface WorkPageProps {
 }
 
 const WorkPage: React.FC<WorkPageProps> = props => {
-  const {shouldLoad} = props;
+  const {shouldLoad, height, width} = props;
   const [paused, setPaused] = useState(props.paused);
   const [resourcesLoaded, setResourcesLoaded] = useState(false);
   const [workDetail, setWorkDetail] = useState<WorkDetailF>();
@@ -41,7 +43,6 @@ const WorkPage: React.FC<WorkPageProps> = props => {
 
   const isLoggedIn = useIsLoggedIn();
 
-  const {width, height} = useDeviceDimensions();
   const isFocused = useIsFocused();
   const appState = useAppState();
   const {bottom} = useSafeAreaInsets();
