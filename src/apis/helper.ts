@@ -93,9 +93,9 @@ export async function postPaged<T, P>(url: string, data?: P, config: AxiosReques
   if (res.data.code === 1) {
     const data = res.data.data;
     if (needEncrypt) {
-      data.content = decrypt(data.content);
+      data.content = decrypt(data.content as unknown as string);
     }
-    console.log(data);
+    console.log('解密后:', data);
     return data;
   }
   throw new CustomError(res.data.msg, res.data.code);
