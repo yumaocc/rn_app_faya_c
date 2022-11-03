@@ -223,8 +223,8 @@ const User: React.FC = () => {
                     )}
                     {followed && (
                       <TouchableOpacity activeOpacity={0.7} onPress={followUser}>
-                        <View style={[globalStyles.containerCenter, styles.userAction, {backgroundColor: 'transparent', paddingHorizontal: 10}]}>
-                          <Icon name="wode_yiguanzhu48" size={24} color="#fff" />
+                        <View style={[globalStyles.containerCenter, styles.userAction, {backgroundColor: 'transparent', paddingHorizontal: 10, borderColor: '#f4f4f4'}]}>
+                          <Icon name="wode_yiguanzhu48" size={24} color="#999" />
                         </View>
                       </TouchableOpacity>
                     )}
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     paddingHorizontal: 20,
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: globalStyleVariables.COLOR_PRIMARY,
     marginLeft: globalStyleVariables.MODULE_SPACE,
     backgroundColor: globalStyleVariables.COLOR_PRIMARY,
     alignItems: 'center',
