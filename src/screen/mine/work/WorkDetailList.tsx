@@ -15,6 +15,7 @@ import {getShareWorkLink} from '../../../helper/order';
 import WorkShareModal from '../agent/WorkShareModal';
 import MyStatusBar from '../../../component/MyStatusBar';
 import {getSPUNavigateParam} from '../../../helper/spu';
+import {inRange} from 'lodash';
 
 const WorkDetailList: React.FC = () => {
   const params = useParams<{index: number}>();
@@ -29,7 +30,7 @@ const WorkDetailList: React.FC = () => {
   const refreshing = useMemo(() => works.status === 'loading', [works.status]);
   const userId = useSelector((state: RootState) => state.user.myDetail?.userId);
 
-  const {height} = useDeviceDimensions();
+  const {height, width} = useDeviceDimensions();
   const [flatListRef, setRef, isReady] = useRefCallback(null);
   const commentModalRef = useRef<CommentModalRef>(null);
   const navigation = useNavigation<FakeNavigation>();
@@ -90,6 +91,10 @@ const WorkDetailList: React.FC = () => {
   function renderVideoPage(info: ListRenderItemInfo<WorkF>) {
     const {item, index} = info;
     const shouldLoad = index === currentIndex || index === currentIndex + 1 || index === currentIndex - 1;
+    const shouldRender = inRange(index, currentIndex - 2, currentIndex + 3);
+    if (!shouldRender) {
+      return <View style={{backgroundColor: '#000', height, width}} />;
+    }
     return (
       <WorkPage
         videoUrl={item.videoUrl}

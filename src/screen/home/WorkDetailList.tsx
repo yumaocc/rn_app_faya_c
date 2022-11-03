@@ -20,6 +20,7 @@ import {getShareWorkLink} from '../../helper/order';
 import WorkShareModal from '../mine/agent/WorkShareModal';
 import MyStatusBar from '../../component/MyStatusBar';
 import {getSPUNavigateParam} from '../../helper/spu';
+import {inRange} from 'lodash';
 
 const WorkDetailList: React.FC = () => {
   const params = useParams<{index: number}>();
@@ -45,7 +46,7 @@ const WorkDetailList: React.FC = () => {
   // const shareLink = useMemo(() => getShareSPULink(currentSPU?.id, userId), [currentSPU?.id, userId]); // 商品分享链接
 
   // const isLoggedIn = useIsLoggedIn();
-  const {height} = useDeviceDimensions();
+  const {height, width} = useDeviceDimensions();
   const [flatListRef, setRef, isReady] = useRefCallback(null);
   const navigation = useNavigation<FakeNavigation>();
 
@@ -135,6 +136,10 @@ const WorkDetailList: React.FC = () => {
   function renderVideoPage(info: ListRenderItemInfo<WorkF>) {
     const {item, index} = info;
     const shouldLoad = index === currentIndex || index === currentIndex + 1 || index === currentIndex - 1;
+    const shouldRender = inRange(index, currentIndex - 2, currentIndex + 3);
+    if (!shouldRender) {
+      return <View style={{backgroundColor: '#000', height, width}} />;
+    }
     return (
       <WorkPage
         videoUrl={item.videoUrl}

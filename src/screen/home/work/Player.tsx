@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text} from 'react-native';
-import Video, {OnLoadData, OnProgressData} from 'react-native-video';
+import Video, {LoadError, OnLoadData, OnProgressData} from 'react-native-video';
 import {globalStyles} from '../../../constants/styles';
 import {StylePropView} from '../../../models';
 
@@ -14,6 +14,7 @@ interface PlayerProps {
   onProgress?: (data: OnProgressData) => void;
   onLoad?: () => void;
   onEnd?: () => void;
+  onError?: () => void;
 }
 
 const Player: React.FC<PlayerProps> = props => {
@@ -35,12 +36,17 @@ const Player: React.FC<PlayerProps> = props => {
     onEnd && onEnd();
   }
 
-  function handleError() {
+  function handleError(e: LoadError) {
     setError('呀，视频加载失败～');
+    console.log(e);
+    props.onError && props.onError();
   }
 
   function handleProgress(e: OnProgressData) {
     onProgress && onProgress(e);
+  }
+  function handleSeek() {
+    console.log('seek');
   }
 
   return (
@@ -51,6 +57,7 @@ const Player: React.FC<PlayerProps> = props => {
           disableFocus={true}
           onLoad={handleOnLoad}
           onError={handleError}
+          onSeek={handleSeek}
           onEnd={handleOnEnd}
           onProgress={handleProgress}
           source={{uri: videoUri}}

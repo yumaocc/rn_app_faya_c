@@ -12,7 +12,7 @@ import {BoolEnum} from '../../../fst/models';
 import Player from './Player';
 import PhotoPlayer from './PhotoPlayer';
 
-interface VideoPageProps {
+interface WorkPageProps {
   // item: WorkF;
   videoUrl?: string;
   coverImage: string;
@@ -24,7 +24,7 @@ interface VideoPageProps {
   onShowShare?: (mainId: string) => void;
 }
 
-const VideoPage: React.FC<VideoPageProps> = props => {
+const WorkPage: React.FC<WorkPageProps> = props => {
   const {shouldLoad} = props;
   const [paused, setPaused] = useState(props.paused);
   const [resourcesLoaded, setResourcesLoaded] = useState(false);
@@ -97,6 +97,9 @@ const VideoPage: React.FC<VideoPageProps> = props => {
         })
         .catch(console.log);
     }
+  }
+  function handleVideoLoadError() {
+    setResourcesLoaded(true);
   }
 
   function handleEnd() {
@@ -172,7 +175,9 @@ const VideoPage: React.FC<VideoPageProps> = props => {
 
   return (
     <View style={[{width, height}, styles.container]}>
-      {workDetail?.type === WorkType.Video && <Player style={[styles.full]} videoUri={videoUrl} paused={paused} poster={props.coverImage} onLoad={handleLoad} onEnd={handleEnd} />}
+      {workDetail?.type === WorkType.Video && (
+        <Player style={[styles.full]} videoUri={videoUrl} paused={paused} poster={props.coverImage} onLoad={handleLoad} onEnd={handleEnd} onError={handleVideoLoadError} />
+      )}
       {workDetail?.type === WorkType.Photo && <PhotoPlayer style={[styles.full]} files={workDetail?.fileList} paused={paused} onLoad={handleLoad} onEnd={handleEnd} />}
       {showPoster && <Image style={[styles.full]} source={{uri: props.coverImage}} resizeMode="cover" />}
 
@@ -291,9 +296,9 @@ const VideoPage: React.FC<VideoPageProps> = props => {
   );
 };
 
-export default memo(VideoPage);
+export default memo(WorkPage);
 
-VideoPage.defaultProps = {
+WorkPage.defaultProps = {
   shouldLoad: false,
 };
 
