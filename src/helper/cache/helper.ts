@@ -16,3 +16,9 @@ export async function setItem(key: CacheKeys | string, value: string): Promise<v
     await AsyncStorage.setItem(key, value);
   } catch (error) {}
 }
+
+export async function removeItem(key: CacheKeys | string): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(key);
+  } catch (error) {}
+}

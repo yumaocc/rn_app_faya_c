@@ -6,12 +6,10 @@ import {ActionType} from './types';
 import {resetBaseURL, resetToken} from '../../apis/helper';
 import {ERROR_SHOW_TIME, getBaseURL} from '../../constants';
 import {wait} from '../../fst/helper';
-// import {cache} from '../../helper/cache';
 import {ActionWithPayload} from '../types';
 import {getItem, setItem} from '../../helper/cache/helper';
 import {SystemConfig} from '../../models';
 import * as api from '../../apis';
-// import {UserInfo} from '../../models';
 
 function* initApp(): any {
   const url = getBaseURL();
@@ -23,7 +21,7 @@ function* initApp(): any {
     locationName: (yield getItem('locationName')) || '成都',
     locationId: Number(yield getItem('locationId')) || 19,
     shareUserId: (yield getItem('shareUserId')) || null,
-    touristId: Number(yield getItem('touristId')) || null,
+    touristId: (yield getItem('touristId')) || null,
     buyUserName: (yield getItem('buyUserName')) || '',
     buyUserPhone: (yield getItem('buyUserPhone')) || '',
   };
@@ -47,12 +45,6 @@ function* dismissMessage() {
   yield wait(ERROR_SHOW_TIME);
   yield put(Actions.dismissMessage());
 }
-
-// function* setToken(action: ActionWithPayload<ActionType, string>) {
-//   const token = action.payload;
-//   resetToken(token);
-//   yield cache.config.setToken(token);
-// }
 
 function* setConfig(action: ActionWithPayload<ActionType, Partial<SystemConfig>>) {
   const config = action.payload;

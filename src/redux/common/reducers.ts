@@ -22,6 +22,8 @@ export const initialState: CommonState = {
     locationName: '',
     shareUserId: null,
     touristId: null,
+    buyUserName: '',
+    buyUserPhone: '',
   },
 };
 

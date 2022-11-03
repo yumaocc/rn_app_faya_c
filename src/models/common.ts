@@ -43,7 +43,7 @@ export interface SystemConfig {
   locationId: number;
   locationName: string;
   shareUserId: string;
-  touristId: number;
+  touristId: string;
   buyUserName: string;
   buyUserPhone: string;
 }
