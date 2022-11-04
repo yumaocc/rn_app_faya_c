@@ -11,6 +11,7 @@ import {dictAgentLevel} from '../../../helper/dictionary';
 import {getValidPercent} from '../../../fst/helper';
 import MyStatusBar from '../../../component/MyStatusBar';
 import {useNavigation} from '@react-navigation/native';
+import {OperateItemStyles} from '../../../component/OperateIItem';
 
 const Profile: React.FC = () => {
   const [agentInfo, setAgentInfo] = useState<AgentHomeInfo>(null);
@@ -25,7 +26,6 @@ const Profile: React.FC = () => {
     return opacity > 0.5 ? '#000' : '#fff';
   }, [opacity]);
 
-  // const detail = useSelector((state: RootState) => state.user.myDetail);
   const progress = useMemo(() => {
     if (!agentInfo) {
       return 0;
@@ -57,7 +57,6 @@ const Profile: React.FC = () => {
   const hasLevel3Right = useMemo(() => agentInfo?.level >= 3, [agentInfo]);
 
   const [commonDispatcher] = useCommonDispatcher();
-  // const {top} = useSafeAreaInsets();
 
   useEffect(() => {
     api.user
@@ -78,6 +77,18 @@ const Profile: React.FC = () => {
     setOpacity(opacity);
   }
 
+  function showCode(type: 'friend' | 'share') {
+    navigation.navigate('MyCode', {type});
+    // navigation.navigate('MyCode', {type: 'share'})
+  }
+
+  function rightExplain(requireLevel?: number) {
+    if (requireLevel && agentInfo?.level < requireLevel) {
+      return;
+    }
+    navigation.navigate('Browser', {url: 'https://m.faya.life/#/agent/rights'});
+  }
+
   return (
     <View style={styles.container}>
       <NavigationBar title="达人主页" color={navigationColor} style={[{position: 'absolute', top: 0, left: 0, width: '100%', zIndex: 3, backgroundColor: navigationBg}]} />
@@ -94,7 +105,7 @@ const Profile: React.FC = () => {
               <View style={styles.avatarContainer}>
                 <TouchableWithoutFeedback>
                   <View style={{alignItems: 'center'}}>
-                    {!!agentInfo?.avatar && <Image style={[styles.avatar]} source={{uri: agentInfo?.avatar}} />}
+                    {!!agentInfo?.avatar && <Image style={[styles.avatar]} source={{uri: agentInfo?.avatar}} defaultSource={require('../../../assets/avatar_def.png')} />}
                     {!agentInfo?.avatar && <Image style={[styles.avatar]} source={require('../../../assets/avatar_def.png')} />}
                     {agentInfo?.level === 1 && <Image source={require('../../../assets/tag_darensign_xinshou.png')} style={styles.agentBadge} />}
                     {agentInfo?.level === 2 && <Image source={require('../../../assets/tag_darensign_jinjie.png')} style={styles.agentBadge} />}
@@ -105,24 +116,27 @@ const Profile: React.FC = () => {
               <View style={[globalStyles.containerRow, {justifyContent: 'space-around', flex: 1, height: 62}]}>
                 <View style={{alignItems: 'center', flex: 1}}>
                   <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{agentInfo?.cumulativeOrders}</Text>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 11}]}>累计订单（笔）</Text>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>累计订单(笔)</Text>
                 </View>
+                <View style={[globalStyles.lineVertical, {height: 20}]} />
                 <View style={{alignItems: 'center', flex: 1}}>
                   <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{agentInfo?.cumulativeIncomeYuan}</Text>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 11}]}>累计收益（元）</Text>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>累计收益(元)</Text>
                 </View>
               </View>
             </View>
 
-            <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE}}>
+            <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER}}>
               {/* 团队情况 */}
               {hasLevel2Right && (
                 <View style={[styles.card]}>
-                  <OperateItem label="我的推广码" showArrow onPress={() => navigation.navigate('MyCode', {type: 'share'})}>
+                  <OperateItem styles={operateStyles} label="我的组队码" showArrow onPress={() => showCode('share')}>
                     <Icon name="wode_erweima48" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                   </OperateItem>
-                  <View style={globalStyles.lineHorizontal} />
-                  <OperateItem label="我的团队">
+                  <View style={[{paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+                    <View style={globalStyles.lineHorizontal} />
+                  </View>
+                  <OperateItem label="我的团队" styles={operateStyles}>
                     <Text style={globalStyles.fontPrimary}>{agentInfo?.developNewUsers ?? '-'}人</Text>
                   </OperateItem>
                 </View>
@@ -131,59 +145,98 @@ const Profile: React.FC = () => {
               {!hasLevel3Right && (
                 <View style={styles.card}>
                   <TouchableHighlight underlayColor="#999" onPress={() => {}}>
-                    <View style={{padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}}>
+                    <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}}>
                       <View style={[globalStyles.containerLR]}>
-                        <View style={[globalStyles.containerRow]}>
-                          <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{dictAgentLevel(agentInfo?.level)}</Text>
-                          <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
-                        </View>
-                        <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>{dictAgentLevel(agentInfo?.level + 1)}</Text>
+                        <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{dictAgentLevel(agentInfo?.level)}</Text>
                       </View>
                       {/* 经验条 */}
                       <View style={{backgroundColor: '#0000001A', height: 4, marginTop: globalStyleVariables.MODULE_SPACE}}>
                         <View style={{backgroundColor: globalStyleVariables.COLOR_BUD, height: 4, width: progress + '%'}} />
                       </View>
-                      {/* 任务完成情况 */}
-                      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE}]}>
-                        <View style={[globalStyles.containerRow]}>
-                          {newUserTaskCompleted ? (
-                            <Icon name="task_complete_true" size={18} color={globalStyleVariables.COLOR_BUD} />
-                          ) : (
-                            <Icon name="task_complete_false" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
-                          )}
-                          <Text
-                            style={[
-                              globalStyles.fontPrimary,
-                              styles.taskName,
-                              {color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
-                            ]}>
-                            发展新用户{`（${Math.min(agentInfo?.developNewUsers, agentInfo?.developNewUsersMax) ?? '-'}/${agentInfo?.developNewUsersMax ?? '-'}）`}
-                          </Text>
+                      <Text style={[globalStyles.fontTertiary, {fontSize: 12, color: globalStyleVariables.COLOR_WARNING_YELLOW, marginTop: globalStyleVariables.MODULE_SPACE}]}>
+                        升级到{dictAgentLevel(agentInfo?.level + 1)}还需要
+                      </Text>
+                      {/* 新手达人任务完成情况 */}
+                      {agentInfo.level === 1 && (
+                        <View style={[{marginTop: 20}]}>
+                          <View style={[globalStyles.containerLR]}>
+                            <Text
+                              style={[
+                                globalStyles.fontPrimary,
+                                styles.taskName,
+                                {color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
+                              ]}>
+                              邀请新用户{`(${Math.min(agentInfo?.developNewUsers, agentInfo?.developNewUsersMax) ?? '-'}/${agentInfo?.developNewUsersMax ?? '-'}人)`}
+                            </Text>
+                            <Text style={{color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY}}>
+                              {newUserTaskCompleted ? '(已完成)' : '(待完成)'}
+                            </Text>
+                          </View>
+                          <View style={[globalStyles.containerCol, {padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#0000000D', marginTop: 10, borderRadius: 5}]}>
+                            <Text>· 分享商品给朋友，点击注册成功即可</Text>
+                            <Text style={{marginTop: 10}}>
+                              · 朋友扫描
+                              <Text onPress={() => showCode('friend')} style={[{color: globalStyleVariables.COLOR_LINK}]}>
+                                交友码
+                              </Text>
+                              ，完成注册即可
+                            </Text>
+                          </View>
+                          <View style={[globalStyles.containerLR, {marginTop: 20}]}>
+                            <Text
+                              style={[
+                                globalStyles.fontPrimary,
+                                styles.taskName,
+                                {color: newOrderTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
+                              ]}>
+                              分享商品完成订单交易
+                              {`(${Math.min(agentInfo?.shareCompletedOrder, agentInfo?.shareCompletedOrderMax) ?? '-'}/${agentInfo?.shareCompletedOrderMax ?? '-'}笔)`}
+                            </Text>
+                            <Text style={{color: newOrderTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY}}>
+                              {newOrderTaskCompleted ? '(已完成)' : '(待完成)'}
+                            </Text>
+                          </View>
+                          <View style={[globalStyles.containerCol, {padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#0000000D', marginTop: 10, borderRadius: 5}]}>
+                            <Text>· 把商品分享给朋友，成功购买即可</Text>
+                          </View>
                         </View>
-                        <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
-                          {newOrderTaskCompleted ? (
-                            <Icon name="task_complete_true" size={18} color={globalStyleVariables.COLOR_BUD} />
-                          ) : (
-                            <Icon name="task_complete_false" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
-                          )}
-                          <Text
-                            style={[
-                              globalStyles.fontPrimary,
-                              styles.taskName,
-                              {color: newOrderTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
-                            ]}>
-                            分享商品完成订单交易
-                            {`（${Math.min(agentInfo?.shareCompletedOrder, agentInfo?.shareCompletedOrderMax) ?? '-'}/${agentInfo?.shareCompletedOrderMax ?? '-'}）`}
-                          </Text>
+                      )}
+                      {/* 进阶达人任务完成情况 */}
+                      {agentInfo.level === 2 && (
+                        <View style={[{marginTop: 20}]}>
+                          <View style={[globalStyles.containerLR]}>
+                            <Text
+                              style={[
+                                globalStyles.fontPrimary,
+                                styles.taskName,
+                                {color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
+                              ]}>
+                              组建团队{`${agentInfo?.developNewUsersMax ?? '-'}人`}
+                              {`(${Math.min(agentInfo?.developNewUsers, agentInfo?.developNewUsersMax) ?? '-'}/${agentInfo?.developNewUsersMax ?? '-'}人)`}
+                            </Text>
+                            <Text style={{color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY}}>
+                              {newUserTaskCompleted ? '(已完成)' : '(待完成)'}
+                            </Text>
+                          </View>
+                          <View style={[globalStyles.containerCol, {padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#0000000D', marginTop: 10, borderRadius: 5}]}>
+                            <Text>
+                              · 朋友扫描
+                              <Text onPress={() => showCode('share')} style={[{color: globalStyleVariables.COLOR_LINK}]}>
+                                组队码
+                              </Text>
+                              ，完成注册即可
+                            </Text>
+                          </View>
                         </View>
-                      </View>
+                      )}
                     </View>
                   </TouchableHighlight>
                 </View>
               )}
+
               {/* 权益面板 */}
               <View style={styles.card}>
-                <View style={[{padding: globalStyleVariables.MODULE_SPACE}]}>
+                <View style={[{padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
                   <View style={[globalStyles.containerLR]}>
                     <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>我的权益</Text>
                     <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>
@@ -194,7 +247,7 @@ const Profile: React.FC = () => {
                   <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE}]} />
                   {/* 权益内容 */}
                   {/* 一级权益 */}
-                  <View>
+                  <View style={[{marginTop: 15}]}>
                     <View style={[styles.rightItem, {marginTop: 0}]}>
                       <Image source={require('../../../assets/icon_daren_01.png')} style={styles.rightIcon} />
                       <View style={styles.rightContent}>
@@ -204,7 +257,12 @@ const Profile: React.FC = () => {
                             <View style={styles.dot} />
                           </View>
                           <View style={{flex: 1}}>
-                            <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>将商品加入橱窗，当橱窗商品销售完成后可以获取【带货佣金】</Text>
+                            <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>
+                              将商品加入橱窗，当橱窗商品销售完成后可以获取
+                              <Text style={{color: globalStyleVariables.COLOR_LINK}} onPress={() => rightExplain()}>
+                                【带货佣金】
+                              </Text>
+                            </Text>
                           </View>
                         </View>
                       </View>
@@ -218,7 +276,12 @@ const Profile: React.FC = () => {
                             <View style={styles.dot} />
                           </View>
                           <View style={{flex: 1}}>
-                            <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>分享商品，当订单完成后可以获取【直售佣金】</Text>
+                            <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>
+                              分享商品，当订单完成后可以获取
+                              <Text style={{color: globalStyleVariables.COLOR_LINK}} onPress={() => rightExplain()}>
+                                【直售佣金】
+                              </Text>
+                            </Text>
                           </View>
                         </View>
                       </View>
@@ -242,7 +305,12 @@ const Profile: React.FC = () => {
                             <View style={styles.dot} />
                           </View>
                           <View style={{flex: 1}}>
-                            <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>可以组建团队，当团队成员分享商品完成订单后，你会获得一份【躺赚佣金】</Text>
+                            <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>
+                              可以组建团队，当团队成员分享商品完成订单后，你会获得一份
+                              <Text style={{color: globalStyleVariables.COLOR_LINK}} onPress={() => rightExplain(2)}>
+                                【躺赚佣金】
+                              </Text>
+                            </Text>
                           </View>
                         </View>
                       </View>
@@ -266,7 +334,16 @@ const Profile: React.FC = () => {
                             <View style={styles.dot} />
                           </View>
                           <View style={{flex: 1}}>
-                            <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>分享商品，当订单完成后可以获取【直售佣金】+【躺赚佣金】</Text>
+                            <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>
+                              分享商品，当订单完成后可以获取
+                              <Text style={{color: globalStyleVariables.COLOR_LINK}} onPress={() => rightExplain(3)}>
+                                【直售佣金】
+                              </Text>
+                              +
+                              <Text style={{color: globalStyleVariables.COLOR_LINK}} onPress={() => rightExplain(3)}>
+                                【躺赚佣金】
+                              </Text>
+                            </Text>
                           </View>
                         </View>
                         <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE, alignItems: 'flex-start'}]}>
@@ -274,7 +351,13 @@ const Profile: React.FC = () => {
                             <View style={styles.dot} />
                           </View>
                           <View style={{flex: 1}}>
-                            <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>解锁【躺赚佣金】提现</Text>
+                            <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>
+                              解锁
+                              <Text style={{color: globalStyleVariables.COLOR_LINK}} onPress={() => rightExplain(3)}>
+                                【躺赚佣金】
+                              </Text>
+                              提现
+                            </Text>
                           </View>
                         </View>
                       </View>
@@ -307,7 +390,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     marginTop: -20,
   },
   avatarContainer: {
@@ -334,7 +417,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   taskName: {
-    marginLeft: globalStyleVariables.MODULE_SPACE_BIGGER,
+    // marginLeft: globalStyleVariables.MODULE_SPACE_BIGGER,
   },
   rightItem: {
     flexDirection: 'row',
@@ -360,3 +443,9 @@ const styles = StyleSheet.create({
     backgroundColor: globalStyleVariables.TEXT_COLOR_TERTIARY,
   },
 });
+
+const operateStyles: Partial<OperateItemStyles> = {
+  item: {paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER},
+  container: {height: 50},
+  label: {fontSize: 18, color: globalStyleVariables.TEXT_COLOR_PRIMARY},
+};

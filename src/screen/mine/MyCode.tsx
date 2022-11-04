@@ -89,13 +89,13 @@ const MyCode: React.FC = () => {
           <View style={globalStyles.containerRow}>
             <TouchableOpacity activeOpacity={0.8} onPress={() => setCurrentType('friend')}>
               <Text style={[globalStyles.fontPrimary, {color: currentType === 'friend' ? globalStyleVariables.TEXT_COLOR_PRIMARY : globalStyleVariables.TEXT_COLOR_TERTIARY}]}>
-                交友二维码
+                交友码
               </Text>
             </TouchableOpacity>
             {hasShareCode && (
-              <TouchableOpacity activeOpacity={0.8} style={{marginLeft: globalStyleVariables.MODULE_SPACE_BIGGER}} onPress={() => setCurrentType('share')}>
+              <TouchableOpacity activeOpacity={0.8} style={{marginLeft: 40}} onPress={() => setCurrentType('share')}>
                 <Text style={[globalStyles.fontPrimary, {color: currentType === 'share' ? globalStyleVariables.TEXT_COLOR_PRIMARY : globalStyleVariables.TEXT_COLOR_TERTIARY}]}>
-                  推广码
+                  组队码
                 </Text>
               </TouchableOpacity>
             )}

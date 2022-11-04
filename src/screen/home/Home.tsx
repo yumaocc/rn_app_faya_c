@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, ScrollView, useWindowDimensions} from 'react-native';
+import {View, StyleSheet, ScrollView, useWindowDimensions, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {Button, Tabs} from '../../component';
@@ -10,10 +10,11 @@ import {useIsLoggedIn, useWorkDispatcher} from '../../helper/hooks';
 import {RootState} from '../../redux/reducers';
 import WorkList from './WorkList';
 // import Icon from '../../component/Icon';
-import {WorkTabType} from '../../models';
-import {useIsFocused} from '@react-navigation/native';
+import {FakeNavigation, WorkTabType} from '../../models';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {goLogin} from '../../router/Router';
 import MyStatusBar from '../../component/MyStatusBar';
+import Icon from '../../component/Icon';
 
 const Home: React.FC = () => {
   const currentTab = useSelector((state: RootState) => state.work.currentTab);
@@ -27,6 +28,7 @@ const Home: React.FC = () => {
   const [ref, setRef, isReady] = useRefCallback();
   const isFocused = useIsFocused();
   const isLoggedIn = useIsLoggedIn();
+  const navigation = useNavigation<FakeNavigation>();
 
   const [workDispatcher] = useWorkDispatcher();
 
@@ -79,17 +81,21 @@ const Home: React.FC = () => {
     return Promise.resolve();
   }
 
+  function handleScan() {
+    navigation.navigate('Scanner');
+  }
+
   return (
     <SafeAreaView edges={['top']} style={{flex: 1, backgroundColor: '#fff'}}>
       {isFocused && <MyStatusBar barStyle="dark-content" />}
       <View style={styles.container}>
         <View style={{position: 'relative'}}>
           <Tabs styles={tabStyles} gap={30} currentKey={currentTab.type} tabs={tabs.map(tab => ({title: tab.title, key: tab.key}))} onChange={handleChangeTab} />
-          {/* <View style={styles.searchIcon}>
-            <TouchableOpacity activeOpacity={0.8} onPress={handleSearch}>
-              <Icon name="all_input_search36" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+          <View style={styles.scanIcon}>
+            <TouchableOpacity activeOpacity={0.8} onPress={handleScan}>
+              <Icon name="wode_scan48" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
             </TouchableOpacity>
-          </View> */}
+          </View>
         </View>
         <ScrollView ref={setRef} horizontal style={{flex: 1}} snapToInterval={width} showsHorizontalScrollIndicator={false} scrollEnabled={false}>
           <View style={{width}}>
@@ -149,6 +155,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     // backgroundColor: '#fff',
+  },
+  scanIcon: {
+    position: 'absolute',
+    height: 50,
+    left: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   workContainer: {
     flex: 1,

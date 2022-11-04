@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../../component';
+import Icon from '../../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {moneyToYuan} from '../../../fst/helper';
 import {useCoupons, useInvalidCoupons, useUsedCoupons} from '../../../helper/hooks';
@@ -43,15 +44,33 @@ const CouponList: React.FC = () => {
         <NavigationBar title="优惠券" />
         <ScrollView style={{flex: 1}}>
           <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
-            {couponList.map(renderCouponItem)}
-            <View style={{marginTop: 40, marginBottom: 15}}>
-              <Text>已使用</Text>
-            </View>
-            {usedCoupons.map(renderCouponItem)}
-            <View style={{marginTop: 40, marginBottom: 15}}>
-              <Text>已失效</Text>
-            </View>
-            {invalidCoupons.map(renderCouponItem)}
+            {couponList?.length ? (
+              couponList.map(renderCouponItem)
+            ) : (
+              <View style={[{marginTop: 120}, globalStyles.containerCenter]}>
+                <View style={[globalStyles.containerCenter, {width: 50, height: 50, borderRadius: 25, backgroundColor: '#0000000D'}]}>
+                  <Icon name="empty_quan" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                </View>
+                <Text style={[globalStyles.fontTertiary, {marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}]}>暂无可用优惠券</Text>
+              </View>
+            )}
+
+            {!!usedCoupons?.length && (
+              <>
+                <View style={{marginTop: 40, marginBottom: 15}}>
+                  <Text>已使用</Text>
+                </View>
+                {usedCoupons.map(renderCouponItem)}
+              </>
+            )}
+            {!!invalidCoupons?.length && (
+              <>
+                <View style={{marginTop: 40, marginBottom: 15}}>
+                  <Text>已失效</Text>
+                </View>
+                {invalidCoupons.map(renderCouponItem)}
+              </>
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -64,6 +83,7 @@ export default CouponList;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   couponItem: {
     paddingVertical: 24,

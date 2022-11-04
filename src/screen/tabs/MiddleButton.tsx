@@ -27,6 +27,7 @@ const MiddleButton: React.FC = () => {
       // navigation.navigate('TestPage');
       // navigation.navigate('SearchSPU');
       // navigation.navigate('WithdrawalRecords');
+      // navigation.navigate('CouponList');
       // navigation.navigate('WalletSummaryAgent');
       // navigation.navigate('Profile');
       // navigation.navigate('PaySuccess');

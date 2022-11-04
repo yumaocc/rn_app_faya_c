@@ -39,8 +39,8 @@ const Certification: React.FC = () => {
       idCardFrontOss: idCardFrontOss,
       idNo: idCard,
       mobileNo: bankTelephone,
-      _idCardBack: {uri: idCardBackOss},
-      _idCardFront: {uri: idCardFrontOss},
+      _idCardBack: idCardBackOss ? {uri: idCardBackOss} : null,
+      _idCardFront: idCardFrontOss ? {uri: idCardFrontOss} : null,
     });
     setRejectReason(reason);
   }, [wallet, setFormFields]);
@@ -202,6 +202,7 @@ const Certification: React.FC = () => {
             <FormItem label="身份证号" {...formItemProps}>
               <TextInput value={form.idNo} onChangeText={val => setFormField('idNo', val)} placeholder="请输入身份证号" {...formItemInputProps} style={styles.formItemInput} />
             </FormItem>
+            <View style={[globalStyles.lineHorizontal]} />
             <FormItem label="银行卡号" {...formItemProps}>
               <TextInput value={form.cardNo} onChangeText={val => setFormField('cardNo', val)} placeholder="请输入银行卡号" {...formItemInputProps} style={styles.formItemInput} />
             </FormItem>

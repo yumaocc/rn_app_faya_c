@@ -68,6 +68,10 @@ export interface OrderF {
 export interface OrderDetailF {
   id: number;
   skuName: string;
+  bookingTime: DateTimeString;
+  createdTime: DateTimeString;
+  useBeginTime: DateTimeString;
+  useEndTime: DateTimeString;
   bizName: string;
   status: OrderStatus;
   spuCoverImage: string;

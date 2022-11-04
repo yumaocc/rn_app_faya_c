@@ -6,7 +6,7 @@ import Popover from 'react-native-popover-view';
 
 import {Modal, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {useParams} from '../../helper/hooks';
+import {useCommonDispatcher, useParams} from '../../helper/hooks';
 import {LocationNavigateInfo, OrderDetailF, OrderPackageSKU, PayChannel} from '../../models';
 import * as api from '../../apis';
 import {StylePropView} from '../../models';
@@ -20,6 +20,7 @@ import KFModal from '../common/KFModal';
 import MyStatusBar from '../../component/MyStatusBar';
 import {callPhone, openMap} from '../../helper/system';
 import NavigationModal from '../common/NavigateModal';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 const OrderDetail: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -34,6 +35,7 @@ const OrderDetail: React.FC = () => {
   const orderCompleted = orderDetail?.status === OrderStatus.Completed;
   const orderCanceled = orderDetail?.status === OrderStatus.Canceled;
   const orderCanUse = useMemo(() => [OrderStatus.Booked, OrderStatus.Paid].includes(orderDetail?.status), [orderDetail]);
+  const [commonDispatcher] = useCommonDispatcher();
 
   const {bottom} = useSafeAreaInsets();
   const isFocused = useIsFocused();
@@ -77,6 +79,13 @@ const OrderDetail: React.FC = () => {
     });
     setShowSelectMap(true);
   }, []);
+
+  function onCopy(text: string) {
+    if (text) {
+      Clipboard.setString(text);
+      commonDispatcher.info('复制成功');
+    }
+  }
 
   function renderCodeItem(orderPackage: OrderPackage, index: number) {
     return (
@@ -289,10 +298,32 @@ const OrderDetail: React.FC = () => {
                     <Text style={globalStyles.fontPrimary}>联系电话</Text>
                     <Text style={globalStyles.fontSecondary}>{orderDetail?.paidPhone}</Text>
                   </View>
+                  {orderDetail?.bookingTime && (
+                    <View style={[globalStyles.containerLR, {height: 30}]}>
+                      <Text style={globalStyles.fontPrimary}>开始预约时间</Text>
+                      <Text style={globalStyles.fontSecondary}>{orderDetail?.bookingTime}</Text>
+                    </View>
+                  )}
+
+                  {orderDetail?.useBeginTime && orderDetail?.useEndTime && (
+                    <View style={[globalStyles.containerLR, {height: 30}]}>
+                      <Text style={globalStyles.fontPrimary}>使用日期</Text>
+                      <Text style={globalStyles.fontSecondary}>
+                        {orderDetail?.useBeginTime}-{orderDetail?.useEndTime}
+                      </Text>
+                    </View>
+                  )}
                   <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
                   <View style={[globalStyles.containerLR, {height: 30}]}>
                     <Text style={globalStyles.fontPrimary}>订单编号</Text>
-                    <Text style={globalStyles.fontSecondary}>{orderDetail?.orderBigId}</Text>
+                    <View style={globalStyles.containerRow}>
+                      <TouchableOpacity activeOpacity={0.8} onPress={() => onCopy(orderDetail?.orderBigId)}>
+                        <View style={[globalStyles.tagWrapper, {backgroundColor: '#3333331A'}]}>
+                          <Text style={[globalStyles.tag, globalStyles.fontPrimary, {fontSize: 10}]}>复制</Text>
+                        </View>
+                      </TouchableOpacity>
+                      <Text style={[globalStyles.fontSecondary, {marginLeft: 5}]}>{orderDetail?.orderBigId}</Text>
+                    </View>
                   </View>
                   <View style={[globalStyles.containerLR, {height: 30}]}>
                     <Text style={globalStyles.fontPrimary}>套餐名称</Text>
@@ -302,6 +333,10 @@ const OrderDetail: React.FC = () => {
                     <Text style={globalStyles.fontPrimary}>购买数量</Text>
                     <Text style={globalStyles.fontSecondary}>x{orderDetail?.numberOfProducts || 0}</Text>
                   </View>
+                  <View style={[globalStyles.containerLR, {height: 30}]}>
+                    <Text style={globalStyles.fontPrimary}>支付方式</Text>
+                    <Text style={globalStyles.fontSecondary}>{orderDetail?.ypPayChannel === PayChannel.ALIPAY ? '支付宝' : '微信'}</Text>
+                  </View>
                   <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE}]} />
                   {!!orderDetail?.willReturnUserCommission && (
                     <View style={[globalStyles.containerLR, {height: 30}]}>
@@ -309,10 +344,6 @@ const OrderDetail: React.FC = () => {
                       <Text style={globalStyles.fontSecondary}>{orderDetail?.willReturnUserCommissionYuan}</Text>
                     </View>
                   )}
-                  <View style={[globalStyles.containerLR, {height: 30}]}>
-                    <Text style={globalStyles.fontPrimary}>支付方式</Text>
-                    <Text style={globalStyles.fontSecondary}>{orderDetail?.ypPayChannel === PayChannel.ALIPAY ? '支付宝' : '微信'}</Text>
-                  </View>
                   <View style={[globalStyles.containerLR, {height: 30}]}>
                     <Text style={globalStyles.fontPrimary}>优惠券</Text>
                     <Text style={globalStyles.fontSecondary}>-¥{orderDetail?.usedCouponMoneyYuan}</Text>

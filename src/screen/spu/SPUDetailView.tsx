@@ -86,9 +86,9 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
     );
   }
 
-  function renderSKUNode(skuName: string, isActive: boolean, disabled: boolean) {
+  function renderSKUNode(skuName: string, isActive: boolean, disabled: boolean, key: string) {
     return (
-      <View style={[styles.skuItem, isActive && styles.skuItemActive, disabled && styles.skuItemDisabled]}>
+      <View style={[styles.skuItem, isActive && styles.skuItemActive, disabled && styles.skuItemDisabled]} key={key}>
         <Text style={[styles.skuText, isActive && styles.skuTextActive, disabled && styles.skuTextDisabled]}>{skuName}</Text>
       </View>
     );
@@ -97,27 +97,29 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
   function renderSKU(sku: SKUDetail) {
     const isActive = (currentSelect as SKUDetail)?.id === sku.id;
     const disabled = sku?.saleStatus !== SKUSaleState.ON_SALE;
+    const key = 'sku_' + sku.id;
     if (!disabled) {
       return (
-        <TouchableOpacity activeOpacity={0.8} key={'sku_' + sku.id} onPress={() => handleClick(sku)}>
-          {renderSKUNode(sku.skuName, isActive, disabled)}
+        <TouchableOpacity activeOpacity={0.8} key={key} onPress={() => handleClick(sku)}>
+          {renderSKUNode(sku.skuName, isActive, disabled, key)}
         </TouchableOpacity>
       );
     } else {
-      return renderSKUNode(sku.skuName, isActive, disabled);
+      return renderSKUNode(sku.skuName, isActive, disabled, key);
     }
   }
   function renderPackage(pkg: PackageDetail) {
     const isActive = (currentSelect as PackageDetail)?.packageId === pkg.packageId;
     const disabled = pkg?.saleStatus !== SKUSaleState.ON_SALE;
+    const key = 'pkg_' + pkg.packageId;
     if (!disabled) {
       return (
-        <TouchableOpacity activeOpacity={0.8} key={'pkg_' + pkg.packageId} onPress={() => handleClick(pkg, true)}>
-          {renderSKUNode(pkg.packageName, isActive, disabled)}
+        <TouchableOpacity activeOpacity={0.8} key={key} onPress={() => handleClick(pkg, true)}>
+          {renderSKUNode(pkg.packageName, isActive, disabled, key)}
         </TouchableOpacity>
       );
     } else {
-      return renderSKUNode(pkg.packageName, isActive, disabled);
+      return renderSKUNode(pkg.packageName, isActive, disabled, key);
     }
   }
 
@@ -175,11 +177,11 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
           </View>
         </View>
         <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
-          <View style={[globalStyles.tagWrapper, {backgroundColor: '#4AB87D33'}]}>
+          <View style={[globalStyles.tagWrapper, {backgroundColor: '#4AB87D33', height: 24}]}>
             <Icon name="shangpin_suixintui24" size={12} color="#4AB87D" />
-            <Text style={[globalStyles.tag, {color: '#4AB87D'}]}>平台保障·随心腿</Text>
+            <Text style={[globalStyles.tag, {color: '#4AB87D', marginLeft: 2}]}>平台保障·随心退</Text>
           </View>
-          <View style={[globalStyles.tagWrapper, {backgroundColor: '#FF593433', marginLeft: globalStyleVariables.MODULE_SPACE}]}>
+          <View style={[globalStyles.tagWrapper, {backgroundColor: '#FF593433', marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER, height: 24}]}>
             <Text style={[globalStyles.tag, {color: '#FF5934'}]}>限时抢购</Text>
           </View>
         </View>
