@@ -10,17 +10,26 @@ interface CustomTouchableProps {
   activeOpacity?: number;
   style?: StylePropView;
   onPress?: () => void;
+  onLongPress?: () => void;
 }
 
 function isClick(dx: number, dy: number) {
   return Math.abs(dx) < 10 && Math.abs(dy) < 10;
 }
 
+const longPressThreshold = 200;
+
+function isLongPress(dx: number, dy: number, startAt: number) {
+  return isClick(dx, dy) && Date.now() - startAt > longPressThreshold;
+}
+
 const CustomTouchable: React.FC<CustomTouchableProps> = props => {
   const [opacity, setOpacity] = React.useState(1);
+  const timeRef = React.useRef(0);
   const _panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderGrant: () => {
+      timeRef.current = Date.now();
       setOpacity(props.activeOpacity);
     },
     onPanResponderRelease: (evt: GestureResponderEvent, state: PanResponderGestureState) => {
@@ -32,6 +41,10 @@ const CustomTouchable: React.FC<CustomTouchableProps> = props => {
     },
     onPanResponderTerminationRequest: (_, state: PanResponderGestureState) => {
       const {dx, dy} = state;
+      if (isLongPress(dx, dy, timeRef.current)) {
+        props.onLongPress && props.onLongPress();
+        return true;
+      }
       return !isClick(dx, dy);
     },
     onPanResponderTerminate: () => {

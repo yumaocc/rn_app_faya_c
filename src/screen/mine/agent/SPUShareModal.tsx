@@ -6,6 +6,7 @@ import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useCommonDispatcher} from '../../../helper/hooks';
 import {saveImageToGallery} from '../../../helper/system';
 import Clipboard from '@react-native-clipboard/clipboard';
+import Loading from '../../../component/Loading';
 
 interface SPUShareModalProps {
   poster: string;
@@ -55,10 +56,14 @@ const SPUShareModal: React.FC<SPUShareModalProps> = props => {
         </View>
         <View style={[globalStyles.containerCenter, {marginTop: 20}]}>
           <View style={{width: 205, height: 360, backgroundColor: '#f4f4f4'}}>
-            {poster && (
+            {poster ? (
               <TouchableWithoutFeedback onPress={handlePreviewPoster}>
                 <Image source={{uri: poster}} style={{width: '100%', height: '100%'}} resizeMode="contain" />
               </TouchableWithoutFeedback>
+            ) : (
+              <View style={[{width: '100%', height: '100%'}, globalStyles.containerCenter]}>
+                <Loading />
+              </View>
             )}
           </View>
 

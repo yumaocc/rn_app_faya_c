@@ -54,6 +54,7 @@ export type RootStackParamList = {
   MyProfile: undefined; // 个人资料修改
   SingleWorkDetail: {id: string};
   Invite: undefined;
+  CommentReport: {id: string};
 };
 
 export type ValidRoute = keyof RootStackParamList;

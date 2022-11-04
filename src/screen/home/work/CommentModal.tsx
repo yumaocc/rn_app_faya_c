@@ -1,5 +1,5 @@
 import React, {memo, useCallback, useEffect, useImperativeHandle, useRef, useState} from 'react';
-import {View, Text, StyleSheet, Platform, ScrollView, TextInput, TouchableOpacity, Keyboard, useWindowDimensions, Image} from 'react-native';
+import {View, Text, StyleSheet, Platform, ScrollView, TextInput, TouchableOpacity, Keyboard, useWindowDimensions, Image, TouchableWithoutFeedback} from 'react-native';
 import {Popup} from '../../../component';
 import Icon from '../../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
@@ -13,9 +13,11 @@ import {goLogin} from '../../../router/Router';
 interface CommentModalProps {
   // visible: boolean;
   // onClose: () => void;
+  onCommentAction?: (comment: WorkComment) => void; // 长按评论的操作
 }
 export interface CommentModalRef {
   openComment: (mainId: string, focusInput?: boolean) => void;
+  close: () => void;
 }
 
 const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props, ref) => {
@@ -35,6 +37,9 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
     openComment: (mainId: string, focusInput = false) => {
       openCommentModal(mainId, focusInput);
     },
+    close: () => {
+      setShowComment(false);
+    },
   }));
 
   const loadComment = useCallback(
@@ -49,6 +54,7 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
             status: res.length < pageSize ? 'noMore' : 'none',
             index,
           };
+          console.log(newComments);
           setComment(newComments);
         } catch (error) {
           commonDispatcher.error(error);
@@ -153,18 +159,20 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
             {comment.list.map((comment, index) => {
               return (
                 <View key={index} style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, marginVertical: globalStyleVariables.MODULE_SPACE}}>
-                  <View style={[globalStyles.containerRow, {alignItems: 'flex-start'}]}>
-                    <Image source={comment.avatar ? {uri: comment.avatar} : require('../../../assets/avatar_def.png')} style={styles.commentAvatar} />
-                    <View style={{flex: 1, marginLeft: globalStyleVariables.MODULE_SPACE}}>
-                      <Text>{comment.nickName}</Text>
-                      <View>
-                        <Text style={[globalStyles.fontPrimary, {lineHeight: 20}]}>{comment.content}</Text>
-                      </View>
-                      <View>
-                        <Text style={globalStyles.fontTertiary}>{friendlyTime(comment.createdTime)}</Text>
+                  <TouchableWithoutFeedback onLongPress={() => props.onCommentAction && props.onCommentAction(comment)}>
+                    <View style={[globalStyles.containerRow, {alignItems: 'flex-start'}]}>
+                      <Image source={comment.avatar ? {uri: comment.avatar} : require('../../../assets/avatar_def.png')} style={styles.commentAvatar} />
+                      <View style={{flex: 1, marginLeft: globalStyleVariables.MODULE_SPACE}}>
+                        <Text>{comment.nickName}</Text>
+                        <View>
+                          <Text style={[globalStyles.fontPrimary, {lineHeight: 20}]}>{comment.content}</Text>
+                        </View>
+                        <View>
+                          <Text style={globalStyles.fontTertiary}>{friendlyTime(comment.createdTime)}</Text>
+                        </View>
                       </View>
                     </View>
-                  </View>
+                  </TouchableWithoutFeedback>
                 </View>
               );
             })}

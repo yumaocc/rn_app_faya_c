@@ -48,6 +48,7 @@ import SearchSPU from '../screen/discover/SearchSPU';
 import Scanner from '../screen/common/Scanner';
 import ScanResult from '../screen/common/ScanResult';
 import SingleWorkDetail from '../screen/home/work/SingleWorkDetail';
+import CommentReport from '../screen/common/CommentReport';
 
 import {RootStackParamList, ValidRoute} from '../models';
 import {useIsLoggedIn} from '../helper/hooks';
@@ -82,6 +83,7 @@ const Navigator: React.FC = () => {
       <Stack.Screen name="ScanResult" component={ScanResult} options={commonScreenOptions} />
       <Stack.Screen name="SingleWorkDetail" component={SingleWorkDetail} options={commonScreenOptions} />
       <Stack.Screen name="Invite" component={Invite} options={commonScreenOptions} />
+      <Stack.Screen name="CommentReport" component={CommentReport} options={commonScreenOptions} />
       {isLoggedIn ? (
         <>
           <Stack.Screen name="Order" component={Order} options={commonScreenOptions} />

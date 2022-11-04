@@ -185,7 +185,7 @@ const OrderDetail: React.FC = () => {
               onRequestClose={() => setShowMenu(false)}
               animationConfig={{
                 delay: 0,
-                duration: 200,
+                duration: 16,
               }}
               from={
                 <TouchableOpacity activeOpacity={0.8} onPress={() => setShowMenu(true)}>

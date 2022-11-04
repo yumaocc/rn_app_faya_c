@@ -6,6 +6,7 @@ import {displayName} from '../../../app.json';
 import {APP_SCHEMES} from '../../constants';
 import {AppInstallCheckType, ImageCompressOptions, ImageCompressResult, LocationNavigateInfo, QRCodeScanResult, URLParseRule} from '../../models';
 import CameraRoll from '@react-native-community/cameraroll';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 export function getVideoNameByPath(videPath: string) {
   return getFileNameByPath(videPath, 'upload.mp4');
@@ -316,4 +317,8 @@ export async function openMap(locationInfo: LocationNavigateInfo, targetAppName:
       }
     })
     .catch(err => console.error('An error occurred', err));
+}
+
+export function copyText(text: string) {
+  Clipboard.setString(text);
 }

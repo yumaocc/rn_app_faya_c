@@ -133,6 +133,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
 
   return (
     <View style={styles.container}>
+      {/* <Image style={styles.maskUp} source={require('../../assets/mask-up.png')} /> */}
       {/* banner */}
       <View style={styles.banners}>
         <Carousel autoplay infinite style={styles.swiperWrapper} pagination={renderIndicator}>
@@ -321,6 +322,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f4f4f4',
   },
+  // maskUp: {
+  //   position: 'absolute',
+  //   top: 0,
+  //   width: '100%',
+  //   zIndex: 2,
+  // },
   banners: {
     height: 281,
     position: 'relative',

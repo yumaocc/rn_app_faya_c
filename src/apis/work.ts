@@ -79,3 +79,12 @@ export async function commentWork(params: SearchParam): Promise<boolean> {
 export async function checkWorkPublishContent(content: string): Promise<boolean> {
   return await post('/video/main/vod/content/check', {content});
 }
+
+// 对作品不感兴趣
+export async function dislikeWork(params: SearchParam): Promise<boolean> {
+  return await post('/video/main/dislike/one', params);
+}
+
+export async function reportComment(params: SearchParam): Promise<boolean> {
+  return await post('/video/comment/report', params);
+}

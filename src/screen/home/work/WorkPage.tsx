@@ -6,6 +6,7 @@ import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useAppState, useCommonDispatcher, useIsLoggedIn} from '../../../helper/hooks';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {FakeNavigation, WorkDetailF, WorkType} from '../../../models';
+// import {Modal} from '@ant-design/react-native';
 import * as api from '../../../apis';
 import CustomTouchable from '../../../component/CustomTouchable';
 import {BoolEnum} from '../../../fst/models';
@@ -24,6 +25,7 @@ interface WorkPageProps {
   onShowSPU: (id: number) => void;
   onShowComment?: (mainId: string, focus?: boolean) => void;
   onShowShare?: (mainId: string) => void;
+  onShowWorkAction?: (mainId: string) => void;
 }
 
 const WorkPage: React.FC<WorkPageProps> = props => {
@@ -37,6 +39,7 @@ const WorkPage: React.FC<WorkPageProps> = props => {
   const [reportedEnd, setReportedEnd] = useState(false); // 是否已经上报过结束播放
   const [loadingLike, setLoadingLike] = useState(false);
   const [loadingCollect, setLoadingCollect] = useState(false);
+  // const [showWorkAction, setShowWorkAction] = useState(false);
 
   // const userId = useSelector((state: RootState) => state.user.myDetail?.userId);
   // const shareLink = useMemo(() => getShareWorkLink(props.mainId, userId), [props.mainId, userId]);
@@ -78,6 +81,9 @@ const WorkPage: React.FC<WorkPageProps> = props => {
     setPaused(props.paused);
   }, [props.paused]);
 
+  function onLongPressCover() {
+    props.onShowWorkAction && props.onShowWorkAction(props.mainId);
+  }
   const handleClickCover = useCallback(() => {
     setPaused(!paused);
   }, [paused]);
@@ -185,8 +191,10 @@ const WorkPage: React.FC<WorkPageProps> = props => {
       {/* 视频上覆盖的所有页面 */}
 
       <View style={styles.cover}>
+        <Image style={styles.maskUp} source={require('../../../assets/mask-up.png')} />
+        <Image style={styles.maskDown} source={require('../../../assets/mask-down.png')} />
         <SafeAreaView edges={['top']} style={styles.cover}>
-          <CustomTouchable activeOpacity={1} onPress={handleClickCover} style={[styles.cover]}>
+          <CustomTouchable activeOpacity={1} onPress={handleClickCover} onLongPress={onLongPressCover} style={[styles.cover]}>
             <View style={[styles.cover]}>
               {/* 暂停后的播放按钮 */}
               {paused ? (
@@ -316,6 +324,16 @@ const styles = StyleSheet.create({
   },
   cover: {
     flex: 1,
+    width: '100%',
+  },
+  maskUp: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+  },
+  maskDown: {
+    position: 'absolute',
+    bottom: 0,
     width: '100%',
   },
   side: {
