@@ -33,7 +33,7 @@ const Order: React.FC = () => {
   const [isPaying, setIsPaying] = useState(false);
   const [checkOrderId, setCheckOrderId] = useState<string>('');
   const [checkOrderType, setCheckOrderType] = useState<number>(0); // 0 订单id，1tempId;
-  const [canUseAlipay, setCanUseAlipay] = useState(false);
+  // const [canUseAlipay, setCanUseAlipay] = useState(false);
   const [showBooking, setShowBooking] = useState(false);
   const [bookingModel, setBookingModel] = useState<BookingModelF>(null);
   const [showSelectCoupon, setShowSelectCoupon] = useState(false);
@@ -181,17 +181,17 @@ const Order: React.FC = () => {
     }
   }, [commonConfig, form.name, form.telephone, setFormField]);
 
-  useEffect(() => {
-    async function f() {
-      try {
-        const aliPayInstalled = await checkAppInstall('alipay');
-        setCanUseAlipay(aliPayInstalled);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    f();
-  }, []);
+  // useEffect(() => {
+  //   async function f() {
+  //     try {
+  //       const aliPayInstalled = await checkAppInstall('alipay');
+  //       setCanUseAlipay(aliPayInstalled);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   f();
+  // }, []);
 
   useEffect(() => {
     const subscribe = AppState.addEventListener('change', nextState => {
@@ -492,21 +492,21 @@ const Order: React.FC = () => {
               </View>
             </TouchableOpacity>
             {/* 支付宝 */}
-            {canUseAlipay && (
-              <TouchableOpacity activeOpacity={0.8} onPress={() => setFormField('channel', PayChannel.ALIPAY)}>
-                <View style={[globalStyles.containerLR]}>
-                  <View style={[globalStyles.containerRow, {height: 50}]}>
-                    <Image source={require('../../assets/icon-ali-pay.png')} style={{width: 24, height: 24, marginRight: 15}} />
-                    <Text>支付宝</Text>
-                  </View>
-                  {payChannel === PayChannel.ALIPAY ? (
-                    <Image source={require('../../assets/select-true.png')} style={{width: 18, height: 18}} />
-                  ) : (
-                    <Image source={require('../../assets/select-false.png')} style={{width: 18, height: 18}} />
-                  )}
+            {/* {canUseAlipay && ( */}
+            <TouchableOpacity activeOpacity={0.8} onPress={() => setFormField('channel', PayChannel.ALIPAY)}>
+              <View style={[globalStyles.containerLR]}>
+                <View style={[globalStyles.containerRow, {height: 50}]}>
+                  <Image source={require('../../assets/icon-ali-pay.png')} style={{width: 24, height: 24, marginRight: 15}} />
+                  <Text>支付宝</Text>
                 </View>
-              </TouchableOpacity>
-            )}
+                {payChannel === PayChannel.ALIPAY ? (
+                  <Image source={require('../../assets/select-true.png')} style={{width: 18, height: 18}} />
+                ) : (
+                  <Image source={require('../../assets/select-false.png')} style={{width: 18, height: 18}} />
+                )}
+              </View>
+            </TouchableOpacity>
+            {/* )} */}
           </View>
           {/* </Form> */}
         </ScrollView>
