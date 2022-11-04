@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal, TextInput, KeyboardAvoidingView, Platform, TextInputProps} from 'react-native';
+import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal, TextInput, KeyboardAvoidingView, Platform, TextInputProps, AppState} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from '../../component/Icon';
 import {useSelector} from 'react-redux';
@@ -7,16 +7,16 @@ import {InputNumber, NavigationBar, Popup, Select, Button} from '../../component
 import FormItem from '../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {fenToYuan, findItem, moneyToYuan} from '../../fst/helper';
-import {useAndroidBack, useAppState, useCommonDispatcher, useCoupons, useParams, useSPUDispatcher, useWallet} from '../../helper/hooks';
+import {useAndroidBack, useCommonDispatcher, useCoupons, useParams, useSPUDispatcher, useWallet} from '../../helper/hooks';
 import {BookingModelF, BookingType, CouponState, FakeNavigation, OrderPayState, PackageDetail, PayChannel, SKUDetail, SKUSaleState} from '../../models';
 import {RootState} from '../../redux/reducers';
 import * as api from '../../apis';
-import {cleanOrderForm} from '../../helper/order';
+import {cleanOrderForm, openWxToPay} from '../../helper/order';
 import {useNavigation} from '@react-navigation/native';
-import {useSearch} from '../../fst/hooks';
+import {useLog, useSearch} from '../../fst/hooks';
 import {OrderForm} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
-import {getAliPayUrl, getWechatPayUrl} from '../../constants';
+import {getAliPayUrl} from '../../constants';
 import {checkAppInstall} from '../../helper/system';
 import BookingModal from '../../component/BookingModal';
 import MyStatusBar from '../../component/MyStatusBar';
@@ -37,10 +37,11 @@ const Order: React.FC = () => {
   const [showBooking, setShowBooking] = useState(false);
   const [bookingModel, setBookingModel] = useState<BookingModelF>(null);
   const [showSelectCoupon, setShowSelectCoupon] = useState(false);
-  // useLog('checkid', checkOrderId);
+
+  useLog('订单检查ID', checkOrderId);
+  useLog('订单检查Type', checkOrderType);
   useAndroidBack();
 
-  const appState = useAppState();
   const {workMainId} = useParams<{workMainId: string}>();
   const navigation = useNavigation<FakeNavigation>();
   const [wallet] = useWallet();
@@ -169,7 +170,6 @@ const Order: React.FC = () => {
       id = 'sku_' + (sku as SKUDetail)?.id;
     }
     setFormField('skuId', id);
-    // form.setFieldValue('skuId', id);
   }, [sku, currentSkuIsPackage, setFormField]);
 
   useEffect(() => {
@@ -194,27 +194,32 @@ const Order: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (appState === 'active' && isPaying) {
-      api.order
-        .checkOrderPayState(checkOrderId, checkOrderType)
-        .then(res => {
-          const {status, id} = res;
-          console.log(res);
-          if (status === OrderPayState.PAYED) {
-            navigation.replace('PaySuccess');
-          } else if (status === OrderPayState.UNPAY) {
-            navigation.replace('WaitPay', {id});
-          } else {
+    const subscribe = AppState.addEventListener('change', nextState => {
+      if (nextState === 'active' && isPaying) {
+        console.log(`应用回到前台, 检查支付状态。id: ${checkOrderId}, type: ${checkOrderType}`);
+        api.order
+          .checkOrderPayState(checkOrderId, checkOrderType)
+          .then(res => {
+            const {status, id} = res;
+            if (status === OrderPayState.PAYED) {
+              navigation.replace('PaySuccess');
+            } else if (status === OrderPayState.UNPAY) {
+              navigation.replace('WaitPay', {id});
+            } else {
+              setIsPaying(false);
+            }
+          })
+          .catch(e => {
+            commonDispatcher.error(e);
             setIsPaying(false);
-          }
-        })
-        .catch(e => {
-          commonDispatcher.error(e);
-          setIsPaying(false);
-        })
-        .finally(() => {});
-    }
-  }, [appState, checkOrderId, checkOrderType, commonDispatcher, isPaying, navigation]);
+          })
+          .finally(() => {});
+      }
+    });
+    return () => {
+      subscribe.remove();
+    };
+  }, [checkOrderId, checkOrderType, commonDispatcher, isPaying, navigation]);
 
   // 用户换了套餐，这里同步到redux
   function handleSKUChange(e = '') {
@@ -278,24 +283,23 @@ const Order: React.FC = () => {
         const tempOrderId = await api.order.getOrderTempId();
         setCheckOrderType(1);
         setCheckOrderId(tempOrderId);
-        const orderInfo = encodeURIComponent(
-          JSON.stringify({
+        await openWxToPay(
+          encodeURIComponent(token),
+          {
+            spuName: spu.name,
             skuName: (sku as SKUDetail).skuName || (sku as PackageDetail).packageName,
             skuAmount: moneyToYuan(shouldPay),
             amount: form.amount,
-          }),
+          },
+          {...formData, tempId: tempOrderId},
         );
-        const payInfo = encodeURIComponent(JSON.stringify({...formData, tempId: tempOrderId}));
-        link = getWechatPayUrl(`token=${encodeURIComponent(token)}&o=${orderInfo}&p=${payInfo}`);
       } else {
         const res = await api.order.makeOrder(formData);
         setCheckOrderId(res.orderId);
         link = getAliPayUrl(res.prePayTn);
+        Linking.openURL(link);
       }
-      Linking.openURL(link);
-      setTimeout(() => {
-        setIsPaying(true);
-      }, 1000);
+      setIsPaying(true);
     } catch (error) {
       commonDispatcher.error(error);
     }

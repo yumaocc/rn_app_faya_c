@@ -1,6 +1,8 @@
-import {FAYA_MINI_PROGRAM_PAY_PATH} from '../../constants';
+import {FAYA_MINI_PROGRAM_ORIGIN, FAYA_MINI_PROGRAM_PAY_PATH} from '../../constants';
+import {getWxLaunchMiniProgramType} from '../../constants/url';
 import {PayChannel, PayWay, SKUBuyNotice, SKUBuyNoticeF} from '../../models';
 import {OrderForm, WxOrderInfo} from '../../models/order';
+import Wechat from '../../native-modules/Wechat';
 import {encodeJson} from '../common';
 
 export function cleanOrderForm(formData: any): OrderForm {
@@ -30,10 +32,6 @@ export function getShareWorkLink(workId: string, userId: string): string {
   return `https://m.faya.life/${userId ? `?a=${userId}` : ''}#/work/detail/${workId}`;
 }
 
-export function getWXPayPath(token: string, orderInfo: WxOrderInfo, orderForm: OrderForm) {
-  return FAYA_MINI_PROGRAM_PAY_PATH + `?token=${token}&o=${encodeJson(orderInfo)}&p=${encodeJson(orderForm)}`;
-}
-
 export function convertSKUBuyNotice(buyNotices: SKUBuyNoticeF[]): SKUBuyNotice {
   const result: SKUBuyNotice = {
     BOOKING: [],
@@ -46,4 +44,13 @@ export function convertSKUBuyNotice(buyNotices: SKUBuyNoticeF[]): SKUBuyNotice {
     result[buyNotice.type].push(buyNotice.content);
   });
   return result;
+}
+
+export async function openWxToPay(token: string, orderInfo: WxOrderInfo, orderForm: OrderForm): Promise<boolean> {
+  const path = FAYA_MINI_PROGRAM_PAY_PATH + `?token=${token}&o=${encodeJson(orderInfo)}&p=${encodeJson(orderForm)}`;
+  return await Wechat.openMiniProgram({
+    path: path,
+    userName: FAYA_MINI_PROGRAM_ORIGIN,
+    type: getWxLaunchMiniProgramType(),
+  });
 }

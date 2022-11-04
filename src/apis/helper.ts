@@ -50,13 +50,13 @@ export function decrypt(str: string) {
 }
 
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
-  console.log(config);
+  // console.log(config);
   return config;
 });
 
 axios.interceptors.response.use((response: AxiosResponse) => {
   let {data} = response;
-  console.log(`接口： ${response.config.url}请求成功：`);
+  // console.log(`接口： ${response.config.url}请求成功：`);
   if (!response.data?.data?.content) {
     // console.log('response data:', response.data);
   } else {
@@ -95,7 +95,7 @@ export async function postPaged<T, P>(url: string, data?: P, config: AxiosReques
     if (needEncrypt) {
       data.content = decrypt(data.content as unknown as string);
     }
-    console.log('解密后:', data);
+    // console.log('解密后:', data);
     return data;
   }
   throw new CustomError(res.data.msg, res.data.code);

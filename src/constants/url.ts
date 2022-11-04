@@ -1,7 +1,26 @@
+import {WxLaunchMiniProgramType} from '../native-modules/Wechat';
+import {getEnv} from './env';
+
 export function getBaseURL(): string {
-  // 生产环境
-  return 'https://api.faya.life';
-  // return 'https://api-beta.faya.life';
+  const env = getEnv();
+  switch (env) {
+    case 'development':
+      return 'https://api-beta.faya.life';
+    case 'production':
+    default:
+      return 'https://api.faya.life';
+  }
+}
+
+export function getWxLaunchMiniProgramType(): WxLaunchMiniProgramType {
+  const env = getEnv();
+  switch (env) {
+    case 'development':
+      return WxLaunchMiniProgramType.Test; // 开发版？
+    case 'production':
+    default:
+      return WxLaunchMiniProgramType.Release;
+  }
 }
 
 // 隐私政策网址
