@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:https://app.faya.life</string>
+		<string>applinks:m.faya.life</string>
 	</array>
 </dict>
 </plist>

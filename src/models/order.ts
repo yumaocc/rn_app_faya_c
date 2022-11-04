@@ -69,6 +69,7 @@ export interface OrderDetailF {
   id: number;
   skuName: string;
   bookingTime: DateTimeString;
+  canBookingTime: DateTimeString;
   createdTime: DateTimeString;
   useBeginTime: DateTimeString;
   useEndTime: DateTimeString;

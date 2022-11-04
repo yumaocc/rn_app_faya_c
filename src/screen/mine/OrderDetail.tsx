@@ -21,6 +21,7 @@ import MyStatusBar from '../../component/MyStatusBar';
 import {callPhone, openMap} from '../../helper/system';
 import NavigationModal from '../common/NavigateModal';
 import Clipboard from '@react-native-clipboard/clipboard';
+import {reFormatDate} from '../../fst/helper';
 
 const OrderDetail: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -298,10 +299,10 @@ const OrderDetail: React.FC = () => {
                     <Text style={globalStyles.fontPrimary}>联系电话</Text>
                     <Text style={globalStyles.fontSecondary}>{orderDetail?.paidPhone}</Text>
                   </View>
-                  {orderDetail?.bookingTime && (
+                  {orderDetail?.canBookingTime && (
                     <View style={[globalStyles.containerLR, {height: 30}]}>
                       <Text style={globalStyles.fontPrimary}>开始预约时间</Text>
-                      <Text style={globalStyles.fontSecondary}>{orderDetail?.bookingTime}</Text>
+                      <Text style={globalStyles.fontSecondary}>{orderDetail?.canBookingTime}</Text>
                     </View>
                   )}
 
@@ -309,7 +310,7 @@ const OrderDetail: React.FC = () => {
                     <View style={[globalStyles.containerLR, {height: 30}]}>
                       <Text style={globalStyles.fontPrimary}>使用日期</Text>
                       <Text style={globalStyles.fontSecondary}>
-                        {orderDetail?.useBeginTime}-{orderDetail?.useEndTime}
+                        {reFormatDate(orderDetail?.useBeginTime, 'YYYY.MM.DD')}-{reFormatDate(orderDetail?.useEndTime, 'YYYY.MM.DD')}
                       </Text>
                     </View>
                   )}
@@ -337,7 +338,7 @@ const OrderDetail: React.FC = () => {
                     <Text style={globalStyles.fontPrimary}>支付方式</Text>
                     <Text style={globalStyles.fontSecondary}>{orderDetail?.ypPayChannel === PayChannel.ALIPAY ? '支付宝' : '微信'}</Text>
                   </View>
-                  <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE}]} />
+                  <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
                   {!!orderDetail?.willReturnUserCommission && (
                     <View style={[globalStyles.containerLR, {height: 30}]}>
                       <Text style={globalStyles.fontPrimary}>返芽</Text>
