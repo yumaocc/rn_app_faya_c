@@ -14,6 +14,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-faya-fayaTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-faya-fayaTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F47895BA2914E51600916DE1 /* SMNWeChat.m in Sources */ = {isa = PBXBuildFile; fileRef = F47895B92914E51600916DE1 /* SMNWeChat.m */; };
 		F4925E9828CB410200F2B607 /* RecordView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4925E9728CB410200F2B607 /* RecordView.m */; };
 		F4925E9C28CB42AB00F2B607 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = F4925E9B28CB42AB00F2B607 /* Util.m */; };
 		F4925E9F28CBA47700F2B607 /* SMNView.m in Sources */ = {isa = PBXBuildFile; fileRef = F4925E9E28CBA47700F2B607 /* SMNView.m */; };
@@ -55,6 +56,8 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = faya/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-faya-fayaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faya-fayaTests.release.xcconfig"; path = "Target Support Files/Pods-faya-fayaTests/Pods-faya-fayaTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F47895B82914E51600916DE1 /* SMNWeChat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SMNWeChat.h; sourceTree = "<group>"; };
+		F47895B92914E51600916DE1 /* SMNWeChat.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SMNWeChat.m; sourceTree = "<group>"; };
 		F4925E9728CB410200F2B607 /* RecordView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RecordView.m; sourceTree = "<group>"; };
 		F4925E9A28CB42AB00F2B607 /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		F4925E9B28CB42AB00F2B607 /* Util.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
@@ -187,6 +190,8 @@
 		F47895B72914DF9600916DE1 /* Wechat */ = {
 			isa = PBXGroup;
 			children = (
+				F47895B82914E51600916DE1 /* SMNWeChat.h */,
+				F47895B92914E51600916DE1 /* SMNWeChat.m */,
 			);
 			path = Wechat;
 			sourceTree = "<group>";
@@ -479,6 +484,7 @@
 				F4925E9F28CBA47700F2B607 /* SMNView.m in Sources */,
 				F4ECFC7B28D86DFA000017F0 /* PublishManager.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				F47895BA2914E51600916DE1 /* SMNWeChat.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				F4925E9828CB410200F2B607 /* RecordView.m in Sources */,
 				F4925E9C28CB42AB00F2B607 /* Util.m in Sources */,

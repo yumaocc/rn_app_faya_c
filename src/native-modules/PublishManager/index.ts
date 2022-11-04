@@ -4,8 +4,6 @@ import {VODPublishManager} from './types';
 const NativePublishManager = NativeModules.SMNPublishManager;
 
 const EventEmitter = new NativeEventEmitter(NativePublishManager);
-console.log(NativePublishManager);
-console.log(EventEmitter);
 
 const PublishManager: VODPublishManager = {
   onProgress: callback => {

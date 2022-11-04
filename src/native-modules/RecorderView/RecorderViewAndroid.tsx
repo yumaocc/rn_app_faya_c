@@ -5,8 +5,6 @@ import {RecorderViewProps, RecorderViewRef, RecorderViewActionType} from './type
 const ComponentName = 'SMNRecordView';
 
 const config = UIManager.getViewManagerConfig(ComponentName);
-console.log('加载RecordView：');
-console.log(config?.Commands);
 
 const NativeRecorderView =
   config != null

@@ -57,6 +57,10 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  
+  // 向微信注册发芽
+  [WXApi registerApp:@"wx3fbb61265709334d" universalLink:@"https://m.faya.life/app/"];
+  
   return YES;
 }
 
@@ -130,4 +134,27 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
 #endif
 
+#pragma mark - 微信要求 重写方法
+-(BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+  return [WXApi handleOpenURL:url delegate:self];
+}
+
+-(BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  return [WXApi handleOpenURL:url delegate:self];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+  return [WXApi handleOpenURL:url delegate:self];
+}
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
+  return [WXApi handleOpenUniversalLink:userActivity delegate:self];
+}
+
+# pragma mark - 微信通信协议方法
+- (void)onReq:(BaseReq *)req {
+  
+}
+- (void)onResp:(BaseResp *)resp {
+  
+}
 @end

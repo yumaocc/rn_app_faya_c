@@ -1,6 +1,13 @@
 import {BoolEnum, DateTimeString} from '../fst/models';
 import {BookingType, PayChannel, PayWay} from './spu';
 
+// 用于在微信支付那里显示订单信息
+export interface WxOrderInfo {
+  spuName: string;
+  skuName: string; // 商品名称
+  skuAmount: string; // 总支付价格，单位元
+  amount: number; // 购买数量
+}
 export interface OrderForm {
   addressId?: string; // 收货地址
   agentUserId?: string;
@@ -21,6 +28,7 @@ export interface OrderForm {
   telephone: string;
   videoId?: string; // 从哪个视频过来
   wxOpenId?: string;
+  tempId?: string; // 临时id,用来检查订单支付情况
 }
 
 export interface PayOrder {

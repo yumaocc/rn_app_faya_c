@@ -58,3 +58,7 @@ export const ALL_WEEK_START_WITH_MONDAY = [
 ];
 
 export {getBaseURL, getAliPayUrl, getWechatPayUrl, USER_AGREEMENT_URL, PRIVACY_POLICY_URL} from './url';
+
+// 小程序配置
+export const FAYA_MINI_PROGRAM_ORIGIN = 'gh_a89c093854cb'; // 小程序原始ID
+export const FAYA_MINI_PROGRAM_PAY_PATH = '/pages/fromH5Pay/index'; // 小程序支付页面路径

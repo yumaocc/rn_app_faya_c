@@ -1,5 +1,7 @@
+import {FAYA_MINI_PROGRAM_PAY_PATH} from '../../constants';
 import {PayChannel, PayWay, SKUBuyNotice, SKUBuyNoticeF} from '../../models';
-import {OrderForm} from '../../models/order';
+import {OrderForm, WxOrderInfo} from '../../models/order';
+import {encodeJson} from '../common';
 
 export function cleanOrderForm(formData: any): OrderForm {
   const {skuId: id, channel} = formData;
@@ -26,6 +28,10 @@ export function getShareSPULink(spuId: number, userId: string): string {
 export function getShareWorkLink(workId: string, userId: string): string {
   // return `https://m.faya.life/?a=${userId}#/work/detail/${workId}`;
   return `https://m.faya.life/${userId ? `?a=${userId}` : ''}#/work/detail/${workId}`;
+}
+
+export function getWXPayPath(token: string, orderInfo: WxOrderInfo, orderForm: OrderForm) {
+  return FAYA_MINI_PROGRAM_PAY_PATH + `?token=${token}&o=${encodeJson(orderInfo)}&p=${encodeJson(orderForm)}`;
 }
 
 export function convertSKUBuyNotice(buyNotices: SKUBuyNoticeF[]): SKUBuyNotice {

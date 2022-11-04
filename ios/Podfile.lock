@@ -497,6 +497,7 @@ PODS:
     - React-Core
   - VODUpload (1.6.6):
     - AliyunOSSiOS
+  - WechatOpenSDK (1.9.7)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -581,6 +582,7 @@ DEPENDENCIES:
   - vision-camera-code-scanner (from `../node_modules/vision-camera-code-scanner`)
   - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - VODUpload
+  - WechatOpenSDK
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -617,6 +619,7 @@ SPEC REPOS:
     - QuCore-ThirdParty
     - SocketRocket
     - VODUpload
+    - WechatOpenSDK
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -815,9 +818,10 @@ SPEC CHECKSUMS:
   vision-camera-code-scanner: dda884a7f3ec8243a2a6d6489b91860648371bca
   VisionCamera: cc788935bcfd2f7031d3295adedbc9786835f402
   VODUpload: 57651539af6a40a5d74c3e1b26165251b670a388
+  WechatOpenSDK: 2f0ae448c7525cb5c27db5f7aa0f568de0988fa4
   Yoga: 236056dd74cda4d9d76c20306fd8c20bb087614d
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 629cc4e522d8df4ba8353c93cee08831bb4fcae4
+PODFILE CHECKSUM: 899bb0dc9d28d03ea23be8d39c23e3b4b9cf971d
 
 COCOAPODS: 1.11.3
