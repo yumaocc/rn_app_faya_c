@@ -6,16 +6,12 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.alibaba.sdk.android.vod.upload.VODSVideoUploadClient;
-import com.alibaba.sdk.android.vod.upload.VODSVideoUploadClientImpl;
 import com.alibaba.sdk.android.vod.upload.VODUploadCallback;
 import com.alibaba.sdk.android.vod.upload.VODUploadClient;
 import com.alibaba.sdk.android.vod.upload.VODUploadClientImpl;
 import com.alibaba.sdk.android.vod.upload.model.UploadFileInfo;
 import com.alibaba.sdk.android.vod.upload.model.VodInfo;
 import com.alibaba.sdk.android.vod.upload.model.VodUploadResult;
-import com.aliyun.svideosdk.editor.AliyunIVodCompose;
-import com.aliyun.svideosdk.editor.impl.AliyunComposeFactory;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;

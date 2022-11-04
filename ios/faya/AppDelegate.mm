@@ -58,7 +58,6 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   
-  // 向微信注册发芽
   [WXApi registerApp:@"wx3fbb61265709334d" universalLink:@"https://m.faya.life/app/"];
   
   return YES;
