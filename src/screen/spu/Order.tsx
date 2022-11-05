@@ -17,7 +17,6 @@ import {useLog, useSearch} from '../../fst/hooks';
 import {OrderForm} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
 import {getAliPayUrl} from '../../constants';
-import {checkAppInstall} from '../../helper/system';
 import BookingModal from '../../component/BookingModal';
 import MyStatusBar from '../../component/MyStatusBar';
 
