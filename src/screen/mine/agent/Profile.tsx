@@ -157,7 +157,7 @@ const Profile: React.FC = () => {
                         升级到{dictAgentLevel(agentInfo?.level + 1)}还需要
                       </Text>
                       {/* 新手达人任务完成情况 */}
-                      {agentInfo.level === 1 && (
+                      {agentInfo?.level === 1 && (
                         <View style={[{marginTop: 20}]}>
                           <View style={[globalStyles.containerLR]}>
                             <Text
@@ -202,7 +202,7 @@ const Profile: React.FC = () => {
                         </View>
                       )}
                       {/* 进阶达人任务完成情况 */}
-                      {agentInfo.level === 2 && (
+                      {agentInfo?.level === 2 && (
                         <View style={[{marginTop: 20}]}>
                           <View style={[globalStyles.containerLR]}>
                             <Text

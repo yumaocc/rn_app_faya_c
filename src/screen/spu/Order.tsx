@@ -201,6 +201,7 @@ const Order: React.FC = () => {
           .checkOrderPayState(checkOrderId, checkOrderType)
           .then(res => {
             const {status, id} = res;
+            console.log('检查结果：', res);
             if (status === OrderPayState.PAYED) {
               navigation.replace('PaySuccess');
             } else if (status === OrderPayState.UNPAY) {
@@ -283,7 +284,7 @@ const Order: React.FC = () => {
         const tempOrderId = await api.order.getOrderTempId();
         setCheckOrderType(1);
         setCheckOrderId(tempOrderId);
-        await openWxToPay(
+        const success = await openWxToPay(
           encodeURIComponent(token),
           {
             spuName: spu.name,
@@ -293,6 +294,7 @@ const Order: React.FC = () => {
           },
           {...formData, tempId: tempOrderId},
         );
+        console.log(success);
       } else {
         const res = await api.order.makeOrder(formData);
         setCheckOrderId(res.orderId);

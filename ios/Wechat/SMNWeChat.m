@@ -19,8 +19,7 @@ RCT_REMAP_METHOD(openMiniProgram,
   WXLaunchMiniProgramReq * req = [WXLaunchMiniProgramReq object];
   req.userName = option[@"userName"];
   req.path = option[@"path"];
-//  req.type = option[@"type"];
-  NSLog(@"%@", option);
+  req.miniProgramType = (WXMiniProgramType)[option[@"type"] intValue];
   [WXApi sendReq:req completion:^(BOOL success) {
     resolve(@(success));
   }];

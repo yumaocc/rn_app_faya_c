@@ -16,7 +16,7 @@ export function getWxLaunchMiniProgramType(): WxLaunchMiniProgramType {
   const env = getEnv();
   switch (env) {
     case 'development':
-      return WxLaunchMiniProgramType.Test; // 开发版？
+      return WxLaunchMiniProgramType.Preview; // 跳转开发版会导致场景值不正确，无法返回APP，所以开发环境跳转到体验版
     case 'production':
     default:
       return WxLaunchMiniProgramType.Release;
