@@ -34,6 +34,14 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+      <activity
+        android:name=".wxapi.WXEntryActivity"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar"
+        android:exported="true"
+        android:taskAffinity="com.fylife.app"
+        android:launchMode="singleTask">
+      </activity>
       <meta-data
         android:name="com.aliyun.alivc_license.licensekey"
         android:value="QodZYwdNIN4a54Xgh776b2e49e4974f09b91738b41e910829"/>
@@ -41,4 +49,8 @@
         android:name="com.aliyun.alivc_license.licensefile"
         android:value="assets/AlivcCert.crt"/>
     </application>
+    <!-- 微信SDK适配android 11 -->
+    <queries>
+        <package android:name="com.tencent.mm" />
+    </queries>
 </manifest>

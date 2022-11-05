@@ -62,4 +62,9 @@ allprojects {
             url 'https://maven.aliyun.com/nexus/content/repositories/releases/'
        }
     }
+    configurations.all {
+        resolutionStrategy {
+            force 'com.facebook.react:react-native:0.69.2'
+        }
+    }
 }
