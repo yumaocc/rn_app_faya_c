@@ -35,7 +35,7 @@ const Settings: React.FC = () => {
         {/* <OperateItem label="隐私设置" showArrow /> */}
         <OperateItem label="联系客服" showArrow onPress={() => setShowKF(true)} />
         {/* <OperateItem label="帮助与反馈" showArrow /> */}
-        <OperateItem label="关于发芽" showArrow>
+        <OperateItem label="关于发芽" showArrow onPress={() => navigation.navigate('About')}>
           <Text style={globalStyles.fontPrimary}>v{pkg.version}</Text>
         </OperateItem>
         <OperateItem label="注销账号" showArrow onPress={handleDeleteAccount} />

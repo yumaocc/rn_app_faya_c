@@ -55,6 +55,7 @@ export type RootStackParamList = {
   SingleWorkDetail: {id: string};
   Invite: undefined;
   CommentReport: {id: string};
+  About: undefined;
 };
 
 export type ValidRoute = keyof RootStackParamList;

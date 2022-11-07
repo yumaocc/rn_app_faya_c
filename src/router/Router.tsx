@@ -54,6 +54,7 @@ import {RootStackParamList, ValidRoute} from '../models';
 import {useIsLoggedIn} from '../helper/hooks';
 import MyProfile from '../screen/mine/settings/MyProfile';
 import Invite from '../screen/mine/agent/Invite';
+import About from '../screen/common/About';
 
 const Navigator: React.FC = () => {
   const isLoggedIn = useIsLoggedIn();
@@ -84,6 +85,7 @@ const Navigator: React.FC = () => {
       <Stack.Screen name="SingleWorkDetail" component={SingleWorkDetail} options={commonScreenOptions} />
       <Stack.Screen name="Invite" component={Invite} options={commonScreenOptions} />
       <Stack.Screen name="CommentReport" component={CommentReport} options={commonScreenOptions} />
+      <Stack.Screen name="About" component={About} options={commonScreenOptions} />
       {isLoggedIn ? (
         <>
           <Stack.Screen name="Order" component={Order} options={commonScreenOptions} />

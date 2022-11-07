@@ -22,7 +22,7 @@ const MyCode: React.FC = () => {
   const [ref, setRef, isReady] = useRefCallback();
   const [codeInfo, setCodeInfo] = React.useState<MyCodeUrl>();
   const userInfo = useSelector((state: RootState) => state.user.myDetail);
-  const hasShareCode = useMemo(() => !!codeInfo?.shareQrCodeUrl, [codeInfo]);
+  const hasShareCode = useMemo(() => !!codeInfo?.shareQrCodeUrl && !!codeInfo?.shareQrCodeUrlReal, [codeInfo]);
 
   useEffect(() => {
     if (type === 'share' && hasShareCode) {

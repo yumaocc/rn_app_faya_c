@@ -43,11 +43,11 @@ const Profile: React.FC = () => {
     }
     switch (agentInfo.level) {
       case 1:
-        return 2;
-      case 2:
         return 3;
-      case 3:
+      case 2:
         return 4;
+      case 3:
+        return 5;
       default:
         return 0;
     }
@@ -241,7 +241,7 @@ const Profile: React.FC = () => {
                     <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>我的权益</Text>
                     <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>
                       <Text style={{fontSize: 18}}>{rightCount}</Text>
-                      <Text> / 4</Text>
+                      <Text> / 5</Text>
                     </Text>
                   </View>
                   <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE}]} />
@@ -249,6 +249,25 @@ const Profile: React.FC = () => {
                   {/* 一级权益 */}
                   <View style={[{marginTop: 15}]}>
                     <View style={[styles.rightItem, {marginTop: 0}]}>
+                      <Image source={require('../../../assets/icon_daren_00.png')} style={styles.rightIcon} />
+                      <View style={styles.rightContent}>
+                        <Text style={styles.rightName}>视频带货</Text>
+                        <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE, alignItems: 'flex-start'}]}>
+                          <View style={[globalStyles.containerCenter, {height: 18, width: 18}]}>
+                            <View style={styles.dot} />
+                          </View>
+                          <View style={{flex: 1}}>
+                            <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>
+                              拍视频可以链接商品，当用户通过视频购买商品，且订单完成后可以获取
+                              <Text style={{color: globalStyleVariables.COLOR_LINK}} onPress={() => rightExplain()}>
+                                【带货佣金】
+                              </Text>
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                    <View style={[styles.rightItem]}>
                       <Image source={require('../../../assets/icon_daren_01.png')} style={styles.rightIcon} />
                       <View style={styles.rightContent}>
                         <Text style={styles.rightName}>橱窗</Text>
