@@ -1,6 +1,6 @@
 {
   "name": "faya-app",
-  "version": "1.0.23",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -45,6 +45,8 @@
     "react": "18.0.0",
     "react-native": "0.69.2",
     "react-native-autoheight-webview": "^1.6.5",
+    "react-native-device-info": "^10.3.0",
+    "react-native-fast-image": "^8.6.3",
     "react-native-fs": "^2.20.0",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-gesture-handler": "^2.5.0",

@@ -7,6 +7,7 @@ import {FakeNavigation, WorkF, WorkList as IWorkList, WorkType} from '../../mode
 import Icon from '../../component/Icon';
 import {dictLoadingState} from '../../helper/dictionary';
 import {BoolEnum} from '../../fst/models';
+import FastImage from 'react-native-fast-image';
 
 interface WorkListProps {
   list: IWorkList;
@@ -65,7 +66,12 @@ const WorkList: React.FC<WorkListProps> = props => {
       <View style={styles.item} key={`${work.mainId}-${index}-${left ? 'l' : 'r'}`}>
         <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetailList', {index})}>
           <View style={{width: '100%', position: 'relative'}}>
-            <Image source={{uri: work?.coverImage}} defaultSource={require('../../assets/sku_def_180w.png')} style={true ? styles.cover : styles.smallCover} />
+            <FastImage
+              source={{uri: work?.coverImage}}
+              defaultSource={require('../../assets/sku_def_180w.png')}
+              style={true ? styles.cover : styles.smallCover}
+              resizeMode="cover"
+            />
             {work.type === WorkType.Video && (
               <View style={[styles.playIcon]}>
                 <Image source={require('../../assets/zuopin_tag_video.png')} style={styles.palyIconImage} />

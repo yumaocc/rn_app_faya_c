@@ -1,6 +1,8 @@
 import {useEffect, useMemo, useState} from 'react';
 import {BackHandler, Dimensions, Keyboard, Platform, useWindowDimensions} from 'react-native';
 import {navigateBack} from '../../router/Router';
+import DeviceInfo from 'react-native-device-info';
+import pkg from '../../../package.json';
 
 export function useAndroidBack() {
   useEffect(() => {
@@ -45,4 +47,30 @@ export function useKeyboardHeight(): number {
     };
   }, []);
   return keyboardHeight;
+}
+
+export function useVersionInfo() {
+  const [version, setVersion] = useState('');
+  const [build, setBuild] = useState('');
+
+  useEffect(() => {
+    const version = DeviceInfo.getVersion();
+    const buildNumber = DeviceInfo.getBuildNumber();
+    setVersion(version);
+    setBuild(buildNumber);
+  }, []);
+
+  const versionText = useMemo(() => {
+    if (version && build) {
+      return `v${version}(${build})`;
+    }
+    return '';
+  }, [build, version]);
+
+  return {
+    version,
+    build,
+    bundle: pkg.version,
+    versionText,
+  };
 }

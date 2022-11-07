@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, Text, ScrollView, Image, NativeSyntheticEvent, NativeScrollEvent, RefreshControl, TouchableWithoutFeedback, TouchableHighlight} from 'react-native';
+import {View, StyleSheet, Text, ScrollView, NativeSyntheticEvent, NativeScrollEvent, RefreshControl, TouchableWithoutFeedback, TouchableHighlight} from 'react-native';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from '../../component/Icon';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -17,6 +17,7 @@ import {dictLoadingState} from '../../helper/dictionary';
 import ReactNativeModal from 'react-native-modal';
 import MyStatusBar from '../../component/MyStatusBar';
 import {getSPUNavigateParam} from '../../helper/spu';
+import FastImage from 'react-native-fast-image';
 
 const Discover: React.FC = () => {
   const [showSelectCity, setShowSelectCity] = React.useState(false);
@@ -92,7 +93,7 @@ const Discover: React.FC = () => {
             goSPUDetail(spu.spuId);
           }}>
           <View style={styles.spuCoverContainer}>
-            <Image source={{uri: spu.poster}} defaultSource={require('../../assets/sku_def_180w.png')} style={styles.spuCover} />
+            <FastImage source={{uri: spu.poster}} defaultSource={require('../../assets/sku_def_180w.png')} style={styles.spuCover} />
           </View>
         </TouchableOpacity>
         <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE}}>
