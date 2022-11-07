@@ -2,7 +2,8 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
 import Icon from '../../component/Icon';
 import QRCode from 'react-native-qrcode-svg';
-import Popover from 'react-native-popover-view';
+import {Popover} from '@ant-design/react-native';
+// import Popover from 'react-native-popover-view';
 
 import {Modal, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -29,7 +30,7 @@ const OrderDetail: React.FC = () => {
   const [showBatch, setShowBatch] = useState(false);
   const [showCode, setShowCode] = useState(false);
   const [currentCode, setCurrentCode] = useState<OrderPackageSKU>();
-  const [showMenu, setShowMenu] = useState(false);
+  // const [showMenu, setShowMenu] = useState(false);
   const [showKF, setShowKF] = useState(false);
   const [showSelectMap, setShowSelectMap] = useState(false);
   const [navigationInfo, setNavigationInfo] = useState<LocationNavigateInfo>(null);
@@ -62,14 +63,18 @@ const OrderDetail: React.FC = () => {
     }
   }
 
-  async function handleRefund() {
-    setShowMenu(false);
-    navigateTo('Refund', {id});
-  }
-
-  function openKf() {
-    setShowMenu(false);
-    setShowKF(true);
+  function handleSelect(key: string) {
+    // console.log('key', key);
+    switch (key) {
+      case 'refund':
+        navigateTo('Refund', {id});
+        break;
+      case 'kf':
+        setTimeout(() => {
+          setShowKF(true);
+        }, 0);
+        break;
+    }
   }
 
   function goBooking(orderSmallId: string) {
@@ -186,33 +191,47 @@ const OrderDetail: React.FC = () => {
           title="订单详情"
           headerRight={
             <Popover
-              isVisible={showMenu}
-              onRequestClose={() => setShowMenu(false)}
-              animationConfig={{
-                delay: 0,
-                duration: 16,
-              }}
-              from={
-                <TouchableOpacity activeOpacity={0.8} onPress={() => setShowMenu(true)}>
-                  <Icon name="nav_more" size={24} color="#333" style={{marginRight: 20}} />
-                </TouchableOpacity>
-              }
-              popoverStyle={{borderRadius: globalStyleVariables.RADIUS_MODAL}}
-              backgroundStyle={{backgroundColor: '#00000011'}}
-              arrowSize={{width: 0, height: 0}}>
-              <View style={styles.popoverMenu}>
-                <TouchableOpacity activeOpacity={0.8} onPress={handleRefund}>
-                  <View style={styles.popoverItem}>
-                    <Text style={styles.popoverText}>申请退款</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.8} onPress={openKf}>
-                  <View style={styles.popoverItem}>
-                    <Text style={styles.popoverText}>联系客服</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+              overlay={[
+                <Popover.Item key="refund" value="refund">
+                  <Text style={styles.popoverText}>申请退款</Text>
+                </Popover.Item>,
+                <Popover.Item key="kf" value="kf">
+                  <Text style={styles.popoverText}>联系客服</Text>
+                </Popover.Item>,
+              ]}
+              onSelect={handleSelect}
+              placement="bottom">
+              <Icon name="nav_more" size={24} color="#333" style={{marginRight: 20}} />
             </Popover>
+
+            // <Popover
+            //   isVisible={showMenu}
+            //   onRequestClose={() => setShowMenu(false)}
+            //   animationConfig={{
+            //     delay: 0,
+            //     duration: 16,
+            //   }}
+            //   from={
+            //     <TouchableOpacity activeOpacity={0.8} onPress={() => setShowMenu(true)}>
+            //       <Icon name="nav_more" size={24} color="#333" style={{marginRight: 20}} />
+            //     </TouchableOpacity>
+            //   }
+            //   popoverStyle={{borderRadius: globalStyleVariables.RADIUS_MODAL}}
+            //   backgroundStyle={{backgroundColor: '#00000011'}}
+            //   arrowSize={{width: 0, height: 0}}>
+            //   <View style={styles.popoverMenu}>
+            //     <TouchableOpacity activeOpacity={0.8} onPress={handleRefund}>
+            //       <View style={styles.popoverItem}>
+            //         <Text style={styles.popoverText}>申请退款</Text>
+            //       </View>
+            //     </TouchableOpacity>
+            //     <TouchableOpacity activeOpacity={0.8} onPress={openKf}>
+            //       <View style={styles.popoverItem}>
+            //         <Text style={styles.popoverText}>联系客服</Text>
+            //       </View>
+            //     </TouchableOpacity>
+            //   </View>
+            // </Popover>
           }
         />
         {!orderDetail && <Loading style={{marginTop: 150}} />}
