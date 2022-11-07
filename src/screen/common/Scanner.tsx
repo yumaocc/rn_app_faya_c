@@ -25,10 +25,11 @@ const Scanner: React.FC = () => {
 
   const saveShareUser = useCallback(
     (userId: string | number) => {
-      userId = String(userId);
-      if (userId) {
-        commonDispatcher.setConfig({shareUserId: userId});
+      if (!userId) {
+        return;
       }
+      userId = String(userId);
+      commonDispatcher.setConfig({shareUserId: userId});
     },
     [commonDispatcher],
   );
@@ -136,7 +137,7 @@ const Scanner: React.FC = () => {
 
   function handleBack() {
     navigation.canGoBack() && navigation.goBack();
-    // checkScanContent('https://m.faya.life/?a=22#/spu/detail/65');
+    // checkScanContent('https://m.faya.life/?#/invite/23');
   }
 
   if (!device || !hasPermission || !ruleIsReady) {

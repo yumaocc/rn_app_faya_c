@@ -25,6 +25,7 @@ const Invite: React.FC = () => {
       });
       return;
     }
+    // console.log('即将绑定：', userId);
     api.user
       .agentRegister(userId)
       .then(res => {

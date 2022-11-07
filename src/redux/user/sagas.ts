@@ -4,7 +4,7 @@ import {Actions as CommonActions} from '../common/actions';
 import {Actions} from './actions';
 import {ActionType} from './types';
 import {ActionWithPayload} from '../types';
-import {GoLoginParams, MyWorkTabType, UserWorkTabType, WorkF, WorkList} from '../../models';
+import {GoLoginParams, MineDetail, MyWorkTabType, UserWorkTabType, WorkF, WorkList} from '../../models';
 import * as api from '../../apis';
 import {goLogin, navigateBack, navigateTo, relaunch} from '../../router/Router';
 import {RootState} from '../reducers';
@@ -12,7 +12,7 @@ import {OrderActions, SPUActions, WorkActions} from '../actions';
 import {PagedData} from '../../fst/models';
 
 function* logout(): any {
-  yield put(CommonActions.setConfig({token: ''}));
+  yield put(CommonActions.setConfig({token: '', shareUserId: '', touristId: ''}));
   yield put(CommonActions.reset());
   yield put(Actions.reset());
   yield put(WorkActions.reset());
@@ -59,9 +59,14 @@ function* getCouponList(): any {
 }
 function* getMyDetail(): any {
   try {
-    const detail = yield call(api.user.getMineDetail);
+    const detail: MineDetail = yield call(api.user.getMineDetail);
     if (detail) {
       yield put(Actions.getMyDetailSuccess(detail));
+      if (detail?.level > 0) {
+        if (detail?.userId) {
+          yield put(CommonActions.setConfig({shareUserId: String(detail.userId)}));
+        }
+      }
     }
   } catch (error) {
     yield put(CommonActions.error(error));

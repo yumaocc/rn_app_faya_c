@@ -67,6 +67,11 @@ const OrderDetail: React.FC = () => {
     navigateTo('Refund', {id});
   }
 
+  function openKf() {
+    setShowMenu(false);
+    setShowKF(true);
+  }
+
   function goBooking(orderSmallId: string) {
     navigateTo('OrderBooking', {id: orderSmallId});
   }
@@ -201,7 +206,7 @@ const OrderDetail: React.FC = () => {
                     <Text style={styles.popoverText}>申请退款</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.8}>
+                <TouchableOpacity activeOpacity={0.8} onPress={openKf}>
                   <View style={styles.popoverItem}>
                     <Text style={styles.popoverText}>联系客服</Text>
                   </View>
@@ -393,7 +398,7 @@ const OrderDetail: React.FC = () => {
         </Modal>
       )}
       {showSelectMap && <NavigationModal visible={true} onClose={() => setShowSelectMap(false)} onSelect={app => openMap(navigationInfo, app)} />}
-      <KFModal visible={showKF} onClose={() => setShowKF(false)} />
+      {showKF && <KFModal visible={true} onClose={() => setShowKF(false)} />}
     </>
   );
 };
