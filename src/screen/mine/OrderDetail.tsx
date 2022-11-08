@@ -38,6 +38,9 @@ const OrderDetail: React.FC = () => {
   const orderCanceled = orderDetail?.status === OrderStatus.Canceled;
   const orderCanUse = useMemo(() => [OrderStatus.Booked, OrderStatus.Paid].includes(orderDetail?.status), [orderDetail]);
   const [commonDispatcher] = useCommonDispatcher();
+  const canShowRefund = useMemo(() => {
+    return [OrderStatus.Paid, OrderStatus.Booked, OrderStatus.Completed].includes(orderDetail?.status);
+  }, [orderDetail?.status]);
 
   const {bottom} = useSafeAreaInsets();
   const isFocused = useIsFocused();
@@ -229,11 +232,14 @@ const OrderDetail: React.FC = () => {
               backgroundStyle={{backgroundColor: '#00000011'}}
               arrowSize={{width: 0, height: 0}}>
               <View style={styles.popoverMenu}>
-                <TouchableOpacity activeOpacity={0.8} onPress={handleRefund}>
-                  <View style={styles.popoverItem}>
-                    <Text style={styles.popoverText}>申请退款</Text>
-                  </View>
-                </TouchableOpacity>
+                {canShowRefund && (
+                  <TouchableOpacity activeOpacity={0.8} onPress={handleRefund}>
+                    <View style={styles.popoverItem}>
+                      <Text style={styles.popoverText}>申请退款</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+
                 <TouchableOpacity activeOpacity={0.8} onPress={openKf}>
                   <View style={styles.popoverItem}>
                     <Text style={styles.popoverText}>联系客服</Text>
