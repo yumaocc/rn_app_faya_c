@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Image, Nat
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {NavigationBar, OperateItem} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
-import {useCommonDispatcher} from '../../../helper/hooks';
+import {useCommonDispatcher, useUserDispatcher} from '../../../helper/hooks';
 import Icon from '../../../component/Icon';
 import {AgentHomeInfo, FakeNavigation} from '../../../models';
 import * as api from '../../../apis';
@@ -57,6 +57,11 @@ const Profile: React.FC = () => {
   const hasLevel3Right = useMemo(() => agentInfo?.level >= 3, [agentInfo]);
 
   const [commonDispatcher] = useCommonDispatcher();
+  const [userDispatcher] = useUserDispatcher();
+
+  useEffect(() => {
+    userDispatcher.getMyDetail();
+  }, [userDispatcher]);
 
   useEffect(() => {
     api.user
