@@ -58,7 +58,7 @@ const OrderItem: React.FC<OrderItemProps> = props => {
       <TouchableOpacity activeOpacity={0.8} onPress={handleClickOrder}>
         <View style={[globalStyles.containerRow, {alignItems: 'flex-start'}]}>
           <Image source={{uri: order.spuCoverImage}} defaultSource={require('../../../assets/sku_def_1_1.png')} style={styles.orderCover} />
-          <View style={{flex: 1}}>
+          <View style={{flex: 1, paddingLeft: globalStyleVariables.MODULE_SPACE}}>
             <View style={[globalStyles.containerLR]}>
               <View style={globalStyles.containerRow}>
                 <Icon name="shangpin_shanghu24" size={15} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
@@ -72,8 +72,8 @@ const OrderItem: React.FC<OrderItemProps> = props => {
               <Text style={globalStyles.fontTertiary}>数量</Text>
               <Text style={globalStyles.fontPrimary}>x{order.quantityOfOrder}</Text>
             </View>
-            <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
-            <View style={globalStyles.containerLR}>
+            <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER, marginBottom: globalStyleVariables.MODULE_SPACE}]} />
+            <View style={[globalStyles.containerLR]}>
               <View style={[globalStyles.containerRow, {alignItems: 'flex-end'}]}>
                 <Text style={[globalStyles.fontTertiary, {paddingBottom: 3}]}>实付</Text>
                 <Text style={[globalStyles.fontPrimary, {padding: 0, marginLeft: 10}]}>
@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 5,
-    marginRight: globalStyleVariables.MODULE_SPACE,
   },
   button: {
     height: 30,

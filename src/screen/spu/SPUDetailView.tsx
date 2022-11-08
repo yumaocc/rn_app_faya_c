@@ -146,7 +146,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
   function renderTips(text: string, index: number) {
     return (
       <View key={index}>
-        <Text style={[globalStyles.fontPrimary, {fontSize: 12, lineHeight: 18}]}>·{text}</Text>
+        <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 24}]}>·{text}</Text>
       </View>
     );
   }
@@ -221,7 +221,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
             paddingBottom: 5,
           },
         ]}>
-        <Text style={globalStyles.fontStrong}>套餐规格</Text>
+        <Text style={styles.moduleTitle}>套餐规格</Text>
         <View style={[{flexDirection: 'row', flexWrap: 'wrap', marginTop: globalStyleVariables.MODULE_SPACE}]}>
           {spu?.skuList?.map(sku => {
             return renderSKU(sku);
@@ -234,9 +234,17 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
       </View>
 
       {/* 商品详情 */}
-      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+      <View
+        style={[
+          {
+            marginTop: globalStyleVariables.MODULE_SPACE,
+            backgroundColor: '#fff',
+            paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER,
+            paddingBottom: globalStyleVariables.MODULE_SPACE_BIGGER,
+          },
+        ]}>
         {spu?.subName && (
-          <View style={{marginTop: 10}}>
+          <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
             <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 22}]}>{spu?.subName}</Text>
           </View>
         )}
@@ -244,16 +252,16 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         {/* 套餐内容 */}
         {currentSKU?.contentList?.length ? (
           <View style={styles.buyNoticeItem}>
-            <Text style={globalStyles.fontStrong}>套餐内容</Text>
+            <Text style={styles.moduleSubTitle}>套餐内容</Text>
             <View style={{marginTop: 5}}>
               {currentSKU.contentList.map((skuContent, index) => {
                 return (
                   <View style={[globalStyles.containerLR]} key={index}>
-                    <Text style={[globalStyles.fontPrimary, {fontSize: 12, lineHeight: 18}]}>·{skuContent.name}</Text>
+                    <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 24}]}>·{skuContent.name}</Text>
                     <View style={[globalStyles.containerRow]}>
-                      <Text style={[globalStyles.fontPrimary, {fontSize: 12, lineHeight: 18}]}>¥{skuContent.price}</Text>
+                      <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 24}]}>¥{skuContent.price}</Text>
                       <View style={[globalStyles.lineVertical, {height: 6, marginHorizontal: 10}]} />
-                      <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>x{skuContent.nums}</Text>
+                      <Text style={[globalStyles.fontTertiary, {fontSize: 15, lineHeight: 24}]}>x{skuContent.nums}</Text>
                     </View>
                   </View>
                 );
@@ -263,16 +271,16 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         ) : null}
         {currentPkg?.list?.length ? (
           <View style={styles.buyNoticeItem}>
-            <Text style={globalStyles.fontStrong}>套餐内容</Text>
+            <Text style={styles.moduleSubTitle}>套餐内容</Text>
             <View style={{marginTop: 5}}>
               {currentPkg.list.map((pkgContent, index) => {
                 return (
                   <View style={[globalStyles.containerLR]} key={index}>
-                    <Text style={[globalStyles.fontPrimary, {fontSize: 12, lineHeight: 18}]}>·{pkgContent.skuName}</Text>
+                    <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 24}]}>·{pkgContent.skuName}</Text>
                     <View style={[globalStyles.containerRow]}>
-                      <Text style={[globalStyles.fontPrimary, {fontSize: 12, lineHeight: 18}]}>¥{pkgContent.salePriceYuan}</Text>
+                      <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 24}]}>¥{pkgContent.salePriceYuan}</Text>
                       <View style={[globalStyles.lineVertical, {height: 6, marginHorizontal: 10}]} />
-                      <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>x{pkgContent.quantityWithPkg}</Text>
+                      <Text style={[globalStyles.fontTertiary, {fontSize: 15, lineHeight: 24}]}>x{pkgContent.quantityWithPkg}</Text>
                     </View>
                   </View>
                 );
@@ -285,35 +293,35 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
 
         {!!buyNotice?.USE_RULE?.length && (
           <View style={styles.buyNoticeItem}>
-            <Text style={globalStyles.fontStrong}>使用规则</Text>
+            <Text style={styles.moduleSubTitle}>使用规则</Text>
             <View style={{marginTop: 5}}>{buyNotice?.USE_RULE.map(renderTips)}</View>
           </View>
         )}
 
         {!!buyNotice?.BOOKING?.length && (
           <View style={styles.buyNoticeItem}>
-            <Text style={globalStyles.fontStrong}>预约须知</Text>
+            <Text style={styles.moduleSubTitle}>预约须知</Text>
             <View style={{marginTop: 5}}>{buyNotice?.BOOKING.map(renderTips)}</View>
           </View>
         )}
 
         {!!buyNotice?.SALE_TIME?.length && (
           <View style={styles.buyNoticeItem}>
-            <Text style={globalStyles.fontStrong}>营业时间</Text>
+            <Text style={styles.moduleSubTitle}>营业时间</Text>
             <View style={{marginTop: 5}}>{buyNotice?.SALE_TIME.map(renderTips)}</View>
           </View>
         )}
 
         {!!buyNotice?.POLICY?.length && (
           <View style={styles.buyNoticeItem}>
-            <Text style={globalStyles.fontStrong}>取消政策</Text>
+            <Text style={styles.moduleSubTitle}>取消政策</Text>
             <View style={{marginTop: 5}}>{buyNotice?.POLICY.map(renderTips)}</View>
           </View>
         )}
 
         {!!buyNotice?.TIPS?.length && (
           <View style={styles.buyNoticeItem}>
-            <Text style={globalStyles.fontStrong}>温馨提示</Text>
+            <Text style={styles.moduleSubTitle}>温馨提示</Text>
             <View style={{marginTop: 5}}>{buyNotice?.TIPS.map(renderTips)}</View>
           </View>
         )}
@@ -322,7 +330,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
       {/* 可用门店 */}
       <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
         <View style={[globalStyles.containerLR, {height: 24}]}>
-          <Text style={[globalStyles.fontStrong]}>可用门店{spu?.shopList?.length ? `（${spu?.shopList.length}）` : ''}</Text>
+          <Text style={[styles.moduleTitle]}>可用门店{spu?.shopList?.length ? `（${spu?.shopList.length}）` : ''}</Text>
           {spu?.shopList?.length > 1 && <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
         </View>
         <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
@@ -399,6 +407,17 @@ const styles = StyleSheet.create({
   swiperWrapper: {
     height: 281,
     width: '100%',
+  },
+  moduleTitle: {
+    fontSize: 18,
+    color: '#333',
+    fontWeight: '500',
+  },
+  moduleSubTitle: {
+    fontSize: 18,
+    lineHeight: 24,
+    color: globalStyleVariables.TEXT_COLOR_SECONDARY,
+    fontWeight: '500',
   },
   indicator: {
     position: 'absolute',

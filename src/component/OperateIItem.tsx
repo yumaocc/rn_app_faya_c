@@ -22,7 +22,7 @@ const OperateItem: React.FC<OperateItemProps> = props => {
 
   function renderLabel() {
     if (typeof label === 'string') {
-      return <Text style={[globalStyles.fontSecondary, styles.label, propStyles.label]}>{label}</Text>;
+      return <Text style={[globalStyles.fontPrimary, styles.label, propStyles.label]}>{label}</Text>;
     }
   }
   function handlePress() {

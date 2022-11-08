@@ -200,7 +200,7 @@ export function getTempFilePath(fileName: string) {
 export function parseLink(content: string, parseRule: URLParseRule): QRCodeScanResult {
   const {home, invite, friend, spu, work} = parseRule;
   const schemeReg = /^([a-zA-Z]+:\/\/)/;
-  const scheme = content.match(schemeReg)[1];
+  const scheme = content.match(schemeReg)?.[1];
   const homeMatch = content.match(new RegExp(home));
   const inviteMatch = content.match(new RegExp(invite));
   const friendMatch = content.match(new RegExp(friend));

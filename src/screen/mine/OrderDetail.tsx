@@ -114,7 +114,7 @@ const OrderDetail: React.FC = () => {
     return (
       <View key={index} style={{marginBottom: globalStyleVariables.MODULE_SPACE}}>
         <Text style={[globalStyles.fontPrimary]}>{orderPackage.packageName}</Text>
-        <View style={{marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}}>
+        <View style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
           <View>
             {orderPackage.list?.map((sku, i) => {
               const {status, code, codeUrl} = sku;
@@ -262,9 +262,9 @@ const OrderDetail: React.FC = () => {
                     <View>
                       <View style={globalStyles.containerRow}>
                         <Icon name="shangpin_shanghu24" size={15} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-                        <Text style={globalStyles.fontPrimary}>{orderDetail?.bizName}</Text>
+                        <Text style={[globalStyles.fontPrimary, {fontSize: 12, marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}]}>{orderDetail?.bizName}</Text>
                       </View>
-                      <Text style={[globalStyles.fontPrimary]} numberOfLines={2}>
+                      <Text style={[globalStyles.fontPrimary, {lineHeight: 20, marginTop: globalStyleVariables.MODULE_SPACE}]} numberOfLines={2}>
                         {orderDetail.spuName}
                       </Text>
                     </View>
@@ -328,7 +328,10 @@ const OrderDetail: React.FC = () => {
 
                 {/* 订单信息 */}
                 <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
-                  <Text style={[globalStyles.fontStrong]}>订单信息</Text>
+                  <View style={{height: 24}}>
+                    <Text style={[globalStyles.fontStrong]}>订单信息</Text>
+                  </View>
+                  {/* <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]} /> */}
                   <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
                   <View style={[globalStyles.containerLR, {height: 30}]}>
                     <Text style={[globalStyles.fontPrimary]}>用户姓名</Text>

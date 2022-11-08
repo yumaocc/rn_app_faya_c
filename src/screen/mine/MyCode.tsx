@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {View, Text, TouchableOpacity, ScrollView, useWindowDimensions, StyleSheet, Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../component';
@@ -14,6 +14,7 @@ import Icon from '../../component/Icon';
 import {saveImageToGallery} from '../../helper/system';
 import {MyCodeUrl} from '../../models';
 import MyStatusBar from '../../component/MyStatusBar';
+import Loading from '../../component/Loading';
 
 const MyCode: React.FC = () => {
   const {type} = useParams<{type: 'friend' | 'share'}>();
@@ -22,6 +23,7 @@ const MyCode: React.FC = () => {
   const [ref, setRef, isReady] = useRefCallback();
   const [codeInfo, setCodeInfo] = React.useState<MyCodeUrl>();
   const userInfo = useSelector((state: RootState) => state.user.myDetail);
+  const hasShareCodeRef = useRef(false);
   const hasShareCode = useMemo(() => !!codeInfo?.shareQrCodeUrl && !!codeInfo?.shareQrCodeUrlReal, [codeInfo]);
 
   useEffect(() => {
@@ -36,6 +38,8 @@ const MyCode: React.FC = () => {
     try {
       const res = await api.user.getCodeUrl();
       setCodeInfo(res);
+      // swiper view有问题，不能动态处理，所以这里暂时用ref来处理
+      hasShareCodeRef.current = !!res.shareQrCodeUrl && !!res.shareQrCodeUrlReal;
     } catch (error) {
       commonDispatcher.error(error);
     }
@@ -62,7 +66,7 @@ const MyCode: React.FC = () => {
   function handleSwipe(direction: SwipeDirection) {
     switch (direction) {
       case SwipeDirection.LEFT:
-        if (hasShareCode) {
+        if (hasShareCodeRef.current) {
           setCurrentType('share');
         }
         break;
@@ -71,7 +75,6 @@ const MyCode: React.FC = () => {
         break;
     }
   }
-
   async function downloadCode(url: string) {
     try {
       await saveImageToGallery(url);
@@ -109,7 +112,13 @@ const MyCode: React.FC = () => {
             <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{userInfo?.nickName}</Text>
           </View>
           <View style={{marginTop: 30}}>
-            <QRCode value={codeInfo?.datingQrCodeUrlReal || '发芽'} size={250} />
+            {codeInfo?.datingQrCodeUrlReal ? (
+              <QRCode value={codeInfo?.datingQrCodeUrlReal || '发芽'} size={250} />
+            ) : (
+              <View style={[styles.loadingCode, globalStyles.containerCenter]}>
+                <Loading />
+              </View>
+            )}
           </View>
           <View style={{marginTop: 20}}>
             <Text style={globalStyles.fontPrimary}>扫描二维码，立刻关注我</Text>
@@ -168,5 +177,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#0000000D',
     padding: 7,
     borderRadius: 5,
+  },
+  loadingCode: {
+    width: 250,
+    height: 250,
   },
 });

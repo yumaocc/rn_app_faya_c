@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     position: 'relative',
-    height: 40,
+    height: 50,
   },
   left: {
     position: 'absolute',

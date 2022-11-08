@@ -165,7 +165,7 @@ const Discover: React.FC = () => {
             </TouchableWithoutFeedback>
           </View>
           <ScrollView
-            style={{flex: 1, marginTop: globalStyleVariables.MODULE_SPACE}}
+            style={{flex: 1, paddingTop: globalStyleVariables.MODULE_SPACE}}
             onMomentumScrollEnd={handleScrollEnd}
             refreshControl={<RefreshControl refreshing={false} onRefresh={handleRefresh} />}>
             <View style={styles.spuContainer}>

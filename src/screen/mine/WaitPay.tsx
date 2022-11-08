@@ -74,7 +74,7 @@ const WaitPay: React.FC = () => {
     }
     const {canPayAgainTimeEnd} = orderInfo;
     const now = moment();
-    // const end = moment('2022-10-06 11:42:30', 'YYYY-MM-DD HH:mm:ss');
+    // const end = moment('2022-11-08 18:42:30', 'YYYY-MM-DD HH:mm:ss');
     const end = moment(canPayAgainTimeEnd, 'YYYY-MM-DD HH:mm:ss');
     const rest = end.diff(now, 'seconds');
     if (rest <= 1) {
@@ -150,7 +150,7 @@ const WaitPay: React.FC = () => {
         headerLeft={
           <View style={globalStyles.containerRow}>
             <TouchableOpacity activeOpacity={0.6} onPress={handleBack}>
-              <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
+              <View style={[{paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
                 <Icon name="nav_back48" width={11} height={24} color="#333" />
               </View>
             </TouchableOpacity>
@@ -174,25 +174,17 @@ const WaitPay: React.FC = () => {
             <View style={[globalStyles.lineVertical, {height: 12, backgroundColor: globalStyleVariables.BORDER_COLOR, marginHorizontal: globalStyleVariables.MODULE_SPACE}]} />
             <Text style={styles.name}>{orderInfo?.paidPhone}</Text>
           </View>
-          <View style={styles.orderContainer}>
-            <View style={[{flexDirection: 'row', alignItems: 'flex-start'}]}>
-              <Image source={orderInfo?.spuCoverImage ? {uri: orderInfo.spuCoverImage} : require('../../assets/sku_def_1_1.png')} style={styles.spuCover} />
-              <View style={{flex: 1, marginLeft: globalStyleVariables.MODULE_SPACE}}>
+          <View style={[styles.orderContainer]}>
+            <View style={[globalStyles.containerRow, {alignItems: 'flex-start'}]}>
+              <Image source={{uri: orderInfo?.spuCoverImage}} style={styles.spuCover} />
+              <View>
                 <View style={globalStyles.containerRow}>
                   <Icon name="shangpin_shanghu24" size={15} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-                  <Text style={[globalStyles.fontStrong]} numberOfLines={1}>
-                    {orderInfo?.bizName}
-                  </Text>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 12, marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER}]}>{orderInfo?.bizName}</Text>
                 </View>
-                {/* <View style={[{marginTop: globalStyleVariables.MODULE_SPACE_SMALLER, flexDirection: 'row'}]}>
-                  <Text style={[globalStyles.fontTertiary]}>暂无标签字段</Text>
-                </View> */}
-                <Text style={[globalStyles.fontStrong]} numberOfLines={2}>
+                <Text style={[globalStyles.fontPrimary, {lineHeight: 20, marginTop: globalStyleVariables.MODULE_SPACE}]} numberOfLines={2}>
                   {orderInfo?.spuName}
                 </Text>
-                {/* <View style={{alignItems: 'flex-end'}}>
-                  <Text style={globalStyles.fontPrimary}>¥{orderInfo.}</Text>
-                </View> */}
               </View>
             </View>
             <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE}]} />
@@ -260,7 +252,7 @@ const styles = StyleSheet.create({
   nameContainer: {
     marginTop: globalStyleVariables.MODULE_SPACE,
     height: 54,
-    paddingHorizontal: globalStyleVariables.MODULE_SPACE,
+    paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER,
     backgroundColor: '#fff',
   },
   name: {
@@ -270,11 +262,12 @@ const styles = StyleSheet.create({
   orderContainer: {
     backgroundColor: '#fff',
     marginTop: globalStyleVariables.MODULE_SPACE,
-    padding: globalStyleVariables.MODULE_SPACE,
+    padding: globalStyleVariables.MODULE_SPACE_BIGGER,
   },
   spuCover: {
     width: 60,
     height: 60,
     borderRadius: 5,
+    marginRight: globalStyleVariables.MODULE_SPACE,
   },
 });

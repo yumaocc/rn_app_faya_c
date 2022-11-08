@@ -109,9 +109,10 @@ const Profile: React.FC = () => {
             <View style={[styles.userData]}>
               <View style={styles.avatarContainer}>
                 <TouchableWithoutFeedback>
-                  <View style={{alignItems: 'center'}}>
+                  <View style={[{alignItems: 'center'}]}>
                     {!!agentInfo?.avatar && <Image style={[styles.avatar]} source={{uri: agentInfo?.avatar}} defaultSource={require('../../../assets/avatar_def.png')} />}
                     {!agentInfo?.avatar && <Image style={[styles.avatar]} source={require('../../../assets/avatar_def.png')} />}
+                    <View style={[{width: 1, height: 6}]} />
                     {agentInfo?.level === 1 && <Image source={require('../../../assets/tag_darensign_xinshou.png')} style={styles.agentBadge} />}
                     {agentInfo?.level === 2 && <Image source={require('../../../assets/tag_darensign_jinjie.png')} style={styles.agentBadge} />}
                     {agentInfo?.level === 3 && <Image source={require('../../../assets/tag_darensign_zishen.png')} style={styles.agentBadge} />}

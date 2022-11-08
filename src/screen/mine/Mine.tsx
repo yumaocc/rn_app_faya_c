@@ -169,6 +169,7 @@ const Mine: React.FC = () => {
                   <View style={{alignItems: 'center'}}>
                     {!!detail.avatar && <Image style={[styles.avatar]} source={{uri: detail.avatar}} defaultSource={require('../../assets/avatar_def.png')} />}
                     {!detail.avatar && <Image style={[styles.avatar]} source={require('../../assets/avatar_def.png')} />}
+                    <View style={[{width: 1, height: 6}]} />
                     {detail?.level === 1 && <Image source={require('../../assets/tag_darensign_xinshou.png')} style={styles.agentBadge} />}
                     {detail?.level === 2 && <Image source={require('../../assets/tag_darensign_jinjie.png')} style={styles.agentBadge} />}
                     {detail?.level === 3 && <Image source={require('../../assets/tag_darensign_zishen.png')} style={styles.agentBadge} />}

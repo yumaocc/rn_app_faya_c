@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from '../../component/Icon';
-// import {spu} from '../../apis';
 import {globalStyleVariables, globalStyles} from '../../constants/styles';
 import {SPUF} from '../../models';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import FastImage from 'react-native-fast-image';
 
 interface SPUCardProps {
   spu: SPUF;
@@ -40,7 +40,7 @@ const SPUCard: React.FC<SPUCardProps> = props => {
       <TouchableOpacity activeOpacity={0.8} onPress={handleSelectSpu}>
         <View style={styles.spuItem}>
           <View style={styles.spuCoverContainer}>
-            <Image source={{uri: spu.poster}} defaultSource={require('../../assets/sku_def_1_1.png')} style={styles.spuCover} />
+            <FastImage source={{uri: spu.poster}} defaultSource={require('../../assets/sku_def_1_1.png')} style={styles.spuCover} />
           </View>
           <View style={{paddingLeft: globalStyleVariables.MODULE_SPACE, flex: 1}}>
             <View style={globalStyles.containerRow}>
