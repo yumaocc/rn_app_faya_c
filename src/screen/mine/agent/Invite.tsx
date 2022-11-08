@@ -9,7 +9,6 @@ import {FakeNavigation} from '../../../models';
 import MyStatusBar from '../../../component/MyStatusBar';
 import Loading from '../../../component/Loading';
 import {isInLogin, navigateBack} from '../../../router/Router';
-import {useLog} from '../../../fst/hooks';
 
 const Invite: React.FC = () => {
   const [inviteCode, setInviteCode] = React.useState<number>(null);
@@ -20,7 +19,6 @@ const Invite: React.FC = () => {
   const isAgentAlready = useMemo(() => inviteCode === 3, [inviteCode]); // 3已经是达人
   const navigation = useNavigation<FakeNavigation>();
   const isLoggedIn = useIsLoggedIn();
-  useLog('userId', userId);
 
   useEffect(() => {
     if (!isLoggedIn) {
