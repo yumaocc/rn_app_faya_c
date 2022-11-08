@@ -143,7 +143,7 @@ const Mine: React.FC = () => {
         <Image source={require('../../assets/mine-bg.png')} style={styles.cover} />
         <View style={[styles.container, {paddingTop: 170, paddingBottom: 20}]}>
           {/* 顶部扫码等按钮栏 */}
-          <View style={[globalStyles.containerLR, {position: 'absolute', top: top + 10, width: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
+          <View style={[globalStyles.containerLR, {position: 'absolute', top: top, width: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER, height: 50}]}>
             <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('Scanner')}>
               <Icon name="wode_scan48" size={24} color="#fff" />
             </TouchableOpacity>

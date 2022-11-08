@@ -131,7 +131,7 @@ export default OrderList;
 const styles = StyleSheet.create({
   stepContainer: {
     backgroundColor: '#fff',
-    height: 40,
+    height: 50,
   },
   searchIconContainer: {
     width: 30,

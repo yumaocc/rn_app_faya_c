@@ -89,7 +89,7 @@ const Home: React.FC = () => {
     <SafeAreaView edges={['top']} style={{flex: 1, backgroundColor: '#fff'}}>
       {isFocused && <MyStatusBar barStyle="dark-content" />}
       <View style={styles.container}>
-        <View style={{position: 'relative'}}>
+        <View style={{position: 'relative', height: 50}}>
           <Tabs styles={tabStyles} gap={30} currentKey={currentTab.type} tabs={tabs.map(tab => ({title: tab.title, key: tab.key}))} onChange={handleChangeTab} />
           <View style={styles.scanIcon}>
             <TouchableOpacity activeOpacity={0.8} onPress={handleScan}>
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   scanIcon: {
     position: 'absolute',
     height: 50,
-    left: 20,
+    left: 15,
     alignItems: 'center',
     justifyContent: 'center',
   },

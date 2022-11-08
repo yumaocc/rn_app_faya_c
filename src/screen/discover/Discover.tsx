@@ -146,7 +146,7 @@ const Discover: React.FC = () => {
         <SafeAreaView edges={['top']} style={{flex: 1}}>
           {/* 其他页面会默认此状态栏设置 */}
           <MyStatusBar barStyle="dark-content" />
-          <View style={[globalStyles.containerLR, {paddingHorizontal: globalStyleVariables.MODULE_SPACE}]}>
+          <View style={[globalStyles.containerLR, {paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER, height: 50}]}>
             <View style={[{maxWidth: 110, marginRight: 20}]}>
               <TouchableOpacity activeOpacity={0.8} onPress={() => setShowSelectCity(true)}>
                 <View style={[globalStyles.containerRow]}>
