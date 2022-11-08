@@ -94,7 +94,9 @@ const User: React.FC = () => {
   async function followUser() {
     if (!isLoggedIn) {
       userDispatcher.login({
-        back: true,
+        behavior: 'push',
+        skipBehavior: 'back',
+        completeBehavior: 'back',
       });
       return;
     }

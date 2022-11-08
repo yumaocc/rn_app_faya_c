@@ -15,7 +15,9 @@ const MiddleButton: React.FC = () => {
     if (!isLoggedIn) {
       userDispatcher.login({
         to: 'ShootVideo',
-        redirect: true,
+        behavior: 'push',
+        skipBehavior: 'back',
+        completeBehavior: 'replace',
       });
     } else {
       navigation.navigate('ShootVideo');

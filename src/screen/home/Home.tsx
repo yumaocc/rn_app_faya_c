@@ -111,7 +111,7 @@ const Home: React.FC = () => {
               />
             ) : (
               <View style={[{paddingTop: 40}, globalStyles.containerCenter]}>
-                <Button style={{marginTop: 10}} title="请先登录" type="primary" onPress={goLogin} />
+                <Button style={{marginTop: 10}} title="请先登录" type="primary" onPress={() => goLogin()} />
               </View>
             )}
           </View>

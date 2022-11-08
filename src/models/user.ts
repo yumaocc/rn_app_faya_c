@@ -16,9 +16,10 @@ export interface UserInfo {
 
 export interface GoLoginParams {
   to?: ValidRoute;
-  back?: boolean;
   params?: any;
-  redirect?: boolean;
+  behavior: 'push' | 'replace'; // 如何到login页
+  completeBehavior: 'replace' | 'back' | 'home'; // 登录完成如何到to页，注意back能不能返回
+  skipBehavior: 'replace' | 'back' | 'home'; // 暂不登录会如何
 }
 
 export enum CouponState {

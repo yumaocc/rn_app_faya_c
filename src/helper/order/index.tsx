@@ -23,11 +23,11 @@ export function cleanOrderForm(formData: any): OrderForm {
   };
 }
 
-export function getShareSPULink(spuId: number, userId: string): string {
+export function getShareSPULink(spuId: number, userId: string | number): string {
   return `https://m.faya.life/${userId ? `?a=${userId}` : ''}#/spu/detail/${spuId}`;
 }
 
-export function getShareWorkLink(workId: string, userId: string): string {
+export function getShareWorkLink(workId: string, userId: string | number): string {
   // return `https://m.faya.life/?a=${userId}#/work/detail/${workId}`;
   return `https://m.faya.life/${userId ? `?a=${userId}` : ''}#/work/detail/${workId}`;
 }

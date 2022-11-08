@@ -72,14 +72,6 @@ const BankCards: React.FC = () => {
             </SwipeAction>
           );
         })}
-        {/* <SwipeAction right={[{text: <MaterialIcon name="delete" size={24} color="#f00" />, backgroundColor: '#fff', color: '#fff'}]}>
-          <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE}}>
-            <View style={[globalStyles.containerRow, styles.item]}>
-              <Text>中国工商银行（6228480402564890018）</Text>
-            </View>
-            <View style={globalStyles.lineHorizontal} />
-          </View>
-        </SwipeAction> */}
         <View style={[styles.item, globalStyles.containerRow, {paddingLeft: globalStyleVariables.MODULE_SPACE}]}>
           <TouchableOpacity activeOpacity={0.8} onPress={handleAddCard}>
             <View style={[globalStyles.containerRow]}>

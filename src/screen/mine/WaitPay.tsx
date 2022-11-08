@@ -231,13 +231,6 @@ const WaitPay: React.FC = () => {
               </Text>
             </View>
           </View>
-          {/* <View style={[globalStyles.containerLR, styles.nameContainer, {marginBottom: 20}]}>
-            <Text>
-              <Text>预约信息</Text>
-              <Text>非必填，使用前需预约</Text>
-            </Text>
-            <MaterialIcon name="keyboard-arrow-right" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-          </View> */}
         </ScrollView>
         <View style={{marginBottom: 10, padding: globalStyleVariables.MODULE_SPACE}}>
           <Button title="立即支付" type="primary" disabled={expired} onPress={payNow} style={{height: 40}} />

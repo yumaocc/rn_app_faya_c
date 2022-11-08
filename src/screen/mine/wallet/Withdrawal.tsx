@@ -124,7 +124,6 @@ const Withdrawal: React.FC = () => {
                 <TouchableOpacity activeOpacity={0.5} onPress={() => setShowSelectBank(true)}>
                   <View style={[styles.bankCardItem, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
                     <View style={[globalStyles.containerRow, {flex: 1}]}>
-                      {/* <MaterialIcon name="credit-card" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} /> */}
                       <Text style={[styles.bankText]}>
                         {selectBankCard?.bankCodeName}({selectBankCard?.accountNo})
                       </Text>

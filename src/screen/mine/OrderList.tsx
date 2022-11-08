@@ -19,8 +19,6 @@ import MyStatusBar from '../../component/MyStatusBar';
 
 const OrderList: React.FC = () => {
   const [currentKey, setCurrentKey] = React.useState<string>('all');
-  // const [searchName, setSearchName] = React.useState<string>('');
-  // const [name, setName] = React.useState<string>('');
 
   const orders = useSelector((state: RootState) => state.order.orders);
   const orderList = useMemo(() => orders.list, [orders]);
@@ -41,19 +39,11 @@ const OrderList: React.FC = () => {
     {title: ({active}) => <Text style={active ? styles.stepActive : styles.stepInactive}>待评价</Text>, key: '4'},
   ];
 
-  // function handleBack() {
-  //   navigation.canGoBack() && navigation.goBack();
-  // }
-
   useEffect(() => {
     if (isFocused && isLoggedIn) {
       orderDispatcher.loadOrders(currentKey, '', true);
     }
   }, [currentKey, orderDispatcher, isFocused, isLoggedIn]);
-
-  // function searchOrder() {
-  //   setName(searchName);
-  // }
 
   function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
     if (isReachBottom(e) && isLoggedIn) {
@@ -81,7 +71,7 @@ const OrderList: React.FC = () => {
                   <Icon name="empty_dingdan" size={30} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                 </View>
                 <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>登录后可查看订单</Text>
-                <Button style={{marginTop: 10}} title="去登录" type="primary" onPress={goLogin} />
+                <Button style={{marginTop: 10}} title="去登录" type="primary" onPress={() => goLogin()} />
               </View>
             )}
             {showEmpty && (

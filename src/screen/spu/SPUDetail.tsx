@@ -82,7 +82,9 @@ const SPUDetail: React.FC = () => {
       userDispatcher.login({
         to: 'Order',
         params: {workMainId},
-        redirect: true,
+        behavior: 'push',
+        skipBehavior: 'back',
+        completeBehavior: 'replace',
       });
     } else {
       navigation.navigate('Order', {workMainId});

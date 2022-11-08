@@ -1,16 +1,16 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useRef} from 'react';
-import {View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Image, RefreshControl, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import {View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, RefreshControl, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import {useSelector} from 'react-redux';
 import {NavigationBar} from '../../../component';
 import Icon from '../../../component/Icon';
-import {globalStyles, globalStyleVariables} from '../../../constants/styles';
+import {globalStyleVariables} from '../../../constants/styles';
 import {useSPUDispatcher} from '../../../helper/hooks';
 import {isReachBottom} from '../../../helper/system';
 import {FakeNavigation, SPUF} from '../../../models';
 import {RootState} from '../../../redux/reducers';
 import MyStatusBar from '../../../component/MyStatusBar';
+import SPUCard from '../../common/SPUCard';
 
 const Showcase: React.FC = () => {
   const [search, setSearch] = React.useState(''); // 文本框内容
@@ -42,84 +42,12 @@ const Showcase: React.FC = () => {
     }
   }
 
-  function goSPUDetail(id: number) {
+  function goSPUDetail(spu: SPUF) {
     navigation.navigate({
       name: 'SPUDetail',
-      params: {id},
-      key: 'SPUDetail-' + id,
+      params: {id: spu.spuId},
+      key: 'SPUDetail-' + spu.spuId,
     });
-  }
-
-  function renderSPU(spu: SPUF) {
-    const {commissionRangeLeftMoneyYuan, commissionRangeRightMoneyYuan, salePrice, originPrice} = spu;
-    let commission = '';
-    if (commissionRangeLeftMoneyYuan && commissionRangeRightMoneyYuan) {
-      if (commissionRangeLeftMoneyYuan === commissionRangeRightMoneyYuan) {
-        commission = commissionRangeLeftMoneyYuan;
-      } else {
-        commission = `${commissionRangeLeftMoneyYuan}-${commissionRangeRightMoneyYuan}`;
-      }
-    }
-    let discount = null;
-    if (originPrice && salePrice) {
-      const res = Math.round((salePrice / originPrice) * 10);
-      discount = Math.max(1, res);
-    }
-    if (discount && discount > 5) {
-      discount = null;
-    }
-
-    return (
-      <View key={spu.spuId}>
-        <TouchableOpacity activeOpacity={0.8} onPress={() => goSPUDetail(spu.spuId)}>
-          <View style={styles.spuItem}>
-            <View style={styles.spuCoverContainer}>
-              <Image source={{uri: spu.poster}} defaultSource={require('../../../assets/sku_def_1_1.png')} style={styles.spuCover} />
-            </View>
-            <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, flex: 1}}>
-              <View style={globalStyles.containerRow}>
-                <Icon name="shangpin_shanghu24" size={15} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-                <Text style={[globalStyles.fontPrimary, globalStyles.moduleMarginLeft]}>{spu.bizName}</Text>
-              </View>
-              {!!spu.tags?.length && (
-                <View style={[globalStyles.halfModuleMarginTop]}>
-                  {spu.tags.map((tag, i) => (
-                    <Text key={i} style={[globalStyles.fontTertiary, {marginRight: globalStyleVariables.MODULE_SPACE}]}>
-                      {tag}
-                    </Text>
-                  ))}
-                </View>
-              )}
-              <Text style={[globalStyles.fontStrong, {marginTop: 10}]}>{spu.spuName}</Text>
-              <View style={[globalStyles.halfModuleMarginTop, globalStyles.containerLR]}>
-                <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop]}>
-                  <View style={globalStyles.containerRow}>
-                    <View style={[globalStyles.containerRow, {alignItems: 'flex-end'}]}>
-                      <Text style={[{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 12}]}>¥</Text>
-                      <Text style={{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 18}}>{spu.salePriceYuan}</Text>
-                      <Text style={[globalStyles.fontTertiary, {marginLeft: globalStyleVariables.MODULE_SPACE / 2, textDecorationLine: 'line-through'}]}>
-                        ¥{spu.originPriceYuan}
-                      </Text>
-                    </View>
-                  </View>
-                  {discount && (
-                    <View style={[globalStyles.tagWrapper, globalStyles.moduleMarginLeft]}>
-                      <Text style={[globalStyles.tag, {color: globalStyleVariables.COLOR_WARNING_YELLOW}]}>{discount}折</Text>
-                    </View>
-                  )}
-                </View>
-                {commission && (
-                  <Text style={{color: globalStyleVariables.COLOR_BUD}}>
-                    <MaterialIcon name="spa" size={14} />
-                    <Text>{commission}</Text>
-                  </Text>
-                )}
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
   }
 
   return (
@@ -149,7 +77,11 @@ const Showcase: React.FC = () => {
         onMomentumScrollEnd={handleScrollEnd}
         refreshControl={<RefreshControl refreshing={showcaseSPUList?.status === 'loading'} onRefresh={handleFreshSearch} />}>
         <View>
-          <View style={{padding: globalStyleVariables.MODULE_SPACE}}>{showcaseSPUList?.list.map(renderSPU)}</View>
+          <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
+            {showcaseSPUList?.list.map(spu => {
+              return <SPUCard key={spu.spuId} onSelect={goSPUDetail} spu={spu} />;
+            })}
+          </View>
         </View>
       </ScrollView>
     </View>

@@ -50,7 +50,7 @@ import ScanResult from '../screen/common/ScanResult';
 import SingleWorkDetail from '../screen/home/work/SingleWorkDetail';
 import CommentReport from '../screen/common/CommentReport';
 
-import {RootStackParamList, ValidRoute} from '../models';
+import {GoLoginParams, RootStackParamList, ValidRoute} from '../models';
 import {useIsLoggedIn} from '../helper/hooks';
 import MyProfile from '../screen/mine/settings/MyProfile';
 import Invite from '../screen/mine/agent/Invite';
@@ -130,18 +130,25 @@ export default Navigator;
 
 export const navigationRef = createNavigationContainerRef();
 
-// 编程式导航
-export function goLogin() {
+export function isInLogin(): boolean {
   if (navigationRef.isReady()) {
     const routes = navigationRef.getState()?.routes;
     if (routes?.length) {
       const last = routes[routes.length - 1];
       if (last.name === 'Login') {
-        return; // 已经是登录页了
+        return true;
       }
     }
-    navigateTo('Login', null, false);
   }
+  return false;
+}
+
+// 编程式导航
+export function goLogin(loginParams?: GoLoginParams) {
+  if (isInLogin()) {
+    return;
+  }
+  navigateTo('Login', loginParams?.params, loginParams?.behavior === 'replace');
 }
 
 export function relaunch() {

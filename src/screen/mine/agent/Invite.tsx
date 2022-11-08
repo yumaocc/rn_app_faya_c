@@ -7,6 +7,9 @@ import {globalStyles} from '../../../constants/styles';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation} from '../../../models';
 import MyStatusBar from '../../../component/MyStatusBar';
+import Loading from '../../../component/Loading';
+import {isInLogin, navigateBack} from '../../../router/Router';
+import {useLog} from '../../../fst/hooks';
 
 const Invite: React.FC = () => {
   const [inviteCode, setInviteCode] = React.useState<number>(null);
@@ -14,15 +17,24 @@ const Invite: React.FC = () => {
   const [commonDispatcher] = useCommonDispatcher();
   const [userDispatcher] = useUserDispatcher();
   const success = useMemo(() => inviteCode === 1, [inviteCode]); // 1升级成功
-  const fail = useMemo(() => inviteCode === 3, [inviteCode]); // 3已经是达人
+  const isAgentAlready = useMemo(() => inviteCode === 3, [inviteCode]); // 3已经是达人
   const navigation = useNavigation<FakeNavigation>();
   const isLoggedIn = useIsLoggedIn();
+  useLog('userId', userId);
 
   useEffect(() => {
     if (!isLoggedIn) {
-      userDispatcher.login({
-        back: true,
-      });
+      if (!isInLogin()) {
+        userDispatcher.login({
+          to: 'Invite',
+          params: {userId: userId},
+          behavior: 'replace',
+          skipBehavior: 'back',
+          completeBehavior: 'replace',
+        });
+      } else {
+        navigateBack(); // hack处理多次登录的情况
+      }
       return;
     }
     // console.log('即将绑定：', userId);
@@ -33,7 +45,7 @@ const Invite: React.FC = () => {
         userDispatcher.getMyDetail();
       })
       .catch(commonDispatcher.error);
-  }, [commonDispatcher.error, userId, isLoggedIn, userDispatcher]);
+  }, [commonDispatcher, userId, isLoggedIn, userDispatcher]);
 
   function onOk() {
     navigation.canGoBack() && navigation.goBack();
@@ -43,31 +55,36 @@ const Invite: React.FC = () => {
     <View style={styles.container}>
       <MyStatusBar />
       <NavigationBar title="" />
-      {success && (
-        <View style={globalStyles.containerCenter}>
-          <Image source={require('../../../assets/tyro.png')} style={styles.titleBg} resizeMode="contain" />
+      {!inviteCode ? (
+        <View style={[globalStyles.containerCenter, {marginTop: 100}]}>
+          <Loading />
         </View>
-      )}
+      ) : (
+        <>
+          {success && (
+            <View style={globalStyles.containerCenter}>
+              <Image source={require('../../../assets/tyro.png')} style={styles.titleBg} resizeMode="contain" />
+            </View>
+          )}
+          <View style={[globalStyles.containerCenter, {marginTop: 113}]}>
+            <Image source={require('../../../assets/img_daren_sign_ring_xinshou.png')} style={styles.star} />
+          </View>
+          {isAgentAlready && (
+            <View style={globalStyles.containerCenter}>
+              <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>您已经是达人了</Text>
+            </View>
+          )}
+          {success && (
+            <View style={globalStyles.containerCenter}>
+              <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>恭喜您升级为</Text>
+              <Text style={[globalStyles.fontPrimary, {fontSize: 40}]}>新手达人</Text>
+            </View>
+          )}
 
-      <View style={[globalStyles.containerCenter, {marginTop: 113}]}>
-        <Image source={require('../../../assets/img_daren_sign_ring_xinshou.png')} style={styles.star} />
-      </View>
-      {fail && (
-        <View style={globalStyles.containerCenter}>
-          <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>您已经是达人了</Text>
-        </View>
-      )}
-      {success && (
-        <View style={globalStyles.containerCenter}>
-          <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>恭喜您升级为</Text>
-          <Text style={[globalStyles.fontPrimary, {fontSize: 40}]}>新手达人</Text>
-        </View>
-      )}
-
-      {inviteCode && (
-        <View style={[globalStyles.containerCenter, {marginTop: 20}]}>
-          <Button title="确定" type="primary" style={styles.button} activeStyle={{borderColor: '#666', backgroundColor: '#666'}} onPress={onOk} />
-        </View>
+          <View style={[globalStyles.containerCenter, {marginTop: 20}]}>
+            <Button title="确定" type="primary" style={styles.button} activeStyle={{borderColor: '#666', backgroundColor: '#666'}} onPress={onOk} />
+          </View>
+        </>
       )}
     </View>
   );

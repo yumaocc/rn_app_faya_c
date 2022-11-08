@@ -20,8 +20,9 @@ function* logout(): any {
   yield put(SPUActions.reset());
 }
 
-function login() {
-  goLogin();
+function login(action: ActionWithPayload<ActionType, GoLoginParams>) {
+  const params = action.payload;
+  goLogin(params);
 }
 
 function* loginSuccess(action: ActionWithPayload<ActionType, string>): any {
@@ -32,10 +33,15 @@ function* loginSuccess(action: ActionWithPayload<ActionType, string>): any {
   if (!params) {
     relaunch();
   } else {
-    if (params?.back) {
+    const {completeBehavior, to} = params;
+    if (completeBehavior === 'back') {
       navigateBack();
+    } else if (completeBehavior === 'replace') {
+      let toRoute = to || 'Tab';
+      navigateTo(toRoute, params.params, true);
     } else {
-      navigateTo(params?.to || 'Tab', params?.params, params?.redirect);
+      // 默认重定向到home
+      navigateTo('Tab', params.params, true);
     }
     yield put(Actions.clearLoginInfo());
   }

@@ -22,6 +22,7 @@ const Login: React.FC = () => {
   const suggestPhone = useSelector((state: RootState) => state.common.config.phone);
   const shareUserId = useSelector((state: RootState) => state.common.config.shareUserId);
   const touristsSnowId = useSelector((state: RootState) => state.common.config.touristId);
+  const loginParams = useSelector((state: RootState) => state.user.login);
 
   const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
@@ -102,12 +103,32 @@ const Login: React.FC = () => {
     }
   }
 
+  function replaceToHome() {
+    navigation.replace('Home');
+  }
+
+  function back() {
+    navigation.canGoBack() ? navigation.goBack() : replaceToHome();
+  }
+
   function skipLogin() {
     userDispatcher.clearLoginInfo();
-    if (navigation.canGoBack()) {
-      navigation.goBack();
+    if (loginParams) {
+      const {skipBehavior, to} = loginParams;
+      switch (skipBehavior) {
+        case 'back':
+          back();
+          break;
+        case 'replace':
+          const toRoute = to || 'Tab';
+          navigation.replace(toRoute);
+          break;
+        default:
+          replaceToHome();
+          break;
+      }
     } else {
-      navigation.replace('Home');
+      back();
     }
   }
 

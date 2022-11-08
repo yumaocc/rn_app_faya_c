@@ -1,17 +1,16 @@
 import React, {useMemo} from 'react';
-import {View, Text, StyleSheet, ScrollView, NativeSyntheticEvent, NativeScrollEvent, TouchableOpacity, Image, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, NativeSyntheticEvent, NativeScrollEvent, ActivityIndicator} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {NavigationSearchBar} from '../../component';
 import {FakeNavigation, LoadingState, SPUF} from '../../models';
 import * as api from '../../apis';
 import {isReachBottom} from '../../helper/system';
 import {SearchParam} from '../../fst/models';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import Icon from '../../component/Icon';
 import {useNavigation} from '@react-navigation/native';
 import {dictLoadingState} from '../../helper/dictionary';
 import MyStatusBar from '../../component/MyStatusBar';
+import SPUCard from '../common/SPUCard';
 
 const SearchSPU: React.FC = () => {
   const [keyword, setKeyword] = React.useState('');
@@ -61,82 +60,16 @@ const SearchSPU: React.FC = () => {
     });
   }
 
-  function renderSPU(spu: SPUF) {
-    const {commissionRangeLeftMoneyYuan, commissionRangeRightMoneyYuan, salePrice, originPrice} = spu;
-    let commission = '';
-    if (commissionRangeLeftMoneyYuan && commissionRangeRightMoneyYuan) {
-      if (commissionRangeLeftMoneyYuan === commissionRangeRightMoneyYuan) {
-        commission = commissionRangeLeftMoneyYuan;
-      } else {
-        commission = `${commissionRangeLeftMoneyYuan}-${commissionRangeRightMoneyYuan}`;
-      }
-    }
-    let discount = null;
-    if (originPrice && salePrice) {
-      const res = Math.round((salePrice / originPrice) * 10);
-      discount = Math.max(1, res);
-    }
-    if (discount && discount > 5) {
-      discount = null;
-    }
-
-    return (
-      <View key={spu.spuId}>
-        <TouchableOpacity activeOpacity={0.8} onPress={() => goSPUDetail(spu)}>
-          <View style={styles.spuItem}>
-            <View style={styles.spuCoverContainer}>
-              <Image source={{uri: spu.poster}} defaultSource={require('../../assets/sku_def_1_1.png')} style={styles.spuCover} />
-            </View>
-            <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, flex: 1}}>
-              <View style={globalStyles.containerRow}>
-                <Icon name="shangpin_shanghu24" size={15} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-                <Text style={[globalStyles.fontPrimary, globalStyles.moduleMarginLeft]}>{spu?.bizName}</Text>
-              </View>
-              <View style={[globalStyles.halfModuleMarginTop]}>
-                {spu.tags?.map((tag, i) => (
-                  <Text key={i} style={[globalStyles.fontTertiary, {marginRight: globalStyleVariables.MODULE_SPACE}]}>
-                    {tag}
-                  </Text>
-                ))}
-              </View>
-              <Text style={[globalStyles.fontStrong, {marginTop: 10}]}>{spu.spuName}</Text>
-              <View style={[globalStyles.halfModuleMarginTop, globalStyles.containerLR]}>
-                <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop]}>
-                  <View style={globalStyles.containerRow}>
-                    <View style={[globalStyles.containerRow, {alignItems: 'flex-end'}]}>
-                      <Text style={[{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 12}]}>¥</Text>
-                      <Text style={{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 18}}>{spu.salePriceYuan}</Text>
-                      <Text style={[globalStyles.fontTertiary, {marginLeft: globalStyleVariables.MODULE_SPACE / 2, textDecorationLine: 'line-through'}]}>
-                        ¥{spu.originPriceYuan}
-                      </Text>
-                    </View>
-                  </View>
-                  {discount && (
-                    <View style={[globalStyles.tagWrapper, globalStyles.moduleMarginLeft]}>
-                      <Text style={[globalStyles.tag, {color: globalStyleVariables.COLOR_WARNING_YELLOW}]}>{discount}折</Text>
-                    </View>
-                  )}
-                </View>
-                {commission && (
-                  <Text style={{color: globalStyleVariables.COLOR_BUD}}>
-                    <MaterialIcon name="spa" size={14} />
-                    <Text>{commission}</Text>
-                  </Text>
-                )}
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
       <MyStatusBar />
       <NavigationSearchBar autoFocus onSearch={handleSearch} />
       <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag" onMomentumScrollEnd={handleScrollEnd}>
-        <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, paddingBottom: bottom}}>{list.map(spu => renderSPU(spu))}</View>
+        <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, paddingBottom: bottom}}>
+          {list.map(spu => {
+            return <SPUCard key={spu.spuId} spu={spu} onSelect={() => goSPUDetail(spu)} />;
+          })}
+        </View>
         <View>
           {showNoMore && (
             <View style={[globalStyles.containerCenter, {paddingVertical: 20}]}>

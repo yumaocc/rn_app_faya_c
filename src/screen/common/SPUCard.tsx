@@ -47,13 +47,16 @@ const SPUCard: React.FC<SPUCardProps> = props => {
               <Icon name="shangpin_shanghu24" size={15} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
               <Text style={[globalStyles.fontPrimary, {marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER, fontSize: 12}]}>{spu?.bizName}</Text>
             </View>
-            <View style={[globalStyles.halfModuleMarginTop]}>
-              {spu.tags?.map((tag, i) => (
-                <Text key={i} style={[globalStyles.fontTertiary, {marginRight: globalStyleVariables.MODULE_SPACE}]}>
-                  {tag}
-                </Text>
-              ))}
-            </View>
+            {spu.tags?.length ? (
+              <View style={[globalStyles.halfModuleMarginTop]}>
+                {spu.tags?.map((tag, i) => (
+                  <Text key={i} style={[globalStyles.fontTertiary, {marginRight: globalStyleVariables.MODULE_SPACE}]}>
+                    {tag}
+                  </Text>
+                ))}
+              </View>
+            ) : null}
+
             <Text style={[globalStyles.fontStrong, {marginTop: 10}]}>{spu.spuName}</Text>
             <View style={[globalStyles.halfModuleMarginTop, globalStyles.containerLR, {alignItems: 'flex-end'}]}>
               <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop, {alignItems: 'flex-end'}]}>
