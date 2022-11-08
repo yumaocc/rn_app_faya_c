@@ -56,6 +56,7 @@ export type RootStackParamList = {
   Invite: undefined;
   CommentReport: {id: string};
   About: undefined;
+  PrivacySetting: undefined;
 };
 
 export type ValidRoute = keyof RootStackParamList;
