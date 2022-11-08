@@ -12,6 +12,7 @@ import CustomTouchable from '../../../component/CustomTouchable';
 import {BoolEnum} from '../../../fst/models';
 import Player from './Player';
 import PhotoPlayer from './PhotoPlayer';
+import FastImage from 'react-native-fast-image';
 
 interface WorkPageProps {
   // item: WorkF;
@@ -250,7 +251,7 @@ const WorkPage: React.FC<WorkPageProps> = props => {
                   <View style={styles.sideItem}>
                     <CustomTouchable onPress={goAuthor}>
                       {workDetail?.avatar ? (
-                        <Image source={{uri: workDetail?.avatar}} style={[styles.sideItem, styles.avatar]} />
+                        <FastImage source={{uri: workDetail?.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={[styles.sideItem, styles.avatar]} />
                       ) : (
                         <Image source={require('../../../assets/avatar_def.png')} style={[styles.sideItem, styles.avatar]} />
                       )}
@@ -356,6 +357,8 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
+    borderWidth: 2,
+    borderColor: '#fff',
   },
   bottom: {
     position: 'absolute',
