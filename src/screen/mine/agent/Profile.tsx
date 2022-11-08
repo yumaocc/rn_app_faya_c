@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Image, TouchableHighlight, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Image, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {NavigationBar, OperateItem} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
@@ -144,93 +144,93 @@ const Profile: React.FC = () => {
               {/* 任务面板 */}
               {!hasLevel3Right && (
                 <View style={styles.card}>
-                  <TouchableHighlight underlayColor="#999" onPress={() => {}}>
-                    <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}}>
-                      <View style={[globalStyles.containerLR]}>
-                        <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{dictAgentLevel(agentInfo?.level)}</Text>
-                      </View>
-                      {/* 经验条 */}
-                      <View style={{backgroundColor: '#0000001A', height: 4, marginTop: globalStyleVariables.MODULE_SPACE}}>
-                        <View style={{backgroundColor: globalStyleVariables.COLOR_BUD, height: 4, width: progress + '%'}} />
-                      </View>
-                      <Text style={[globalStyles.fontTertiary, {fontSize: 12, color: globalStyleVariables.COLOR_WARNING_YELLOW, marginTop: globalStyleVariables.MODULE_SPACE}]}>
-                        升级到{dictAgentLevel(agentInfo?.level + 1)}还需要
-                      </Text>
-                      {/* 新手达人任务完成情况 */}
-                      {agentInfo?.level === 1 && (
-                        <View style={[{marginTop: 20}]}>
-                          <View style={[globalStyles.containerLR]}>
-                            <Text
-                              style={[
-                                globalStyles.fontPrimary,
-                                styles.taskName,
-                                {color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
-                              ]}>
-                              邀请新用户{`(${Math.min(agentInfo?.developNewUsers, agentInfo?.developNewUsersMax) ?? '-'}/${agentInfo?.developNewUsersMax ?? '-'}人)`}
-                            </Text>
-                            <Text style={{color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY}}>
-                              {newUserTaskCompleted ? '(已完成)' : '(待完成)'}
-                            </Text>
-                          </View>
-                          <View style={[globalStyles.containerCol, {padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#0000000D', marginTop: 10, borderRadius: 5}]}>
-                            <Text>· 分享商品给朋友，点击注册成功即可</Text>
-                            <Text style={{marginTop: 10}}>
-                              · 朋友扫描
-                              <Text onPress={() => showCode('friend')} style={[{color: globalStyleVariables.COLOR_LINK}]}>
-                                交友码
-                              </Text>
-                              ，完成注册即可
-                            </Text>
-                          </View>
-                          <View style={[globalStyles.containerLR, {marginTop: 20}]}>
-                            <Text
-                              style={[
-                                globalStyles.fontPrimary,
-                                styles.taskName,
-                                {color: newOrderTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
-                              ]}>
-                              分享商品完成订单交易
-                              {`(${Math.min(agentInfo?.shareCompletedOrder, agentInfo?.shareCompletedOrderMax) ?? '-'}/${agentInfo?.shareCompletedOrderMax ?? '-'}笔)`}
-                            </Text>
-                            <Text style={{color: newOrderTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY}}>
-                              {newOrderTaskCompleted ? '(已完成)' : '(待完成)'}
-                            </Text>
-                          </View>
-                          <View style={[globalStyles.containerCol, {padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#0000000D', marginTop: 10, borderRadius: 5}]}>
-                            <Text>· 把商品分享给朋友，成功购买即可</Text>
-                          </View>
-                        </View>
-                      )}
-                      {/* 进阶达人任务完成情况 */}
-                      {agentInfo?.level === 2 && (
-                        <View style={[{marginTop: 20}]}>
-                          <View style={[globalStyles.containerLR]}>
-                            <Text
-                              style={[
-                                globalStyles.fontPrimary,
-                                styles.taskName,
-                                {color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
-                              ]}>
-                              组建团队{`${agentInfo?.developNewUsersMax ?? '-'}人`}
-                              {`(${Math.min(agentInfo?.developNewUsers, agentInfo?.developNewUsersMax) ?? '-'}/${agentInfo?.developNewUsersMax ?? '-'}人)`}
-                            </Text>
-                            <Text style={{color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY}}>
-                              {newUserTaskCompleted ? '(已完成)' : '(待完成)'}
-                            </Text>
-                          </View>
-                          <View style={[globalStyles.containerCol, {padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#0000000D', marginTop: 10, borderRadius: 5}]}>
-                            <Text>
-                              · 朋友扫描
-                              <Text onPress={() => showCode('share')} style={[{color: globalStyleVariables.COLOR_LINK}]}>
-                                组队码
-                              </Text>
-                              ，完成注册即可
-                            </Text>
-                          </View>
-                        </View>
-                      )}
+                  {/* <TouchableHighlight underlayColor="#999" onPress={() => {}}> */}
+                  {/* </TouchableHighlight> */}
+                  <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}}>
+                    <View style={[globalStyles.containerLR]}>
+                      <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{dictAgentLevel(agentInfo?.level)}</Text>
                     </View>
-                  </TouchableHighlight>
+                    {/* 经验条 */}
+                    <View style={{backgroundColor: '#0000001A', height: 4, marginTop: globalStyleVariables.MODULE_SPACE}}>
+                      <View style={{backgroundColor: globalStyleVariables.COLOR_BUD, height: 4, width: progress + '%'}} />
+                    </View>
+                    <Text style={[globalStyles.fontTertiary, {fontSize: 12, color: globalStyleVariables.COLOR_WARNING_YELLOW, marginTop: globalStyleVariables.MODULE_SPACE}]}>
+                      升级到{dictAgentLevel(agentInfo?.level + 1)}还需要
+                    </Text>
+                    {/* 新手达人任务完成情况 */}
+                    {agentInfo?.level === 1 && (
+                      <View style={[{marginTop: 20}]}>
+                        <View style={[globalStyles.containerLR]}>
+                          <Text
+                            style={[
+                              globalStyles.fontPrimary,
+                              styles.taskName,
+                              {color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
+                            ]}>
+                            邀请新用户{`(${Math.min(agentInfo?.developNewUsers, agentInfo?.developNewUsersMax) ?? '-'}/${agentInfo?.developNewUsersMax ?? '-'}人)`}
+                          </Text>
+                          <Text style={{color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY}}>
+                            {newUserTaskCompleted ? '(已完成)' : '(待完成)'}
+                          </Text>
+                        </View>
+                        <View style={[globalStyles.containerCol, {padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#0000000D', marginTop: 10, borderRadius: 5}]}>
+                          <Text>· 分享商品给朋友，点击注册成功即可</Text>
+                          <Text style={{marginTop: 10}}>
+                            · 朋友扫描
+                            <Text onPress={() => showCode('friend')} style={[{color: globalStyleVariables.COLOR_LINK}]}>
+                              交友码
+                            </Text>
+                            ，完成注册即可
+                          </Text>
+                        </View>
+                        <View style={[globalStyles.containerLR, {marginTop: 20}]}>
+                          <Text
+                            style={[
+                              globalStyles.fontPrimary,
+                              styles.taskName,
+                              {color: newOrderTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
+                            ]}>
+                            分享商品完成订单交易
+                            {`(${Math.min(agentInfo?.shareCompletedOrder, agentInfo?.shareCompletedOrderMax) ?? '-'}/${agentInfo?.shareCompletedOrderMax ?? '-'}笔)`}
+                          </Text>
+                          <Text style={{color: newOrderTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY}}>
+                            {newOrderTaskCompleted ? '(已完成)' : '(待完成)'}
+                          </Text>
+                        </View>
+                        <View style={[globalStyles.containerCol, {padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#0000000D', marginTop: 10, borderRadius: 5}]}>
+                          <Text>· 把商品分享给朋友，成功购买即可</Text>
+                        </View>
+                      </View>
+                    )}
+                    {/* 进阶达人任务完成情况 */}
+                    {agentInfo?.level === 2 && (
+                      <View style={[{marginTop: 20}]}>
+                        <View style={[globalStyles.containerLR]}>
+                          <Text
+                            style={[
+                              globalStyles.fontPrimary,
+                              styles.taskName,
+                              {color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY},
+                            ]}>
+                            组建团队{`${agentInfo?.developNewUsersMax ?? '-'}人`}
+                            {`(${Math.min(agentInfo?.developNewUsers, agentInfo?.developNewUsersMax) ?? '-'}/${agentInfo?.developNewUsersMax ?? '-'}人)`}
+                          </Text>
+                          <Text style={{color: newUserTaskCompleted ? globalStyleVariables.COLOR_BUD : globalStyleVariables.TEXT_COLOR_PRIMARY}}>
+                            {newUserTaskCompleted ? '(已完成)' : '(待完成)'}
+                          </Text>
+                        </View>
+                        <View style={[globalStyles.containerCol, {padding: globalStyleVariables.MODULE_SPACE, backgroundColor: '#0000000D', marginTop: 10, borderRadius: 5}]}>
+                          <Text>
+                            · 朋友扫描
+                            <Text onPress={() => showCode('share')} style={[{color: globalStyleVariables.COLOR_LINK}]}>
+                              组队码
+                            </Text>
+                            ，完成注册即可
+                          </Text>
+                        </View>
+                      </View>
+                    )}
+                  </View>
                 </View>
               )}
 

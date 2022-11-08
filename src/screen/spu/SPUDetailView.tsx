@@ -10,6 +10,7 @@ import {convertSKUBuyNotice} from '../../helper/order';
 import {callPhone} from '../../helper/system';
 import CustomTouchable from '../../component/CustomTouchable';
 import RichText from '../../component/RichText';
+// import {useLog} from '../../fst/hooks';
 
 interface SPUDetailViewProps {
   spu: SPUDetailF;
@@ -70,6 +71,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
 
   // useLog('currentSKU', currentSKU);
   // useLog('currentPkg', currentPkg);
+  // useLog('spu', spu);
   // useWhyDidYouUpdate('SPUDetailView', {...props, skuShowInfo});
   useEffect(() => {
     const notices = spu?.spuPurchaseNoticeVOS;
@@ -240,7 +242,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         )}
 
         {/* 套餐内容 */}
-        {currentSKU?.contentList?.length && (
+        {currentSKU?.contentList?.length ? (
           <View style={styles.buyNoticeItem}>
             <Text style={globalStyles.fontStrong}>套餐内容</Text>
             <View style={{marginTop: 5}}>
@@ -258,8 +260,8 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
               })}
             </View>
           </View>
-        )}
-        {currentPkg?.list?.length && (
+        ) : null}
+        {currentPkg?.list?.length ? (
           <View style={styles.buyNoticeItem}>
             <Text style={globalStyles.fontStrong}>套餐内容</Text>
             <View style={{marginTop: 5}}>
@@ -277,7 +279,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
               })}
             </View>
           </View>
-        )}
+        ) : null}
 
         {spu?.spuHtml && <RichText content={spu.spuHtml} style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}} />}
 
