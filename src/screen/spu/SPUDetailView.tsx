@@ -222,12 +222,12 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
           <TouchableOpacity activeOpacity={0.8} onPress={handleShootVideo}>
             <View style={[styles.video, globalStyles.containerRow]}>
               <View style={{flex: 1}}>
-                <Text style={[globalStyles.fontPrimary, {color: '#9A66DB', fontSize: 12}]}>为此商品拍摄作品，每单额外奖励{skuShowInfo?.videoCommissionYuan}芽</Text>
+                <Text style={[globalStyles.fontPrimary, {color: '#9A66DB', fontSize: 12}]}>为此商品拍摄视频，每单额外得{skuShowInfo?.videoCommissionYuan}芽</Text>
               </View>
               <View style={[globalStyles.lineVertical, {height: 10, backgroundColor: '#0000001A', marginHorizontal: 10}]} />
               <View style={globalStyles.containerRow}>
                 <Icon name="all_uptupian64" size={18} color="#9A66DB" />
-                <Text style={[globalStyles.fontPrimary, {color: '#9A66DB', fontSize: 12, marginLeft: 5}]}>立即拍视频</Text>
+                <Text style={[globalStyles.fontPrimary, {color: '#9A66DB', fontSize: 12, marginLeft: 5}]}>立即拍</Text>
               </View>
             </View>
           </TouchableOpacity>
