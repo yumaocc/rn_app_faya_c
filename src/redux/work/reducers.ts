@@ -1,5 +1,5 @@
 import produce from 'immer';
-import {PublishConfig, SPUF, VideoInfo, WorkList, WorkTab, WorkTabType} from '../../models';
+import {PublishConfig, SPUDetailF, SPUF, VideoInfo, WorkList, WorkTab, WorkTabType} from '../../models';
 import {WorkActions} from './actions';
 import {ActionType} from './types';
 
@@ -7,7 +7,7 @@ export interface WorkState {
   tabs: WorkTab[];
   currentTab: WorkTab;
   videoInfo?: VideoInfo;
-  bindSPU?: SPUF;
+  bindSPU?: SPUF | SPUDetailF;
   publishConfig?: PublishConfig;
   works: {
     [WorkTabType.Recommend]: WorkList;

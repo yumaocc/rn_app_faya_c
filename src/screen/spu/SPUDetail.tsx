@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, StyleSheet, ScrollView, StatusBar, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useAndroidBack, useCommonDispatcher, useIsLoggedIn, useParams, useSPUDispatcher, useUserDispatcher} from '../../helper/hooks';
+import {useAndroidBack, useCommonDispatcher, useIsLoggedIn, useParams, useSPUDispatcher, useUserDispatcher, useWorkDispatcher} from '../../helper/hooks';
 import {FakeNavigation, LocationNavigateInfo, PackageDetail, SKUDetail, SPUDetailF} from '../../models';
 
 import SPUDetailView from './SPUDetailView';
@@ -19,6 +19,7 @@ import {getShareSPULink} from '../../helper/order';
 import {openMap} from '../../helper/system';
 import NavigationModal from '../common/NavigateModal';
 import MyStatusBar from '../../component/MyStatusBar';
+import {useLog} from '../../fst/hooks';
 
 const SPUDetail: React.FC = () => {
   const {id, workMainId} = useParams<{id: number; workMainId: string}>();
@@ -39,9 +40,12 @@ const SPUDetail: React.FC = () => {
 
   const isLoggedIn = useIsLoggedIn();
   const [userDispatcher] = useUserDispatcher();
+  const [workDispatcher] = useWorkDispatcher();
   const [spuDispatcher] = useSPUDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
   const isFocused = useIsFocused();
+
+  useLog('spuDetail', spu);
 
   useAndroidBack();
 
@@ -190,6 +194,11 @@ const SPUDetail: React.FC = () => {
   //   setShowShare(false);
   // }
 
+  function onShootVideo(spu: SPUDetailF) {
+    workDispatcher.setWorkSPU(spu);
+    navigation.navigate('ShootVideo');
+  }
+
   const goNavigation = useCallback((locationInfo: LocationNavigateInfo) => {
     setNavigationInfo(locationInfo);
     setShowSelectMap(true);
@@ -201,7 +210,7 @@ const SPUDetail: React.FC = () => {
       {titleOpacity > 0.2 && <NavigationBar title="商品详情" style={[styles.navigation, {opacity: titleOpacity}]} />}
       <ScrollView style={{flex: 1}} onScroll={handleScroll} scrollEventThrottle={16}>
         {spu ? (
-          <SPUDetailView isPackage={isPackage} currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} onNavigation={goNavigation} />
+          <SPUDetailView isPackage={isPackage} currentSelect={currentSKU} spu={spu} onChangeSelect={handleChangeSKU} onNavigation={goNavigation} onShootVideo={onShootVideo} />
         ) : (
           <Loading style={{marginTop: 150}} />
         )}

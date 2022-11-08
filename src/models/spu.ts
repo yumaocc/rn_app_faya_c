@@ -66,6 +66,8 @@ export interface PackageDetail {
   list: SKUDetail[];
   userCommission: number;
   userCommissionYuan: string;
+  videoCommission: number;
+  videoCommissionYuan: string;
 }
 
 export interface SKUContent {
@@ -90,6 +92,8 @@ export interface SKUDetail {
   skuStockAmount: number;
   userCommission: number; // 用户佣金
   userCommissionYuan: string;
+  videoCommission: number;
+  videoCommissionYuan: string;
   saleStatus: SKUSaleState;
   quantityWithPkg: number;
 }
@@ -167,6 +171,8 @@ export interface SKUShowInfo {
   originPriceYuan: string;
   salePrice: number;
   salePriceYuan: string;
+  videoCommission: number;
+  videoCommissionYuan: string;
   // saleStatus: SKUSaleState;
 }
 

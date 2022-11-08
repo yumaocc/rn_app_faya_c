@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {Button, NavigationBar} from '../../component';
@@ -9,7 +9,7 @@ import * as api from '../../apis';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {getValidPercent} from '../../fst/helper';
 import {useNavigation} from '@react-navigation/native';
-import {FakeNavigation} from '../../models';
+import {FakeNavigation, SPUDetailF, SPUF} from '../../models';
 import MyStatusBar from '../../component/MyStatusBar';
 
 const PublishVideo: React.FC = () => {
@@ -22,6 +22,7 @@ const PublishVideo: React.FC = () => {
   const [hasError, setHasError] = React.useState(false);
 
   const [commonDispatcher] = useCommonDispatcher();
+  const spuId = useMemo(() => (bindSPU as SPUF)?.spuId || (bindSPU as SPUDetailF)?.id, [bindSPU]);
 
   useEffect(() => {
     PublishManager.onProgress(progress => {
@@ -72,7 +73,7 @@ const PublishVideo: React.FC = () => {
         longitude,
         addressDetails: addressName,
         mainId: mainId,
-        bindSpuId: bindSPU?.spuId,
+        bindSpuId: spuId,
       });
 
       // console.log('success');

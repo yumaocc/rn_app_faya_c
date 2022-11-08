@@ -3,7 +3,7 @@ import {View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Image} 
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar, Popup, Switch} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {FakeNavigation, WorkType, WorkVisibleAuth} from '../../models';
+import {FakeNavigation, SPUDetailF, SPUF, WorkType, WorkVisibleAuth} from '../../models';
 import {WorkVisibleAuthOptions} from '../../constants';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
@@ -25,6 +25,11 @@ const Publish: React.FC = () => {
   const [allowForward, setAllowForward] = useState(true);
   const [autoSave, setAutoSave] = useState(false);
   const [content, setContent] = useState('');
+  const [spuPoster, spuName] = useMemo(() => {
+    const poster = (spu as SPUF).poster || (spu as SPUDetailF).posters[0];
+    const name = (spu as SPUF).spuName || (spu as SPUDetailF).name;
+    return [poster, name];
+  }, [spu]);
 
   const navigation = useNavigation<FakeNavigation>();
   const [workDispatcher] = useWorkDispatcher();
@@ -98,10 +103,10 @@ const Publish: React.FC = () => {
                 <View style={[globalStyles.containerRow, {flex: 1}]}>
                   {!!spu && (
                     <View style={[globalStyles.containerRow, styles.showSPUContainer]}>
-                      <Image source={{uri: spu.poster}} style={{width: 30, height: 30, borderRadius: 5, marginRight: 5}} />
+                      <Image source={{uri: spuPoster}} style={{width: 30, height: 30, borderRadius: 5, marginRight: 5}} />
                       <View style={{flex: 1}}>
                         <Text style={globalStyles.fontPrimary} numberOfLines={1}>
-                          {spu.spuName}
+                          {spuName}
                         </Text>
                       </View>
                     </View>

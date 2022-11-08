@@ -18,6 +18,7 @@ interface SPUDetailViewProps {
   isPackage: boolean;
   onNavigation?: (locationInfo: LocationNavigateInfo) => void; // 导航
   onChangeSelect: (sku: SKUDetail | PackageDetail, isPackage: boolean) => void;
+  onShootVideo?: (spu: SPUDetailF) => void;
 }
 
 const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
@@ -40,6 +41,8 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         originPriceYuan: pkg?.packageOriginPriceYuan,
         salePrice: pkg?.packageSalePrice,
         salePriceYuan: pkg?.packageSalePriceYuan,
+        videoCommission: pkg?.videoCommission,
+        videoCommissionYuan: pkg.videoCommissionYuan,
       };
     } else {
       const sku = currentSelect as SKUDetail;
@@ -52,6 +55,8 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         originPriceYuan: sku?.originPriceYuan,
         salePrice: sku?.salePrice,
         salePriceYuan: sku?.salePriceYuan,
+        videoCommission: sku?.videoCommission,
+        videoCommissionYuan: sku.videoCommissionYuan,
       };
     }
   }, [currentSelect, isPackage]);
@@ -94,6 +99,10 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
 
   function handleNavigation(locationInfo: LocationNavigateInfo) {
     props.onNavigation && props.onNavigation(locationInfo);
+  }
+
+  function handleShootVideo() {
+    props.onShootVideo && props.onShootVideo(spu);
   }
 
   function renderIndicator({current, count}: PaginationProps): React.ReactNode {
@@ -208,6 +217,21 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
           </View>
         </View>
         <Text style={[globalStyles.fontStrong, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER, fontSize: 18}]}>{spu?.name}</Text>
+
+        {skuShowInfo?.videoCommission && (
+          <TouchableOpacity activeOpacity={0.8} onPress={handleShootVideo}>
+            <View style={[styles.video, globalStyles.containerRow]}>
+              <View style={{flex: 1}}>
+                <Text style={[globalStyles.fontPrimary, {color: '#9A66DB', fontSize: 12}]}>为此商品拍摄作品，每单额外奖励{skuShowInfo?.videoCommissionYuan}芽</Text>
+              </View>
+              <View style={[globalStyles.lineVertical, {height: 10, backgroundColor: '#0000001A', marginHorizontal: 10}]} />
+              <View style={globalStyles.containerRow}>
+                <Icon name="all_uptupian64" size={18} color="#9A66DB" />
+                <Text style={[globalStyles.fontPrimary, {color: '#9A66DB', fontSize: 12, marginLeft: 5}]}>立即拍视频</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* 选择套餐 */}
@@ -441,6 +465,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     flexDirection: 'row',
+  },
+  video: {
+    backgroundColor: '#9A66DB33',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    marginTop: 10,
+    borderRadius: 3,
   },
   skuItem: {
     padding: 10,
