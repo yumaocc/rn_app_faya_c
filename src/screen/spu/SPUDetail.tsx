@@ -35,7 +35,7 @@ const SPUDetail: React.FC = () => {
   const currentSKU: PackageDetail | SKUDetail = useSelector((state: RootState) => state.spu.currentSKU);
   const isPackage: boolean = useSelector((state: RootState) => state.spu.currentSKUIsPackage);
   const userId = useSelector((state: RootState) => state.user.myDetail?.userId);
-  const shareLink = useMemo(() => getShareSPULink(id, userId), [id, userId]); // 分享链接
+  const shareLink = useMemo(() => getShareSPULink(id, String(userId)), [id, userId]); // 分享链接
 
   const isLoggedIn = useIsLoggedIn();
   const [userDispatcher] = useUserDispatcher();

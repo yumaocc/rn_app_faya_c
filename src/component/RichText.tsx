@@ -10,7 +10,7 @@ interface RichTextProps {
 }
 
 const RichText: React.FC<RichTextProps> = props => {
-  const [height, setHeight] = React.useState(0);
+  const [height, setHeight] = React.useState(800);
 
   function onMessage(e: WebViewMessageEvent) {
     const height = e.nativeEvent.data;
@@ -36,6 +36,9 @@ const RichText: React.FC<RichTextProps> = props => {
           meta.setAttribute('content', 'width=device-width,initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no');
           meta.setAttribute('name', 'viewport');
           document.getElementsByTagName('head')[0].appendChild(meta);
+          const style = document.createElement('style');
+          style.innerHTML = 'html,body{padding:0;margin:0;}';
+          document.getElementsByTagName('head')[0].appendChild(style);
           // alert("mmm");
           setTimeout(function() {
             window.ReactNativeWebView.postMessage(window.document.body.scrollHeight);

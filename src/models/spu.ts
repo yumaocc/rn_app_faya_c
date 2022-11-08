@@ -68,8 +68,16 @@ export interface PackageDetail {
   userCommissionYuan: string;
 }
 
+export interface SKUContent {
+  id: number;
+  name: string;
+  nums: number;
+  price: number;
+}
+
 export interface SKUDetail {
   id: number;
+  contentList: SKUContent[];
   maxPurchaseQuantity: number; // 最大购买数量
   minPurchaseQuantity: number; // 最小购买数量
   originPrice: number;
@@ -83,6 +91,7 @@ export interface SKUDetail {
   userCommission: number; // 用户佣金
   userCommissionYuan: string;
   saleStatus: SKUSaleState;
+  quantityWithPkg: number;
 }
 
 export interface SPUDetailF {

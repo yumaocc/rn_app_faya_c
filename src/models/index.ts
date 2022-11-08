@@ -62,6 +62,7 @@ export type {
   SKUBuyNotice,
   SKUBuyNoticeF,
   SKUBuyNoticeType,
+  SKUContent,
 } from './spu';
 export type {OrderF, OrderDetailF, OrderPackageSKU, PayOrder, OrderCommentForm, OrderRefundForm, OrderBookingForm, OrderBookingDetailF, OrderForm, WxOrderInfo} from './order';
 export type {CameraType, AppInstallCheckType, ImageCompressOptions, ImageCompressResult} from './device';

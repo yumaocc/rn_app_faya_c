@@ -5,7 +5,7 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {LocationNavigateInfo, PackageDetail, SKUBuyNotice, SKUDetail, SKUSaleState, SKUShowInfo, SPUDetailF} from '../../models';
 import Icon from '../../component/Icon';
-import {useWhyDidYouUpdate} from '../../fst/hooks';
+// import {useLog, useWhyDidYouUpdate} from '../../fst/hooks';
 import {convertSKUBuyNotice} from '../../helper/order';
 import {callPhone} from '../../helper/system';
 import CustomTouchable from '../../component/CustomTouchable';
@@ -23,7 +23,11 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
   const {spu, currentSelect, isPackage} = props;
   const [buyNotice, setBuyNotice] = useState<SKUBuyNotice>(null);
 
-  const currentSKU: SKUShowInfo = useMemo(() => {
+  // 用来统一要显示的内容
+  const skuShowInfo: SKUShowInfo = useMemo(() => {
+    if (!currentSelect) {
+      return null;
+    }
     if (isPackage) {
       const pkg = currentSelect as PackageDetail;
       return {
@@ -51,6 +55,22 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
     }
   }, [currentSelect, isPackage]);
 
+  const currentSKU = useMemo(() => {
+    if (currentSelect && !isPackage) {
+      return currentSelect as SKUDetail;
+    }
+    return null;
+  }, [currentSelect, isPackage]);
+  const currentPkg = useMemo(() => {
+    if (currentSelect && isPackage) {
+      return currentSelect as PackageDetail;
+    }
+    return null;
+  }, [currentSelect, isPackage]);
+
+  // useLog('currentSKU', currentSKU);
+  // useLog('currentPkg', currentPkg);
+  // useWhyDidYouUpdate('SPUDetailView', {...props, skuShowInfo});
   useEffect(() => {
     const notices = spu?.spuPurchaseNoticeVOS;
     if (!notices) {
@@ -59,8 +79,6 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
     const cleaned = convertSKUBuyNotice(notices);
     setBuyNotice(cleaned);
   }, [spu]);
-
-  useWhyDidYouUpdate('SPUDetailView', {...props, currentSKU});
 
   // const flatSKUList = useMemo(() => {
   //   const skuList = spu?.skuList?.map({})
@@ -125,7 +143,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
 
   function renderTips(text: string, index: number) {
     return (
-      <View style={[{paddingLeft: 6}]} key={index}>
+      <View key={index}>
         <Text style={[globalStyles.fontPrimary, {fontSize: 12, lineHeight: 18}]}>·{text}</Text>
       </View>
     );
@@ -133,7 +151,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
 
   return (
     <View style={styles.container}>
-      {/* <Image style={styles.maskUp} source={require('../../assets/mask-up.png')} /> */}
+      {/* <Image style={styles.maskUp} source={require('../../assets/mask-up.png')} resizeMode="stretch" /> */}
       {/* banner */}
       <View style={styles.banners}>
         <Carousel autoplay infinite style={styles.swiperWrapper} pagination={renderIndicator}>
@@ -141,10 +159,11 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
             <Image key={i} source={{uri: banner}} style={styles.banner} />
           ))}
         </Carousel>
-        <View style={styles.bannerBottom}>
+        <View style={{height: 27, width: 1}} />
+        <View style={[styles.bannerBottom]}>
           <View style={[globalStyles.containerRow, {backgroundColor: '#f92', height: 27, paddingLeft: 10}]}>
             <View style={{paddingHorizontal: 20}}>
-              <Text style={{color: '#fff'}}>库存: {currentSKU?.stockAmount}</Text>
+              <Text style={{color: '#fff'}}>库存: {skuShowInfo?.stockAmount}</Text>
             </View>
             <View style={[globalStyles.lineVertical, {height: 10, backgroundColor: '#ffffff80'}]} />
             <View style={{paddingHorizontal: 20}}>
@@ -156,8 +175,8 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
             <View style={[globalStyles.containerRow, {backgroundColor: globalStyleVariables.COLOR_PRIMARY, height: 45, paddingRight: 15}]}>
               <Text>
                 <Text style={[{color: '#fff', fontSize: 15}]}>¥</Text>
-                <Text style={[{color: '#fff', fontSize: 25}]}>{currentSKU?.salePriceYuan}</Text>
-                <Text style={[globalStyles.fontTertiary, {textDecorationLine: 'line-through', color: '#ffffff80'}]}>¥{currentSKU?.originPriceYuan}</Text>
+                <Text style={[{color: '#fff', fontSize: 25}]}>{skuShowInfo?.salePriceYuan}</Text>
+                <Text style={[globalStyles.fontTertiary, {textDecorationLine: 'line-through', color: '#ffffff80'}]}>¥{skuShowInfo?.originPriceYuan}</Text>
               </Text>
             </View>
           </View>
@@ -174,7 +193,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
           <View style={[globalStyles.containerRow]}>
             <Text style={[globalStyles.fontTertiary]}>收藏{spu?.collectAmount}</Text>
             <Text style={{marginHorizontal: globalStyleVariables.MODULE_SPACE_SMALLER, color: globalStyleVariables.TEXT_COLOR_TERTIARY}}>·</Text>
-            <Text style={[globalStyles.fontTertiary]}>已售{currentSKU?.saleAmount}</Text>
+            <Text style={[globalStyles.fontTertiary]}>已售{skuShowInfo?.saleAmount}</Text>
           </View>
         </View>
         <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
@@ -213,12 +232,54 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
       </View>
 
       {/* 商品详情 */}
-      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
-        <View>
-          <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 22}]}>{spu?.subName}</Text>
-        </View>
+      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+        {spu?.subName && (
+          <View style={{marginTop: 10}}>
+            <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 22}]}>{spu?.subName}</Text>
+          </View>
+        )}
 
-        {spu?.spuHtml && <RichText content={spu.spuHtml} style={{marginTop: 10}} />}
+        {/* 套餐内容 */}
+        {currentSKU?.contentList?.length && (
+          <View style={styles.buyNoticeItem}>
+            <Text style={globalStyles.fontStrong}>套餐内容</Text>
+            <View style={{marginTop: 5}}>
+              {currentSKU.contentList.map((skuContent, index) => {
+                return (
+                  <View style={[globalStyles.containerLR]} key={index}>
+                    <Text style={[globalStyles.fontPrimary, {fontSize: 12, lineHeight: 18}]}>·{skuContent.name}</Text>
+                    <View style={[globalStyles.containerRow]}>
+                      <Text style={[globalStyles.fontPrimary, {fontSize: 12, lineHeight: 18}]}>¥{skuContent.price}</Text>
+                      <View style={[globalStyles.lineVertical, {height: 6, marginHorizontal: 10}]} />
+                      <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>x{skuContent.nums}</Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        )}
+        {currentPkg?.list?.length && (
+          <View style={styles.buyNoticeItem}>
+            <Text style={globalStyles.fontStrong}>套餐内容</Text>
+            <View style={{marginTop: 5}}>
+              {currentPkg.list.map((pkgContent, index) => {
+                return (
+                  <View style={[globalStyles.containerLR]} key={index}>
+                    <Text style={[globalStyles.fontPrimary, {fontSize: 12, lineHeight: 18}]}>·{pkgContent.skuName}</Text>
+                    <View style={[globalStyles.containerRow]}>
+                      <Text style={[globalStyles.fontPrimary, {fontSize: 12, lineHeight: 18}]}>¥{pkgContent.salePriceYuan}</Text>
+                      <View style={[globalStyles.lineVertical, {height: 6, marginHorizontal: 10}]} />
+                      <Text style={[globalStyles.fontTertiary, {lineHeight: 18}]}>x{pkgContent.quantityWithPkg}</Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        )}
+
+        {spu?.spuHtml && <RichText content={spu.spuHtml} style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}} />}
 
         {!!buyNotice?.USE_RULE?.length && (
           <View style={styles.buyNoticeItem}>
@@ -326,10 +387,11 @@ const styles = StyleSheet.create({
   //   position: 'absolute',
   //   top: 0,
   //   width: '100%',
+  //   height: 20,
   //   zIndex: 2,
   // },
   banners: {
-    height: 281,
+    // height: 281,
     position: 'relative',
   },
   swiperWrapper: {
@@ -339,7 +401,7 @@ const styles = StyleSheet.create({
   indicator: {
     position: 'absolute',
     left: globalStyleVariables.MODULE_SPACE,
-    bottom: 44,
+    bottom: 15,
     backgroundColor: '#00000033',
     padding: 5,
     borderRadius: 5,
