@@ -22,8 +22,8 @@ const About: React.FC = () => {
       <NavigationBar />
       <View style={[globalStyles.containerCenter, {marginTop: 50}]}>
         <Image source={require('../../assets/logo-h.png')} style={{width: 128, height: 40}} />
-        <Text style={[globalStyles.fontPrimary, {fontSize: 15, marginTop: 10}]}>{version.versionText}</Text>
-        <Text style={[globalStyles.fontPrimary, {fontSize: 15, marginTop: 10}]}>bundle: {version.bundle || ''}</Text>
+        <Text style={[globalStyles.fontTertiary, {marginTop: 20}]}>{version.versionText}</Text>
+        <Text style={[globalStyles.fontTertiary, {marginTop: 5}]}>bundle: {version.bundle || ''}</Text>
       </View>
 
       <View style={{marginTop: 37}}>
