@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useRef} from 'react';
-import {View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, useWindowDimensions, Image} from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, useWindowDimensions} from 'react-native';
 import {NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {SPUF} from '../../models';
@@ -7,9 +7,9 @@ import {useSPUDispatcher, useWorkDispatcher} from '../../helper/hooks';
 import {useNavigation} from '@react-navigation/native';
 import Icon from '../../component/Icon';
 import {useRefCallback} from '../../fst/hooks';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
+import SPUCard from '../common/SPUCard';
 
 const SelectSPU: React.FC = () => {
   const [type, setType] = React.useState<'search' | 'showcase'>('search');
@@ -62,76 +62,6 @@ const SelectSPU: React.FC = () => {
     navigation.canGoBack() && navigation.goBack();
   }
 
-  function renderSPU(spu: SPUF) {
-    const {commissionRangeLeftMoneyYuan, commissionRangeRightMoneyYuan, salePrice, originPrice} = spu;
-    let commission = '';
-    if (commissionRangeLeftMoneyYuan && commissionRangeRightMoneyYuan) {
-      if (commissionRangeLeftMoneyYuan === commissionRangeRightMoneyYuan) {
-        commission = commissionRangeLeftMoneyYuan;
-      } else {
-        commission = `${commissionRangeLeftMoneyYuan}-${commissionRangeRightMoneyYuan}`;
-      }
-    }
-    let discount = null;
-    if (originPrice && salePrice) {
-      const res = Math.round((salePrice / originPrice) * 10);
-      discount = Math.max(1, res);
-    }
-    if (discount && discount > 5) {
-      discount = null;
-    }
-
-    return (
-      <View key={spu.spuId}>
-        <TouchableOpacity activeOpacity={0.8} onPress={() => handleSelectSpu(spu)}>
-          <View style={styles.spuItem}>
-            <View style={styles.spuCoverContainer}>
-              <Image source={{uri: spu.poster}} defaultSource={require('../../assets/sku_def_1_1.png')} style={styles.spuCover} />
-            </View>
-            <View style={{paddingLeft: globalStyleVariables.MODULE_SPACE, flex: 1}}>
-              <View style={globalStyles.containerRow}>
-                <Icon name="shangpin_shanghu24" size={15} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-                <Text style={[globalStyles.fontPrimary, {marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER, fontSize: 12}]}>{spu?.bizName}</Text>
-              </View>
-              <View style={[globalStyles.halfModuleMarginTop]}>
-                {spu.tags?.map((tag, i) => (
-                  <Text key={i} style={[globalStyles.fontTertiary, {marginRight: globalStyleVariables.MODULE_SPACE}]}>
-                    {tag}
-                  </Text>
-                ))}
-              </View>
-              <Text style={[globalStyles.fontStrong, {marginTop: 10}]}>{spu.spuName}</Text>
-              <View style={[globalStyles.halfModuleMarginTop, globalStyles.containerLR, {alignItems: 'flex-end'}]}>
-                <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop, {alignItems: 'flex-end'}]}>
-                  <View style={[globalStyles.containerRow]}>
-                    <View style={[globalStyles.containerRow, {alignItems: 'flex-end'}]}>
-                      <Text style={[{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 12}]}>¥</Text>
-                      <Text style={{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 18, lineHeight: 18, bottom: -2}}>{spu.salePriceYuan}</Text>
-                      <Text style={[globalStyles.fontTertiary, {marginLeft: globalStyleVariables.MODULE_SPACE / 2, textDecorationLine: 'line-through'}]}>
-                        ¥{spu.originPriceYuan}
-                      </Text>
-                    </View>
-                  </View>
-                  {discount && (
-                    <View style={[globalStyles.discountTagWrapper, globalStyles.moduleMarginLeft]}>
-                      <Text style={[globalStyles.discountTag]}>{discount}折</Text>
-                    </View>
-                  )}
-                </View>
-                {commission && (
-                  <View style={globalStyles.containerRow}>
-                    <MaterialIcon name="spa" size={14} color={globalStyleVariables.COLOR_BUD} />
-                    <Text style={{color: globalStyleVariables.COLOR_BUD}}>{commission}</Text>
-                  </View>
-                )}
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
   return (
     <View style={{flex: 1, backgroundColor: '#f4f4f4'}}>
       <NavigationBar
@@ -165,13 +95,21 @@ const SelectSPU: React.FC = () => {
       <ScrollView ref={setRef} horizontal style={{flex: 1}} snapToInterval={width} showsHorizontalScrollIndicator={false} scrollEnabled={false}>
         <View style={{width}}>
           <ScrollView style={{flex: 1}}>
-            <View style={{padding: globalStyleVariables.MODULE_SPACE}}>{spuList?.list.map(renderSPU)}</View>
+            <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
+              {spuList?.list.map(spu => {
+                return <SPUCard key={spu.spuId} onSelect={handleSelectSpu} spu={spu} />;
+              })}
+            </View>
           </ScrollView>
         </View>
         {hasShowcase && (
           <View style={{width}}>
             <ScrollView style={{flex: 1}}>
-              <View style={{padding: globalStyleVariables.MODULE_SPACE}}>{showCaseSpu?.list?.map(renderSPU)}</View>
+              <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
+                {showCaseSpu?.list?.map(spu => {
+                  return <SPUCard key={spu.spuId} onSelect={handleSelectSpu} spu={spu} />;
+                })}
+              </View>
             </ScrollView>
           </View>
         )}
