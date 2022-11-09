@@ -80,6 +80,11 @@ const WorkDetailList: React.FC = () => {
     commentModalRef.current?.openComment(mainId, autoFocus);
   }
 
+  function handleReport() {
+    setShowWorkAction(false);
+    commonDispatcher.info('已收到您的举报，我们会尽快处理');
+    setCurrentIndex(currentIndex + 1);
+  }
   async function handleDislike() {
     if (!currentItem) {
       return;
@@ -196,6 +201,11 @@ const WorkDetailList: React.FC = () => {
             onClose={closeWorkAction}
             style={[{backgroundColor: '#fff', borderTopLeftRadius: globalStyleVariables.RADIUS_MODAL, borderTopRightRadius: globalStyleVariables.RADIUS_MODAL}]}>
             <View>
+              <TouchableHighlight underlayColor="#999" onPress={handleReport}>
+                <View style={[{height: 55, backgroundColor: '#fff'}, globalStyles.containerCenter]}>
+                  <Text style={globalStyles.fontPrimary}>举报该作品</Text>
+                </View>
+              </TouchableHighlight>
               <TouchableHighlight underlayColor="#999" onPress={handleDislike}>
                 <View style={[{height: 55, backgroundColor: '#fff'}, globalStyles.containerCenter]}>
                   <Text style={globalStyles.fontPrimary}>不感兴趣</Text>

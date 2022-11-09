@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Platform, NativeScrollEvent, NativeSyntheticEvent} from 'react-native';
+import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Platform, NativeScrollEvent, NativeSyntheticEvent, TouchableHighlight} from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {NavigationBar, Tabs} from '../../component';
+import {NavigationBar, Popup, Tabs} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {FakeNavigation, OtherUserDetail, UserFollowState, UserWorkTabType} from '../../models';
 import * as api from '../../apis';
@@ -22,6 +22,7 @@ const User: React.FC = () => {
   const publicMyLike = useMemo(() => userInfo?.userSettings?.publicMyLike === BoolEnum.TRUE, [userInfo?.userSettings?.publicMyLike]);
   const [showFixTab, setShowFixTab] = useState(false);
   const userHasShowcase = useMemo(() => userInfo?.level > 0, [userInfo?.level]);
+  const [showUserAction, setShowUserAction] = useState(false);
 
   // const token = useSelector((state: RootState) => state.common.token);
   const userWorks = useSelector((state: RootState) => state.user.otherUserWorks[String(id)]);
@@ -167,6 +168,20 @@ const User: React.FC = () => {
   function goWorkList(index: number) {
     navigation.navigate({name: 'UserWorkDetail', params: {index, userId: id}, key: 'UserWorkDetail' + Date.now()});
   }
+  function openUserAction() {
+    setShowUserAction(true);
+  }
+  function closeUserAction() {
+    setShowUserAction(false);
+  }
+  function doAction(type: 'report' | 'block') {
+    const text = type === 'report' ? '已收到您的举报，我们会尽快核实' : '已加入黑名单，将不再收到该用户的动态';
+    setShowUserAction(false);
+
+    setTimeout(() => {
+      commonDispatcher.info(text);
+    }, 300);
+  }
 
   return (
     <View style={styles.container}>
@@ -174,7 +189,15 @@ const User: React.FC = () => {
       <ScrollView style={{flex: 1}} contentContainerStyle={{position: 'relative'}} onScroll={handleScroll} scrollEventThrottle={16} onMomentumScrollEnd={handleScrollEnd}>
         <Image source={require('../../assets/mine-bg.png')} style={styles.cover} />
         <View style={{flex: 1, paddingBottom: 30}}>
-          <NavigationBar title="" color="#fff" />
+          <NavigationBar
+            title=""
+            color="#fff"
+            headerRight={
+              <TouchableOpacity onPress={openUserAction} style={{paddingRight: 10}}>
+                <Icon name="nav_more" size={24} color="#fff" />
+              </TouchableOpacity>
+            }
+          />
           <View style={[styles.container, {paddingTop: 0, marginTop: 100}]}>
             <View style={{borderTopLeftRadius: 10, borderTopRightRadius: 10, marginTop: -20, backgroundColor: '#fff'}}>
               {/* 头像栏 */}
@@ -295,6 +318,32 @@ const User: React.FC = () => {
           </View>
         </View>
       </ScrollView>
+
+      {showUserAction && (
+        <Popup
+          visible={true}
+          onClose={closeUserAction}
+          style={[{backgroundColor: '#fff', borderTopLeftRadius: globalStyleVariables.RADIUS_MODAL, borderTopRightRadius: globalStyleVariables.RADIUS_MODAL}]}>
+          <View>
+            <TouchableHighlight underlayColor="#999" onPress={() => doAction('report')}>
+              <View style={[{height: 55, backgroundColor: '#fff'}, globalStyles.containerCenter]}>
+                <Text style={globalStyles.fontPrimary}>举报该用户</Text>
+              </View>
+            </TouchableHighlight>
+            <TouchableHighlight underlayColor="#999" onPress={() => doAction('block')}>
+              <View style={[{height: 55, backgroundColor: '#fff'}, globalStyles.containerCenter]}>
+                <Text style={globalStyles.fontPrimary}>拉黑</Text>
+              </View>
+            </TouchableHighlight>
+
+            <TouchableHighlight underlayColor="#999" onPress={closeUserAction}>
+              <View style={[{height: 55, backgroundColor: '#fff'}, globalStyles.containerCenter]}>
+                <Text style={globalStyles.fontPrimary}>取消</Text>
+              </View>
+            </TouchableHighlight>
+          </View>
+        </Popup>
+      )}
     </View>
   );
 };
