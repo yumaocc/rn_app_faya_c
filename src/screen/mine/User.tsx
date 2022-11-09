@@ -15,6 +15,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {TabsStyles} from '../../component/Tabs';
 import {BoolEnum} from '../../fst/models';
 import MyStatusBar from '../../component/MyStatusBar';
+import {getItem, removeItem, setItem} from '../../helper/cache/helper';
 
 const User: React.FC = () => {
   const {id} = useParams<{id: number}>();
@@ -23,6 +24,7 @@ const User: React.FC = () => {
   const [showFixTab, setShowFixTab] = useState(false);
   const userHasShowcase = useMemo(() => userInfo?.level > 0, [userInfo?.level]);
   const [showUserAction, setShowUserAction] = useState(false);
+  const [blocked, setBlocked] = useState(false);
 
   // const token = useSelector((state: RootState) => state.common.token);
   const userWorks = useSelector((state: RootState) => state.user.otherUserWorks[String(id)]);
@@ -37,6 +39,24 @@ const User: React.FC = () => {
 
   // 是否已关注
   const followed = useMemo(() => userInfo && [UserFollowState.FOLLOW_EACH_OTHER, UserFollowState.FOLLOWED_USER].includes(userInfo?.hasCare), [userInfo]);
+  useEffect(() => {
+    getItem(`blockUser_${id}`).then(res => {
+      if (res === 'true') {
+        setBlocked(true);
+      }
+    });
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+    if (blocked) {
+      setItem(`blockUser_${id}`, 'true');
+    } else {
+      removeItem(`blockUser_${id}`);
+    }
+  }, [blocked, id]);
 
   const tabs = useMemo(() => {
     if (!userWorks) {
@@ -174,10 +194,21 @@ const User: React.FC = () => {
   function closeUserAction() {
     setShowUserAction(false);
   }
-  function doAction(type: 'report' | 'block') {
-    const text = type === 'report' ? '已收到您的举报，我们会尽快核实' : '已加入黑名单，将不再收到该用户的动态';
+  function doReport() {
     setShowUserAction(false);
-
+    setTimeout(() => {
+      commonDispatcher.info('已收到您的举报，我们会尽快核实');
+    }, 300);
+  }
+  function doBlock(flag: boolean) {
+    setShowUserAction(false);
+    setBlocked(flag);
+    let text = '';
+    if (flag) {
+      text = '已加入黑名单，将不再收到该用户的动态';
+    } else {
+      text = '已从黑名单移除';
+    }
     setTimeout(() => {
       commonDispatcher.info(text);
     }, 300);
@@ -243,6 +274,13 @@ const User: React.FC = () => {
                       <TouchableOpacity activeOpacity={0.7} onPress={followUser}>
                         <View style={[styles.userAction]}>
                           <Text style={[globalStyles.fontPrimary, {color: '#fff'}]}>{userInfo?.hasCare === UserFollowState.FOLLOWED_ME ? '回关' : '关注'}</Text>
+                        </View>
+                      </TouchableOpacity>
+                    )}
+                    {blocked && (
+                      <TouchableOpacity activeOpacity={0.7} onPress={() => doBlock(false)}>
+                        <View style={[globalStyles.containerCenter, styles.userAction, {backgroundColor: 'transparent', paddingHorizontal: 10, borderColor: '#f4f4f4'}]}>
+                          <Text style={[globalStyles.fontTertiary]}>已拉黑</Text>
                         </View>
                       </TouchableOpacity>
                     )}
@@ -325,16 +363,18 @@ const User: React.FC = () => {
           onClose={closeUserAction}
           style={[{backgroundColor: '#fff', borderTopLeftRadius: globalStyleVariables.RADIUS_MODAL, borderTopRightRadius: globalStyleVariables.RADIUS_MODAL}]}>
           <View>
-            <TouchableHighlight underlayColor="#999" onPress={() => doAction('report')}>
+            <TouchableHighlight underlayColor="#999" onPress={() => doReport()}>
               <View style={[{height: 55, backgroundColor: '#fff'}, globalStyles.containerCenter]}>
                 <Text style={globalStyles.fontPrimary}>举报该用户</Text>
               </View>
             </TouchableHighlight>
-            <TouchableHighlight underlayColor="#999" onPress={() => doAction('block')}>
-              <View style={[{height: 55, backgroundColor: '#fff'}, globalStyles.containerCenter]}>
-                <Text style={globalStyles.fontPrimary}>拉黑</Text>
-              </View>
-            </TouchableHighlight>
+            {!blocked && (
+              <TouchableHighlight underlayColor="#999" onPress={() => doBlock(true)}>
+                <View style={[{height: 55, backgroundColor: '#fff'}, globalStyles.containerCenter]}>
+                  <Text style={globalStyles.fontPrimary}>拉黑</Text>
+                </View>
+              </TouchableHighlight>
+            )}
 
             <TouchableHighlight underlayColor="#999" onPress={closeUserAction}>
               <View style={[{height: 55, backgroundColor: '#fff'}, globalStyles.containerCenter]}>
