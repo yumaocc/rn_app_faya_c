@@ -61,8 +61,13 @@ const WorkList: React.FC<WorkListProps> = props => {
 
   const handleClickWork = useCallback(
     (work: WorkF, index: number) => {
-      console.log('i: ', index);
-      navigation.navigate('WorkDetailList', {index});
+      // console.log('i: ', index);
+      navigation.navigate('WorkStream', {
+        index,
+        type: 'home',
+        work,
+      });
+      // navigation.navigate('WorkDetailList', {index});
     },
     [navigation],
   );
