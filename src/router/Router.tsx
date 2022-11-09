@@ -56,6 +56,7 @@ import MyProfile from '../screen/mine/settings/MyProfile';
 import Invite from '../screen/mine/agent/Invite';
 import About from '../screen/common/About';
 import PrivacySetting from '../screen/mine/settings/PrivacySetting';
+import WorkStream from '../screen/home/work/WorkStream';
 
 const Navigator: React.FC = () => {
   const isLoggedIn = useIsLoggedIn();
@@ -88,6 +89,7 @@ const Navigator: React.FC = () => {
       <Stack.Screen name="CommentReport" component={CommentReport} options={commonScreenOptions} />
       <Stack.Screen name="About" component={About} options={commonScreenOptions} />
       <Stack.Screen name="PrivacySetting" component={PrivacySetting} options={commonScreenOptions} />
+      <Stack.Screen name="WorkStream" component={WorkStream} options={commonScreenOptions} />
       {isLoggedIn ? (
         <>
           <Stack.Screen name="Order" component={Order} options={commonScreenOptions} />

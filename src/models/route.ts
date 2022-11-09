@@ -1,4 +1,5 @@
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {WorkF} from './work';
 import {IDBody} from '../fst/models';
 import {OrderStatus} from './order';
 
@@ -57,6 +58,7 @@ export type RootStackParamList = {
   CommentReport: {id: string};
   About: undefined;
   PrivacySetting: undefined;
+  WorkStream: {index: number; type: 'home' | 'mine' | 'user'; work: WorkF};
 };
 
 export type ValidRoute = keyof RootStackParamList;

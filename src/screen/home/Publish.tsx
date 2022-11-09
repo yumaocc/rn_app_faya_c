@@ -26,8 +26,8 @@ const Publish: React.FC = () => {
   const [autoSave, setAutoSave] = useState(false);
   const [content, setContent] = useState('');
   const [spuPoster, spuName] = useMemo(() => {
-    const poster = (spu as SPUF).poster || (spu as SPUDetailF).posters[0];
-    const name = (spu as SPUF).spuName || (spu as SPUDetailF).name;
+    const poster = (spu as SPUF)?.poster || (spu as SPUDetailF)?.posters[0];
+    const name = (spu as SPUF)?.spuName || (spu as SPUDetailF)?.name;
     return [poster, name];
   }, [spu]);
 
