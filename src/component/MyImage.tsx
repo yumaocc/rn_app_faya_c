@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {View, StyleSheet, ImageProps, Image, NativeSyntheticEvent, ImageLoadEventData} from 'react-native';
 
 export interface MyImageProps extends ImageProps {}
@@ -13,28 +13,27 @@ const MyImage: React.FC<MyImageProps> = props => {
   }
   return (
     <View style={[styles.container, style]}>
-      <Image style={styles.image} {...rest} onLoad={handleLoad} />
-      {!loadSuccess && <Image style={[styles.image, styles.placeholder]} source={defaultSource} />}
+      <Image style={[styles.image, {opacity: loadSuccess ? 1 : 0}]} {...rest} onLoad={handleLoad} />
+      {!loadSuccess && <Image style={[styles.image, styles.placeholder]} source={defaultSource} resizeMode="cover" />}
     </View>
   );
 };
 
-export default MyImage;
+export default memo(MyImage);
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     position: 'relative',
     overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   image: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    width: '100%',
+    height: '100%',
   },
   placeholder: {
     zIndex: 2,
+    position: 'absolute',
   },
 });

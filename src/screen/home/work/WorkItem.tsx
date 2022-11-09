@@ -1,6 +1,7 @@
 import React, {memo} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import Icon from '../../../component/Icon';
+import MyImage from '../../../component/MyImage';
 import {globalStyleVariables, globalStyles} from '../../../constants/styles';
 import {BoolEnum} from '../../../fst/models';
 import {WorkF, WorkType} from '../../../models';
@@ -22,7 +23,7 @@ const WorkItem: React.FC<WorkItemProps> = props => {
     <View style={styles.item}>
       <TouchableOpacity activeOpacity={0.9} onPress={handleClick}>
         <View style={{width: '100%', position: 'relative'}}>
-          <Image source={{uri: work?.coverImage}} defaultSource={require('../../../assets/sku_def_180w.png')} style={styles.cover} resizeMode="cover" />
+          <MyImage source={{uri: work?.coverImage}} defaultSource={require('../../../assets/sku_def_180w.png')} style={styles.cover} resizeMode="cover" />
           {work.type === WorkType.Video && (
             <View style={[styles.playIcon]}>
               <Image source={require('../../../assets/zuopin_tag_video.png')} style={styles.palyIconImage} />
