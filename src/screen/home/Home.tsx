@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {View, StyleSheet, ScrollView, useWindowDimensions, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
@@ -65,25 +65,58 @@ const Home: React.FC = () => {
   //   console.log(1);
   // }
 
-  function loadWork(type: WorkTabType) {
-    if (type === WorkTabType.Follow && !isLoggedIn) {
-      // 未登录不加载关注列表
-      return;
-    }
-    workDispatcher.loadWork(type);
-  }
-  function refreshWork(type: WorkTabType) {
-    if (type === WorkTabType.Follow && !isLoggedIn) {
-      // 未登录不加载关注列表
-      return;
-    }
-    workDispatcher.loadWork(type, true);
-    return Promise.resolve();
-  }
+  const loadWork = useCallback(
+    (type: WorkTabType) => {
+      if (currentTab.type !== type) {
+        return;
+      }
+      if (type === WorkTabType.Follow && !isLoggedIn) {
+        // 未登录不加载关注列表
+        return;
+      }
+      workDispatcher.loadWork(type);
+    },
+    [currentTab.type, isLoggedIn, workDispatcher],
+  );
 
+  const loadRecommend = useCallback(() => {
+    loadWork(WorkTabType.Recommend);
+  }, [loadWork]);
+  const loadFollow = useCallback(() => {
+    loadWork(WorkTabType.Follow);
+  }, [loadWork]);
+  const loadNearby = useCallback(() => {
+    loadWork(WorkTabType.Nearby);
+  }, [loadWork]);
+
+  const refreshWork = useCallback(
+    (type: WorkTabType) => {
+      if (type !== currentTab.type) {
+        return;
+      }
+      if (type === WorkTabType.Follow && !isLoggedIn) {
+        // 未登录不加载关注列表
+        return;
+      }
+      workDispatcher.loadWork(type, true);
+      return Promise.resolve();
+    },
+    [currentTab.type, isLoggedIn, workDispatcher],
+  );
+  const refreshRecommend = useCallback(() => {
+    return refreshWork(WorkTabType.Recommend);
+  }, [refreshWork]);
+  const refreshFollow = useCallback(() => {
+    return refreshWork(WorkTabType.Follow);
+  }, [refreshWork]);
+  const refreshNearby = useCallback(() => {
+    return refreshWork(WorkTabType.Nearby);
+  }, [refreshWork]);
   function handleScan() {
     navigation.navigate('Scanner');
   }
+
+  // useWhyDidYouUpdate('home加载', {type: currentTab.type, isLoggedIn, workDispatcher, refreshWork, refreshRecommend, loadRecommend, loadWork});
 
   return (
     <SafeAreaView edges={['top']} style={{flex: 1, backgroundColor: '#fff'}}>
@@ -100,15 +133,7 @@ const Home: React.FC = () => {
         <ScrollView ref={setRef} horizontal style={{flex: 1}} snapToInterval={width} showsHorizontalScrollIndicator={false} scrollEnabled={false}>
           <View style={{width}}>
             {isLoggedIn ? (
-              <WorkList
-                list={followWorks}
-                onRefresh={() => refreshWork(WorkTabType.Follow)}
-                onLoadMore={() => {
-                  if (currentTab.type === WorkTabType.Follow) {
-                    loadWork(WorkTabType.Follow);
-                  }
-                }}
-              />
+              <WorkList list={followWorks} onRefresh={refreshFollow} onLoadMore={loadFollow} />
             ) : (
               <View style={[{paddingTop: 40}, globalStyles.containerCenter]}>
                 <Button style={{marginTop: 10}} title="请先登录" type="primary" onPress={() => goLogin()} />
@@ -116,26 +141,10 @@ const Home: React.FC = () => {
             )}
           </View>
           <View style={{width}}>
-            <WorkList
-              list={recommendWorks}
-              onRefresh={() => refreshWork(WorkTabType.Recommend)}
-              onLoadMore={() => {
-                if (currentTab.type === WorkTabType.Recommend) {
-                  loadWork(WorkTabType.Recommend);
-                }
-              }}
-            />
+            <WorkList list={recommendWorks} onRefresh={refreshRecommend} onLoadMore={loadRecommend} />
           </View>
           <View style={{width}}>
-            <WorkList
-              list={nearbyWorks}
-              onRefresh={() => refreshWork(WorkTabType.Nearby)}
-              onLoadMore={() => {
-                if (currentTab.type === WorkTabType.Nearby) {
-                  loadWork(WorkTabType.Nearby);
-                }
-              }}
-            />
+            <WorkList list={nearbyWorks} onRefresh={refreshNearby} onLoadMore={loadNearby} />
           </View>
         </ScrollView>
       </View>

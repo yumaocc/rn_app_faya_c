@@ -1,13 +1,13 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useRef} from 'react';
-import {View, StyleSheet, ScrollView, NativeSyntheticEvent, NativeScrollEvent, Image, Text, TouchableOpacity, RefreshControl} from 'react-native';
+import React, {memo, useCallback, useRef} from 'react';
+import {View, StyleSheet, ScrollView, NativeSyntheticEvent, NativeScrollEvent, Text, RefreshControl} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useDivideData} from '../../helper/hooks';
-import {FakeNavigation, WorkF, WorkList as IWorkList, WorkType} from '../../models';
-import Icon from '../../component/Icon';
+import {FakeNavigation, WorkF, WorkList as IWorkList} from '../../models';
 import {dictLoadingState} from '../../helper/dictionary';
-import {BoolEnum} from '../../fst/models';
-import FastImage from 'react-native-fast-image';
+// import {useWhyDidYouUpdate} from '../../fst/hooks';
+import WorkItem from './work/WorkItem';
+// import FastImage from 'react-native-fast-image';
 
 interface WorkListProps {
   list: IWorkList;
@@ -23,6 +23,8 @@ const WorkList: React.FC<WorkListProps> = props => {
 
   const scroll = useRef<ScrollView>(null);
   const navigation = useNavigation<FakeNavigation>();
+
+  // useWhyDidYouUpdate('render workList', {...props, refreshing});
 
   function emitLoadMore() {
     props.onLoadMore && props.onLoadMore();
@@ -56,53 +58,14 @@ const WorkList: React.FC<WorkListProps> = props => {
       emitLoadMore();
     }
   }
-  function renderWorkItem(work: WorkF, index: number, left = false) {
-    if (left) {
-      index = index * 2;
-    } else {
-      index = index * 2 + 1;
-    }
-    return (
-      <View style={styles.item} key={`${work.mainId}-${index}-${left ? 'l' : 'r'}`}>
-        <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('WorkDetailList', {index})}>
-          <View style={{width: '100%', position: 'relative'}}>
-            <FastImage
-              source={{uri: work?.coverImage}}
-              defaultSource={require('../../assets/sku_def_180w.png')}
-              style={true ? styles.cover : styles.smallCover}
-              resizeMode="cover"
-            />
-            {work.type === WorkType.Video && (
-              <View style={[styles.playIcon]}>
-                <Image source={require('../../assets/zuopin_tag_video.png')} style={styles.palyIconImage} />
-              </View>
-            )}
-          </View>
-        </TouchableOpacity>
-        <View style={[{padding: globalStyleVariables.MODULE_SPACE}]}>
-          <Text style={[globalStyles.fontStrong, {fontSize: 15}]} numberOfLines={2}>
-            {work.content || '暂无描述'}
-          </Text>
-          <View style={[globalStyles.containerLR, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
-            <View style={[globalStyles.containerRow, {flex: 1, marginRight: 5}]}>
-              {work?.userAvatar ? <Image source={{uri: work.userAvatar}} style={styles.avatar} /> : <Image source={require('../../assets/avatar_def.png')} style={styles.avatar} />}
-              <Text style={[globalStyles.fontPrimary, {marginLeft: 3, flex: 1}]} numberOfLines={1}>
-                {work.userName}
-              </Text>
-            </View>
-            <View style={globalStyles.containerRow}>
-              {work.liked === BoolEnum.TRUE ? (
-                <Icon name="home_zuopin_zan_sel20" size={15} color={globalStyleVariables.COLOR_LIKE_RED} />
-              ) : (
-                <Icon name="home_zuopin_zan_nor20" size={15} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
-              )}
-              <Text style={[globalStyles.fontPrimary, {marginLeft: 3}]}>{work.numberOfLikes}</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-    );
-  }
+
+  const handleClickWork = useCallback(
+    (work: WorkF, index: number) => {
+      console.log('i: ', index);
+      navigation.navigate('WorkDetailList', {index});
+    },
+    [navigation],
+  );
 
   return (
     <View style={styles.container}>
@@ -123,8 +86,20 @@ const WorkList: React.FC<WorkListProps> = props => {
         scrollEventThrottle={100}
         onScrollEndDrag={endDrag}>
         <View style={styles.itemContainer}>
-          <View style={styles.left}>{l.map((v, i) => renderWorkItem(v, i, true))}</View>
-          <View style={styles.right}>{r.map((v, i) => renderWorkItem(v, i))}</View>
+          <View style={styles.left}>
+            {l.map((v, i) => {
+              const key = `${v.mainId}-${i}-l`;
+              const index = i * 2;
+              return <WorkItem work={v} key={key} index={index} onSelect={handleClickWork} />;
+            })}
+          </View>
+          <View style={styles.right}>
+            {r.map((v, i) => {
+              const key = `${v.mainId}-${i}-r`;
+              const index = i * 2 + 1;
+              return <WorkItem work={v} key={key} index={index} onSelect={handleClickWork} />;
+            })}
+          </View>
         </View>
         <View style={[globalStyles.containerCenter, {paddingVertical: globalStyleVariables.MODULE_SPACE}]}>
           <Text>{dictLoadingState(status)}</Text>
@@ -136,7 +111,7 @@ const WorkList: React.FC<WorkListProps> = props => {
 WorkList.defaultProps = {
   // title: 'WorkList',
 };
-export default WorkList;
+export default memo(WorkList);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
