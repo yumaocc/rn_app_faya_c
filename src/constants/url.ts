@@ -5,8 +5,8 @@ export function getBaseURL(): string {
   const env = getEnv();
   switch (env) {
     case 'development':
-      // return 'https://api-beta.faya.life';
-      return 'https://api.faya.life';
+      return 'https://api-beta.faya.life';
+    // return 'https://api.faya.life';
     case 'production':
     default:
       return 'https://api.faya.life';
