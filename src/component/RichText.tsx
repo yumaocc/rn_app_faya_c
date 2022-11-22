@@ -28,7 +28,7 @@ const RichText: React.FC<RichTextProps> = props => {
       userAgent="RNWebView"
       scalesPageToFit={fitPage}
       source={webViewSource}
-      style={[props.style, {width: '100%', height}]}
+      style={[props.style, {width: '100%', height, opacity: 0.99}]}
       javaScriptEnabled
       onMessage={onMessage}
       injectedJavaScript={`

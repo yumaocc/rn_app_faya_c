@@ -21,13 +21,13 @@ const MiddleButton: React.FC = () => {
       });
     } else {
       navigation.navigate('ShootVideo');
+      // navigation.navigate('TestPage');
       // navigation.navigate('Scanner');
       // navigation.navigate('CommentReport', {id: '2323'});
       // navigation.navigate('SingleWorkDetail', {id: '1575447541069455360'});
       // navigation.navigate('ScanResult', {content: '你好'});
       // navigation.navigate('Invite', {userId: '1574958869138587643'});
       // navigation.navigate('Publish');
-      // navigation.navigate('TestPage');
       // navigation.navigate('SearchSPU');
       // navigation.navigate('WithdrawalRecords');
       // navigation.navigate('CouponList');
