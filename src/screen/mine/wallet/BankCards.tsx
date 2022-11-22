@@ -1,7 +1,7 @@
 import {SwipeAction} from '@ant-design/react-native';
 import React, {useState} from 'react';
 import Icon from '../../../component/Icon';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight} from 'react-native';
 import {Modal, NavigationBar} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useBankCards, useCommonDispatcher, useWallet} from '../../../helper/hooks';
@@ -49,19 +49,8 @@ const BankCards: React.FC = () => {
       <ScrollView style={{flex: 1}}>
         {bankCards.map((card, i) => {
           return (
-            <SwipeAction
-              key={i}
-              right={[
-                {
-                  onPress: () => {
-                    handleUnbindCard(card);
-                  },
-                  text: <Icon name="all_delete48" size={24} color={globalStyleVariables.COLOR_WARNING_RED} />,
-                  backgroundColor: '#fff',
-                  color: '#fff',
-                },
-              ]}>
-              <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE}}>
+            <TouchableHighlight underlayColor="#999" key={i} onPress={() => handleUnbindCard(card)}>
+              <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff'}}>
                 <View style={[globalStyles.containerRow, styles.item]}>
                   <Text>
                     {card.bankCodeName}（{card.accountNo}）
@@ -69,7 +58,7 @@ const BankCards: React.FC = () => {
                 </View>
                 <View style={globalStyles.lineHorizontal} />
               </View>
-            </SwipeAction>
+            </TouchableHighlight>
           );
         })}
         <View style={[styles.item, globalStyles.containerRow, {paddingLeft: globalStyleVariables.MODULE_SPACE}]}>
