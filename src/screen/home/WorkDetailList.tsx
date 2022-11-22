@@ -52,12 +52,12 @@ const WorkDetailList: React.FC = () => {
   useEffect(() => {
     if (dimension.ready) {
       setTimeout(() => {
-        const index = currentIndex || 0;
+        const index = params.index || 0;
         flatListRef.current?.scrollToIndex({index, animated: false});
         setCurrentIndex(index);
       }, 0);
     }
-  }, [currentIndex, flatListRef, dimension.ready]);
+  }, [params.index, flatListRef, dimension.ready]);
 
   async function handleRefresh() {
     workDispatcher.loadWork(currentTabType, true);
