@@ -37,7 +37,8 @@ const RichText: React.FC<RichTextProps> = props => {
           meta.setAttribute('name', 'viewport');
           document.getElementsByTagName('head')[0].appendChild(meta);
           const style = document.createElement('style');
-          style.innerHTML = 'html,body{padding:0;margin:0;}';
+          style.type='text/css';
+          style.innerHTML = 'html,body{padding:0;margin:0;}img{max-width:100%;height:auto;}';
           document.getElementsByTagName('head')[0].appendChild(style);
           // alert("mmm");
           setTimeout(function() {

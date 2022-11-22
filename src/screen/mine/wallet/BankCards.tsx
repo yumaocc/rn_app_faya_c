@@ -1,4 +1,3 @@
-import {SwipeAction} from '@ant-design/react-native';
 import React, {useState} from 'react';
 import Icon from '../../../component/Icon';
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity, TouchableHighlight} from 'react-native';
