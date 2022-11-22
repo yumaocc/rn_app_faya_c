@@ -7,6 +7,7 @@ import {LoadListState, SPUDetailF, SPUF} from '../../models';
 import {Actions} from './actions';
 import {RootState} from '../reducers';
 import {SearchForm} from '../../fst/models';
+import logger from '../../helper/logger';
 
 function* viewSPU(action: ActionWithPayload<ActionType, number>) {
   const id = action.payload;
@@ -18,7 +19,8 @@ function* viewSPU(action: ActionWithPayload<ActionType, number>) {
     } else if (detail?.packageDetailsList?.length) {
       yield put(Actions.setCurrentSKU(detail.packageDetailsList[0], true));
     }
-  } catch (error) {
+  } catch (error: any) {
+    logger.error('spu/sagas.ts/viewSPU', {message: String(error?.message), spuId: id, stack: error?.stack || 'none'});
     yield put(CommonActions.error(error));
   }
 }

@@ -218,7 +218,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
         </View>
         <Text style={[globalStyles.fontStrong, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER, fontSize: 18}]}>{spu?.name}</Text>
 
-        {skuShowInfo?.videoCommission && (
+        {!!skuShowInfo?.videoCommission && (
           <TouchableOpacity activeOpacity={0.8} onPress={handleShootVideo}>
             <View style={[styles.video, globalStyles.containerRow]}>
               <View style={{flex: 1}}>

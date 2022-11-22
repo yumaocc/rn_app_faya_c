@@ -63,7 +63,7 @@ axios.interceptors.response.use((response: AxiosResponse) => {
     // console.log('response content: ', response.data.data.content);
   }
 
-  switch (data.code) {
+  switch (data?.code) {
     case 8000:
       goLogin();
       return response;
@@ -108,4 +108,9 @@ export async function get<T>(url: string, config?: AxiosRequestConfig): Promise<
 export async function post<T, P>(url: string, data?: P, config?: AxiosRequestConfig): Promise<T> {
   const res = await postPaged<T, P>(url, data, config);
   return res.content;
+}
+// 原始axios get，用于其他非平台接口，不遵守{code,msg,data}规范
+export async function originGet<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+  const res = await axios.get<T>(url, config);
+  return res.data;
 }

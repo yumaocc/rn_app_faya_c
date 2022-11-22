@@ -9,6 +9,7 @@ export function getBaseURL(): string {
     // return 'https://api.faya.life';
     case 'production':
     default:
+      // return 'https://api-beta.faya.life';
       return 'https://api.faya.life';
   }
 }

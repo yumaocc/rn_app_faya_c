@@ -1,5 +1,5 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import React, {useCallback, useMemo, useRef} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {View, StyleSheet, NativeSyntheticEvent, Text, TouchableOpacity, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar} from '../../component';
@@ -13,9 +13,12 @@ import PublishManager from '../../native-modules/PublishManager';
 import {copyFileUrl, getVideoNameByPath} from '../../helper/system';
 import Icon from '../../component/Icon';
 import MyStatusBar from '../../component/MyStatusBar';
+import logger from '../../helper/logger';
+import Loading from '../../component/Loading';
 
 const ShootVideo: React.FC = () => {
   const recorder = useRef<RecorderViewRef>(null);
+  const [isProcessingVideo, setIsProcessingVideo] = useState(false); // 是否正在处理选择的视频
   const [recorderState, setRecorderState] = React.useState<RecorderState>({
     isRecording: false,
     torchMode: 'off',
@@ -103,26 +106,30 @@ const ShootVideo: React.FC = () => {
         videoQuality: 'high',
         selectionLimit: 1,
       });
-      console.log('result');
-      console.log(result);
+      // console.log('result');
+      // console.log(result);
       if (result?.assets?.length) {
+        setIsProcessingVideo(true);
         const video = result.assets[0];
         let uri = video.uri;
         if (Platform.OS === 'android') {
           uri = await copyFileUrl(video.uri, video.fileName);
         }
-        console.log('replaced_uri', uri);
+        // console.log('replaced_uri', uri);
         const info: VideoInfo = {
           path: uri.replace(/^file:\/\//, ''),
           coverPath: await PublishManager.getVideoCover({path: uri}),
           duration: video.duration,
           fileName: getVideoNameByPath(uri),
         };
-        console.log(info);
+        setIsProcessingVideo(false);
         jumpToNext(info);
+      } else {
+        logger.warn('ShootVideo.tsx/selectVideo/empty', {msg: '选择视频结果为空', result: JSON.stringify(result)});
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      setIsProcessingVideo(false);
+      logger.fatal('ShootVideo.tsx/selectVideo/error', {message: error?.message || 'none', stack: error?.stack});
     }
   }
 
@@ -151,6 +158,11 @@ const ShootVideo: React.FC = () => {
                 </View>
               }
             />
+          )}
+          {isProcessingVideo && (
+            <View style={[{position: 'absolute', width: '100%', height: '100%'}, globalStyles.containerCenter]}>
+              <Loading />
+            </View>
           )}
           {/* <View style={[globalStyles.containerRow, {flexWrap: 'wrap'}]}>
           </View> */}

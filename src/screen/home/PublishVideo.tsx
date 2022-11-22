@@ -11,6 +11,7 @@ import {getValidPercent} from '../../fst/helper';
 import {useNavigation} from '@react-navigation/native';
 import {FakeNavigation, SPUDetailF, SPUF} from '../../models';
 import MyStatusBar from '../../component/MyStatusBar';
+import logger from '../../helper/logger';
 
 const PublishVideo: React.FC = () => {
   const publishConfig = useSelector((state: RootState) => state.work.publishConfig);
@@ -43,25 +44,21 @@ const PublishVideo: React.FC = () => {
   async function startUpload() {
     try {
       const mainId = await api.work.getPublishMainID(publishConfig.publishType);
-      console.log(videoInfo);
+      // console.log(videoInfo);
       const auth = await api.work.getUploadVideoAuth({
         mainId,
         title: 'video',
         fileName: videoInfo?.fileName || 'upload.mp4',
       });
-      // console.log('video auth', auth);
       currentUpload.current = 'video';
       await PublishManager.uploadVideo({
         uploadAuth: auth.uploadAuth,
         uploadAddress: auth.uploadAddress,
         path: videoInfo?.path,
       });
-      // console.log('上传视频 done');
       currentUpload.current = 'cover';
       const coverAuth = await api.work.getUploadPhotoAuth({mainId, imageType: 'cover'});
-      // console.log('cover auth', coverAuth);
       await PublishManager.uploadPhoto({path: videoInfo?.coverPath, uploadAuth: coverAuth.uploadAuth, uploadAddress: coverAuth.uploadAddress});
-      // console.log('cover done');
       const {allowDownload, allowForward, publishType, content, addressName, latitude, longitude, hasPrivate} = publishConfig;
       await api.work.realPublish({
         allowedDownload: allowDownload,
@@ -76,10 +73,10 @@ const PublishVideo: React.FC = () => {
         bindSpuId: spuId,
       });
 
-      // console.log('success');
       setPercent(100);
-    } catch (error) {
+    } catch (error: any) {
       setHasError(true);
+      logger.fatal('PublishVideo.tsx', {message: error?.message || 'none', stack: error?.stack});
       commonDispatcher.error(error);
     }
   }

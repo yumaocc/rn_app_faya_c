@@ -19,6 +19,7 @@ import {BoolEnum} from '../../fst/models';
 import {getAliPayUrl} from '../../constants';
 import BookingModal from '../../component/BookingModal';
 import MyStatusBar from '../../component/MyStatusBar';
+import logger from '../../helper/logger';
 
 const Order: React.FC = () => {
   const spu = useSelector((state: RootState) => state.spu.currentSPU);
@@ -133,7 +134,11 @@ const Order: React.FC = () => {
     if (currentSkuIsPackage) {
       return (sku as PackageDetail)?.stockAmount;
     } else {
-      return (sku as SKUDetail)?.maxPurchaseQuantity;
+      const max = (sku as SKUDetail)?.maxPurchaseQuantity || 0;
+      if (max === 0) {
+        return 99999;
+      }
+      return max;
     }
   }, [currentSkuIsPackage, sku]);
 
@@ -206,6 +211,7 @@ const Order: React.FC = () => {
             } else if (status === OrderPayState.UNPAY) {
               navigation.replace('WaitPay', {id});
             } else {
+              logger.warn('Order.tsx/effect/checkPay', {msg: '未检查到支付结果', checkOrderId, checkOrderType});
               setIsPaying(false);
             }
           })
@@ -293,7 +299,9 @@ const Order: React.FC = () => {
           },
           {...formData, tempId: tempOrderId},
         );
-        console.log(success);
+        if (!success) {
+          logger.fatal('Order.tsx/#submit', {msg: '唤起微信小程序失败', tempOrderId, formData: JSON.stringify(formData)});
+        }
       } else {
         const res = await api.order.makeOrder(formData);
         setCheckOrderId(res.orderId);
