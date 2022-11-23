@@ -112,9 +112,8 @@ const ShootVideo: React.FC = () => {
         setIsProcessingVideo(true);
         const video = result.assets[0];
         let uri = video.uri;
-        if (Platform.OS === 'android') {
-          uri = await copyFileUrl(video.uri, video.fileName);
-        }
+        // ios 和安卓均将资源拷贝到临时目录
+        uri = await copyFileUrl(video.uri, video.fileName);
         // console.log('replaced_uri', uri);
         const info: VideoInfo = {
           path: uri.replace(/^file:\/\//, ''),
