@@ -111,7 +111,7 @@ export async function checkAppInstall(appType: AppInstallCheckType): Promise<boo
 }
 
 export async function copyFileUrl(uri: string, fileName: string) {
-  const destPath = `${RNFS.TemporaryDirectoryPath}/${fileName}`;
+  const destPath = `${RNFS.TemporaryDirectoryPath}/${Date.now()}-${fileName}`;
   await RNFS.copyFile(uri, destPath);
   await RNFS.stat(destPath);
   return destPath;
