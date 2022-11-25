@@ -93,7 +93,7 @@ const WalletSummaryAgent: React.FC = () => {
                 <Icon name="wode_qianbao_tuiguangma" size={24} color="#333" />
               </View>
               <View style={{flex: 1, marginLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
-                <Text style={globalStyles.fontPrimary}>通过推广码组件自己的团队，当团队成员成功分享商品，你也可以躺赚佣金。</Text>
+                <Text style={globalStyles.fontPrimary}>通过推广码组建自己的团队，当团队成员成功分享商品，你也可以躺赚佣金。</Text>
               </View>
             </View>
           </View>
