@@ -13,6 +13,7 @@ import {RootState} from '../../redux/reducers';
 import {getAliPayUrl, getWechatPayUrl} from '../../constants';
 import moment from 'moment';
 import MyStatusBar from '../../component/MyStatusBar';
+import {BoolEnum} from '../../fst/models';
 
 const WaitPay: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
@@ -207,14 +208,18 @@ const WaitPay: React.FC = () => {
                 <Text style={globalStyles.fontSecondary}>{orderInfo?.willReturnUserCommissionYuan}</Text>
               </View>
             )}
-            <View style={[globalStyles.containerLR, {height: 30}]}>
-              <Text style={globalStyles.fontPrimary}>优惠券</Text>
-              <Text style={globalStyles.fontSecondary}>-¥{orderInfo?.usedCouponMoneyYuan}</Text>
-            </View>
-            <View style={[globalStyles.containerLR, {height: 30}]}>
-              <Text style={globalStyles.fontPrimary}>使用芽</Text>
-              <Text style={globalStyles.fontSecondary}>-¥{orderInfo?.usedIntegralMoneyYuan}</Text>
-            </View>
+            {orderInfo?.canUseIntegral === BoolEnum.TRUE && (
+              <View style={[globalStyles.containerLR, {height: 30}]}>
+                <Text style={globalStyles.fontPrimary}>优惠券</Text>
+                <Text style={globalStyles.fontSecondary}>-¥{orderInfo?.usedCouponMoneyYuan}</Text>
+              </View>
+            )}
+            {orderInfo?.canUseCoupon === BoolEnum.TRUE && (
+              <View style={[globalStyles.containerLR, {height: 30}]}>
+                <Text style={globalStyles.fontPrimary}>使用芽</Text>
+                <Text style={globalStyles.fontSecondary}>-¥{orderInfo?.usedIntegralMoneyYuan}</Text>
+              </View>
+            )}
             <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE}]} />
             <View>
               <Text style={[globalStyles.fontPrimary, {textAlign: 'right'}]}>

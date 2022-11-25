@@ -387,14 +387,18 @@ const OrderDetail: React.FC = () => {
                       <Text style={globalStyles.fontSecondary}>{orderDetail?.willReturnUserCommissionYuan}</Text>
                     </View>
                   )}
-                  <View style={[globalStyles.containerLR, {height: 30}]}>
-                    <Text style={globalStyles.fontPrimary}>优惠券</Text>
-                    <Text style={globalStyles.fontSecondary}>-¥{orderDetail?.usedCouponMoneyYuan}</Text>
-                  </View>
-                  <View style={[globalStyles.containerLR, {height: 30}]}>
-                    <Text style={globalStyles.fontPrimary}>使用芽</Text>
-                    <Text style={globalStyles.fontSecondary}>-¥{orderDetail?.usedIntegralMoneyYuan}</Text>
-                  </View>
+                  {orderDetail?.canUseIntegral === BoolEnum.TRUE && (
+                    <View style={[globalStyles.containerLR, {height: 30}]}>
+                      <Text style={globalStyles.fontPrimary}>优惠券</Text>
+                      <Text style={globalStyles.fontSecondary}>-¥{orderDetail?.usedCouponMoneyYuan}</Text>
+                    </View>
+                  )}
+                  {orderDetail?.canUseCoupon === BoolEnum.TRUE && (
+                    <View style={[globalStyles.containerLR, {height: 30}]}>
+                      <Text style={globalStyles.fontPrimary}>使用芽</Text>
+                      <Text style={globalStyles.fontSecondary}>-¥{orderDetail?.usedIntegralMoneyYuan}</Text>
+                    </View>
+                  )}
                   <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE}]} />
                   <View>
                     <Text style={[globalStyles.fontPrimary, {textAlign: 'right'}]}>

@@ -426,30 +426,33 @@ const Order: React.FC = () => {
               </FormItem>
             )}
             <View style={[globalStyles.lineHorizontal]} />
-            <FormItem
-              {...formItemProps}
-              label={
-                <View style={globalStyles.containerRow}>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 15}]}>使用芽抵扣</Text>
-                  <Text style={[globalStyles.fontTertiary]}>{wallet?.money ? `余${wallet?.moneyYuan}` : '余额为0'}</Text>
-                </View>
-              }>
-              <InputNumber
-                styles={{container: {flex: 1}, inputContainer: {flex: 1}, input: {textAlign: 'right', width: '100%', fontSize: 15}}}
-                controls={false}
-                min={0}
-                digit={2}
-                max={fenToYuan(wallet?.money)}
-                value={form.integralMoney}
-                disabled={!wallet?.money}
-                onChange={val => setFormField('integralMoney', val)}
-                placeholder={wallet?.money ? '请输入抵扣金额' : '无法抵扣'}
-              />
-            </FormItem>
-            <FormItem label="优惠券" {...formItemProps}>
-              {renderCouponEntry()}
-            </FormItem>
-
+            {wallet?.canUseIntegral === BoolEnum.TRUE && (
+              <FormItem
+                {...formItemProps}
+                label={
+                  <View style={globalStyles.containerRow}>
+                    <Text style={[globalStyles.fontPrimary, {fontSize: 15}]}>使用芽抵扣</Text>
+                    <Text style={[globalStyles.fontTertiary]}>{wallet?.money ? `余${wallet?.moneyYuan}` : '余额为0'}</Text>
+                  </View>
+                }>
+                <InputNumber
+                  styles={{container: {flex: 1}, inputContainer: {flex: 1}, input: {textAlign: 'right', width: '100%', fontSize: 15}}}
+                  controls={false}
+                  min={0}
+                  digit={2}
+                  max={fenToYuan(wallet?.money)}
+                  value={form.integralMoney}
+                  disabled={!wallet?.money}
+                  onChange={val => setFormField('integralMoney', val)}
+                  placeholder={wallet?.money ? '请输入抵扣金额' : '无法抵扣'}
+                />
+              </FormItem>
+            )}
+            {wallet?.canUseCoupon === BoolEnum.TRUE && (
+              <FormItem label="优惠券" {...formItemProps}>
+                {renderCouponEntry()}
+              </FormItem>
+            )}
             <FormItem label="备注" {...formItemProps}>
               <TextInput
                 value={form.memo}

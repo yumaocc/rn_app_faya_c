@@ -88,6 +88,8 @@ export interface WalletInfo {
   cardholder: string;
   status: UserCertificationStatus;
   details: UserCertificationDetail;
+  canUseIntegral: BoolEnum;
+  canUseCoupon: BoolEnum;
 }
 
 export interface UserSetting {

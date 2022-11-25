@@ -110,6 +110,8 @@ export interface OrderDetailF {
   numberOfProducts: number;
   canRefundNumberOfProducts: number;
   needBooking: BoolEnum;
+  canUseIntegral: BoolEnum;
+  canUseCoupon: BoolEnum;
 }
 
 export interface OrderPackage {
