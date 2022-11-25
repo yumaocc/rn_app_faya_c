@@ -12,10 +12,12 @@ import {FakeNavigation} from '../../models';
 import {PRIVACY_POLICY_URL, USER_AGREEMENT_URL} from '../../constants';
 import {cache} from '../../helper/cache';
 import MyStatusBar from '../../component/MyStatusBar';
+import Radio from '../../component/Form/Radio';
 
 const Login: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState(''); // 验证码
+  const [agree, setAgree] = useState(false); // 是否同意用户协议
   const [loginState, setLoginState] = useState<LoginState>(LoginState.None);
   const [verifyCodeSend, setVerifyCodeSend] = useState(false);
   const [resendAfter, setResendAfter] = useState(0);
@@ -74,6 +76,9 @@ const Login: React.FC = () => {
   //   }
   // }
   function handleLogin() {
+    if (!agree) {
+      return commonDispatcher.info('请先阅读并同意隐私政策和用户协议');
+    }
     if (!phone) {
       return commonDispatcher.error('请输入手机号');
     }
@@ -175,16 +180,18 @@ const Login: React.FC = () => {
           />
         </View>
         <View>
-          <Text style={[globalStyles.fontTertiary, globalStyles.moduleMarginTop]}>
-            <Text>登录即代表同意</Text>
-            <Text onPress={openUserProtocol} style={[globalStyles.fontTertiary, {color: globalStyleVariables.COLOR_LINK}]}>
-              用户协议
+          <Radio checked={agree} onChange={setAgree} style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
+            <Text style={[globalStyles.fontTertiary, globalStyles.moduleMarginTop]}>
+              <Text>已阅读并同意</Text>
+              <Text onPress={openUserProtocol} style={[globalStyles.fontTertiary, {color: globalStyleVariables.COLOR_LINK}]}>
+                用户协议
+              </Text>
+              <Text>和</Text>
+              <Text onPress={openPrivacyPolicy} style={[globalStyles.fontTertiary, {color: globalStyleVariables.COLOR_LINK}]}>
+                隐私政策
+              </Text>
             </Text>
-            <Text>和</Text>
-            <Text onPress={openPrivacyPolicy} style={[globalStyles.fontTertiary, {color: globalStyleVariables.COLOR_LINK}]}>
-              隐私政策
-            </Text>
-          </Text>
+          </Radio>
         </View>
         <Button style={styles.login} type="primary" onPress={handleLogin} loading={loginState === LoginState.Loading}>
           登录
