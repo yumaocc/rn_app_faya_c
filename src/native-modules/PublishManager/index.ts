@@ -17,4 +17,4 @@ const PublishManager: VODPublishManager = {
   getVideoCover: config => NativePublishManager.getVideoCover(config),
 };
 
-export default PublishManager;
+export {PublishManager};

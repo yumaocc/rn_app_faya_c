@@ -46,8 +46,11 @@ function* dismissMessage() {
   yield put(Actions.dismissMessage());
 }
 
-function* setConfig(action: ActionWithPayload<ActionType, Partial<SystemConfig>>) {
+function* setConfig(action: ActionWithPayload<ActionType, Partial<SystemConfig>>): any {
   const config = action.payload;
+  // app 是否正在初始化，如果在初始化，不要保存到本地，防止应用审核不通过（用户同意隐私政策前，不应写入SD卡数据）
+  // const isLoading: boolean = yield select((state: RootState) => state.common.isLoading);
+
   Object.keys(config).forEach(key => {
     if (key === 'token') {
       resetToken(config.token);

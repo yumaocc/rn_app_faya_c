@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {Button, NavigationBar} from '../../component';
 import {useCommonDispatcher} from '../../helper/hooks';
-import PublishManager from '../../native-modules/PublishManager';
+import {PublishManager} from '../../native-modules/PublishManager';
 import {RootState} from '../../redux/reducers';
 import * as api from '../../apis';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';

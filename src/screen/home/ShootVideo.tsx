@@ -1,6 +1,6 @@
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {View, StyleSheet, NativeSyntheticEvent, Text, TouchableOpacity, Platform} from 'react-native';
+import {View, StyleSheet, NativeSyntheticEvent, Text, TouchableOpacity} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Button, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
@@ -9,7 +9,7 @@ import {FakeNavigation, VideoInfo} from '../../models';
 import {RecorderFinishData, RecorderView, RecorderViewRef, RecorderViewActionType, RecorderErrorData, RecorderState, RecorderProgressData} from '../../native-modules/RecorderView';
 import {secondToMinute} from '../../fst/helper';
 import {launchImageLibrary} from 'react-native-image-picker';
-import PublishManager from '../../native-modules/PublishManager';
+import {PublishManager} from '../../native-modules/PublishManager';
 import {copyFileUrl, getVideoNameByPath} from '../../helper/system';
 import Icon from '../../component/Icon';
 import MyStatusBar from '../../component/MyStatusBar';

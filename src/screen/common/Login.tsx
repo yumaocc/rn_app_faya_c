@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {InputItem, Button} from '@ant-design/react-native';
+import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import {Button} from '@ant-design/react-native';
 import {useSelector} from 'react-redux';
 import {useCommonDispatcher, useUserDispatcher} from '../../helper/hooks';
 import {RootState} from '../../redux/reducers';
@@ -13,11 +13,13 @@ import {PRIVACY_POLICY_URL, USER_AGREEMENT_URL} from '../../constants';
 import {cache} from '../../helper/cache';
 import MyStatusBar from '../../component/MyStatusBar';
 import Radio from '../../component/Form/Radio';
+import {Popup} from '../../component';
 
 const Login: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState(''); // 验证码
   const [agree, setAgree] = useState(false); // 是否同意用户协议
+  const [showAgreeTip, setShowAgreeTip] = useState(false); // 是否显示同意用户协议提示
   const [loginState, setLoginState] = useState<LoginState>(LoginState.None);
   const [verifyCodeSend, setVerifyCodeSend] = useState(false);
   const [resendAfter, setResendAfter] = useState(0);
@@ -29,6 +31,10 @@ const Login: React.FC = () => {
   const [userDispatcher] = useUserDispatcher();
   const [commonDispatcher] = useCommonDispatcher();
   const navigation = useNavigation<FakeNavigation>();
+
+  function closeAgreeTip() {
+    setShowAgreeTip(false);
+  }
 
   useEffect(() => {
     if (suggestPhone) {
@@ -75,15 +81,22 @@ const Login: React.FC = () => {
   //     navigation.replace(params.to, params.params);
   //   }
   // }
-  function handleLogin() {
-    if (!agree) {
-      return commonDispatcher.info('请先阅读并同意隐私政策和用户协议');
-    }
+  function confirmAgreeInTip() {
+    closeAgreeTip();
+    setAgree(true);
+    login();
+  }
+
+  function checkForm() {
     if (!phone) {
       return commonDispatcher.error('请输入手机号');
     }
     if (!code) {
       return commonDispatcher.error('请输入验证码');
+    }
+    if (!agree) {
+      setShowAgreeTip(true);
+      return;
     }
     login();
   }
@@ -138,9 +151,11 @@ const Login: React.FC = () => {
   }
 
   function openUserProtocol() {
+    closeAgreeTip();
     loadUrl(USER_AGREEMENT_URL + '?_r=' + Math.random());
   }
   function openPrivacyPolicy() {
+    closeAgreeTip();
     loadUrl(PRIVACY_POLICY_URL + '?_r=' + Math.random());
   }
 
@@ -153,31 +168,36 @@ const Login: React.FC = () => {
       <MyStatusBar />
       <Text style={styles.title}>登录/注册</Text>
       <View style={styles.form}>
-        <View style={styles.formItem}>
-          <InputItem clear last value={phone} labelNumber={2} type="text" onChange={setPhone} placeholder="请输入手机号">
-            <Text style={styles.phoneLabel}>+86</Text>
-          </InputItem>
+        <View style={[globalStyles.containerRow, styles.formItem, {paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+          <Text style={[styles.phoneLabel, {marginRight: 10}]}>+86</Text>
+          <TextInput
+            value={phone}
+            onChangeText={setPhone}
+            placeholder="请输入手机号"
+            placeholderTextColor={globalStyleVariables.TEXT_COLOR_TERTIARY}
+            clearButtonMode="while-editing"
+            style={styles.inputItem}
+          />
         </View>
         <Text style={styles.formExplain}>未注册的手机号验证通过后将自动注册</Text>
-        <View style={[styles.formItem, styles.formItemCode]}>
-          <InputItem
-            clear
-            last
+        <View style={[styles.formItem, styles.formItemCode, globalStyles.containerRow, {paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+          <TextInput
             value={code}
-            labelNumber={2}
-            type="number"
-            onChange={setCode}
-            extra={
-              verifyCodeSend ? (
-                <Text style={styles.phoneLabel}>重新发送({resendAfter})</Text>
-              ) : (
-                <Text style={styles.getCode} onPress={handleSendCode}>
-                  获取验证码
-                </Text>
-              )
-            }
+            onChangeText={setCode}
             placeholder="请输入验证码"
+            placeholderTextColor={globalStyleVariables.TEXT_COLOR_TERTIARY}
+            clearButtonMode="while-editing"
+            style={styles.inputItem}
           />
+          <View style={{marginLeft: 10}}>
+            {verifyCodeSend ? (
+              <Text style={styles.phoneLabel}>重新发送({resendAfter})</Text>
+            ) : (
+              <Text style={styles.getCode} onPress={handleSendCode}>
+                获取验证码
+              </Text>
+            )}
+          </View>
         </View>
         <View>
           <Radio checked={agree} onChange={setAgree} style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
@@ -193,7 +213,7 @@ const Login: React.FC = () => {
             </Text>
           </Radio>
         </View>
-        <Button style={styles.login} type="primary" onPress={handleLogin} loading={loginState === LoginState.Loading}>
+        <Button style={styles.login} type="primary" onPress={checkForm} loading={loginState === LoginState.Loading}>
           登录
         </Button>
         <View style={[globalStyles.containerCenter, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
@@ -202,6 +222,33 @@ const Login: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
+      {showAgreeTip && (
+        <Popup visible={true} onClose={closeAgreeTip} round={globalStyleVariables.RADIUS_MODAL}>
+          <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+            <Text style={{fontSize: 18, color: globalStyleVariables.TEXT_COLOR_PRIMARY}}>用户协议及隐私保护</Text>
+            <View style={{marginTop: 20}}>
+              <Text style={[globalStyles.fontPrimary, globalStyles.moduleMarginTop]}>
+                <Text>我已阅读并同意</Text>
+                <Text onPress={openUserProtocol} style={[{color: globalStyleVariables.COLOR_LINK, fontSize: 15}]}>
+                  用户协议
+                </Text>
+                <Text>和</Text>
+                <Text onPress={openPrivacyPolicy} style={[{color: globalStyleVariables.COLOR_LINK, fontSize: 15}]}>
+                  隐私政策
+                </Text>
+              </Text>
+            </View>
+            <View style={[{paddingHorizontal: 15, marginTop: 62}, globalStyles.containerRow]}>
+              <Button style={{flex: 1, backgroundColor: '#0000001A'}} onPress={closeAgreeTip}>
+                不同意
+              </Button>
+              <Button style={{flex: 1, marginLeft: 15}} type="primary" onPress={confirmAgreeInTip}>
+                同意并登录
+              </Button>
+            </View>
+          </View>
+        </Popup>
+      )}
     </View>
   );
 };
@@ -226,6 +273,7 @@ const styles = StyleSheet.create({
   formItem: {
     backgroundColor: '#f2f2f2',
     borderRadius: 8,
+    height: 50,
   },
   formItemCode: {
     marginTop: 30,
@@ -246,5 +294,12 @@ const styles = StyleSheet.create({
   login: {
     width: '100%',
     marginTop: 40,
+  },
+  inputItem: {
+    fontSize: 15,
+    padding: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    flex: 1,
   },
 });

@@ -1,9 +1,9 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {NavigationBar} from '../../component';
 import {useCommonDispatcher} from '../../helper/hooks';
-import PublishManager from '../../native-modules/PublishManager';
+import {PublishManager} from '../../native-modules/PublishManager';
 import {RootState} from '../../redux/reducers';
 import * as api from '../../apis';
 import {WorkType} from '../../models';
@@ -11,7 +11,7 @@ import {WorkType} from '../../models';
 const PublishPhoto: React.FC = () => {
   const publishConfig = useSelector((state: RootState) => state.work.publishConfig);
   const videoInfo = useSelector((state: RootState) => state.work.videoInfo);
-  const [percent, setPercent] = React.useState(0);
+  // const [percent, setPercent] = React.useState(0);
 
   const [commonDispatcher] = useCommonDispatcher();
 
