@@ -369,14 +369,14 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
                 <View style={[globalStyles.containerLR]}>
                   <View style={[{flex: 1}]}>
                     <Text style={[globalStyles.fontTertiary]}>{shop.addressDetail}</Text>
-                    {shop?.distanceFromMe && (
+                    {!!shop?.distanceFromMe && (
                       <View style={[globalStyles.tagWrapper, {backgroundColor: '#49A0FF1A'}]}>
                         <Text style={[globalStyles.tag, {color: '#49A0FF'}]}>{shop.distanceFromMe}</Text>
                       </View>
                     )}
                   </View>
                   <View style={[globalStyles.containerRow, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                    {showNavigation && (
+                    {!!showNavigation && (
                       <CustomTouchable
                         onPress={() =>
                           handleNavigation({
@@ -392,7 +392,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
                       </CustomTouchable>
                     )}
 
-                    {shop.contactPhone && (
+                    {!!shop.contactPhone && (
                       <CustomTouchable onPress={() => callPhone(shop.contactPhone)}>
                         <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
                           <Icon name="shangpin_dianpu_dianhua" size={16} color="#48db94" />
