@@ -156,6 +156,7 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
         {/* <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{flex: 1}}> */}
         <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">
           <View style={{flex: 1}}>
+            {/* TODO: 加上分页请求 */}
             {comment.list.map((comment, index) => {
               return (
                 <View key={index} style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, marginVertical: globalStyleVariables.MODULE_SPACE}}>
