@@ -23,6 +23,7 @@ const MiddleButton: React.FC = () => {
       navigation.navigate('ShootVideo');
       // navigation.navigate('TestPage');
       // navigation.navigate('Scanner');
+      // navigation.navigate('ManageAddress');
       // navigation.navigate('CommentReport', {id: '2323'});
       // navigation.navigate('SingleWorkDetail', {id: '1575447541069455360'});
       // navigation.navigate('ScanResult', {content: '你好'});

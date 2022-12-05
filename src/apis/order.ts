@@ -46,3 +46,7 @@ export async function booking(bookingForm: OrderBookingForm) {
 export async function cancelBooking(orderSmallId: string): Promise<boolean> {
   return await post('/order/booking/cancel', {orderSmallId});
 }
+
+export async function checkExpress(): Promise<any> {
+  return await post('/order/express/inquiry', {no: 'JD0076704732627', telephone: '17726582214'});
+}

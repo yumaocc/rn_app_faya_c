@@ -11,6 +11,7 @@ import {
   MyCodeUrl,
   OtherUserDetail,
   UserCertificationForm,
+  UserExpressAddress,
   UserInfo,
   WalletInfo,
   WalletSummary,
@@ -132,4 +133,22 @@ export async function agentRegister(shareUserId: string): Promise<number> {
 export async function getTouristId(): Promise<string> {
   const res = await post<{touristsSnowId: string}, unknown>('/user/tourists/create/one');
   return res?.touristsSnowId;
+}
+
+// 收货地址相关
+// 新增收货地址
+export async function addNewAddress(params: SearchParam): Promise<boolean> {
+  return await post('/user/address/add/one', params);
+}
+// 收货地址列表
+export async function getAddressList(params: SearchParam): Promise<UserExpressAddress[]> {
+  return await post('/user/address/my/list', params);
+}
+// 编辑收货地址
+export async function editAddress(params: Partial<UserExpressAddress>): Promise<boolean> {
+  return await post('/user/address/modify/one', params);
+}
+// 删除收货地址
+export async function deleteAddress(id: number): Promise<boolean> {
+  return await post('/user/address/del/one', {id});
 }

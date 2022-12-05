@@ -33,6 +33,7 @@ const Settings: React.FC = () => {
       <MyStatusBar />
       <ScrollView style={{flex: 1}}>
         <OperateItem label="个人资料" showArrow onPress={() => navigation.navigate('MyProfile')} />
+        <OperateItem label="收货地址" showArrow onPress={() => navigation.navigate('ManageAddress')} />
         <OperateItem label="隐私设置" showArrow onPress={() => navigation.navigate('PrivacySetting')} />
         {isAgent && <OperateItem label="达人主页" showArrow onPress={() => navigation.navigate('Profile')} />}
         {/* <OperateItem label="隐私设置" showArrow /> */}

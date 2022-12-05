@@ -78,3 +78,11 @@ export interface DeepNavigationParam {
   params?: any;
   key: string;
 }
+
+// 省市区数据
+export interface AreaF {
+  id: number;
+  name: string;
+  pid: number;
+  children?: AreaF[];
+}

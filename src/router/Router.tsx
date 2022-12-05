@@ -57,6 +57,8 @@ import Invite from '../screen/mine/agent/Invite';
 import About from '../screen/common/About';
 import PrivacySetting from '../screen/mine/settings/PrivacySetting';
 import WorkStream from '../screen/home/work/WorkStream';
+import AddAddress from '../screen/mine/settings/AddAddress';
+import ManageAddress from '../screen/mine/settings/ManageAddress';
 
 const Navigator: React.FC = () => {
   const isLoggedIn = useIsLoggedIn();
@@ -123,6 +125,8 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="MyShowcase" component={MyShowcase} options={commonScreenOptions} />
           <Stack.Screen name="OtherShowcase" component={OtherShowcase} options={commonScreenOptions} />
           <Stack.Screen name="MyProfile" component={MyProfile} options={commonScreenOptions} />
+          <Stack.Screen name="AddAddress" component={AddAddress} options={commonScreenOptions} />
+          <Stack.Screen name="ManageAddress" component={ManageAddress} options={commonScreenOptions} />
         </>
       ) : (
         <></>

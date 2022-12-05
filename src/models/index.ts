@@ -15,6 +15,7 @@ export type {
   WithdrawalRecord,
   ModifyProfileForm,
   MyCodeUrl,
+  UserExpressAddress,
 } from './user';
 export type {
   AppHeader,
@@ -30,6 +31,7 @@ export type {
   URLParseRule,
   LocationNavigateInfo,
   SupportMapAppName,
+  AreaF,
 } from './common';
 export type {
   WorkTab,

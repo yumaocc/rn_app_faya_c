@@ -218,3 +218,21 @@ export interface MyCodeUrl {
   datingQrCodeUrlReal: string; // 链接
   shareQrCodeUrlReal: string; // 链接
 }
+
+// 用户收货地址
+export interface UserExpressAddress {
+  id: number;
+  userId: number;
+  name: string;
+  detailAddress: string;
+  contactPhone: string;
+  hasDefault: BoolEnum;
+  _hasDefault?: boolean;
+  _areaIDs: number[];
+  type: number;
+  createdTime: DateTimeString;
+  province: string;
+  city: string;
+  area: string;
+  streetId: number;
+}

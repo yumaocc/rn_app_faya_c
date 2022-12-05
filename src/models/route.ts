@@ -59,6 +59,8 @@ export type RootStackParamList = {
   About: undefined;
   PrivacySetting: undefined;
   WorkStream: {index: number; type: 'home' | 'mine' | 'user'; work: WorkF};
+  AddAddress: undefined;
+  ManageAddress: undefined;
 };
 
 export type ValidRoute = keyof RootStackParamList;

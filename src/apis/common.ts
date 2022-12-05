@@ -1,5 +1,5 @@
 import {SearchParam} from '../fst/models';
-import {LocationCity, URLParseRule} from '../models';
+import {AreaF, LocationCity, URLParseRule} from '../models';
 import {originGet, post} from './helper';
 import DeviceInfo from 'react-native-device-info';
 
@@ -47,4 +47,8 @@ export async function report(locate: string, params: SearchParam = {}): Promise<
       deviceInfo: info ? JSON.stringify(info) : null,
     },
   });
+}
+
+export async function getArea(): Promise<AreaF[]> {
+  return await post('/street/list/all/no/street');
 }
