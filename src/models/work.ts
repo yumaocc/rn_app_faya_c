@@ -157,4 +157,5 @@ export interface WorkComment {
   content: string;
   avatar: string;
   nickName: string;
+  authorUserId: number;
 }

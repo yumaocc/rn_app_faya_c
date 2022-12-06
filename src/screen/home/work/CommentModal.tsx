@@ -7,8 +7,9 @@ import {friendlyTime} from '../../../fst/helper/data';
 import {useCommonDispatcher, useIsLoggedIn} from '../../../helper/hooks';
 import * as api from '../../../apis';
 import {SearchParam} from '../../../fst/models';
-import {LoadListState, WorkComment} from '../../../models';
+import {FakeNavigation, LoadListState, WorkComment} from '../../../models';
 import {goLogin} from '../../../router/Router';
+import {useNavigation} from '@react-navigation/native';
 
 interface CommentModalProps {
   // visible: boolean;
@@ -27,6 +28,7 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
   const [comment, setComment] = useState<LoadListState<WorkComment>>({list: [], status: 'none', index: 0});
   const [modalComment, setModalComment] = useState(''); // 弹窗上的评论输入框内容
   const [autoFocusComment, setAutoFocusComment] = useState(false); // 是否自动聚焦评论输入框
+  const navigation = useNavigation<FakeNavigation>();
 
   const commentInputRef = useRef<TextInput>(null);
   const [commonDispatcher] = useCommonDispatcher();
@@ -133,6 +135,15 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
     };
   }, []);
 
+  function onClickUserAvatar(id: number) {
+    setShowComment(false);
+    navigation.navigate({
+      name: 'User',
+      params: {id: id},
+      key: 'User-' + id, // 每次去往个人中心需要新建一个key，否则会返回之前的页面
+    });
+  }
+
   if (!showComment) {
     return null;
   }
@@ -162,7 +173,9 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
                 <View key={index} style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, marginVertical: globalStyleVariables.MODULE_SPACE}}>
                   <TouchableWithoutFeedback onLongPress={() => props.onCommentAction && props.onCommentAction(comment)}>
                     <View style={[globalStyles.containerRow, {alignItems: 'flex-start'}]}>
-                      <Image source={comment.avatar ? {uri: comment.avatar} : require('../../../assets/avatar_def.png')} style={styles.commentAvatar} />
+                      <TouchableOpacity onPress={() => onClickUserAvatar(comment.authorUserId)}>
+                        <Image source={comment.avatar ? {uri: comment.avatar} : require('../../../assets/avatar_def.png')} style={styles.commentAvatar} />
+                      </TouchableOpacity>
                       <View style={{flex: 1, marginLeft: globalStyleVariables.MODULE_SPACE}}>
                         <Text>{comment.nickName}</Text>
                         <View>
