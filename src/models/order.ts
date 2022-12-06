@@ -9,7 +9,7 @@ export interface WxOrderInfo {
   amount: number; // 购买数量
 }
 export interface OrderForm {
-  addressId?: string; // 收货地址
+  addressId?: number; // 收货地址
   agentUserId?: string;
   amount: number;
   bizShopId?: number; // 预约店铺ID

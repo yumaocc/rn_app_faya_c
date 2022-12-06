@@ -1,5 +1,20 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {View, Text, ScrollView, Image, StyleSheet, TouchableOpacity, Linking, Modal, TextInput, KeyboardAvoidingView, Platform, TextInputProps, AppState} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+  Modal,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  TextInputProps,
+  AppState,
+  TouchableHighlight,
+} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from '../../component/Icon';
 import {useSelector} from 'react-redux';
@@ -8,11 +23,11 @@ import FormItem from '../../component/Form/FormItem';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {fenToYuan, findItem, moneyToYuan} from '../../fst/helper';
 import {useAndroidBack, useCommonDispatcher, useCoupons, useParams, useSPUDispatcher, useWallet} from '../../helper/hooks';
-import {BookingModelF, BookingType, CouponState, FakeNavigation, OrderPayState, PackageDetail, PayChannel, SKUDetail, SKUSaleState} from '../../models';
+import {BookingModelF, BookingType, CouponState, FakeNavigation, OrderPayState, PackageDetail, PayChannel, SKUDetail, SKUSaleState, UserExpressAddress} from '../../models';
 import {RootState} from '../../redux/reducers';
 import * as api from '../../apis';
 import {cleanOrderForm, openWxToPay} from '../../helper/order';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useLog, useSearch} from '../../fst/hooks';
 import {OrderForm} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
@@ -37,6 +52,12 @@ const Order: React.FC = () => {
   const [showBooking, setShowBooking] = useState(false);
   const [bookingModel, setBookingModel] = useState<BookingModelF>(null);
   const [showSelectCoupon, setShowSelectCoupon] = useState(false);
+  // 收货地址
+  const [addressList, setAddressList] = useState<UserExpressAddress[]>([]);
+  const [currentAddress, setCurrentAddress] = useState<UserExpressAddress>(null);
+  const [showSelectAddress, setShowSelectAddress] = useState(false); // 是否显示选择地址
+  const needAddress = useMemo(() => spu.needExpress === BoolEnum.TRUE, [spu?.needExpress]); // 是否需要填写收货地址
+  const isFocused = useIsFocused();
 
   useLog('订单检查ID', checkOrderId);
   useLog('订单检查Type', checkOrderType);
@@ -66,6 +87,22 @@ const Order: React.FC = () => {
   }, [canBooking, currentSkuIsPackage, sku]);
 
   const payChannel = useMemo(() => form.channel, [form.channel]);
+
+  useEffect(() => {
+    if (needAddress && !currentAddress && isFocused) {
+      api.user
+        .getAddressList({pageIndex: 1, pageSize: 100})
+        .then(res => {
+          let foundDefault = res.find(address => address.hasDefault === BoolEnum.TRUE);
+          if (!foundDefault) {
+            foundDefault = res[0];
+          }
+          setCurrentAddress(foundDefault);
+          setAddressList(res);
+        })
+        .catch(commonDispatcher.error);
+    }
+  }, [needAddress, commonDispatcher, currentAddress, isFocused]);
 
   // 可以切换的sku
   const flatSKUList = useMemo(() => {
@@ -245,6 +282,9 @@ const Order: React.FC = () => {
   }
   function check(formData: OrderForm): string {
     const {name, telephone, amount, idCard} = formData;
+    if (needAddress && !currentAddress) {
+      return '请选择收货地址';
+    }
     if (!name) {
       return '请输入姓名';
     }
@@ -266,6 +306,11 @@ const Order: React.FC = () => {
   }
   async function submit() {
     const formData = cleanOrderForm(form);
+    if (needAddress && currentAddress) {
+      formData.addressId = currentAddress.id;
+      formData.name = currentAddress.name;
+      formData.telephone = currentAddress.contactPhone;
+    }
     if (shareUserId) {
       formData.agentUserId = shareUserId; // 达人分享
     }
@@ -306,12 +351,29 @@ const Order: React.FC = () => {
         const res = await api.order.makeOrder(formData);
         setCheckOrderId(res.orderId);
         link = getAliPayUrl(res.prePayTn);
-        Linking.openURL(link);
+        try {
+          Linking.openURL(link);
+        } catch (error) {
+          logger.error('Order.tsx/#submit.OPENLINK', {msg: '唤起支付宝失败', link, error});
+        }
       }
       setIsPaying(true);
     } catch (error) {
       commonDispatcher.error(error);
     }
+  }
+  function openSelectAddress() {
+    setShowSelectAddress(true);
+  }
+
+  function goAddNewAddress() {
+    setShowSelectAddress(false);
+    navigation.navigate('AddAddress');
+  }
+
+  function handleSelectAddress(address: UserExpressAddress) {
+    setShowSelectAddress(false);
+    setCurrentAddress(address);
   }
 
   function openBooking() {
@@ -348,6 +410,46 @@ const Order: React.FC = () => {
       <NavigationBar title="确认订单" style={{backgroundColor: '#fff'}} />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{flex: 1}} keyboardVerticalOffset={-bottom}>
         <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">
+          {needAddress && (
+            <View>
+              <View>
+                {currentAddress ? (
+                  <>
+                    <TouchableHighlight onPress={openSelectAddress} underlayColor="#999">
+                      <View style={[{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}]}>
+                        <View>
+                          <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>
+                            {currentAddress.province}
+                            {currentAddress.city}
+                            {currentAddress.area}
+                          </Text>
+                        </View>
+                        <View>
+                          <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{currentAddress.detailAddress}</Text>
+                        </View>
+                        <View style={[globalStyles.containerRow]}>
+                          <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>
+                            {currentAddress.name} {currentAddress.contactPhone}
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableHighlight>
+                    <View style={{height: 10, backgroundColor: '#f4f4f4'}} />
+                  </>
+                ) : (
+                  <View style={[{paddingHorizontal: 15, paddingVertical: 10, backgroundColor: '#fff'}]}>
+                    <TouchableOpacity onPress={goAddNewAddress}>
+                      <View style={[globalStyles.containerRow, {backgroundColor: '#f4f4f4', borderRadius: 7, padding: 15}]}>
+                        <Icon name="fabu_weizhi48" size={24} color="#999" />
+                        <Text style={[{flex: 1}, globalStyles.fontPrimary]}>请添加收货地址</Text>
+                        <Icon name="all_arrowR36" size={18} color="#999" />
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
+            </View>
+          )}
           <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER, paddingTop: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}}>
             <View style={[{flexDirection: 'row'}]}>
               <Image source={poster ? {uri: poster} : require('../../assets/sku_def_1_1.png')} style={{width: 60, height: 60, borderRadius: 5}} />
@@ -391,29 +493,34 @@ const Order: React.FC = () => {
                 <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_BUD}]}>订单完成可返{commission}芽</Text>
               </FormItem>
             )}
+
             <View style={[globalStyles.lineHorizontal]} />
-            <FormItem label="姓名" {...formItemProps}>
-              <TextInput
-                onSubmitEditing={() => phoneRef.current.focus()}
-                value={form.name}
-                onChangeText={val => setFormField('name', val)}
-                placeholder="请输入使用人姓名"
-                {...formItemInputProps}
-                style={styles.formItemInput}
-              />
-              {/* <Input placeholder="请输入使用人姓名" /> */}
-            </FormItem>
-            <FormItem label="手机号" {...formItemProps}>
-              <TextInput
-                value={form.telephone}
-                keyboardType="phone-pad"
-                onChangeText={val => setFormField('telephone', val)}
-                placeholder="用于接收订单短信"
-                ref={phoneRef}
-                {...formItemInputProps}
-                style={styles.formItemInput}
-              />
-            </FormItem>
+            {!needAddress && (
+              <>
+                <FormItem label="姓名" {...formItemProps}>
+                  <TextInput
+                    onSubmitEditing={() => phoneRef.current.focus()}
+                    value={form.name}
+                    onChangeText={val => setFormField('name', val)}
+                    placeholder="请输入使用人姓名"
+                    {...formItemInputProps}
+                    style={styles.formItemInput}
+                  />
+                  {/* <Input placeholder="请输入使用人姓名" /> */}
+                </FormItem>
+                <FormItem label="手机号" {...formItemProps}>
+                  <TextInput
+                    value={form.telephone}
+                    keyboardType="phone-pad"
+                    onChangeText={val => setFormField('telephone', val)}
+                    placeholder="用于接收订单短信"
+                    ref={phoneRef}
+                    {...formItemInputProps}
+                    style={styles.formItemInput}
+                  />
+                </FormItem>
+              </>
+            )}
             {spu?.needIdCard === BoolEnum.TRUE && (
               <FormItem label="身份证" {...formItemProps}>
                 <TextInput
@@ -600,6 +707,48 @@ const Order: React.FC = () => {
               }}
             />
           </View>
+        </Popup>
+      )}
+      {showSelectAddress && (
+        <Popup visible={true} round={5} onClose={() => setShowSelectAddress(false)}>
+          <View style={[{height: 50}]}>
+            <View style={[globalStyles.containerCenter, {height: 50}]}>
+              <Text style={[globalStyles.fontPrimary]}>选择收货地址</Text>
+            </View>
+            <View style={[globalStyles.containerCenter, {height: 50, position: 'absolute', right: 15}]}>
+              <TouchableOpacity onPress={goAddNewAddress}>
+                <Text style={{color: globalStyleVariables.COLOR_LINK}}>新增地址</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <ScrollView style={[{maxHeight: 250}]}>
+            <View style={{padding: 20}}>
+              {addressList.map((address, index) => {
+                const marginTop = index === 0 ? 0 : globalStyleVariables.MODULE_SPACE;
+                return (
+                  <TouchableHighlight key={address.id} onPress={() => handleSelectAddress(address)} style={{marginTop}} underlayColor="#999">
+                    <View style={[{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}]}>
+                      <View>
+                        <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>
+                          {address.province}
+                          {address.city}
+                          {address.area}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{address.detailAddress}</Text>
+                      </View>
+                      <View style={[globalStyles.containerRow]}>
+                        <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>
+                          {address.name} {address.contactPhone}
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableHighlight>
+                );
+              })}
+            </View>
+          </ScrollView>
         </Popup>
       )}
     </View>

@@ -20,9 +20,10 @@ const MiddleButton: React.FC = () => {
         completeBehavior: 'replace',
       });
     } else {
-      navigation.navigate('ShootVideo');
+      // navigation.navigate('ShootVideo');
       // navigation.navigate('TestPage');
       // navigation.navigate('Scanner');
+      navigation.navigate('SPUDetail', {id: 73});
       // navigation.navigate('ManageAddress');
       // navigation.navigate('CommentReport', {id: '2323'});
       // navigation.navigate('SingleWorkDetail', {id: '1575447541069455360'});
