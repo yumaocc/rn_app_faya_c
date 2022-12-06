@@ -1,5 +1,6 @@
 import {BoolEnum, DateTimeString} from '../fst/models';
 import {BookingType, PayChannel, PayWay} from './spu';
+import {UserExpressAddress} from './user';
 
 // 用于在微信支付那里显示订单信息
 export interface WxOrderInfo {
@@ -110,8 +111,11 @@ export interface OrderDetailF {
   numberOfProducts: number;
   canRefundNumberOfProducts: number;
   needBooking: BoolEnum;
+  needExpress: BoolEnum;
   canUseIntegral: BoolEnum;
   canUseCoupon: BoolEnum;
+  userAddress?: UserExpressAddress;
+  expressList: string[];
 }
 
 export interface OrderPackage {
@@ -193,4 +197,15 @@ export interface OrderBookingDetailF {
   skuModelId: number;
   shopId: number;
   shopName: string;
+}
+
+export interface ExpressInfoState {
+  time: string;
+  status: string;
+}
+export interface ExpressInfo {
+  expName: string;
+  number: string;
+  type: string;
+  list: ExpressInfoState[];
 }

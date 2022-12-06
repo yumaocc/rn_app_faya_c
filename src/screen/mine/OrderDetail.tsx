@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, useWindowDimensions} from 'react-native';
 import Icon from '../../component/Icon';
 import QRCode from 'react-native-qrcode-svg';
 // import {Popover} from '@ant-design/react-native';
@@ -13,7 +13,7 @@ import * as api from '../../apis';
 import {StylePropView} from '../../models';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {navigateTo} from '../../router/Router';
-import {OrderPackage, OrderShop, OrderStatus} from '../../models/order';
+import {ExpressInfo, OrderPackage, OrderShop, OrderStatus} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
 import Loading from '../../component/Loading';
 import {useIsFocused} from '@react-navigation/native';
@@ -34,10 +34,14 @@ const OrderDetail: React.FC = () => {
   const [showKF, setShowKF] = useState(false);
   const [showSelectMap, setShowSelectMap] = useState(false);
   const [navigationInfo, setNavigationInfo] = useState<LocationNavigateInfo>(null);
+  const [expressExpand, setExpressExpand] = useState(false); // 是否展开物流信息
+  const [expressInfoList, setExpressInfoList] = useState<ExpressInfo[]>([]);
+  const [currentExpressIndex, setCurrentExpressIndex] = useState(0);
   const orderCompleted = orderDetail?.status === OrderStatus.Completed;
   const orderCanceled = orderDetail?.status === OrderStatus.Canceled;
   const orderCanUse = useMemo(() => [OrderStatus.Booked, OrderStatus.Paid].includes(orderDetail?.status), [orderDetail]);
   const [commonDispatcher] = useCommonDispatcher();
+  const {height} = useWindowDimensions();
   const canShowRefund = useMemo(() => {
     return [OrderStatus.Paid, OrderStatus.Booked, OrderStatus.Completed].includes(orderDetail?.status);
   }, [orderDetail?.status]);
@@ -53,11 +57,32 @@ const OrderDetail: React.FC = () => {
     setOrderDetail(res);
   }, [id]);
 
+  // 从预约或者其他地方过来，也需要刷新
   useEffect(() => {
     if (isFocused) {
       loadingDetail();
     }
   }, [isFocused, loadingDetail]);
+
+  //有订单详情后，去请求物流信息
+  useEffect(() => {
+    if (!orderDetail) {
+      return;
+    }
+    if (orderDetail.needExpress === BoolEnum.TRUE && orderDetail.expressList?.length) {
+      const telephone = orderDetail.userAddress?.contactPhone;
+      const tasks: Promise<ExpressInfo>[] = [];
+      orderDetail.expressList.forEach(expressNo => {
+        const task = api.order.checkExpressInfo({telephone, no: expressNo});
+        tasks.push(task);
+      });
+      Promise.all(tasks)
+        .then(res => {
+          setExpressInfoList(res);
+        })
+        .catch(commonDispatcher.error);
+    }
+  }, [commonDispatcher.error, orderDetail]);
 
   function handleShowCode(code: OrderPackageSKU) {
     if (code.code && code.codeUrl) {
@@ -195,6 +220,64 @@ const OrderDetail: React.FC = () => {
     }
   }
 
+  // 渲染物流信息
+  function renderExpressInfo() {
+    const expressInfo = expressInfoList?.find((e, i) => i === currentExpressIndex);
+    if (!expressInfo) {
+      return null;
+    }
+    if (!expressExpand) {
+      // 未展开物流信息
+      const first = expressInfo.list[0];
+      return (
+        <>
+          <View style={[globalStyles.containerRow, {alignItems: 'flex-start', paddingVertical: 15}]}>
+            <View style={[globalStyles.containerCenter, {height: 24, width: 24}]}>
+              <View style={[styles.dot]} />
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={[globalStyles.fontPrimary, {lineHeight: 24}]}>{first.status}</Text>
+              <View>
+                <Text style={[globalStyles.fontTertiary]}>{first.time}</Text>
+              </View>
+            </View>
+          </View>
+          <TouchableOpacity onPress={() => setExpressExpand(true)}>
+            <View style={[globalStyles.containerCenter, {height: 50}]}>
+              <Text style={[{color: globalStyleVariables.COLOR_LINK}]}>展开物流信息</Text>
+            </View>
+          </TouchableOpacity>
+        </>
+      );
+    }
+    return (
+      <ScrollView style={{maxHeight: height / 2}}>
+        {expressInfo.list.map((info, index) => {
+          const isFirst = index === 0;
+          const isLast = index === expressInfo.list.length - 1;
+          return (
+            <View key={index} style={[globalStyles.containerRow, {alignItems: 'flex-start'}]}>
+              <View style={[{height: '100%', alignItems: 'center'}]}>
+                <View style={{width: StyleSheet.hairlineWidth, height: 24, backgroundColor: isFirst ? 'transparent' : '#d9d9d9'}} />
+                <View style={[globalStyles.containerCenter]}>
+                  <View style={[styles.dot]} />
+                </View>
+                <View style={{width: StyleSheet.hairlineWidth, flex: 1, backgroundColor: isLast ? 'transparent' : '#d9d9d9'}} />
+              </View>
+
+              <View style={{flex: 1, padding: 15}}>
+                <Text style={[globalStyles.fontPrimary, {lineHeight: 24, color: isFirst ? '#333' : '#999'}]}>{info.status}</Text>
+                <View>
+                  <Text style={[globalStyles.fontTertiary]}>{info.time}</Text>
+                </View>
+              </View>
+            </View>
+          );
+        })}
+      </ScrollView>
+    );
+  }
+
   return (
     <>
       <View style={styles.container}>
@@ -250,11 +333,67 @@ const OrderDetail: React.FC = () => {
           }
         />
         {!orderDetail && <Loading style={{marginTop: 150}} />}
+
         {orderDetail && (
           <>
             {renderOrderStatus()}
 
             <ScrollView style={{flex: 1, backgroundColor: '#f4f4f4'}}>
+              {/* 用户收货地址 */}
+              {!!orderDetail?.userAddress && (
+                <View style={{marginBottom: 10}}>
+                  <View style={[{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}]}>
+                    <View>
+                      <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>
+                        {orderDetail?.userAddress.province}
+                        {orderDetail?.userAddress.city}
+                        {orderDetail?.userAddress.area}
+                      </Text>
+                    </View>
+                    <View>
+                      <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{orderDetail?.userAddress.detailAddress}</Text>
+                    </View>
+                    <View style={[globalStyles.containerRow]}>
+                      <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>
+                        {orderDetail?.userAddress.name} {orderDetail?.userAddress.contactPhone}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              )}
+              {/* 用户物流信息 */}
+              {orderDetail?.needExpress === BoolEnum.TRUE && (
+                <View style={{marginBottom: 10}}>
+                  {expressInfoList?.length ? (
+                    <View style={[{paddingHorizontal: 15, paddingTop: 15, backgroundColor: '#fff'}]}>
+                      {/* 大于1个物流信息时展示 */}
+                      {expressInfoList?.length > 1 && (
+                        <ScrollView horizontal>
+                          {expressInfoList.map((_, i) => {
+                            const active = i === currentExpressIndex;
+                            const wrapperStyle = {backgroundColor: active ? '#ff59341a' : '#00000008'};
+                            const textStyle = {color: active ? globalStyleVariables.COLOR_PRIMARY : '#333'};
+                            return (
+                              <TouchableOpacity key={i} onPress={() => setCurrentExpressIndex(i)}>
+                                <View style={[{marginRight: 10, borderRadius: 5, paddingHorizontal: 10, paddingVertical: 5}, wrapperStyle]}>
+                                  <Text style={[textStyle]}>包裹{i + 1}</Text>
+                                </View>
+                              </TouchableOpacity>
+                            );
+                          })}
+                        </ScrollView>
+                      )}
+                      {renderExpressInfo()}
+                    </View>
+                  ) : (
+                    <View style={[{backgroundColor: '#fff', padding: 15}]}>
+                      <Text>物流信息</Text>
+                      <View style={[globalStyles.lineHorizontal, {marginVertical: 10}]} />
+                      <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_PRIMARY}]}>等待发货</Text>
+                    </View>
+                  )}
+                </View>
+              )}
               <View style={{paddingBottom: bottom}}>
                 <View style={[{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}]}>
                   <View style={[globalStyles.containerRow, {alignItems: 'flex-start'}]}>
@@ -281,48 +420,50 @@ const OrderDetail: React.FC = () => {
                     <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}}>{orderDetail.list?.map(renderCodeItem)}</View>
 
                     {/* 可用门店 */}
-                    <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
-                      <View style={[globalStyles.containerLR, {height: 24}]}>
-                        <Text style={[globalStyles.fontStrong]}>可用门店{orderDetail.canUseShops?.length ? `（${orderDetail.canUseShops?.length}）` : ''}</Text>
-                        {orderDetail.canUseShops?.length > 1 && <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
-                      </View>
-                      <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
-                      {/* 店铺列表 */}
-                      <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
-                        {orderDetail.canUseShops?.map((shop, index) => {
-                          const showNavigation = shop.latitude && shop.longitude;
-                          return (
-                            <View key={index}>
-                              {index !== 0 && (
-                                <View style={[globalStyles.lineHorizontal, {height: StyleSheet.hairlineWidth, marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
-                              )}
-                              <Text style={[globalStyles.fontStrong]}>{shop.shopName}</Text>
-                              <View style={[globalStyles.containerLR]}>
-                                <View style={[{flex: 1}]}>
-                                  <Text>{shop.shopAddress}</Text>
-                                </View>
-                                <View style={[globalStyles.containerRow, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                                  {showNavigation && (
-                                    <TouchableOpacity activeOpacity={0.9} onPress={() => goNavigation(shop)}>
-                                      <View style={styles.shopAction}>
-                                        <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
-                                      </View>
-                                    </TouchableOpacity>
-                                  )}
-                                  {shop.shopContactPhone && (
-                                    <TouchableOpacity activeOpacity={0.9} onPress={() => callPhone(shop.shopContactPhone)}>
-                                      <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                                        <Icon name="shangpin_dianpu_dianhua" size={16} color="#48db94" />
-                                      </View>
-                                    </TouchableOpacity>
-                                  )}
+                    {!!orderDetail?.canUseShops?.length && (
+                      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+                        <View style={[globalStyles.containerLR, {height: 24}]}>
+                          <Text style={[globalStyles.fontStrong]}>可用门店（{orderDetail.canUseShops?.length}）</Text>
+                          {orderDetail.canUseShops?.length > 1 && <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
+                        </View>
+                        <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
+                        {/* 店铺列表 */}
+                        <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+                          {orderDetail.canUseShops?.map((shop, index) => {
+                            const showNavigation = shop.latitude && shop.longitude;
+                            return (
+                              <View key={index}>
+                                {index !== 0 && (
+                                  <View style={[globalStyles.lineHorizontal, {height: StyleSheet.hairlineWidth, marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
+                                )}
+                                <Text style={[globalStyles.fontStrong]}>{shop.shopName}</Text>
+                                <View style={[globalStyles.containerLR]}>
+                                  <View style={[{flex: 1}]}>
+                                    <Text>{shop.shopAddress}</Text>
+                                  </View>
+                                  <View style={[globalStyles.containerRow, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
+                                    {showNavigation && (
+                                      <TouchableOpacity activeOpacity={0.9} onPress={() => goNavigation(shop)}>
+                                        <View style={styles.shopAction}>
+                                          <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
+                                        </View>
+                                      </TouchableOpacity>
+                                    )}
+                                    {shop.shopContactPhone && (
+                                      <TouchableOpacity activeOpacity={0.9} onPress={() => callPhone(shop.shopContactPhone)}>
+                                        <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
+                                          <Icon name="shangpin_dianpu_dianhua" size={16} color="#48db94" />
+                                        </View>
+                                      </TouchableOpacity>
+                                    )}
+                                  </View>
                                 </View>
                               </View>
-                            </View>
-                          );
-                        })}
+                            );
+                          })}
+                        </View>
                       </View>
-                    </View>
+                    )}
                   </View>
                 )}
 
@@ -519,5 +660,11 @@ const styles = StyleSheet.create({
   },
   orderStatusText: {
     color: '#fff',
+  },
+  dot: {
+    width: 5,
+    height: 5,
+    borderRadius: 5,
+    backgroundColor: '#d9d9d9',
   },
 });

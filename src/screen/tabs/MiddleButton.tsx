@@ -23,7 +23,7 @@ const MiddleButton: React.FC = () => {
       // navigation.navigate('ShootVideo');
       // navigation.navigate('TestPage');
       // navigation.navigate('Scanner');
-      navigation.navigate('SPUDetail', {id: 73});
+      // navigation.navigate('SPUDetail', {id: 73});
       // navigation.navigate('ManageAddress');
       // navigation.navigate('CommentReport', {id: '2323'});
       // navigation.navigate('SingleWorkDetail', {id: '1575447541069455360'});
@@ -44,7 +44,7 @@ const MiddleButton: React.FC = () => {
       // navigation.navigate('WaitPay');
       // navigation.navigate('SPUDetail', {id: 62});
       // navigation.navigate('User', {id: 2});
-      // navigation.navigate('OrderDetail', {id: '1580101446588235776'});
+      navigation.navigate('OrderDetail', {id: '1600024590998777856'});
       // navigation.navigate('OrderBooking', {id: '1580135056015572993'});
     }
   }

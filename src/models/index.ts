@@ -66,7 +66,20 @@ export type {
   SKUBuyNoticeType,
   SKUContent,
 } from './spu';
-export type {OrderF, OrderDetailF, OrderPackageSKU, PayOrder, OrderCommentForm, OrderRefundForm, OrderBookingForm, OrderBookingDetailF, OrderForm, WxOrderInfo} from './order';
+export type {
+  OrderF,
+  OrderDetailF,
+  OrderPackageSKU,
+  PayOrder,
+  OrderCommentForm,
+  OrderRefundForm,
+  OrderBookingForm,
+  OrderBookingDetailF,
+  OrderForm,
+  WxOrderInfo,
+  ExpressInfo,
+  ExpressInfoState,
+} from './order';
 export type {CameraType, AppInstallCheckType, ImageCompressOptions, ImageCompressResult} from './device';
 
 export {UserState, CouponState, CouponType, UserLevel, CouponFilterState, UserCertificationStatus, UserFollowState} from './user';

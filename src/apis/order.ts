@@ -2,7 +2,7 @@ import {cleanPrivateProperty} from '../fst/helper';
 import {SearchParam} from '../fst/models';
 import {OrderBookingForm, OrderF} from '../models';
 import {OrderDetailF} from '../models';
-import {OrderBookingDetailF, OrderCommentForm, OrderForm, OrderPayState, OrderRefundForm, PayOrder} from '../models';
+import {OrderBookingDetailF, OrderCommentForm, OrderForm, OrderPayState, OrderRefundForm, PayOrder, ExpressInfo} from '../models';
 import {post} from './helper';
 
 export async function getOrderList(params: SearchParam): Promise<OrderF[]> {
@@ -47,6 +47,6 @@ export async function cancelBooking(orderSmallId: string): Promise<boolean> {
   return await post('/order/booking/cancel', {orderSmallId});
 }
 
-export async function checkExpress(): Promise<any> {
-  return await post('/order/express/inquiry', {no: 'JD0076704732627', telephone: '17726582214'});
+export async function checkExpressInfo(params: SearchParam): Promise<ExpressInfo> {
+  return await post('/order/express/inquiry', params);
 }

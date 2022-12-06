@@ -352,60 +352,62 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
       </View>
 
       {/* 可用门店 */}
-      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
-        <View style={[globalStyles.containerLR, {height: 24}]}>
-          <Text style={[styles.moduleTitle]}>可用门店{spu?.shopList?.length ? `（${spu?.shopList.length}）` : ''}</Text>
-          {spu?.shopList?.length > 1 && <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
-        </View>
-        <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
-        {/* 所有店铺 */}
-        <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
-          {spu?.shopList?.map((shop, index) => {
-            const showNavigation = shop.latitude && shop.longitude;
-            return (
-              <View key={index}>
-                {index !== 0 && <View style={[globalStyles.lineHorizontal, {height: StyleSheet.hairlineWidth, marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />}
-                <Text style={[globalStyles.fontStrong]}>{shop.shopName}</Text>
-                <View style={[globalStyles.containerLR]}>
-                  <View style={[{flex: 1}]}>
-                    <Text style={[globalStyles.fontTertiary]}>{shop.addressDetail}</Text>
-                    {!!shop?.distanceFromMe && (
-                      <View style={[globalStyles.tagWrapper, {backgroundColor: '#49A0FF1A'}]}>
-                        <Text style={[globalStyles.tag, {color: '#49A0FF'}]}>{shop.distanceFromMe}</Text>
-                      </View>
-                    )}
-                  </View>
-                  <View style={[globalStyles.containerRow, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                    {!!showNavigation && (
-                      <CustomTouchable
-                        onPress={() =>
-                          handleNavigation({
-                            latitude: shop.latitude,
-                            longitude: shop.longitude,
-                            name: shop.shopName,
-                            address: shop.addressDetail,
-                          })
-                        }>
-                        <View style={styles.shopAction}>
-                          <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
+      {!!spu?.shopList?.length && (
+        <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+          <View style={[globalStyles.containerLR, {height: 24}]}>
+            <Text style={[styles.moduleTitle]}>可用门店{spu?.shopList?.length ? `（${spu?.shopList.length}）` : ''}</Text>
+            {spu?.shopList?.length > 1 && <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
+          </View>
+          <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
+          {/* 所有店铺 */}
+          <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+            {spu?.shopList?.map((shop, index) => {
+              const showNavigation = shop.latitude && shop.longitude;
+              return (
+                <View key={index}>
+                  {index !== 0 && <View style={[globalStyles.lineHorizontal, {height: StyleSheet.hairlineWidth, marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />}
+                  <Text style={[globalStyles.fontStrong]}>{shop.shopName}</Text>
+                  <View style={[globalStyles.containerLR]}>
+                    <View style={[{flex: 1}]}>
+                      <Text style={[globalStyles.fontTertiary]}>{shop.addressDetail}</Text>
+                      {!!shop?.distanceFromMe && (
+                        <View style={[globalStyles.tagWrapper, {backgroundColor: '#49A0FF1A'}]}>
+                          <Text style={[globalStyles.tag, {color: '#49A0FF'}]}>{shop.distanceFromMe}</Text>
                         </View>
-                      </CustomTouchable>
-                    )}
+                      )}
+                    </View>
+                    <View style={[globalStyles.containerRow, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
+                      {!!showNavigation && (
+                        <CustomTouchable
+                          onPress={() =>
+                            handleNavigation({
+                              latitude: shop.latitude,
+                              longitude: shop.longitude,
+                              name: shop.shopName,
+                              address: shop.addressDetail,
+                            })
+                          }>
+                          <View style={styles.shopAction}>
+                            <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
+                          </View>
+                        </CustomTouchable>
+                      )}
 
-                    {!!shop.contactPhone && (
-                      <CustomTouchable onPress={() => callPhone(shop.contactPhone)}>
-                        <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                          <Icon name="shangpin_dianpu_dianhua" size={16} color="#48db94" />
-                        </View>
-                      </CustomTouchable>
-                    )}
+                      {!!shop.contactPhone && (
+                        <CustomTouchable onPress={() => callPhone(shop.contactPhone)}>
+                          <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
+                            <Icon name="shangpin_dianpu_dianhua" size={16} color="#48db94" />
+                          </View>
+                        </CustomTouchable>
+                      )}
+                    </View>
                   </View>
                 </View>
-              </View>
-            );
-          })}
+              );
+            })}
+          </View>
         </View>
-      </View>
+      )}
     </View>
   );
 };
