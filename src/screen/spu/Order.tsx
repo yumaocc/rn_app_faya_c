@@ -187,6 +187,11 @@ const Order: React.FC = () => {
     return sku?.userCommissionYuan || '';
   }, [sku]);
 
+  useEffect(() => {
+    if (form.amount < minPurchaseAmount) {
+      setFormField('amount', minPurchaseAmount);
+    }
+  }, [form.amount, minPurchaseAmount, setFormField]);
   // useWhyDidYouUpdate('Order', {form, sku, spu, currentSkuIsPackage, totalPrice, totalSaved, shouldPay, canUseCoupons, commission});
 
   // 总金额变更导致当前优惠券不满足条件，则取消优惠券
