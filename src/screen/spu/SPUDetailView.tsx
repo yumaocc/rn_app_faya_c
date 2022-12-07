@@ -221,6 +221,11 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
           </View>
         </View>
         <Text style={[globalStyles.fontStrong, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER, fontSize: 18}]}>{spu?.name}</Text>
+        {!!spu?.subName && (
+          <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+            <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 22}]}>{spu?.subName}</Text>
+          </View>
+        )}
 
         {!!skuShowInfo?.videoCommission && (
           <TouchableOpacity activeOpacity={0.8} onPress={handleShootVideo}>
@@ -271,12 +276,6 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
             paddingBottom: globalStyleVariables.MODULE_SPACE_BIGGER,
           },
         ]}>
-        {spu?.subName && (
-          <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
-            <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 22}]}>{spu?.subName}</Text>
-          </View>
-        )}
-
         {/* 套餐内容 */}
         {currentSKU?.contentList?.length ? (
           <View style={styles.buyNoticeItem}>
