@@ -176,10 +176,14 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
             <View style={{paddingHorizontal: 20}}>
               <Text style={{color: '#fff'}}>库存: {skuShowInfo?.stockAmount}</Text>
             </View>
-            <View style={[globalStyles.lineVertical, {height: 10, backgroundColor: '#ffffff80'}]} />
-            <View style={{paddingHorizontal: 20}}>
-              <Text style={{color: '#fff'}}>还剩: {spu?.theRemainingNumberOfDays || '-'}天</Text>
-            </View>
+            {!!spu?.theRemainingNumberOfDays && (
+              <>
+                <View style={[globalStyles.lineVertical, {height: 10, backgroundColor: '#ffffff80'}]} />
+                <View style={{paddingHorizontal: 20}}>
+                  <Text style={{color: '#fff'}}>还剩: {spu?.theRemainingNumberOfDays || '-'}天</Text>
+                </View>
+              </>
+            )}
           </View>
           <View style={styles.priceTag}>
             <Image source={require('../../assets/left-round.png')} style={{width: 35, height: 45}} />
