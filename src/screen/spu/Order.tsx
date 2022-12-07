@@ -163,7 +163,8 @@ const Order: React.FC = () => {
     if (currentSkuIsPackage) {
       return 1;
     } else {
-      return (sku as SKUDetail).minPurchaseQuantity;
+      const min = (sku as SKUDetail).minPurchaseQuantity || 1;
+      return min;
     }
   }, [currentSkuIsPackage, sku]);
 
