@@ -126,13 +126,13 @@ const Discover: React.FC = () => {
             <View style={[globalStyles.containerRow]}>
               <View style={[globalStyles.containerRow, {alignItems: 'flex-end'}]}>
                 <Text style={[{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 12}]}>¥</Text>
-                <Text style={{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 18}}>{spu.salePriceYuan}</Text>
+                <Text style={{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 18, lineHeight: 18, bottom: -2}}>{spu.salePriceYuan}</Text>
                 <Text style={[globalStyles.fontTertiary, {marginLeft: globalStyleVariables.MODULE_SPACE / 2, textDecorationLine: 'line-through'}]}>¥{spu.originPriceYuan}</Text>
               </View>
             </View>
             {discount && (
-              <View style={[globalStyles.tagWrapper, globalStyles.moduleMarginLeft, {paddingVertical: 0, height: 17}]}>
-                <Text style={[globalStyles.tag, {color: globalStyleVariables.COLOR_WARNING_YELLOW}]}>{discount}折</Text>
+              <View style={[globalStyles.discountTagWrapper, globalStyles.moduleMarginLeft]}>
+                <Text style={[globalStyles.discountTag]}>{discount}折</Text>
               </View>
             )}
           </View>

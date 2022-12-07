@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text} from 'react-native';
-import Video, {LoadError, OnLoadData, OnProgressData} from 'react-native-video';
+import Video, {LoadError, OnProgressData} from 'react-native-video';
 import {globalStyles} from '../../../constants/styles';
 import {StylePropView} from '../../../models';
 
@@ -20,15 +20,10 @@ interface PlayerProps {
 const Player: React.FC<PlayerProps> = props => {
   const {paused, muted, repeat, poster, videoUri, onEnd, onProgress} = props;
 
-  const [resizeMode, setResizeMode] = useState<'none' | 'cover'>('none');
+  // const [resizeMode, setResizeMode] = useState<'none' | 'cover'>('none');
   const [error, setError] = useState<string>(null);
 
-  function handleOnLoad(e: OnLoadData) {
-    // const {naturalSize} = e;
-    // if (naturalSize.orientation === 'landscape') {
-    //   // 横屏视频不缩放，竖屏视频cover
-    //   setResizeMode('none');
-    // }
+  function handleOnLoad() {
     props.onLoad && props.onLoad();
   }
 
@@ -64,7 +59,7 @@ const Player: React.FC<PlayerProps> = props => {
           paused={paused}
           repeat={repeat}
           muted={muted}
-          resizeMode={resizeMode}
+          resizeMode="none"
           poster={poster}
         />
       ) : (
