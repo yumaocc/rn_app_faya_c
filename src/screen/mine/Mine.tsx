@@ -14,6 +14,7 @@ import WorkList from './work/WorkList';
 import {TabsStyles} from '../../component/Tabs';
 import {goLogin} from '../../router/Router';
 import MyStatusBar from '../../component/MyStatusBar';
+import {getPrettyNumber} from '../../fst/helper/data';
 
 const Mine: React.FC = () => {
   const detail = useSelector((state: RootState) => state.user.myDetail);
@@ -178,15 +179,15 @@ const Mine: React.FC = () => {
               </View>
               <View style={[globalStyles.containerRow, {justifyContent: 'space-around', flex: 1, height: 62}]}>
                 <View style={{alignItems: 'center', flex: 1}}>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{detail?.nums?.fansNums}</Text>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(detail?.nums?.fansNums)}</Text>
                   <Text style={[globalStyles.fontPrimary]}>粉丝</Text>
                 </View>
                 <View style={{alignItems: 'center', flex: 1}}>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{detail?.nums?.followNums}</Text>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(detail?.nums?.followNums)}</Text>
                   <Text style={[globalStyles.fontPrimary]}>关注</Text>
                 </View>
                 <View style={{alignItems: 'center', flex: 1}}>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{detail?.nums?.likeNums}</Text>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(detail?.nums?.likeNums)}</Text>
                   <Text style={[globalStyles.fontPrimary]}>获赞</Text>
                 </View>
               </View>
