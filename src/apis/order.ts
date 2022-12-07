@@ -50,3 +50,8 @@ export async function cancelBooking(orderSmallId: string): Promise<boolean> {
 export async function checkExpressInfo(params: SearchParam): Promise<ExpressInfo> {
   return await post('/order/express/inquiry', params);
 }
+
+// 确认收货
+export async function confirmReceipt(orderBigId: string): Promise<boolean> {
+  return await post('/order/confirm/receipt', {orderBigId});
+}

@@ -5,13 +5,13 @@ import QRCode from 'react-native-qrcode-svg';
 // import {Popover} from '@ant-design/react-native';
 import Popover from 'react-native-popover-view';
 
-import {Modal, NavigationBar} from '../../component';
+import {Button, Modal, NavigationBar} from '../../component';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {useCommonDispatcher, useParams} from '../../helper/hooks';
 import {LocationNavigateInfo, OrderDetailF, OrderPackageSKU, PayChannel} from '../../models';
 import * as api from '../../apis';
 import {StylePropView} from '../../models';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import {navigateTo} from '../../router/Router';
 import {ExpressInfo, OrderPackage, OrderShop, OrderStatus} from '../../models/order';
 import {BoolEnum} from '../../fst/models';
@@ -45,6 +45,14 @@ const OrderDetail: React.FC = () => {
   const canShowRefund = useMemo(() => {
     return [OrderStatus.Paid, OrderStatus.Booked, OrderStatus.Completed].includes(orderDetail?.status);
   }, [orderDetail?.status]);
+
+  const showReceived = useMemo(() => {
+    if (!orderDetail) {
+      return false;
+    }
+    const {needExpress, emsHasSend, receipted} = orderDetail;
+    return needExpress === BoolEnum.TRUE && emsHasSend === BoolEnum.TRUE && receipted === BoolEnum.FALSE;
+  }, [orderDetail]);
 
   const {bottom} = useSafeAreaInsets();
   const isFocused = useIsFocused();
@@ -132,6 +140,19 @@ const OrderDetail: React.FC = () => {
     if (text) {
       Clipboard.setString(text);
       commonDispatcher.info('复制成功');
+    }
+  }
+
+  async function handleConfirmReceived() {
+    try {
+      const success = await api.order.confirmReceipt(orderDetail.orderBigId);
+      if (!success) {
+        throw new Error('确认收货失败');
+      }
+      commonDispatcher.info('已确认收货');
+      loadingDetail();
+    } catch (error) {
+      commonDispatcher.error(error);
     }
   }
 
@@ -550,6 +571,13 @@ const OrderDetail: React.FC = () => {
                 </View>
               </View>
             </ScrollView>
+            {showReceived && (
+              <SafeAreaView edges={['bottom']}>
+                <View style={[{padding: 15}]}>
+                  <Button title="确认收货" type="primary" onPress={() => handleConfirmReceived()} />
+                </View>
+              </SafeAreaView>
+            )}
           </>
         )}
       </View>

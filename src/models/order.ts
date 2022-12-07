@@ -116,6 +116,8 @@ export interface OrderDetailF {
   canUseCoupon: BoolEnum;
   userAddress?: UserExpressAddress;
   expressList: string[];
+  receipted: BoolEnum; // 是否已收货
+  emsHasSend: BoolEnum; // 是否已发货
 }
 
 export interface OrderPackage {

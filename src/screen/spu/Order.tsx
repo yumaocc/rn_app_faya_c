@@ -416,22 +416,25 @@ const Order: React.FC = () => {
                 {currentAddress ? (
                   <>
                     <TouchableHighlight onPress={openSelectAddress} underlayColor="#999">
-                      <View style={[{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}]}>
+                      <View style={[globalStyles.containerLR, {padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}]}>
                         <View>
-                          <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>
-                            {currentAddress.province}
-                            {currentAddress.city}
-                            {currentAddress.area}
-                          </Text>
+                          <View>
+                            <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>
+                              {currentAddress.province}
+                              {currentAddress.city}
+                              {currentAddress.area}
+                            </Text>
+                          </View>
+                          <View>
+                            <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{currentAddress.detailAddress}</Text>
+                          </View>
+                          <View style={[globalStyles.containerRow]}>
+                            <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>
+                              {currentAddress.name} {currentAddress.contactPhone}
+                            </Text>
+                          </View>
                         </View>
-                        <View>
-                          <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>{currentAddress.detailAddress}</Text>
-                        </View>
-                        <View style={[globalStyles.containerRow]}>
-                          <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>
-                            {currentAddress.name} {currentAddress.contactPhone}
-                          </Text>
-                        </View>
+                        <Icon name="all_arrowR36" size={18} color="#999" />
                       </View>
                     </TouchableHighlight>
                     <View style={{height: 10, backgroundColor: '#f4f4f4'}} />
@@ -440,8 +443,8 @@ const Order: React.FC = () => {
                   <View style={[{paddingHorizontal: 15, paddingVertical: 10, backgroundColor: '#fff'}]}>
                     <TouchableOpacity onPress={goAddNewAddress}>
                       <View style={[globalStyles.containerRow, {backgroundColor: '#f4f4f4', borderRadius: 7, padding: 15}]}>
-                        <Icon name="fabu_weizhi48" size={24} color="#999" />
-                        <Text style={[{flex: 1}, globalStyles.fontPrimary]}>请添加收货地址</Text>
+                        <Icon name="fabu_weizhi48" size={24} color={globalStyleVariables.COLOR_PRIMARY} />
+                        <Text style={[globalStyles.fontPrimary, {flex: 1, color: globalStyleVariables.COLOR_PRIMARY}]}>请添加收货地址</Text>
                         <Icon name="all_arrowR36" size={18} color="#999" />
                       </View>
                     </TouchableOpacity>
