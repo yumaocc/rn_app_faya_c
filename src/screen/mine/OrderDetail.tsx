@@ -51,8 +51,9 @@ const OrderDetail: React.FC = () => {
       const first = list[0];
       hasMulti = first.list?.length > 1;
     }
-    return orderCanUse && orderDetail?.needExpress !== BoolEnum.TRUE && hasMulti;
-  }, [orderCanUse, orderDetail?.list, orderDetail?.needExpress]);
+    const hasCode = !!orderDetail?.code && !!orderDetail?.codeUrl;
+    return orderCanUse && orderDetail?.needExpress !== BoolEnum.TRUE && hasMulti && hasCode;
+  }, [orderCanUse, orderDetail?.code, orderDetail?.codeUrl, orderDetail?.list, orderDetail?.needExpress]);
 
   const [commonDispatcher] = useCommonDispatcher();
   const {height} = useWindowDimensions();
