@@ -7,7 +7,7 @@ import * as api from '../../../apis';
 import {useCommonDispatcher} from '../../../helper/hooks';
 import Loading from '../../../component/Loading';
 import MyStatusBar from '../../../component/MyStatusBar';
-import {Button, NavigationBar} from '../../../component';
+import {NavigationBar} from '../../../component';
 import Icon from '../../../component/Icon';
 import {BoolEnum} from '../../../fst/models';
 import {Modal} from '@ant-design/react-native';
