@@ -11,6 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 import {dictLoadingState} from '../../helper/dictionary';
 import MyStatusBar from '../../component/MyStatusBar';
 import SPUCard from '../common/SPUCard';
+import Icon from '../../component/Icon';
 
 const SearchSPU: React.FC = () => {
   const [keyword, setKeyword] = React.useState('');
@@ -63,7 +64,7 @@ const SearchSPU: React.FC = () => {
   return (
     <View style={styles.container}>
       <MyStatusBar />
-      <NavigationSearchBar autoFocus onSearch={handleSearch} />
+      <NavigationSearchBar autoFocus onSearch={handleSearch} style={{backgroundColor: '#fff'}} />
       <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag" onMomentumScrollEnd={handleScrollEnd}>
         <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE, paddingBottom: bottom}}>
           {list.map(spu => {
@@ -84,7 +85,12 @@ const SearchSPU: React.FC = () => {
           )}
           {showEmpty && (
             <View style={[globalStyles.containerCenter, {paddingTop: 100, paddingBottom: 20}]}>
-              <Text>没有找到符合条件的商品</Text>
+              <View style={[globalStyles.containerCenter]}>
+                <View style={[globalStyles.containerCenter, {width: 50, height: 50, borderRadius: 50, backgroundColor: '#0000000D', marginBottom: 15}]}>
+                  <Icon name="empty_zuopin" size={30} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                </View>
+                <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>没有找到符合条件的商品</Text>
+              </View>
             </View>
           )}
         </View>

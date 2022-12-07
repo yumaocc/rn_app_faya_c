@@ -1,8 +1,9 @@
-import React, {memo} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, {memo, useMemo} from 'react';
+import {View, Text, StyleSheet, Image, TouchableOpacity, useWindowDimensions} from 'react-native';
 import Icon from '../../../component/Icon';
 import MyImage from '../../../component/MyImage';
 import {globalStyleVariables, globalStyles} from '../../../constants/styles';
+import {getPrettyNumber} from '../../../fst/helper/data';
 import {BoolEnum} from '../../../fst/models';
 import {WorkF, WorkType} from '../../../models';
 
@@ -15,6 +16,11 @@ export interface WorkItemProps {
 const WorkItem: React.FC<WorkItemProps> = props => {
   const {work, index, onSelect} = props;
 
+  const {width} = useWindowDimensions();
+  const coverHeight = useMemo(() => {
+    return ((width - 30) / 2 / 3) * 4;
+  }, [width]);
+
   function handleClick() {
     onSelect && onSelect(work, index);
   }
@@ -23,7 +29,7 @@ const WorkItem: React.FC<WorkItemProps> = props => {
     <View style={styles.item}>
       <TouchableOpacity activeOpacity={0.9} onPress={handleClick}>
         <View style={{width: '100%', position: 'relative'}}>
-          <MyImage source={{uri: work?.coverImage}} defaultSource={require('../../../assets/sku_def_180w.png')} style={styles.cover} resizeMode="cover" />
+          <MyImage source={{uri: work?.coverImage}} defaultSource={require('../../../assets/sku_def_180w.png')} style={[styles.cover, {height: coverHeight}]} resizeMode="cover" />
           {work.type === WorkType.Video && (
             <View style={[styles.playIcon]}>
               <Image source={require('../../../assets/zuopin_tag_video.png')} style={styles.palyIconImage} />
@@ -52,7 +58,7 @@ const WorkItem: React.FC<WorkItemProps> = props => {
             ) : (
               <Icon name="home_zuopin_zan_nor20" size={15} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
             )}
-            <Text style={[globalStyles.fontPrimary, {marginLeft: 3}]}>{work.numberOfLikes}</Text>
+            <Text style={[globalStyles.fontPrimary, {marginLeft: 3}]}>{getPrettyNumber(work.numberOfLikes)}</Text>
           </View>
         </View>
       </View>

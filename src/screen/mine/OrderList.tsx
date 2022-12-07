@@ -63,7 +63,7 @@ const OrderList: React.FC = () => {
       <SafeAreaView edges={['top']} style={{backgroundColor: '#fff', flex: 1}}>
         <MyStatusBar />
         <Steps steps={steps} style={styles.stepContainer} currentKey={currentKey} onChange={setCurrentKey} />
-        <ScrollView style={{flex: 1, backgroundColor: '#f4f4f4'}} onMomentumScrollEnd={handleScrollEnd}>
+        <ScrollView style={{flex: 1, backgroundColor: '#f4f4f4'}} onMomentumScrollEnd={handleScrollEnd} showsVerticalScrollIndicator={false}>
           <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
             {!isLoggedIn && (
               <View style={[globalStyles.containerCenter, styles.emptyContainer]}>

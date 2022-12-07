@@ -1,8 +1,18 @@
-import React, {useEffect} from 'react';
-import {View, StyleSheet, Text, ScrollView, NativeSyntheticEvent, NativeScrollEvent, RefreshControl, TouchableWithoutFeedback, TouchableHighlight} from 'react-native';
+import React, {useEffect, useMemo} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  RefreshControl,
+  TouchableWithoutFeedback,
+  TouchableHighlight,
+  useWindowDimensions,
+} from 'react-native';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from '../../component/Icon';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 // import * as api from '../../apis';
 import {useCommonDispatcher, useDivideData, useGrid, useSPUDispatcher, useCityList} from '../../helper/hooks';
@@ -32,6 +42,11 @@ const Discover: React.FC = () => {
   const {top} = useSafeAreaInsets();
   const [cityList] = useCityList();
   const cityWidth = useGrid({col: 3, space: 10, sideSpace: 10});
+
+  const {width} = useWindowDimensions();
+  const coverHeight = useMemo(() => {
+    return ((width - 30) / 2 / 3) * 4;
+  }, [width]);
 
   useEffect(() => {
     spuDispatcher.loadSPUList({locationId}, true);
@@ -92,12 +107,14 @@ const Discover: React.FC = () => {
           onPress={() => {
             goSPUDetail(spu.spuId);
           }}>
-          <View style={styles.spuCoverContainer}>
-            <FastImage source={{uri: spu.poster}} defaultSource={require('../../assets/sku_def_180w.png')} style={styles.spuCover} />
+          <View style={[styles.spuCoverContainer, {height: coverHeight}]}>
+            <FastImage source={{uri: spu.poster}} defaultSource={require('../../assets/sku_def_180w.png')} style={[styles.spuCover]} />
           </View>
         </TouchableOpacity>
         <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE}}>
-          <Text style={[globalStyles.fontStrong, globalStyles.moduleMarginTop]}>{spu.spuName}</Text>
+          <Text numberOfLines={2} style={[globalStyles.fontStrong, globalStyles.moduleMarginTop]}>
+            {spu.spuName}
+          </Text>
           <View style={[globalStyles.halfModuleMarginTop]}>
             {spu.tags.map((tag, i) => (
               <Text key={i} style={[globalStyles.fontTertiary, {marginRight: globalStyleVariables.MODULE_SPACE}]}>
@@ -105,8 +122,8 @@ const Discover: React.FC = () => {
               </Text>
             ))}
           </View>
-          <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop]}>
-            <View style={globalStyles.containerRow}>
+          <View style={[globalStyles.containerRow, globalStyles.halfModuleMarginTop, {alignItems: 'flex-end'}]}>
+            <View style={[globalStyles.containerRow]}>
               <View style={[globalStyles.containerRow, {alignItems: 'flex-end'}]}>
                 <Text style={[{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 12}]}>¥</Text>
                 <Text style={{color: globalStyleVariables.COLOR_PRIMARY, fontSize: 18}}>{spu.salePriceYuan}</Text>
@@ -114,7 +131,7 @@ const Discover: React.FC = () => {
               </View>
             </View>
             {discount && (
-              <View style={[globalStyles.tagWrapper, globalStyles.moduleMarginLeft]}>
+              <View style={[globalStyles.tagWrapper, globalStyles.moduleMarginLeft, {paddingVertical: 0, height: 17}]}>
                 <Text style={[globalStyles.tag, {color: globalStyleVariables.COLOR_WARNING_YELLOW}]}>{discount}折</Text>
               </View>
             )}
@@ -122,10 +139,10 @@ const Discover: React.FC = () => {
           <View style={[globalStyles.halfModuleMarginTop, globalStyles.containerLR]}>
             <Text style={[globalStyles.fontTertiary, {fontSize: 10}]}>已售{spu.saleAmount}</Text>
             {commission && (
-              <Text style={{color: globalStyleVariables.COLOR_BUD}}>
-                <MaterialIcon name="spa" size={14} />
-                <Text>{commission}</Text>
-              </Text>
+              <View style={globalStyles.containerRow}>
+                <Icon name="shangping_ya_20" size={10} color={globalStyleVariables.COLOR_BUD} style={{margin: 3}} />
+                <Text style={{color: globalStyleVariables.COLOR_BUD}}>{commission}</Text>
+              </View>
             )}
           </View>
         </View>
@@ -167,6 +184,7 @@ const Discover: React.FC = () => {
           <ScrollView
             style={{flex: 1, paddingTop: globalStyleVariables.MODULE_SPACE}}
             onMomentumScrollEnd={handleScrollEnd}
+            showsVerticalScrollIndicator={false}
             refreshControl={<RefreshControl refreshing={false} onRefresh={handleRefresh} />}>
             <View style={styles.spuContainer}>
               <View style={styles.spuLeft}>{left.map(renderSPU)}</View>
@@ -240,7 +258,7 @@ const styles = StyleSheet.create({
     marginBottom: globalStyleVariables.MODULE_SPACE * 2,
   },
   spuCoverContainer: {
-    height: 200,
+    // height: 200,
   },
   spuCover: {
     borderRadius: 8,

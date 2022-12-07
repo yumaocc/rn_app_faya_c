@@ -20,15 +20,15 @@ interface PlayerProps {
 const Player: React.FC<PlayerProps> = props => {
   const {paused, muted, repeat, poster, videoUri, onEnd, onProgress} = props;
 
-  const [resizeMode, setResizeMode] = useState<'none' | 'cover'>('cover');
+  const [resizeMode, setResizeMode] = useState<'none' | 'cover'>('none');
   const [error, setError] = useState<string>(null);
 
   function handleOnLoad(e: OnLoadData) {
-    const {naturalSize} = e;
-    if (naturalSize.orientation === 'landscape') {
-      // 横屏视频不缩放，竖屏视频cover
-      setResizeMode('none');
-    }
+    // const {naturalSize} = e;
+    // if (naturalSize.orientation === 'landscape') {
+    //   // 横屏视频不缩放，竖屏视频cover
+    //   setResizeMode('none');
+    // }
     props.onLoad && props.onLoad();
   }
 

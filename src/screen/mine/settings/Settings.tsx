@@ -32,10 +32,13 @@ const Settings: React.FC = () => {
       <NavigationBar title="设置" />
       <MyStatusBar />
       <ScrollView style={{flex: 1}}>
-        <OperateItem label="个人资料" showArrow onPress={() => navigation.navigate('MyProfile')} />
         <OperateItem label="收货地址" showArrow onPress={() => navigation.navigate('ManageAddress')} />
-        <OperateItem label="隐私设置" showArrow onPress={() => navigation.navigate('PrivacySetting')} />
+        <View style={{height: 10, backgroundColor: '#f4f4f4'}} />
+        <OperateItem label="个人资料" showArrow onPress={() => navigation.navigate('MyProfile')} />
         {isAgent && <OperateItem label="达人主页" showArrow onPress={() => navigation.navigate('Profile')} />}
+        {isAgent && <View style={{height: 10, backgroundColor: '#f4f4f4'}} />}
+
+        <OperateItem label="隐私设置" showArrow onPress={() => navigation.navigate('PrivacySetting')} />
         {/* <OperateItem label="隐私设置" showArrow /> */}
         <OperateItem label="联系客服" showArrow onPress={() => setShowKF(true)} />
         {/* <OperateItem label="帮助与反馈" showArrow /> */}

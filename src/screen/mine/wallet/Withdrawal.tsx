@@ -142,7 +142,7 @@ const Withdrawal: React.FC = () => {
                   <Text style={[globalStyles.fontSecondary]}>当前可提现¥{walletSummary?.canWithdrawalMoneyYuan}</Text>
                   {!!walletSummary?.canWithdrawalMoney && (
                     <>
-                      <Text>,</Text>
+                      <Text>，</Text>
                       <TouchableOpacity activeOpacity={0.8} onPress={cashAll}>
                         <Text style={[globalStyles.fontSecondary, {color: globalStyleVariables.COLOR_CASH}]}>全部提现</Text>
                       </TouchableOpacity>

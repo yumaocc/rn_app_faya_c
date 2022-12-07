@@ -13,7 +13,8 @@ import {PRIVACY_POLICY_URL, USER_AGREEMENT_URL} from '../../constants';
 import {cache} from '../../helper/cache';
 import MyStatusBar from '../../component/MyStatusBar';
 import Radio from '../../component/Form/Radio';
-import {Popup} from '../../component';
+import {NavigationBar, Popup} from '../../component';
+import Icon from '../../component/Icon';
 
 const Login: React.FC = () => {
   const [phone, setPhone] = useState('');
@@ -166,62 +167,66 @@ const Login: React.FC = () => {
   return (
     <View style={styles.container}>
       <MyStatusBar />
-      <Text style={styles.title}>登录/注册</Text>
-      <View style={styles.form}>
-        <View style={[globalStyles.containerRow, styles.formItem, {paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
-          <Text style={[styles.phoneLabel, {marginRight: 10}]}>+86</Text>
-          <TextInput
-            value={phone}
-            onChangeText={setPhone}
-            placeholder="请输入手机号"
-            placeholderTextColor={globalStyleVariables.TEXT_COLOR_TERTIARY}
-            clearButtonMode="while-editing"
-            style={styles.inputItem}
-          />
-        </View>
-        <Text style={styles.formExplain}>未注册的手机号验证通过后将自动注册</Text>
-        <View style={[styles.formItem, styles.formItemCode, globalStyles.containerRow, {paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
-          <TextInput
-            value={code}
-            onChangeText={setCode}
-            placeholder="请输入验证码"
-            placeholderTextColor={globalStyleVariables.TEXT_COLOR_TERTIARY}
-            clearButtonMode="while-editing"
-            style={styles.inputItem}
-          />
-          <View style={{marginLeft: 10}}>
-            {verifyCodeSend ? (
-              <Text style={styles.phoneLabel}>重新发送({resendAfter})</Text>
-            ) : (
-              <Text style={styles.getCode} onPress={handleSendCode}>
-                获取验证码
+      <NavigationBar title="" leftIcon={<Icon name="nav_close48" size={24} color="#999" />} canBack onBack={skipLogin} />
+      <View style={styles.bodyContainer}>
+        <Text style={styles.title}>登录/注册</Text>
+        <View style={styles.form}>
+          <View style={[globalStyles.containerRow, styles.formItem, {paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+            <Text style={[styles.phoneLabel, {marginRight: 10}]}>+86</Text>
+            <TextInput
+              value={phone}
+              onChangeText={setPhone}
+              placeholder="请输入手机号"
+              placeholderTextColor={globalStyleVariables.TEXT_COLOR_TERTIARY}
+              clearButtonMode="while-editing"
+              style={styles.inputItem}
+            />
+          </View>
+          <Text style={styles.formExplain}>未注册的手机号验证通过后将自动注册</Text>
+          <View style={[styles.formItem, styles.formItemCode, globalStyles.containerRow, {paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+            <TextInput
+              value={code}
+              onChangeText={setCode}
+              placeholder="请输入验证码"
+              placeholderTextColor={globalStyleVariables.TEXT_COLOR_TERTIARY}
+              clearButtonMode="while-editing"
+              style={styles.inputItem}
+            />
+            <View style={{marginLeft: 10}}>
+              {verifyCodeSend ? (
+                <Text style={styles.phoneLabel}>重新发送({resendAfter})</Text>
+              ) : (
+                <Text style={styles.getCode} onPress={handleSendCode}>
+                  获取验证码
+                </Text>
+              )}
+            </View>
+          </View>
+          <View>
+            <Radio checked={agree} onChange={setAgree} style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
+              <Text style={[globalStyles.fontTertiary, globalStyles.moduleMarginTop]}>
+                <Text>已阅读并同意</Text>
+                <Text onPress={openUserProtocol} style={[globalStyles.fontTertiary, {color: globalStyleVariables.COLOR_LINK}]}>
+                  用户协议
+                </Text>
+                <Text>和</Text>
+                <Text onPress={openPrivacyPolicy} style={[globalStyles.fontTertiary, {color: globalStyleVariables.COLOR_LINK}]}>
+                  隐私政策
+                </Text>
               </Text>
-            )}
+            </Radio>
+          </View>
+          <Button style={styles.login} type="primary" onPress={checkForm} loading={loginState === LoginState.Loading}>
+            登录
+          </Button>
+          <View style={[globalStyles.containerCenter, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
+            <TouchableOpacity activeOpacity={0.7} onPress={skipLogin}>
+              <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.TEXT_COLOR_TERTIARY}]}>暂不登录</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View>
-          <Radio checked={agree} onChange={setAgree} style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
-            <Text style={[globalStyles.fontTertiary, globalStyles.moduleMarginTop]}>
-              <Text>已阅读并同意</Text>
-              <Text onPress={openUserProtocol} style={[globalStyles.fontTertiary, {color: globalStyleVariables.COLOR_LINK}]}>
-                用户协议
-              </Text>
-              <Text>和</Text>
-              <Text onPress={openPrivacyPolicy} style={[globalStyles.fontTertiary, {color: globalStyleVariables.COLOR_LINK}]}>
-                隐私政策
-              </Text>
-            </Text>
-          </Radio>
-        </View>
-        <Button style={styles.login} type="primary" onPress={checkForm} loading={loginState === LoginState.Loading}>
-          登录
-        </Button>
-        <View style={[globalStyles.containerCenter, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
-          <TouchableOpacity activeOpacity={0.7} onPress={skipLogin}>
-            <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.TEXT_COLOR_TERTIARY}]}>暂不登录</Text>
-          </TouchableOpacity>
-        </View>
       </View>
+
       {showAgreeTip && (
         <Popup visible={true} onClose={closeAgreeTip} round={globalStyleVariables.RADIUS_MODAL}>
           <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER}}>
@@ -257,9 +262,11 @@ export default Login;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
+  },
+  bodyContainer: {
     alignItems: 'center',
     paddingTop: 94,
-    backgroundColor: '#fff',
   },
   title: {
     fontSize: 20,

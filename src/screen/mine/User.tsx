@@ -16,6 +16,7 @@ import {TabsStyles} from '../../component/Tabs';
 import {BoolEnum} from '../../fst/models';
 import MyStatusBar from '../../component/MyStatusBar';
 import {getItem, removeItem, setItem} from '../../helper/cache/helper';
+import {getPrettyNumber} from '../../fst/helper/data';
 
 const User: React.FC = () => {
   const {id} = useParams<{id: number}>();
@@ -237,15 +238,15 @@ const User: React.FC = () => {
                 {!userInfo?.avatar && <Image style={[styles.avatar]} source={require('../../assets/avatar_def.png')} />}
                 <View style={[globalStyles.containerRow, {justifyContent: 'space-around', flex: 1, height: 62}]}>
                   <View style={{alignItems: 'center', flex: 1}}>
-                    <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{userInfo?.nums?.fansNums}</Text>
+                    <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(userInfo?.nums?.fansNums)}</Text>
                     <Text style={[globalStyles.fontPrimary]}>粉丝</Text>
                   </View>
                   <View style={{alignItems: 'center', flex: 1}}>
-                    <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{userInfo?.nums?.followNums}</Text>
+                    <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(userInfo?.nums?.followNums)}</Text>
                     <Text style={[globalStyles.fontPrimary]}>关注</Text>
                   </View>
                   <View style={{alignItems: 'center', flex: 1}}>
-                    <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{userInfo?.nums?.likeNums}</Text>
+                    <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(userInfo?.nums?.likeNums)}</Text>
                     <Text style={[globalStyles.fontPrimary]}>获赞</Text>
                   </View>
                 </View>

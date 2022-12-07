@@ -75,9 +75,11 @@ const NavigationSearchBar: React.FC<NavigationSearchBarProps> = props => {
       return searchBar;
     } else {
       return (
-        <View style={{paddingVertical: 15}}>
+        <View style={{paddingVertical: 0}}>
           <View style={[styles.searchBar]}>
-            <Icon name="all_input_search36" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+            <View style={globalStyles.containerCenter}>
+              <Icon name="all_input_search36" size={18} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
+            </View>
             <TextInput
               autoFocus={props.autoFocus}
               ref={inputRef}
@@ -96,15 +98,17 @@ const NavigationSearchBar: React.FC<NavigationSearchBarProps> = props => {
   }
 
   return (
-    <View style={[props.style, {paddingTop: top}]}>
+    <View style={[{paddingTop: top}, props.style]}>
       <View style={styles.container}>
         <TouchableOpacity activeOpacity={0.8} onPress={handleBack}>
-          {leftIcon ? leftIcon : <Icon name="nav_back48" width={11} height={24} color={props.color} />}
+          <View style={[globalStyles.containerCenter, {height: '100%', paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+            {leftIcon ? leftIcon : <Icon name="nav_back48" width={11} height={24} color={props.color} />}
+          </View>
         </TouchableOpacity>
         <View style={{flex: 1}}>{renderSearchBar()}</View>
         {showSearchText ? (
           <TouchableOpacity activeOpacity={0.5} onPress={handleSearch} hitSlop={hitSlop}>
-            <Text style={[globalStyles.fontPrimary, {fontSize: 18, fontWeight: '600'}]}>搜索</Text>
+            <Text style={[globalStyles.fontPrimary, {fontSize: 18, fontWeight: '600', marginLeft: 15}]}>搜索</Text>
           </TouchableOpacity>
         ) : null}
       </View>
@@ -124,14 +128,15 @@ NavigationSearchBar.defaultProps = {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: globalStyleVariables.MODULE_SPACE,
+    paddingRight: globalStyleVariables.MODULE_SPACE,
     flexDirection: 'row',
     alignItems: 'center',
+    height: 50,
   },
   searchBar: {
     height: 35,
     backgroundColor: '#0000000D',
-    marginHorizontal: globalStyleVariables.MODULE_SPACE,
+    // marginHorizontal: globalStyleVariables.MODULE_SPACE,
     flexDirection: 'row',
     paddingHorizontal: globalStyleVariables.MODULE_SPACE,
     borderRadius: 35,

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, TouchableHighlight, Platform} from 'react-native';
 import {Popup} from '../../component';
-import {globalStyleVariables} from '../../constants/styles';
+import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import {SupportMapAppName} from '../../models';
 
 interface NavigationModalProps {
@@ -21,7 +21,7 @@ const NavigationModal: React.FC<NavigationModalProps> = props => {
   }
 
   return (
-    <Popup visible={props.visible} onClose={handleClose}>
+    <Popup visible={props.visible} onClose={handleClose} round={globalStyleVariables.RADIUS_MODAL}>
       <View style={{paddingVertical: 10}}>
         <TouchableHighlight
           underlayColor="#999"
@@ -29,7 +29,7 @@ const NavigationModal: React.FC<NavigationModalProps> = props => {
             selectApp('amap');
           }}>
           <View style={[{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}]}>
-            <Text>高德地图</Text>
+            <Text style={[globalStyles.fontPrimary]}>高德地图</Text>
           </View>
         </TouchableHighlight>
         <TouchableHighlight
@@ -38,7 +38,7 @@ const NavigationModal: React.FC<NavigationModalProps> = props => {
             selectApp('qq');
           }}>
           <View style={[{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}]}>
-            <Text>腾讯地图</Text>
+            <Text style={[globalStyles.fontPrimary]}>腾讯地图</Text>
           </View>
         </TouchableHighlight>
         <TouchableHighlight
@@ -47,7 +47,7 @@ const NavigationModal: React.FC<NavigationModalProps> = props => {
             selectApp('baidu');
           }}>
           <View style={[{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}]}>
-            <Text>百度地图</Text>
+            <Text style={[globalStyles.fontPrimary]}>百度地图</Text>
           </View>
         </TouchableHighlight>
         {Platform.OS === 'ios' && (
@@ -57,7 +57,7 @@ const NavigationModal: React.FC<NavigationModalProps> = props => {
               selectApp('apple');
             }}>
             <View style={[{padding: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}]}>
-              <Text>苹果地图</Text>
+              <Text style={[globalStyles.fontPrimary]}>苹果地图</Text>
             </View>
           </TouchableHighlight>
         )}

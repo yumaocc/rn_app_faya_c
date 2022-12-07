@@ -1,11 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useMemo} from 'react';
 import {View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, RefreshControl, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import {useSelector} from 'react-redux';
 import {NavigationBar} from '../../../component';
 import Icon from '../../../component/Icon';
 import MyStatusBar from '../../../component/MyStatusBar';
-import {globalStyleVariables} from '../../../constants/styles';
+import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useLog} from '../../../fst/hooks';
 import {useParams, useSPUDispatcher} from '../../../helper/hooks';
 import {isReachBottom} from '../../../helper/system';
@@ -20,6 +20,7 @@ const Showcase: React.FC = () => {
 
   // const showcaseSPUList = useSelector((state: RootState) => state.spu.showCaseSPUList);
   const showcaseSPUList = useSelector((state: RootState) => state.spu.userShowcase[String(userId)]);
+  const showEmpty = useMemo(() => showcaseSPUList.status === 'noMore' && showcaseSPUList.list.length === 0, [showcaseSPUList]);
 
   useLog('showcaseSPUList', showcaseSPUList);
 
@@ -96,6 +97,16 @@ const Showcase: React.FC = () => {
             })}
           </View>
         </View>
+        {showEmpty && (
+          <View style={[globalStyles.containerCenter, {paddingTop: 100, paddingBottom: 20}]}>
+            <View style={[globalStyles.containerCenter]}>
+              <View style={[globalStyles.containerCenter, {width: 50, height: 50, borderRadius: 50, backgroundColor: '#0000000D', marginBottom: 15}]}>
+                <Icon name="empty_zuopin" size={30} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+              </View>
+              <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>没有找到符合条件的商品</Text>
+            </View>
+          </View>
+        )}
       </ScrollView>
     </View>
   );

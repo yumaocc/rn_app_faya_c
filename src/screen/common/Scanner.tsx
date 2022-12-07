@@ -22,6 +22,7 @@ const Scanner: React.FC = () => {
   const [urlParserRule, setUrlParserRule] = React.useState<URLParseRule>(null);
   const [ruleIsReady, setRuleIsReady] = React.useState<boolean>(false);
   const [commonDispatcher] = useCommonDispatcher();
+  const [permissionChecked, setPermissionChecked] = React.useState<boolean>(false);
 
   const saveShareUser = useCallback(
     (userId: string | number) => {
@@ -42,6 +43,7 @@ const Scanner: React.FC = () => {
     (async () => {
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'authorized');
+      setPermissionChecked(true);
     })();
   }, []);
 
@@ -140,7 +142,10 @@ const Scanner: React.FC = () => {
     // checkScanContent('https://m.faya.life/?#/invite/23');
   }
 
-  if (!device || !hasPermission || !ruleIsReady) {
+  if (!ruleIsReady || !permissionChecked) {
+    return <View style={styles.loading} />;
+  }
+  if (!device || !hasPermission) {
     return (
       <View style={styles.loading}>
         <Text>未找到可用相机或您未开启相机使用权限</Text>
@@ -174,6 +179,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fff',
   },
   content: {
     position: 'absolute',

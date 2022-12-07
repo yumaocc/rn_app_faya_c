@@ -132,7 +132,7 @@ const Profile: React.FC = () => {
               </View>
             </View>
 
-            <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+            <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER, paddingTop: 5}}>
               {/* 团队情况 */}
               {hasLevel2Right && (
                 <View style={[styles.card]}>

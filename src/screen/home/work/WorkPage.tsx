@@ -13,6 +13,7 @@ import {BoolEnum} from '../../../fst/models';
 import Player from './Player';
 import PhotoPlayer from './PhotoPlayer';
 import FastImage from 'react-native-fast-image';
+import { getPrettyNumber } from '../../../fst/helper/data';
 
 interface WorkPageProps {
   // item: WorkF;
@@ -187,7 +188,7 @@ const WorkPage: React.FC<WorkPageProps> = props => {
         <Player style={[styles.full]} videoUri={videoUrl} paused={paused} poster={props.coverImage} onLoad={handleLoad} onEnd={handleEnd} onError={handleVideoLoadError} />
       )}
       {workDetail?.type === WorkType.Photo && <PhotoPlayer style={[styles.full]} files={workDetail?.fileList} paused={paused} onLoad={handleLoad} onEnd={handleEnd} />}
-      {showPoster && <Image style={[styles.full]} source={{uri: props.coverImage}} resizeMode="cover" />}
+      {showPoster && <Image style={[styles.full]} source={{uri: props.coverImage}} resizeMode="contain" />}
 
       {/* 视频上覆盖的所有页面 */}
 
@@ -208,7 +209,7 @@ const WorkPage: React.FC<WorkPageProps> = props => {
                 <View style={{paddingRight: 70, paddingLeft: globalStyleVariables.MODULE_SPACE_BIGGER}}>
                   {/* 发布人 */}
                   {hasSpu && (
-                    <CustomTouchable activeOpacity={0.5} onPress={openSPU} style={{width: 150, padding: 7, backgroundColor: '#0000004D', borderRadius: 5}}>
+                    <CustomTouchable activeOpacity={0.5} onPress={openSPU} style={{width: 150, padding: 2, backgroundColor: '#0000004D', borderRadius: 5}}>
                       <View style={[globalStyles.containerRow]}>
                         <Icon name="zuopin_shangping" color={globalStyleVariables.COLOR_WARNING} size={24} />
                         <Text style={[globalStyles.fontTertiary, {flex: 1, color: '#fff'}]} numberOfLines={1}>
@@ -218,7 +219,7 @@ const WorkPage: React.FC<WorkPageProps> = props => {
                     </CustomTouchable>
                   )}
                   {workDetail?.userName && (
-                    <CustomTouchable activeOpacity={0.8} onPress={goAuthor}>
+                    <CustomTouchable activeOpacity={0.8} onPress={goAuthor} style={{marginTop: 5}}>
                       <Text style={[globalStyles.fontStrong, {fontSize: 20, color: '#fff'}]}>@{workDetail?.userName}</Text>
                     </CustomTouchable>
                   )}
@@ -267,7 +268,7 @@ const WorkPage: React.FC<WorkPageProps> = props => {
                         )}
                       </View>
                     </CustomTouchable>
-                    <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfLikes}</Text>
+                    <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{getPrettyNumber(workDetail.numberOfLikes)}</Text>
                   </View>
                   <View style={styles.sideItem}>
                     <CustomTouchable onPress={onOpenComment}>
@@ -275,7 +276,7 @@ const WorkPage: React.FC<WorkPageProps> = props => {
                         <Icon name="zuopin_pinglun80" size={32} color="#fff" />
                       </View>
                     </CustomTouchable>
-                    <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfComments}</Text>
+                    <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{getPrettyNumber(workDetail.numberOfComments)}</Text>
                   </View>
                   <View style={styles.sideItem}>
                     <CustomTouchable onPress={handleCollect}>
@@ -287,7 +288,7 @@ const WorkPage: React.FC<WorkPageProps> = props => {
                         )}
                       </View>
                     </CustomTouchable>
-                    <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{workDetail.numberOfCollects}</Text>
+                    <Text style={[globalStyles.fontSecondary, styles.sideItemText]}>{getPrettyNumber(workDetail.numberOfCollects)}</Text>
                   </View>
                   <View style={styles.sideItem}>
                     <CustomTouchable onPress={handleShare}>

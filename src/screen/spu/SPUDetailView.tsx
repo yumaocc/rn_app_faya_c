@@ -212,20 +212,15 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
           </View>
         </View>
         <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
-          <View style={[globalStyles.tagWrapper, {backgroundColor: '#4AB87D33', height: 24}]}>
+          <View style={[globalStyles.tagWrapper, {backgroundColor: '#4AB87D33', height: 17, paddingVertical: 0}]}>
             <Icon name="shangpin_suixintui24" size={12} color="#4AB87D" />
-            <Text style={[globalStyles.tag, {color: '#4AB87D', marginLeft: 2}]}>平台保障·随心退</Text>
+            <Text style={[globalStyles.tag, {color: '#4AB87D', marginLeft: 2, paddingVertical: 0}]}>平台保障·随心退</Text>
           </View>
-          <View style={[globalStyles.tagWrapper, {backgroundColor: '#FF593433', marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER, height: 24}]}>
+          <View style={[globalStyles.tagWrapper, {backgroundColor: '#FF593433', marginLeft: globalStyleVariables.MODULE_SPACE_SMALLER, height: 17, paddingVertical: 0}]}>
             <Text style={[globalStyles.tag, {color: '#FF5934'}]}>限时抢购</Text>
           </View>
         </View>
         <Text style={[globalStyles.fontStrong, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER, fontSize: 18}]}>{spu?.name}</Text>
-        {!!spu?.subName && (
-          <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
-            <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 22}]}>{spu?.subName}</Text>
-          </View>
-        )}
 
         {!!skuShowInfo?.videoCommission && (
           <TouchableOpacity activeOpacity={0.8} onPress={handleShootVideo}>
@@ -276,6 +271,11 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
             paddingBottom: globalStyleVariables.MODULE_SPACE_BIGGER,
           },
         ]}>
+        {!!spu?.subName && (
+          <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+            <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 22}]}>{spu?.subName}</Text>
+          </View>
+        )}
         {/* 套餐内容 */}
         {currentSKU?.contentList?.length ? (
           <View style={styles.buyNoticeItem}>
@@ -283,9 +283,9 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
             <View style={{marginTop: 5}}>
               {currentSKU.contentList.map((skuContent, index) => {
                 return (
-                  <View style={[globalStyles.containerLR]} key={index}>
-                    <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 24}]}>·{skuContent.name}</Text>
-                    <View style={[globalStyles.containerRow]}>
+                  <View style={[globalStyles.containerRow]} key={index}>
+                    <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 24, flex: 1}]}>·{skuContent.name}</Text>
+                    <View style={[globalStyles.containerRow, {marginLeft: 5}]}>
                       <Text style={[globalStyles.fontPrimary, {fontSize: 15, lineHeight: 24}]}>¥{skuContent.price}</Text>
                       <View style={[globalStyles.lineVertical, {height: 6, marginHorizontal: 10}]} />
                       <Text style={[globalStyles.fontTertiary, {fontSize: 15, lineHeight: 24}]}>x{skuContent.nums}</Text>
@@ -296,6 +296,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
             </View>
           </View>
         ) : null}
+
         {currentPkg?.list?.length ? (
           <View style={styles.buyNoticeItem}>
             <Text style={styles.moduleSubTitle}>套餐内容</Text>

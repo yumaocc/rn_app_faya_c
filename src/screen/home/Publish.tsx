@@ -81,7 +81,7 @@ const Publish: React.FC = () => {
           <View>
             {workType === WorkType.Video && (
               <View style={styles.videoContainer}>
-                <TextInput value={content} onChangeText={setContent} multiline={true} style={styles.videoInput} placeholder="使用合适的标题，能让更多人看到~" />
+                <TextInput value={content} onChangeText={setContent} multiline={true} style={styles.videoInput} placeholder="添加作品描述..." />
                 {!!videoInfo?.coverPath && <Image style={styles.videoCover} source={{uri: 'file://' + videoInfo.coverPath}} />}
                 {!videoInfo?.coverPath && <Image style={styles.videoCover} source={require('../../assets/sku_def_180w.png')} />}
               </View>

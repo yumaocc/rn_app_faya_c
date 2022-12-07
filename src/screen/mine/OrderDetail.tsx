@@ -40,6 +40,20 @@ const OrderDetail: React.FC = () => {
   const orderCompleted = orderDetail?.status === OrderStatus.Completed;
   const orderCanceled = orderDetail?.status === OrderStatus.Canceled;
   const orderCanUse = useMemo(() => [OrderStatus.Booked, OrderStatus.Paid].includes(orderDetail?.status), [orderDetail]);
+  const showBatchCode = useMemo(() => {
+    let hasMulti = false;
+    const list = orderDetail?.list || [];
+    if (!list.length) {
+      hasMulti = false;
+    } else if (list.length > 1) {
+      hasMulti = true;
+    } else {
+      const first = list[0];
+      hasMulti = first.list?.length > 1;
+    }
+    return orderCanUse && orderDetail?.needExpress !== BoolEnum.TRUE && hasMulti;
+  }, [orderCanUse, orderDetail?.list, orderDetail?.needExpress]);
+
   const [commonDispatcher] = useCommonDispatcher();
   const {height} = useWindowDimensions();
   const canShowRefund = useMemo(() => {
@@ -429,7 +443,7 @@ const OrderDetail: React.FC = () => {
                       </Text>
                     </View>
                   </View>
-                  {orderCanUse && (
+                  {showBatchCode && (
                     <TouchableOpacity activeOpacity={0.8} style={[globalStyles.containerCenter, styles.batchCheck]} onPress={() => setShowBatch(true)}>
                       <Text style={[globalStyles.fontPrimary]}>批量核销</Text>
                     </TouchableOpacity>
@@ -439,52 +453,51 @@ const OrderDetail: React.FC = () => {
                   <View>
                     {/* 电子码 */}
                     <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}}>{orderDetail.list?.map(renderCodeItem)}</View>
-
                     {/* 可用门店 */}
-                    {!!orderDetail?.canUseShops?.length && (
-                      <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
-                        <View style={[globalStyles.containerLR, {height: 24}]}>
-                          <Text style={[globalStyles.fontStrong]}>可用门店（{orderDetail.canUseShops?.length}）</Text>
-                          {orderDetail.canUseShops?.length > 1 && <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
-                        </View>
-                        <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
-                        {/* 店铺列表 */}
-                        <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
-                          {orderDetail.canUseShops?.map((shop, index) => {
-                            const showNavigation = shop.latitude && shop.longitude;
-                            return (
-                              <View key={index}>
-                                {index !== 0 && (
-                                  <View style={[globalStyles.lineHorizontal, {height: StyleSheet.hairlineWidth, marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
-                                )}
-                                <Text style={[globalStyles.fontStrong]}>{shop.shopName}</Text>
-                                <View style={[globalStyles.containerLR]}>
-                                  <View style={[{flex: 1}]}>
-                                    <Text>{shop.shopAddress}</Text>
-                                  </View>
-                                  <View style={[globalStyles.containerRow, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                                    {showNavigation && (
-                                      <TouchableOpacity activeOpacity={0.9} onPress={() => goNavigation(shop)}>
-                                        <View style={styles.shopAction}>
-                                          <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
-                                        </View>
-                                      </TouchableOpacity>
-                                    )}
-                                    {shop.shopContactPhone && (
-                                      <TouchableOpacity activeOpacity={0.9} onPress={() => callPhone(shop.shopContactPhone)}>
-                                        <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
-                                          <Icon name="shangpin_dianpu_dianhua" size={16} color="#48db94" />
-                                        </View>
-                                      </TouchableOpacity>
-                                    )}
-                                  </View>
-                                </View>
+                  </View>
+                )}
+                {!!orderDetail?.canUseShops?.length && (
+                  <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+                    <View style={[globalStyles.containerLR, {height: 24}]}>
+                      <Text style={[globalStyles.fontStrong]}>可用门店（{orderDetail.canUseShops?.length}）</Text>
+                      {orderDetail.canUseShops?.length > 1 && <Icon name="all_arrowR36" size={18} color={globalStyleVariables.TEXT_COLOR_SECONDARY} />}
+                    </View>
+                    <View style={[globalStyles.lineHorizontal, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
+                    {/* 店铺列表 */}
+                    <View style={{marginTop: globalStyleVariables.MODULE_SPACE_BIGGER}}>
+                      {orderDetail.canUseShops?.map((shop, index) => {
+                        const showNavigation = shop.latitude && shop.longitude;
+                        return (
+                          <View key={index}>
+                            {index !== 0 && (
+                              <View style={[globalStyles.lineHorizontal, {height: StyleSheet.hairlineWidth, marginVertical: globalStyleVariables.MODULE_SPACE_BIGGER}]} />
+                            )}
+                            <Text style={[globalStyles.fontStrong]}>{shop.shopName}</Text>
+                            <View style={[globalStyles.containerLR]}>
+                              <View style={[{flex: 1}]}>
+                                <Text>{shop.shopAddress}</Text>
                               </View>
-                            );
-                          })}
-                        </View>
-                      </View>
-                    )}
+                              <View style={[globalStyles.containerRow, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
+                                {showNavigation && (
+                                  <TouchableOpacity activeOpacity={0.9} onPress={() => goNavigation(shop)}>
+                                    <View style={styles.shopAction}>
+                                      <Icon name="shangpin_dianpu_daohang" size={16} color="#49a0ff" />
+                                    </View>
+                                  </TouchableOpacity>
+                                )}
+                                {shop.shopContactPhone && (
+                                  <TouchableOpacity activeOpacity={0.9} onPress={() => callPhone(shop.shopContactPhone)}>
+                                    <View style={[styles.shopAction, {marginLeft: globalStyleVariables.MODULE_SPACE}]}>
+                                      <Icon name="shangpin_dianpu_dianhua" size={16} color="#48db94" />
+                                    </View>
+                                  </TouchableOpacity>
+                                )}
+                              </View>
+                            </View>
+                          </View>
+                        );
+                      })}
+                    </View>
                   </View>
                 )}
 
@@ -541,6 +554,10 @@ const OrderDetail: React.FC = () => {
                   <View style={[globalStyles.containerLR, {height: 30}]}>
                     <Text style={globalStyles.fontPrimary}>支付方式</Text>
                     <Text style={globalStyles.fontSecondary}>{orderDetail?.ypPayChannel === PayChannel.ALIPAY ? '支付宝' : '微信'}</Text>
+                  </View>
+                  <View style={[globalStyles.containerLR, {height: 30}]}>
+                    <Text style={globalStyles.fontPrimary}>订单创建时间</Text>
+                    <Text style={globalStyles.fontSecondary}>{orderDetail?.createdTime}</Text>
                   </View>
                   <View style={[globalStyles.lineHorizontal, {marginVertical: globalStyleVariables.MODULE_SPACE_SMALLER}]} />
                   {!!orderDetail?.willReturnUserCommission && (

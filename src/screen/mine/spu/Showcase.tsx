@@ -1,10 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useMemo, useRef} from 'react';
 import {View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, RefreshControl, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import {useSelector} from 'react-redux';
 import {NavigationBar} from '../../../component';
 import Icon from '../../../component/Icon';
-import {globalStyleVariables} from '../../../constants/styles';
+import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {useSPUDispatcher} from '../../../helper/hooks';
 import {isReachBottom} from '../../../helper/system';
 import {FakeNavigation, SPUF} from '../../../models';
@@ -20,6 +20,7 @@ const Showcase: React.FC = () => {
   const searchInput = useRef<TextInput>(null);
   const [spuDispatcher] = useSPUDispatcher();
   const navigation = useNavigation<FakeNavigation>();
+  const showEmpty = useMemo(() => showcaseSPUList.status === 'noMore' && showcaseSPUList.list.length === 0, [showcaseSPUList]);
 
   useEffect(() => {
     spuDispatcher.loadShowCaseSPU({name: keyword}, true);
@@ -82,6 +83,16 @@ const Showcase: React.FC = () => {
               return <SPUCard key={spu.spuId} onSelect={goSPUDetail} spu={spu} />;
             })}
           </View>
+          {showEmpty && (
+            <View style={[globalStyles.containerCenter, {paddingTop: 100, paddingBottom: 20}]}>
+              <View style={[globalStyles.containerCenter]}>
+                <View style={[globalStyles.containerCenter, {width: 50, height: 50, borderRadius: 50, backgroundColor: '#0000000D', marginBottom: 15}]}>
+                  <Icon name="empty_zuopin" size={30} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+                </View>
+                <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>没有找到符合条件的商品</Text>
+              </View>
+            </View>
+          )}
         </View>
       </ScrollView>
     </View>

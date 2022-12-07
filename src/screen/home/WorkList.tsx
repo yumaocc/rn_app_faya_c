@@ -77,6 +77,7 @@ const WorkList: React.FC<WorkListProps> = props => {
       <ScrollView
         style={styles.scrollContainer}
         ref={scroll}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
