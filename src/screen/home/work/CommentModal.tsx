@@ -1,5 +1,19 @@
 import React, {memo, useCallback, useEffect, useImperativeHandle, useRef, useState} from 'react';
-import {View, Text, StyleSheet, Platform, ScrollView, TextInput, TouchableOpacity, Keyboard, useWindowDimensions, Image, TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  Keyboard,
+  useWindowDimensions,
+  Image,
+  TouchableWithoutFeedback,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+} from 'react-native';
 import {Popup} from '../../../component';
 import Icon from '../../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
@@ -10,6 +24,7 @@ import {SearchParam} from '../../../fst/models';
 import {FakeNavigation, LoadListState, WorkComment} from '../../../models';
 import {goLogin} from '../../../router/Router';
 import {useNavigation} from '@react-navigation/native';
+import {isReachBottom} from '../../../helper/system';
 
 interface CommentModalProps {
   // visible: boolean;
@@ -135,6 +150,12 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
     };
   }, []);
 
+  function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
+    if (isReachBottom(e) && isLoggedIn) {
+      loadComment({snowId: commentMainId}, false);
+    }
+  }
+
   function onClickUserAvatar(id: number) {
     setShowComment(false);
     navigation.navigate({
@@ -165,7 +186,7 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
           </TouchableOpacity>
         </View>
         {/* <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{flex: 1}}> */}
-        <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag">
+        <ScrollView style={{flex: 1}} keyboardDismissMode="on-drag" onMomentumScrollEnd={handleScrollEnd} showsVerticalScrollIndicator={false}>
           <View style={{flex: 1}}>
             {/* TODO: 加上分页请求 */}
             {comment.list.map((comment, index) => {
