@@ -27,7 +27,7 @@ export async function report(locate: string, params: SearchParam = {}): Promise<
   try {
     info = {
       version: DeviceInfo.getVersion(),
-      apiLevel: DeviceInfo.getApiLevel(),
+      // apiLevel: DeviceInfo.getApiLevel(), // 信息不准确，暂时不上报
       brand: DeviceInfo.getBrand(),
       systemName: DeviceInfo.getSystemName(),
       systemVersion: DeviceInfo.getSystemVersion(),
