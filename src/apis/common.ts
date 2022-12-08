@@ -36,6 +36,7 @@ export async function report(locate: string, params: SearchParam = {}): Promise<
       isTablet: DeviceInfo.isTablet(),
       getFirstInstallTime: await DeviceInfo.getFirstInstallTime(),
       getBaseOs: await DeviceInfo.getBaseOs(),
+      deviceName: await DeviceInfo.getDeviceName(),
     };
   } catch (error) {}
   return await originGet('http://faya-app-log.cn-beijing.log.aliyuncs.com/logstores/faya-app-web-logstore/track', {
