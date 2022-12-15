@@ -380,6 +380,17 @@ PODS:
     - React-Core
   - react-native-slider (4.3.3):
     - React-Core
+  - react-native-update (8.1.0):
+    - React
+    - react-native-update/HDiffPatch (= 8.1.0)
+    - react-native-update/RCTPushy (= 8.1.0)
+    - SSZipArchive
+  - react-native-update/HDiffPatch (8.1.0):
+    - React
+    - SSZipArchive
+  - react-native-update/RCTPushy (8.1.0):
+    - React
+    - SSZipArchive
   - react-native-video (6.0.0-alpha.3):
     - React-Core
     - react-native-video/Video (= 6.0.0-alpha.3)
@@ -509,6 +520,7 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.6.0)
+  - SSZipArchive (2.4.3)
   - vision-camera-code-scanner (0.2.0):
     - GoogleMLKit/BarcodeScanning
     - React-Core
@@ -578,6 +590,7 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-segmented-control (from `../node_modules/@react-native-community/segmented-control`)"
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
+  - react-native-update (from `../node_modules/react-native-update`)
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -644,6 +657,7 @@ SPEC REPOS:
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
+    - SSZipArchive
     - VODUpload
     - WechatOpenSDK
     - YogaKit
@@ -707,6 +721,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/segmented-control"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
+  react-native-update:
+    :path: "../node_modules/react-native-update"
   react-native-video:
     :path: "../node_modules/react-native-video"
   react-native-webview:
@@ -823,6 +839,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
   react-native-segmented-control: 65df6cd0619b780b3843d574a72d4c7cec396097
   react-native-slider: 7d19220da2f2ae7cbb9aa80127cb73c597fa221f
+  react-native-update: 394b7f52ed3c0688d12084f3fb47d49504131be6
   react-native-video: 3b4fa3b67e6d8efcfba6c27231a7a493c28d4f1f
   react-native-webview: d33e2db8925d090871ffeb232dfa50cb3a727581
   React-perflogger: 281c34e42f13245c7a4d6932364d9182f8655e1a
@@ -850,6 +867,7 @@ SPEC CHECKSUMS:
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
+  SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   vision-camera-code-scanner: dda884a7f3ec8243a2a6d6489b91860648371bca
   VisionCamera: cc788935bcfd2f7031d3295adedbc9786835f402
   VODUpload: 57651539af6a40a5d74c3e1b26165251b670a388

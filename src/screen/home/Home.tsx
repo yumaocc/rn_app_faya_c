@@ -1,11 +1,11 @@
-import React, {useCallback, useEffect} from 'react';
-import {View, StyleSheet, ScrollView, useWindowDimensions, TouchableOpacity} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {View, Text, StyleSheet, ScrollView, useWindowDimensions, TouchableOpacity, Platform, Alert} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {Button, Tabs} from '../../component';
 import {TabsStyles} from '../../component/Tabs';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {useRefCallback} from '../../fst/hooks';
+import {useLog, useRefCallback} from '../../fst/hooks';
 import {useIsLoggedIn, useWorkDispatcher} from '../../helper/hooks';
 import {RootState} from '../../redux/reducers';
 import WorkList from './WorkList';
@@ -15,6 +15,10 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {goLogin} from '../../router/Router';
 import MyStatusBar from '../../component/MyStatusBar';
 import Icon from '../../component/Icon';
+import {checkUpdate, currentVersion, downloadAndInstallApk, downloadAndInstallPatch, isFirstTime, isRolledBack, markSuccess} from '../../native-modules/Pushy';
+import {Modal} from '@ant-design/react-native';
+import {DownloadProgressData, UpdateCheck} from '../../native-modules/Pushy/type';
+import {Linking} from 'react-native';
 
 const Home: React.FC = () => {
   const currentTab = useSelector((state: RootState) => state.work.currentTab);
@@ -24,6 +28,15 @@ const Home: React.FC = () => {
   const nearbyWorks = useSelector((state: RootState) => state.work.works[WorkTabType.Nearby]);
   const tabs = useSelector((state: RootState) => state.work.tabs);
 
+  const [showUpdate, setShowUpdate] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState<UpdateCheck>();
+  const [downloadSuccess, setDownloadSuccess] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const [progressData, setProgressData] = useState<DownloadProgressData>();
+  const showFullUpdate = useMemo(() => {
+    return !!updateInfo?.needFullUpdate && !downloadSuccess;
+  }, [downloadSuccess, updateInfo]);
+
   const {width} = useWindowDimensions();
   const [ref, setRef, isReady] = useRefCallback();
   const isFocused = useIsFocused();
@@ -31,6 +44,56 @@ const Home: React.FC = () => {
   const navigation = useNavigation<FakeNavigation>();
 
   const [workDispatcher] = useWorkDispatcher();
+
+  useLog('showUpdate', showUpdate);
+
+  const doDownload = useCallback(async (updateInfo: UpdateCheck) => {
+    if (!updateInfo) {
+      return;
+    }
+    setDownloading(true);
+    const hash = await downloadAndInstallPatch(updateInfo, {onDownloadProgress: setProgressData});
+    setDownloading(false);
+    if (hash) {
+      setDownloadSuccess(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isFirstTime) {
+      markSuccess();
+      Alert.alert('提示', '刚刚更新成功了,版本号为' + currentVersion);
+    } else if (isRolledBack) {
+      Alert.alert('提示', '刚刚更新失败了,版本被回滚.');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (__DEV__) {
+      return;
+    }
+    checkUpdate()
+      .then(res => {
+        console.log('更新信息', res);
+        if (res.needFullUpdate || res.needPatchUpdate) {
+          setUpdateInfo(res);
+          setTimeout(() => {
+            setShowUpdate(true);
+          }, 1000);
+        }
+      })
+      .catch(console.log);
+  }, []);
+
+  // useEffect(() => {
+  //   if (!force || !updateInfo) {
+  //     return;
+  //   }
+  //   // 自动下载热更包
+  //   if (updateInfo.needPatchUpdate) {
+  //     doDownload(updateInfo);
+  //   }
+  // }, [doDownload, force, updateInfo]);
 
   useEffect(() => {
     if (!isReady) {
@@ -112,43 +175,103 @@ const Home: React.FC = () => {
   const refreshNearby = useCallback(() => {
     return refreshWork(WorkTabType.Nearby);
   }, [refreshWork]);
+
   function handleScan() {
     navigation.navigate('Scanner');
+  }
+
+  function handleCloseUpdate() {
+    setShowUpdate(false);
+    return true;
+  }
+
+  async function handleUpdate() {
+    doDownload(updateInfo);
+  }
+  async function handleFullUpdate() {
+    const url = updateInfo?.downloadUrl || '';
+    if (!url) {
+      return;
+    }
+    if (Platform.OS === 'android') {
+      if (url.endsWith('.apk')) {
+        setDownloading(true);
+        downloadAndInstallApk(url, setProgressData);
+        setDownloading(false);
+      }
+    } else {
+      Linking.openURL(url);
+    }
   }
 
   // useWhyDidYouUpdate('home加载', {type: currentTab.type, isLoggedIn, workDispatcher, refreshWork, refreshRecommend, loadRecommend, loadWork});
 
   return (
-    <SafeAreaView edges={['top']} style={{flex: 1, backgroundColor: '#fff'}}>
-      {isFocused && <MyStatusBar barStyle="dark-content" />}
-      <View style={styles.container}>
-        <View style={{position: 'relative', height: 50}}>
-          <Tabs styles={tabStyles} gap={30} currentKey={currentTab.type} tabs={tabs.map(tab => ({title: tab.title, key: tab.key}))} onChange={handleChangeTab} />
-          <View style={styles.scanIcon}>
-            <TouchableOpacity activeOpacity={0.8} onPress={handleScan}>
-              <Icon name="wode_scan48" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
-            </TouchableOpacity>
+    <>
+      <SafeAreaView edges={['top']} style={{flex: 1, backgroundColor: '#fff'}}>
+        {isFocused && <MyStatusBar barStyle="dark-content" />}
+        <View style={styles.container}>
+          <View style={{position: 'relative', height: 50}}>
+            <Tabs styles={tabStyles} gap={30} currentKey={currentTab.type} tabs={tabs.map(tab => ({title: tab.title, key: tab.key}))} onChange={handleChangeTab} />
+            <View style={styles.scanIcon}>
+              <TouchableOpacity activeOpacity={0.8} onPress={handleScan}>
+                <Icon name="wode_scan48" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
+              </TouchableOpacity>
+            </View>
           </View>
+          <ScrollView ref={setRef} horizontal style={{flex: 1}} snapToInterval={width} showsHorizontalScrollIndicator={false} scrollEnabled={false}>
+            <View style={{width}}>
+              {isLoggedIn ? (
+                <WorkList list={followWorks} onRefresh={refreshFollow} onLoadMore={loadFollow} />
+              ) : (
+                <View style={[{paddingTop: 40}, globalStyles.containerCenter]}>
+                  <Button style={{marginTop: 10}} title="请先登录" type="primary" onPress={() => goLogin()} />
+                </View>
+              )}
+            </View>
+            <View style={{width}}>
+              <WorkList list={recommendWorks} onRefresh={refreshRecommend} onLoadMore={loadRecommend} />
+            </View>
+            <View style={{width}}>
+              <WorkList list={nearbyWorks} onRefresh={refreshNearby} onLoadMore={loadNearby} />
+            </View>
+          </ScrollView>
         </View>
-        <ScrollView ref={setRef} horizontal style={{flex: 1}} snapToInterval={width} showsHorizontalScrollIndicator={false} scrollEnabled={false}>
-          <View style={{width}}>
-            {isLoggedIn ? (
-              <WorkList list={followWorks} onRefresh={refreshFollow} onLoadMore={loadFollow} />
-            ) : (
-              <View style={[{paddingTop: 40}, globalStyles.containerCenter]}>
-                <Button style={{marginTop: 10}} title="请先登录" type="primary" onPress={() => goLogin()} />
+      </SafeAreaView>
+      <Modal
+        styles={{
+          body: {paddingHorizontal: 0, paddingBottom: 0, zIndex: 40},
+          innerContainer: {paddingTop: 0, borderRadius: globalStyleVariables.RADIUS_MODAL},
+        }}
+        style={{width: width - 40}}
+        visible={showUpdate}
+        onClose={handleCloseUpdate}
+        animationType="fade"
+        onRequestClose={handleCloseUpdate}
+        transparent
+        maskClosable={false}>
+        <View style={{backgroundColor: '#fff'}}>
+          <View style={[globalStyles.containerCenter, {height: 50}]}>
+            <Text style={[globalStyles.fontPrimary, {fontSize: 18}]}>版本更新</Text>
+          </View>
+          <View style={[{paddingHorizontal: 15, paddingVertical: 20}]}>
+            <Text style={[globalStyles.fontSecondary, {textAlign: 'center'}]}>
+              {downloadSuccess ? '更新完成，点击重启应用' : `检测到新版本，${downloading ? '正在为您更新' : '点击立即更新下载安装新版本'}`}
+            </Text>
+          </View>
+
+          <View style={[globalStyles.containerRow, {padding: 15}]}>
+            {showFullUpdate && <Button type="primary" style={{flex: 1, marginLeft: 15}} onPress={handleFullUpdate} title="立即更新" />}
+            {downloadSuccess && <Button type="primary" style={{flex: 1, marginLeft: 15}} onPress={handleUpdate} title="立即重启" />}
+            {downloading && (
+              <View style={{width: '100%'}}>
+                <Text style={{textAlign: 'center'}}>{progressData ? `${progressData.received}/${progressData.total}` : ''}正在更新</Text>
               </View>
             )}
           </View>
-          <View style={{width}}>
-            <WorkList list={recommendWorks} onRefresh={refreshRecommend} onLoadMore={loadRecommend} />
-          </View>
-          <View style={{width}}>
-            <WorkList list={nearbyWorks} onRefresh={refreshNearby} onLoadMore={loadNearby} />
-          </View>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+        </View>
+      </Modal>
+    </>
   );
 };
 

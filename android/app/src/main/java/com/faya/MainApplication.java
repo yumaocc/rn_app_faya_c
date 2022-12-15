@@ -12,11 +12,18 @@ import com.facebook.soloader.SoLoader;
 import com.faya.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import cn.reactnative.modules.update.UpdateContext;
 
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
+         @Override
+        protected String getJSBundleFile() {
+//          return super.getJSBundleFile();
+            return UpdateContext.getBundleUrl(MainApplication.this);
+        }
+
         @Override
         public boolean getUseDeveloperSupport() {
           return BuildConfig.DEBUG;

@@ -211,6 +211,7 @@ const styles = StyleSheet.create({
   commentInput: {
     height: 80,
     textAlignVertical: 'top',
+    color: '#333',
   },
   files: {
     marginTop: globalStyleVariables.MODULE_SPACE,

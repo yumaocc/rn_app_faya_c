@@ -13,6 +13,7 @@ const Main: React.FC = () => {
   useEffect(() => {
     initMomentLocale();
   }, []);
+
   LogBox.ignoreLogs(['new NativeEventEmitter']);
   // return <Loading />;
   if (isLoading) {
