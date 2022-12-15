@@ -15,7 +15,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {goLogin} from '../../router/Router';
 import MyStatusBar from '../../component/MyStatusBar';
 import Icon from '../../component/Icon';
-import {checkUpdate, currentVersion, downloadAndInstallApk, downloadAndInstallPatch, isFirstTime, isRolledBack, markSuccess} from '../../native-modules/Pushy';
+import {checkUpdate, currentVersion, downloadAndInstallApk, downloadAndInstallPatch, isFirstTime, isRolledBack, markSuccess, switchVersion} from '../../native-modules/Pushy';
 import {Modal} from '@ant-design/react-native';
 import {DownloadProgressData, UpdateCheck} from '../../native-modules/Pushy/type';
 import {Linking} from 'react-native';
@@ -85,15 +85,15 @@ const Home: React.FC = () => {
       .catch(console.log);
   }, []);
 
-  // useEffect(() => {
-  //   if (!force || !updateInfo) {
-  //     return;
-  //   }
-  //   // 自动下载热更包
-  //   if (updateInfo.needPatchUpdate) {
-  //     doDownload(updateInfo);
-  //   }
-  // }, [doDownload, force, updateInfo]);
+  useEffect(() => {
+    if (!updateInfo) {
+      return;
+    }
+    // 自动下载热更包
+    if (updateInfo.needPatchUpdate) {
+      doDownload(updateInfo);
+    }
+  }, [doDownload, updateInfo]);
 
   useEffect(() => {
     if (!isReady) {
@@ -185,9 +185,12 @@ const Home: React.FC = () => {
     return true;
   }
 
-  async function handleUpdate() {
-    doDownload(updateInfo);
+  function handleRestart() {
+    switchVersion(updateInfo.versionHash);
   }
+  // async function handleUpdate() {
+  //   doDownload(updateInfo);
+  // }
   async function handleFullUpdate() {
     const url = updateInfo?.downloadUrl || '';
     if (!url) {
@@ -262,7 +265,7 @@ const Home: React.FC = () => {
 
           <View style={[globalStyles.containerRow, {padding: 15}]}>
             {showFullUpdate && <Button type="primary" style={{flex: 1, marginLeft: 15}} onPress={handleFullUpdate} title="立即更新" />}
-            {downloadSuccess && <Button type="primary" style={{flex: 1, marginLeft: 15}} onPress={handleUpdate} title="立即重启" />}
+            {downloadSuccess && <Button type="primary" style={{flex: 1, marginLeft: 15}} onPress={handleRestart} title="立即重启" />}
             {downloading && (
               <View style={{width: '100%'}}>
                 <Text style={{textAlign: 'center'}}>{progressData ? `${progressData.received}/${progressData.total}` : ''}正在更新</Text>
