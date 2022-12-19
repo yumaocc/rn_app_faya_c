@@ -90,7 +90,7 @@ export function checkNeedUpdate(info: UpdateInfo): UpdateCheck {
   let needPatchUpdate = false;
   if (info.versionHash && info.updateUrl) {
     if (currentVersion) {
-      needPatchUpdate = currentVersion === info.versionHash;
+      needPatchUpdate = currentVersion !== info.versionHash;
     } else {
       needPatchUpdate = true;
     }
@@ -109,7 +109,7 @@ export function isSameOrNewVersion(current: string, newVersion: string) {
   try {
     let currentCodes = current.split('.');
     let newCodes = newVersion.split('.');
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 3; i++) {
       const nowCode = Number(currentCodes[i]);
       const newCode = Number(newCodes[i]);
       if (nowCode < newCode) {
