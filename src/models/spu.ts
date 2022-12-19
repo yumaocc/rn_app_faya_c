@@ -68,6 +68,8 @@ export interface PackageDetail {
   userCommissionYuan: string;
   videoCommission: number;
   videoCommissionYuan: string;
+  extField: string;
+  kindTips: string;
 }
 
 export interface SKUContent {
@@ -96,6 +98,8 @@ export interface SKUDetail {
   videoCommissionYuan: string;
   saleStatus: SKUSaleState;
   quantityWithPkg: number;
+  extField: string;
+  kindTips: string;
 }
 
 export interface SPUDetailF {

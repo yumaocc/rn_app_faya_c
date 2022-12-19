@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import Icon from '../../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
+import {getPrettyNumber} from '../../../fst/helper/data';
 import {BoolEnum} from '../../../fst/models';
 import {dictLoadingState} from '../../../helper/dictionary';
 import {useDivideData} from '../../../helper/hooks';
@@ -60,7 +61,7 @@ const WorkList: React.FC<WorkListProps> = props => {
               ) : (
                 <Icon name="home_zuopin_zan_nor20" size={15} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
               )}
-              <Text style={[globalStyles.fontPrimary, {marginLeft: 3}]}>{work.numberOfLikes}</Text>
+              <Text style={[globalStyles.fontPrimary, {marginLeft: 3}]}>{getPrettyNumber(work.numberOfLikes)}</Text>
             </View>
           </View>
         </View>

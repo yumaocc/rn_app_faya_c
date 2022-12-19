@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, useWindowDimensions} from 'react-native';
 import Icon from '../../component/Icon';
 import QRCode from 'react-native-qrcode-svg';
-// import {Popover} from '@ant-design/react-native';
+import {Modal as AntModal} from '@ant-design/react-native';
 import Popover from 'react-native-popover-view';
 
 import {Button, Modal, NavigationBar} from '../../component';
@@ -54,6 +54,13 @@ const OrderDetail: React.FC = () => {
     const hasCode = !!orderDetail?.code && !!orderDetail?.codeUrl;
     return orderCanUse && orderDetail?.needExpress !== BoolEnum.TRUE && hasMulti && hasCode;
   }, [orderCanUse, orderDetail?.code, orderDetail?.codeUrl, orderDetail?.list, orderDetail?.needExpress]);
+
+  const canShowCodeList = useMemo(() => {
+    if (!orderDetail?.list?.length) {
+      return false;
+    }
+    return orderDetail?.needExpress === BoolEnum.FALSE && orderCanUse;
+  }, [orderCanUse, orderDetail?.list?.length, orderDetail?.needExpress]);
 
   const [commonDispatcher] = useCommonDispatcher();
   const {height} = useWindowDimensions();
@@ -107,10 +114,16 @@ const OrderDetail: React.FC = () => {
     }
   }, [commonDispatcher.error, orderDetail]);
 
-  function handleShowCode(code: OrderPackageSKU) {
-    if (code.code && code.codeUrl) {
-      setCurrentCode(code);
+  function handleShowCode(sku: OrderPackageSKU) {
+    if (sku.code && sku.codeUrl) {
+      setCurrentCode(sku);
       setShowCode(true);
+    }
+  }
+  function handleCopyCode(sku: OrderPackageSKU) {
+    if (sku.status !== OrderStatus.Completed && sku?.code) {
+      Clipboard.setString(sku?.code);
+      commonDispatcher.info('已复制电子码');
     }
   }
 
@@ -159,16 +172,31 @@ const OrderDetail: React.FC = () => {
   }
 
   async function handleConfirmReceived() {
-    try {
-      const success = await api.order.confirmReceipt(orderDetail.orderBigId);
-      if (!success) {
-        throw new Error('确认收货失败');
-      }
-      commonDispatcher.info('已确认收货');
-      loadingDetail();
-    } catch (error) {
-      commonDispatcher.error(error);
-    }
+    AntModal.alert('确认收货', '您确认已经收到商品吗？确认收货后，该订单将无法退款!\n如未收到商品，请勿确认收货。', [
+      {
+        text: '取消',
+        onPress: () => {},
+        style: {color: '#999'},
+      },
+      {
+        text: '确认收货',
+        style: {
+          color: globalStyleVariables.COLOR_WARNING_RED,
+        },
+        onPress: async () => {
+          try {
+            const success = await api.order.confirmReceipt(orderDetail.orderBigId);
+            if (!success) {
+              throw new Error('确认收货失败');
+            }
+            commonDispatcher.info('已确认收货');
+            loadingDetail();
+          } catch (error) {
+            commonDispatcher.error(error);
+          }
+        },
+      },
+    ]);
   }
 
   function renderCodeItem(orderPackage: OrderPackage, index: number) {
@@ -190,47 +218,49 @@ const OrderDetail: React.FC = () => {
                 codeStyle.push(styles.codeBooked);
               }
               return (
-                <View key={i} style={codeStyle}>
-                  <View style={[globalStyles.containerLR]}>
-                    <View>
-                      <Text numberOfLines={1} style={[globalStyles.fontPrimary, {color: '#fff', textDecorationLine: canUse ? 'none' : 'line-through'}]}>
-                        {sku.code}
-                      </Text>
-                      <Text style={[globalStyles.fontTertiary, {color: '#ffffffb2', textDecorationLine: canUse ? 'none' : 'line-through'}]}>使用时请出示此二维码</Text>
+                <TouchableOpacity key={i} activeOpacity={0.9} onPress={() => handleCopyCode(sku)}>
+                  <View style={codeStyle}>
+                    <View style={[globalStyles.containerLR]}>
+                      <View>
+                        <Text numberOfLines={1} style={[globalStyles.fontPrimary, {color: '#fff', textDecorationLine: canUse ? 'none' : 'line-through'}]}>
+                          {sku.code}
+                        </Text>
+                        <Text style={[globalStyles.fontTertiary, {color: '#ffffffb2', textDecorationLine: canUse ? 'none' : 'line-through'}]}>使用时请出示此二维码</Text>
+                      </View>
+                      {canUseCode && (
+                        <TouchableOpacity activeOpacity={0.8} onPress={() => handleShowCode(sku)}>
+                          <Icon name="wode_erweima48" color="#fff" size={24} />
+                        </TouchableOpacity>
+                      )}
                     </View>
-                    {canUseCode && (
-                      <TouchableOpacity activeOpacity={0.8} onPress={() => handleShowCode(sku)}>
-                        <Icon name="wode_erweima48" color="#fff" size={24} />
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                  {/* 需要预约才显示！ */}
-                  <View style={{marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}}>
-                    {needBooking && (
-                      <TouchableOpacity activeOpacity={0.8} onPress={() => goBooking(sku.orderSmallId)}>
-                        <View style={globalStyles.containerRow}>
-                          <Text style={[globalStyles.fontTertiary, {color: '#fff'}]}>立即预约</Text>
-                          <Icon name="all_arrowR36" color="#fff" size={12} />
-                        </View>
-                      </TouchableOpacity>
-                    )}
-                    {booked && (
-                      <View style={globalStyles.containerLR}>
-                        <View style={{flex: 1}}>
-                          <Text numberOfLines={1} style={[globalStyles.fontTertiary, {color: '#ffffffb2'}]}>
-                            {sku.bookingDateAndShopAndModel}
-                          </Text>
-                        </View>
+                    {/* 需要预约才显示！ */}
+                    <View style={{marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}}>
+                      {needBooking && (
                         <TouchableOpacity activeOpacity={0.8} onPress={() => goBooking(sku.orderSmallId)}>
                           <View style={globalStyles.containerRow}>
-                            <Text style={[globalStyles.fontTertiary, {color: '#fff'}]}>修改预约</Text>
+                            <Text style={[globalStyles.fontTertiary, {color: '#fff'}]}>立即预约</Text>
                             <Icon name="all_arrowR36" color="#fff" size={12} />
                           </View>
                         </TouchableOpacity>
-                      </View>
-                    )}
+                      )}
+                      {booked && (
+                        <View style={globalStyles.containerLR}>
+                          <View style={{flex: 1}}>
+                            <Text numberOfLines={1} style={[globalStyles.fontTertiary, {color: '#ffffffb2'}]}>
+                              {sku.bookingDateAndShopAndModel}
+                            </Text>
+                          </View>
+                          <TouchableOpacity activeOpacity={0.8} onPress={() => goBooking(sku.orderSmallId)}>
+                            <View style={globalStyles.containerRow}>
+                              <Text style={[globalStyles.fontTertiary, {color: '#fff'}]}>修改预约</Text>
+                              <Icon name="all_arrowR36" color="#fff" size={12} />
+                            </View>
+                          </TouchableOpacity>
+                        </View>
+                      )}
+                    </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               );
             })}
           </View>
@@ -287,7 +317,7 @@ const OrderDetail: React.FC = () => {
       );
     }
     return (
-      <ScrollView style={{maxHeight: height / 2}}>
+      <ScrollView style={{maxHeight: height / 2}} nestedScrollEnabled={true}>
         {expressInfo.list.map((info, index) => {
           const isFirst = index === 0;
           const isLast = index === expressInfo.list.length - 1;
@@ -374,7 +404,7 @@ const OrderDetail: React.FC = () => {
           <>
             {renderOrderStatus()}
 
-            <ScrollView style={{flex: 1, backgroundColor: '#f4f4f4'}}>
+            <ScrollView style={{flex: 1, backgroundColor: '#f4f4f4'}} nestedScrollEnabled={true}>
               {/* 用户收货地址 */}
               {!!orderDetail?.userAddress && (
                 <View style={{marginBottom: 10}}>
@@ -425,7 +455,7 @@ const OrderDetail: React.FC = () => {
                     <View style={[{backgroundColor: '#fff', padding: 15}]}>
                       <Text>物流信息</Text>
                       <View style={[globalStyles.lineHorizontal, {marginVertical: 10}]} />
-                      <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_PRIMARY}]}>等待发货</Text>
+                      <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_PRIMARY}]}>等待出货</Text>
                     </View>
                   )}
                 </View>
@@ -450,13 +480,15 @@ const OrderDetail: React.FC = () => {
                     </TouchableOpacity>
                   )}
                 </View>
-                {orderCanUse && (
+
+                {/* 电子码 */}
+                {canShowCodeList && (
                   <View>
-                    {/* 电子码 */}
                     <View style={{paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER, backgroundColor: '#fff'}}>{orderDetail.list?.map(renderCodeItem)}</View>
-                    {/* 可用门店 */}
                   </View>
                 )}
+
+                {/* 可用门店 */}
                 {!!orderDetail?.canUseShops?.length && (
                   <View style={[{marginTop: globalStyleVariables.MODULE_SPACE, backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
                     <View style={[globalStyles.containerLR, {height: 24}]}>

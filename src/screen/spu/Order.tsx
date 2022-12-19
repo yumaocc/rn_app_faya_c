@@ -35,6 +35,14 @@ import {getAliPayUrl} from '../../constants';
 import BookingModal from '../../component/BookingModal';
 import MyStatusBar from '../../component/MyStatusBar';
 import logger from '../../helper/logger';
+import {getItem, setItem} from '../../helper/cache/helper';
+interface ExtField {
+  label: string;
+  placeholder: string;
+  value: string;
+  required: boolean;
+  key: string;
+}
 
 const Order: React.FC = () => {
   const spu = useSelector((state: RootState) => state.spu.currentSPU);
@@ -52,6 +60,7 @@ const Order: React.FC = () => {
   const [showBooking, setShowBooking] = useState(false);
   const [bookingModel, setBookingModel] = useState<BookingModelF>(null);
   const [showSelectCoupon, setShowSelectCoupon] = useState(false);
+  const [extFields, setExtFields] = useState<ExtField[]>([]);
   // 收货地址
   const [addressList, setAddressList] = useState<UserExpressAddress[]>([]);
   const [currentAddress, setCurrentAddress] = useState<UserExpressAddress>(null);
@@ -76,7 +85,34 @@ const Order: React.FC = () => {
 
   const initForm: OrderForm = {amount: 1, channel: PayChannel.WECHAT, name: '', payWay: 'MINI_PROGRAM', telephone: ''};
 
-  const [form, setFormField] = useSearch<OrderForm>(initForm);
+  const [form, setFormField, setFormFields] = useSearch<OrderForm>(initForm);
+  useEffect(() => {
+    if (!sku?.extField) {
+      return;
+    }
+    try {
+      const fields = JSON.parse(sku.extField) as ExtField[];
+      const extFields = fields.map((f: ExtField, index: number) => ({
+        ...f,
+        value: '',
+        key: 'extField_' + index + '_' + f.label,
+      }));
+      setExtFields(extFields);
+    } catch (error) {
+      console.error('error', error);
+      return;
+    }
+  }, [sku]);
+
+  useEffect(() => {
+    async function f() {
+      const name = await getItem('payName');
+      const phone = await getItem('payPhone');
+      setFormFields({name, telephone: phone});
+    }
+    f();
+  }, [setFormFields]);
+
   // 当前是sku，且购买数量为1时才显示提前预约
   const canBooking = useMemo(() => !currentSkuIsPackage && form.amount === 1 && spu?.bookingType === BookingType.URL, [currentSkuIsPackage, form.amount, spu.bookingType]);
   const skuId = useMemo(() => {
@@ -145,6 +181,13 @@ const Order: React.FC = () => {
     return couponList?.find(coupon => coupon.id === form.couponId);
   }, [couponList, form.couponId]);
 
+  const totalCommission = useMemo(() => {
+    if (!sku?.userCommissionYuan) {
+      return 0;
+    }
+    return parseFloat((Number(sku.userCommissionYuan) * form.amount).toFixed(2));
+  }, [sku, form.amount]);
+
   const totalSaved = useMemo(() => {
     let saved = 0;
     if (currentSelectedCoupon) {
@@ -183,10 +226,6 @@ const Order: React.FC = () => {
   const canUseCoupons = useMemo(() => {
     return couponList?.filter(coupon => coupon.status === CouponState.Unused && coupon.amountThreshold < totalPrice) || [];
   }, [couponList, totalPrice]);
-
-  const commission = useMemo(() => {
-    return sku?.userCommissionYuan || '';
-  }, [sku]);
 
   useEffect(() => {
     if (form.amount < minPurchaseAmount) {
@@ -286,6 +325,16 @@ const Order: React.FC = () => {
     }
     setFormField('skuId', e);
   }
+  function onInputExtField(key: string, val: string) {
+    const newFields = extFields.map(field => {
+      if (field.key === key) {
+        return {...field, value: val};
+      } else {
+        return field;
+      }
+    });
+    setExtFields(newFields);
+  }
   function check(formData: OrderForm): string {
     const {name, telephone, amount, idCard} = formData;
     if (needAddress && !currentAddress) {
@@ -309,9 +358,24 @@ const Order: React.FC = () => {
     if (spu.needIdCard && !idCard) {
       return '该商品下单需要填写身份证号';
     }
+    const fieldLen = extFields.length;
+    for (let i = 0; i < fieldLen; i++) {
+      const field = extFields[i];
+      if (field.required && !field.value) {
+        return `请输入${field.label}`;
+      }
+    }
   }
   async function submit() {
     const formData = cleanOrderForm(form);
+    let memo = formData.memo || '';
+    const fields = extFields || [];
+    fields.forEach(field => {
+      if (field.value) {
+        memo += `${memo ? '\n' : ''}${field.label}:${field.value};`;
+      }
+    });
+    formData.memo = memo;
     if (needAddress && currentAddress) {
       formData.addressId = currentAddress.id;
       formData.name = currentAddress.name;
@@ -335,6 +399,8 @@ const Order: React.FC = () => {
       return commonDispatcher.error(errorMsg);
     }
     let link = '';
+    setItem('payName', formData.name);
+    setItem('payPhone', formData.telephone);
     try {
       if (channel === PayChannel.WECHAT) {
         const tempOrderId = await api.order.getOrderTempId();
@@ -497,9 +563,9 @@ const Order: React.FC = () => {
             <FormItem label="商品总价" {...formItemProps}>
               <Text style={globalStyles.fontPrimary}>¥{moneyToYuan(totalPrice)}</Text>
             </FormItem>
-            {!!commission && (
+            {!!totalCommission && (
               <FormItem label="返芽" {...formItemProps}>
-                <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_BUD}]}>订单完成可返{commission}芽</Text>
+                <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_BUD}]}>订单完成可返{totalCommission}芽</Text>
               </FormItem>
             )}
 
@@ -515,7 +581,6 @@ const Order: React.FC = () => {
                     {...formItemInputProps}
                     style={styles.formItemInput}
                   />
-                  {/* <Input placeholder="请输入使用人姓名" /> */}
                 </FormItem>
                 <FormItem label="手机号" {...formItemProps}>
                   <TextInput
@@ -541,6 +606,20 @@ const Order: React.FC = () => {
                 />
               </FormItem>
             )}
+            {extFields.map(field => {
+              return (
+                <FormItem label={field.label} {...formItemProps} key={field.key}>
+                  <TextInput
+                    onSubmitEditing={() => phoneRef.current.focus()}
+                    value={field.value}
+                    onChangeText={val => onInputExtField(field.key, val)}
+                    placeholder={field.placeholder}
+                    {...formItemInputProps}
+                    style={styles.formItemInput}
+                  />
+                </FormItem>
+              );
+            })}
             <View style={[globalStyles.lineHorizontal]} />
             {wallet?.canUseIntegral === BoolEnum.TRUE && (
               <FormItem
@@ -599,6 +678,13 @@ const Order: React.FC = () => {
                   </View>
                 </View>
               </TouchableOpacity>
+            </View>
+          )}
+
+          {/* 购买须知 */}
+          {sku?.kindTips && (
+            <View style={[globalStyles.moduleMarginTop, {backgroundColor: '#fff', padding: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
+              <Text style={[globalStyles.fontTertiary, {color: globalStyleVariables.COLOR_WARNING_YELLOW}]}>{sku?.kindTips}</Text>
             </View>
           )}
 

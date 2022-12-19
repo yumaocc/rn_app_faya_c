@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, StyleSheet, ScrollView, StatusBar, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useAndroidBack, useCommonDispatcher, useIsLoggedIn, useParams, useSPUDispatcher, useUserDispatcher, useWorkDispatcher} from '../../helper/hooks';
-import {FakeNavigation, LocationNavigateInfo, PackageDetail, SKUDetail, SPUDetailF} from '../../models';
+import {FakeNavigation, LocationNavigateInfo, PackageDetail, SKUDetail, SKUSaleState, SPUDetailF} from '../../models';
 
 import SPUDetailView from './SPUDetailView';
 import BuyBar from './BuyBar';
@@ -91,6 +91,9 @@ const SPUDetail: React.FC = () => {
         completeBehavior: 'replace',
       });
     } else {
+      if (currentSKU?.saleStatus !== SKUSaleState.ON_SALE) {
+        return commonDispatcher.error('该套餐已售罄');
+      }
       navigation.navigate('Order', {workMainId});
     }
   }
@@ -123,7 +126,11 @@ const SPUDetail: React.FC = () => {
 
   // 点击了分享
   function handleShare() {
-    setShowShare(true);
+    if (!isLoggedIn) {
+      goLogin();
+    } else {
+      setShowShare(true);
+    }
   }
 
   function handleCollect() {

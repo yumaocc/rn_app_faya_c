@@ -118,7 +118,7 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
   function renderSKUNode(skuName: string, isActive: boolean, disabled: boolean, key: string) {
     return (
       <View style={[styles.skuItem, isActive && styles.skuItemActive, disabled && styles.skuItemDisabled]} key={key}>
-        <Text style={[styles.skuText, isActive && styles.skuTextActive, disabled && styles.skuTextDisabled]}>{skuName}</Text>
+        <Text style={[styles.skuText, disabled && styles.skuTextDisabled, isActive && styles.skuTextActive]}>{skuName}</Text>
       </View>
     );
   }
@@ -127,29 +127,21 @@ const SPUDetailView: React.FC<SPUDetailViewProps> = props => {
     const isActive = (currentSelect as SKUDetail)?.id === sku.id;
     const disabled = sku?.saleStatus !== SKUSaleState.ON_SALE;
     const key = 'sku_' + sku.id;
-    if (!disabled) {
-      return (
-        <TouchableOpacity activeOpacity={0.8} key={key} onPress={() => handleClick(sku)}>
-          {renderSKUNode(sku.skuName, isActive, disabled, key)}
-        </TouchableOpacity>
-      );
-    } else {
-      return renderSKUNode(sku.skuName, isActive, disabled, key);
-    }
+    return (
+      <TouchableOpacity activeOpacity={0.8} key={key} onPress={() => handleClick(sku)}>
+        {renderSKUNode(sku.skuName, isActive, disabled, key)}
+      </TouchableOpacity>
+    );
   }
   function renderPackage(pkg: PackageDetail) {
     const isActive = (currentSelect as PackageDetail)?.packageId === pkg.packageId;
     const disabled = pkg?.saleStatus !== SKUSaleState.ON_SALE;
     const key = 'pkg_' + pkg.packageId;
-    if (!disabled) {
-      return (
-        <TouchableOpacity activeOpacity={0.8} key={key} onPress={() => handleClick(pkg, true)}>
-          {renderSKUNode(pkg.packageName, isActive, disabled, key)}
-        </TouchableOpacity>
-      );
-    } else {
-      return renderSKUNode(pkg.packageName, isActive, disabled, key);
-    }
+    return (
+      <TouchableOpacity activeOpacity={0.8} key={key} onPress={() => handleClick(pkg, true)}>
+        {renderSKUNode(pkg.packageName, isActive, disabled, key)}
+      </TouchableOpacity>
+    );
   }
 
   function renderTips(text: string, index: number) {

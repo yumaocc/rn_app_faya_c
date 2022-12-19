@@ -6,6 +6,7 @@ import {OrderF, OrderStatus} from '../../../models';
 import {Button} from '../../../component';
 import {BoolEnum} from '../../../fst/models';
 import Icon from '../../../component/Icon';
+import MyImage from '../../../component/MyImage';
 
 interface OrderItemProps {
   order: OrderF;
@@ -57,7 +58,7 @@ const OrderItem: React.FC<OrderItemProps> = props => {
     <View style={styles.order}>
       <TouchableOpacity activeOpacity={0.8} onPress={handleClickOrder}>
         <View style={[globalStyles.containerRow, {alignItems: 'flex-start'}]}>
-          <Image source={{uri: order.spuCoverImage}} defaultSource={require('../../../assets/sku_def_1_1.png')} style={styles.orderCover} />
+          <MyImage source={{uri: order.spuCoverImage}} defaultSource={require('../../../assets/sku_def_1_1.png')} style={styles.orderCover} />
           <View style={{flex: 1, paddingLeft: globalStyleVariables.MODULE_SPACE}}>
             <View style={[globalStyles.containerLR]}>
               <View style={globalStyles.containerRow}>

@@ -324,7 +324,7 @@ const Profile: React.FC = () => {
                     <View style={[styles.rightItem]}>
                       <Image source={require('../../../assets/icon_daren_03.png')} style={styles.rightIcon} />
                       <View style={styles.rightContent}>
-                        <Text style={styles.rightName}>推广码</Text>
+                        <Text style={styles.rightName}>组队码</Text>
                         <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE, alignItems: 'flex-start'}]}>
                           <View style={[globalStyles.containerCenter, {height: 18, width: 18}]}>
                             <View style={styles.dot} />

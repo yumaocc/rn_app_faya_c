@@ -59,6 +59,7 @@ const Player: React.FC<PlayerProps> = props => {
           paused={paused}
           repeat={repeat}
           muted={muted}
+          ignoreSilentSwitch="ignore"
           resizeMode="none"
           poster={poster}
         />
