@@ -4,7 +4,8 @@ export interface UpdateInfo {
   updateUrl: string;
   versionHash: string;
   versionName: string;
-  downloadUrl: string;
+  iosUrl: string; // 苹果商店下载地址
+  androidUrl: string; // apk地址或者应用宝地址
 }
 
 export interface UpdateCheck extends UpdateInfo {

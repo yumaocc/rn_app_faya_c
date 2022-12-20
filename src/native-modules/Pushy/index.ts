@@ -1,8 +1,10 @@
 import {NativeEventEmitter, NativeModules, PermissionsAndroid, Platform} from 'react-native';
+import {getBaseURL} from '../../constants';
+import logger from '../../helper/logger';
 import {DownloadEventListener, DownloadProgressData, LocalHashInfo, UpdateCheck, UpdateInfo} from './type';
 
 function getCheckUrl() {
-  return 'https://m.faya.life/debug/hot-update/check.json?_t=' + Date.now();
+  return `${getBaseURL()}/app/version/info`;
 }
 
 async function request(url: string, config: RequestInit) {
@@ -63,24 +65,37 @@ export async function checkUpdateInfo(isRetry = false): Promise<UpdateInfo> {
   }, 3000);
 
   let resp;
+  const platform = Platform.OS || '';
   try {
     resp = await request(getCheckUrl(), {
-      method: 'GET',
+      method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        version: packageVersion,
+        platform: platform.toLowerCase(),
+      }),
     });
   } catch (e) {
     if (isRetry) {
+      logger.log('Pushy/index.ts', {msg: '无法连接更新服务器，请检查网络连接后重试'});
       throw new Error('无法连接更新服务器，请检查网络连接后重试');
     }
     return checkUpdateInfo(true);
   }
-  return resp;
+  if (!resp?.data?.content) {
+    logger.log('Pushy/index.ts', {msg: '无法获取更新信息，请稍后重试'});
+    throw new Error('无法获取更新信息，请稍后重试');
+  }
+  return resp.data?.content;
 }
 export async function checkUpdate(): Promise<UpdateCheck> {
   const info = await checkUpdateInfo();
+  if (!info) {
+    return null;
+  }
   return checkNeedUpdate(info);
 }
 
@@ -128,9 +143,11 @@ let downloadedHash: string;
 export async function downloadAndInstallPatch(options: UpdateCheck, listener?: DownloadEventListener) {
   assertRelease();
   if (rolledBackVersion === options.versionHash) {
+    logger.log('Pushy/index.ts', {msg: '已回滚版本', rolledBackVersion, hash: options.versionHash});
     return;
   }
   if (downloadedHash === options.versionHash) {
+    logger.log('Pushy/index.ts', {msg: '已下载版本', downloadedHash, hash: options.versionHash});
     return;
   }
   if (downloadingThrottling) {
@@ -158,8 +175,9 @@ export async function downloadAndInstallPatch(options: UpdateCheck, listener?: D
       hash: options.versionHash,
     });
     succeeded = true;
-  } catch (error) {
+  } catch (error: any) {
     // 下载失败
+    logger.error('Pushy/index.ts', {msg: '下载更新包失败', error: error?.message, updateUrl: options.updateUrl, hash: options.versionHash});
   }
   progressHandler && progressHandler.remove();
   if (!succeeded) {
@@ -170,7 +188,7 @@ export async function downloadAndInstallPatch(options: UpdateCheck, listener?: D
     description: options.versionName,
     metaInfo: options.versionName,
   });
-  console.log('设置downloadedHash:', options.versionHash);
+  // console.log('设置downloadedHash:', options.versionHash);
   downloadedHash = options.versionHash;
   return options.versionHash;
 }
@@ -188,7 +206,7 @@ function assertHash(hash: string) {
 }
 
 export function switchVersion(hash: string) {
-  console.log('切换版本了，hash', hash);
+  // console.log('切换版本，hash', hash);
   assertRelease();
   if (assertHash(hash)) {
     // logger('switchVersion: ' + hash);

@@ -19,6 +19,7 @@ import {checkUpdate, currentVersion, downloadAndInstallApk, downloadAndInstallPa
 import {Modal} from '@ant-design/react-native';
 import {DownloadProgressData, UpdateCheck} from '../../native-modules/Pushy/type';
 import {Linking} from 'react-native';
+import logger from '../../helper/logger';
 
 const Home: React.FC = () => {
   const currentTab = useSelector((state: RootState) => state.work.currentTab);
@@ -62,9 +63,8 @@ const Home: React.FC = () => {
   useEffect(() => {
     if (isFirstTime) {
       markSuccess();
-      Alert.alert('提示', '刚刚更新成功了,版本号为' + currentVersion);
     } else if (isRolledBack) {
-      Alert.alert('提示', '刚刚更新失败了,版本被回滚.');
+      logger.error('Home.tsx/Effect', {currentVersion, isFirstTime, isRolledBack});
     }
   }, []);
 
@@ -74,7 +74,6 @@ const Home: React.FC = () => {
     }
     checkUpdate()
       .then(res => {
-        console.log('更新信息', res);
         if (res.needFullUpdate || res.needPatchUpdate) {
           setUpdateInfo(res);
           setTimeout(() => {
@@ -192,16 +191,17 @@ const Home: React.FC = () => {
   //   doDownload(updateInfo);
   // }
   async function handleFullUpdate() {
-    const url = updateInfo?.downloadUrl || '';
+    const url = Platform.select({
+      ios: updateInfo?.iosUrl || '',
+      android: updateInfo?.androidUrl || '',
+    });
     if (!url) {
       return;
     }
-    if (Platform.OS === 'android') {
-      if (url.endsWith('.apk')) {
-        setDownloading(true);
-        downloadAndInstallApk(url, setProgressData);
-        setDownloading(false);
-      }
+    if (Platform.OS === 'android' && url.endsWith('.apk')) {
+      setDownloading(true);
+      downloadAndInstallApk(url, setProgressData);
+      setDownloading(false);
     } else {
       Linking.openURL(url);
     }
@@ -264,8 +264,8 @@ const Home: React.FC = () => {
           </View>
 
           <View style={[globalStyles.containerRow, {padding: 15}]}>
-            {showFullUpdate && <Button type="primary" style={{flex: 1, marginLeft: 15}} onPress={handleFullUpdate} title="立即更新" />}
-            {downloadSuccess && <Button type="primary" style={{flex: 1, marginLeft: 15}} onPress={handleRestart} title="立即重启" />}
+            {showFullUpdate && <Button type="primary" style={{flex: 1}} onPress={handleFullUpdate} title="立即更新" />}
+            {downloadSuccess && <Button type="primary" style={{flex: 1}} onPress={handleRestart} title="立即重启" />}
             {downloading && (
               <View style={{width: '100%'}}>
                 <Text style={{textAlign: 'center'}}>{progressData ? `${progressData.received}/${progressData.total}` : ''}正在更新</Text>
