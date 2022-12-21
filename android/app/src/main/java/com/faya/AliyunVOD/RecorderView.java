@@ -21,6 +21,7 @@ public class RecorderView extends SimpleViewManager<SMNView> {
     ReactApplicationContext mCallerContext;
     public final int COMMAND_CREATE = 1;
     public final int COMMAND_SEND_ACTION = 2;
+    public boolean isRegistered = false;
 
     public RecorderView(ReactApplicationContext context) {
         mCallerContext = context;
@@ -37,13 +38,17 @@ public class RecorderView extends SimpleViewManager<SMNView> {
         // l2 = " + l2);
         // }
         // });
-        boolean result = AlivcSdkCore.register(context);
-        Log.e("register SDK result", "success = " + result);
+        // boolean result = AlivcSdkCore.register(context);
+        // Log.e("register SDK result", "success = " + result);
     }
 
     @NonNull
     @Override
     protected SMNView createViewInstance(@NonNull ThemedReactContext themedReactContext) {
+        if (!isRegistered) {
+           isRegistered = AlivcSdkCore.register(mCallerContext);
+           Log.e("register SDK result", "success = " + isRegistered);
+        }
         return new SMNView(themedReactContext);
     }
 
