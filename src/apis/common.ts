@@ -2,6 +2,7 @@ import {SearchParam} from '../fst/models';
 import {AreaF, LocationCity, URLParseRule} from '../models';
 import {originGet, post} from './helper';
 import DeviceInfo from 'react-native-device-info';
+// import {cityList} from './mockCity';
 
 export async function uploadToOSS(uri: string, fileName: string): Promise<string> {
   const formData = new FormData();
@@ -12,6 +13,12 @@ export async function uploadToOSS(uri: string, fileName: string): Promise<string
 
 export async function getAllCity(): Promise<LocationCity[]> {
   return await post('/location/with/company/all');
+}
+export async function getAllCityV2(): Promise<{all: LocationCity[]; hot: LocationCity[]}> {
+  // const mock = cityList;
+  // const mockHot = cityList.filter((e, i) => i < 10);
+  // return {list: mock, hot: mockHot};
+  return await post('/location/with/company/all/with/hot');
 }
 
 export async function getKFUrl(): Promise<string> {

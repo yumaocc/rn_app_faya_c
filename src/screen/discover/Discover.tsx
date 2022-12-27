@@ -1,22 +1,11 @@
 import React, {useEffect, useMemo} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  ScrollView,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-  RefreshControl,
-  TouchableWithoutFeedback,
-  TouchableHighlight,
-  useWindowDimensions,
-} from 'react-native';
-import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
+import {View, StyleSheet, Text, ScrollView, NativeSyntheticEvent, NativeScrollEvent, RefreshControl, TouchableWithoutFeedback, useWindowDimensions} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from '../../component/Icon';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 // import * as api from '../../apis';
-import {useCommonDispatcher, useDivideData, useGrid, useSPUDispatcher, useCityList} from '../../helper/hooks';
-import {FakeNavigation, LocationCity, SPUF} from '../../models';
+import {useDivideData, useSPUDispatcher} from '../../helper/hooks';
+import {FakeNavigation, SPUF} from '../../models';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -24,24 +13,22 @@ import {isReachBottom} from '../../helper/system';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../redux/reducers';
 import {dictLoadingState} from '../../helper/dictionary';
-import ReactNativeModal from 'react-native-modal';
 import MyStatusBar from '../../component/MyStatusBar';
 import {getSPUNavigateParam} from '../../helper/spu';
 import FastImage from 'react-native-fast-image';
+import SelectLocationModal from '../../component/SelectLocationModal';
 
 const Discover: React.FC = () => {
-  const [showSelectCity, setShowSelectCity] = React.useState(false);
   const spuList = useSelector((state: RootState) => state.spu.spuList);
   const [left, right] = useDivideData<SPUF>(spuList.list);
   const locationName = useSelector((state: RootState) => state.common.config.locationName);
   const locationId = useSelector((state: RootState) => state.common.config.locationId);
+  const [showSelectCity, setShowSelectCity] = React.useState(false);
 
   const navigation = useNavigation<FakeNavigation>();
-  const [commonDispatcher] = useCommonDispatcher();
   const [spuDispatcher] = useSPUDispatcher();
-  const {top} = useSafeAreaInsets();
-  const [cityList] = useCityList();
-  const cityWidth = useGrid({col: 3, space: 10, sideSpace: 10});
+  // const [cityList] = useCityList();
+  // const cityWidth = useGrid({col: 3, space: 10, sideSpace: 10});
 
   const {width} = useWindowDimensions();
   const coverHeight = useMemo(() => {
@@ -67,18 +54,6 @@ const Discover: React.FC = () => {
 
   function handleSearch() {
     navigation.navigate('SearchSPU');
-  }
-
-  function closeSelectCity() {
-    setShowSelectCity(false);
-  }
-
-  function selectCity(city: LocationCity) {
-    commonDispatcher.setConfig({
-      locationId: city.id,
-      locationName: city.name,
-    });
-    setShowSelectCity(false);
   }
 
   function renderSPU(spu: SPUF) {
@@ -196,35 +171,7 @@ const Discover: React.FC = () => {
           </ScrollView>
         </SafeAreaView>
       </View>
-      <ReactNativeModal
-        style={styles.citySelectorModal}
-        isVisible={showSelectCity}
-        onBackdropPress={closeSelectCity}
-        onBackButtonPress={closeSelectCity}
-        animationIn="slideInDown"
-        animationOut="slideOutUp">
-        <View style={[styles.citySelector, {paddingTop: top}]}>
-          <View style={styles.citySection}>
-            <Text style={globalStyles.fontPrimary}>热门城市</Text>
-          </View>
-          <View style={styles.cityContainer}>
-            {cityList.map((city, index) => {
-              const marginRight = index % 3 === 2 ? 0 : 10;
-              const isActive = city.id === locationId;
-              return (
-                <View style={[styles.cityWrap, {width: cityWidth, marginRight}]} key={index}>
-                  <TouchableHighlight
-                    style={[styles.cityItem, isActive && {borderColor: globalStyleVariables.COLOR_PRIMARY, backgroundColor: globalStyleVariables.COLOR_PRIMARY + '1a'}]}
-                    underlayColor="#ddd"
-                    onPress={() => selectCity(city)}>
-                    <Text>{city.name}</Text>
-                  </TouchableHighlight>
-                </View>
-              );
-            })}
-          </View>
-        </View>
-      </ReactNativeModal>
+      <SelectLocationModal visible={showSelectCity} onClose={() => setShowSelectCity(false)} />
     </>
   );
 };
@@ -264,42 +211,5 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: '100%',
     height: '100%',
-  },
-  citySelectorModal: {
-    margin: 0,
-    justifyContent: 'flex-start',
-  },
-  citySelector: {
-    backgroundColor: '#fff',
-    paddingBottom: 10,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-  },
-  cityContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 10,
-  },
-  citySection: {
-    backgroundColor: '#f4f4f4',
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-  },
-  cityItem: {
-    borderRadius: 5,
-    flex: 1,
-    backgroundColor: '#fff',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: globalStyleVariables.BORDER_COLOR,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-  },
-  cityWrap: {
-    height: 40,
-    marginBottom: 10,
   },
 });

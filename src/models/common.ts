@@ -34,6 +34,7 @@ export interface LocationCity {
   city: string;
   area: string;
   name: string;
+  firstLetter: string;
   id: number;
 }
 
