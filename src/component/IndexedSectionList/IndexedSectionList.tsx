@@ -106,7 +106,7 @@ export default React.forwardRef(
     return (
       <View style={[styles.wrapper, wrapperStyle]}>
         <SectionList
-          onScrollToIndexFailed={_info => console.warn('failed to scroll!')}
+          onScrollToIndexFailed={_info => console.log('failed to scroll!', _info)}
           {...sectionListProps}
           ref={sectionListRef}
           sections={sections}
@@ -121,12 +121,11 @@ export default React.forwardRef(
           indexItemHeight={indexItemHeight}
           scrollEfficiency={scrollEfficiencyFunction}
           onSelectIndex={selection => {
-            console.log(selection);
             scrollOnSelect &&
               sectionListRef.current &&
               sectionListRef.current.scrollToLocation({
                 sectionIndex: selection.index,
-                itemIndex: 0,
+                itemIndex: 1,
               });
             onSelectIndex && onSelectIndex(selection);
           }}

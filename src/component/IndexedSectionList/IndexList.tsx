@@ -87,11 +87,13 @@ export default ({indexTextStyle, indexes, onSelectIndex, indexItemHeight, scroll
         ref={containerRef}
         collapsable={false}
         onLayout={() => {
-          if (containerRef.current !== null) {
-            containerRef.current.measure((_ox, _oy, _width, height, _px, py) => {
-              containerMeasure.current = {height: height, pageY: py};
-            });
-          }
+          setTimeout(() => {
+            if (containerRef.current !== null) {
+              containerRef.current.measure((_ox, _oy, _width, height, _px, py) => {
+                containerMeasure.current = {height: height, pageY: py};
+              });
+            }
+          }, 500);
         }}>
         <Animated.FlatList
           ref={flatListRef}
