@@ -99,6 +99,7 @@ export default ({indexTextStyle, indexes, onSelectIndex, indexItemHeight, scroll
           ref={flatListRef}
           contentContainerStyle={styles.indexContentContainer}
           data={indexes}
+          initialNumToRender={indexes.length}
           scrollEnabled={false}
           getItemLayout={(_data: any, index: number) => ({
             length: indexItemHeight,

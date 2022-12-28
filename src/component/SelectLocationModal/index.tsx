@@ -183,6 +183,7 @@ const SelectLocationModal: React.FC<SelectLocationModalProps> = props => {
           <IndexedSectionList
             keyboardDismissMode="on-drag"
             onSelectIndex={handleSelectIndex}
+            initialNumToRender={30}
             items={cities}
             titleKey="firstLetter"
             uniqueKey="id"
