@@ -1,3 +1,7 @@
+/**
+ * @deprecated
+ * 有问题，最后用的indexedSectionList
+ */
 import React, {useMemo} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, GestureResponderEvent, PanResponder, PanResponderGestureState} from 'react-native';
 import {globalStyles} from '../../constants/styles';

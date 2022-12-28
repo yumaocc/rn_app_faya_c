@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux';
 import {Button, Tabs} from '../../component';
 import {TabsStyles} from '../../component/Tabs';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
-import {useLog, useRefCallback} from '../../fst/hooks';
+import {useRefCallback} from '../../fst/hooks';
 import {useIsLoggedIn, useWorkDispatcher} from '../../helper/hooks';
 import {RootState} from '../../redux/reducers';
 import WorkList from './WorkList';
@@ -35,8 +35,8 @@ const Home: React.FC = () => {
   const [downloading, setDownloading] = useState(false);
   const [progressData, setProgressData] = useState<DownloadProgressData>();
   const showFullUpdate = useMemo(() => {
-    return !!updateInfo?.needFullUpdate && !downloadSuccess;
-  }, [downloadSuccess, updateInfo]);
+    return !!updateInfo?.needFullUpdate && !downloadSuccess && !downloading;
+  }, [downloadSuccess, downloading, updateInfo?.needFullUpdate]);
 
   const {width} = useWindowDimensions();
   const [ref, setRef, isReady] = useRefCallback();
@@ -46,7 +46,7 @@ const Home: React.FC = () => {
 
   const [workDispatcher] = useWorkDispatcher();
 
-  useLog('showUpdate', showUpdate);
+  // useLog('showUpdate', showUpdate);
 
   const doDownload = useCallback(async (updateInfo: UpdateCheck) => {
     if (!updateInfo) {
@@ -263,7 +263,7 @@ const Home: React.FC = () => {
             </Text>
           </View>
 
-          <View style={[globalStyles.containerRow, {padding: 15}]}>
+          <View style={[{padding: 15}]}>
             {showFullUpdate && <Button type="primary" style={{flex: 1}} onPress={handleFullUpdate} title="立即更新" />}
             {downloadSuccess && <Button type="primary" style={{flex: 1}} onPress={handleRestart} title="立即重启" />}
             {downloading && (

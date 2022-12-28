@@ -20,7 +20,7 @@ const Showcase: React.FC = () => {
 
   // const showcaseSPUList = useSelector((state: RootState) => state.spu.showCaseSPUList);
   const showcaseSPUList = useSelector((state: RootState) => state.spu.userShowcase[String(userId)]);
-  const showEmpty = useMemo(() => showcaseSPUList.status === 'noMore' && showcaseSPUList.list.length === 0, [showcaseSPUList]);
+  const showEmpty = useMemo(() => showcaseSPUList?.status === 'noMore' && showcaseSPUList?.list.length === 0, [showcaseSPUList]);
 
   useLog('showcaseSPUList', showcaseSPUList);
 

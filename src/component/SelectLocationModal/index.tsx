@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo, useRef} from 'react';
-import {View, Text, StyleSheet, SectionList, TouchableHighlight, TouchableOpacity, useWindowDimensions, TextInput, ScrollView} from 'react-native';
+import React, {useEffect, useMemo} from 'react';
+import {View, Text, StyleSheet, TouchableHighlight, TouchableOpacity, TextInput, ScrollView} from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import {globalStyles, globalStyleVariables} from '../../constants/styles';
 import * as api from '../../apis';
@@ -13,7 +13,7 @@ import {RootState} from '../../redux/reducers';
 import {LocationSection} from './util';
 import Icon from '../Icon';
 import {fuzzyMatch} from '../../fst/helper';
-import {useLog} from '../../fst/hooks';
+// import {useLog} from '../../fst/hooks';
 import Empty from '../Empty';
 
 interface SelectLocationModalProps {
@@ -50,9 +50,9 @@ const SelectLocationModal: React.FC<SelectLocationModalProps> = props => {
     return cities.filter(city => fuzzyMatch(city.name, validSearchText)).filter((_, i) => i < 20);
   }, [validSearchText, cities]);
 
-  useLog('searchResult', searchResult);
-  useLog('input', searchText);
-  useLog('valid', validSearchText);
+  // useLog('searchResult', searchResult);
+  // useLog('input', searchText);
+  // useLog('valid', validSearchText);
   // useLog('searchKeyword', searchKeyword);
 
   const [showCurrentIndex, setShowCurrentIndex] = React.useState(false);
