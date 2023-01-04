@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo, useRef} from 'react';
 import {View, StyleSheet, Text, ScrollView, NativeSyntheticEvent, NativeScrollEvent, RefreshControl, TouchableWithoutFeedback, useWindowDimensions} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Icon from '../../component/Icon';
@@ -24,6 +24,7 @@ const Discover: React.FC = () => {
   const locationName = useSelector((state: RootState) => state.common.config.locationName);
   const locationId = useSelector((state: RootState) => state.common.config.locationId);
   const [showSelectCity, setShowSelectCity] = React.useState(false);
+  const scrollViewRef = useRef<ScrollView>();
 
   const navigation = useNavigation<FakeNavigation>();
   const [spuDispatcher] = useSPUDispatcher();
@@ -50,6 +51,9 @@ const Discover: React.FC = () => {
   }
   function handleRefresh() {
     spuDispatcher.loadSPUList({locationId}, true);
+    // setTimeout(() => {
+    //   scrollViewRef.current && scrollViewRef.current.scrollTo({x: 0, y: 1, animated: false});
+    // }, 500);
   }
 
   function handleSearch() {
@@ -160,6 +164,7 @@ const Discover: React.FC = () => {
             style={{flex: 1, paddingTop: globalStyleVariables.MODULE_SPACE}}
             onMomentumScrollEnd={handleScrollEnd}
             showsVerticalScrollIndicator={false}
+            ref={scrollViewRef}
             refreshControl={<RefreshControl refreshing={false} onRefresh={handleRefresh} />}>
             <View style={styles.spuContainer}>
               <View style={styles.spuLeft}>{left.map(renderSPU)}</View>

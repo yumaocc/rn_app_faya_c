@@ -177,7 +177,7 @@ const SelectLocationModal: React.FC<SelectLocationModalProps> = props => {
             {searchResult.map(location => {
               return renderCity({item: {data: location}});
             })}
-            {!searchResult?.length && <Empty text="没有找到符合条件的站点" style={{marginTop: 120}} />}
+            {!searchResult?.length && <Empty text="没有找到符合条件的城市/站点" style={{marginTop: 120}} />}
           </ScrollView>
         ) : (
           <IndexedSectionList

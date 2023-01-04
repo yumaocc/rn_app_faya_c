@@ -17,6 +17,7 @@ const Withdrawal: React.FC = () => {
   const [showSelectBank, setShowSelectBank] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [selectBankCard, setSelectBankCard] = useState<BankCardF>(null);
+  const [isLoadingApply, setIsLoadingApply] = useState(false);
 
   const [walletSummary] = useWalletSummary();
   const [bankCards] = useBankCards();
@@ -56,12 +57,16 @@ const Withdrawal: React.FC = () => {
       return commonDispatcher.error('请选择银行卡');
     }
     try {
+      setIsLoadingApply(true);
       await api.user.userWithDraw(cashMoney, selectBankCard.id);
       commonDispatcher.success('提现申请提交成功');
       updateWallet();
       userDispatcher.getWalletSummary(); // 更新钱包详情
-      navigation.canGoBack() && navigation.goBack();
+      setIsLoadingApply(false);
+      handleShowRecords();
+      // navigation.canGoBack() && navigation.goBack();
     } catch (error) {
+      setIsLoadingApply(false);
       commonDispatcher.error(error);
     }
   }
@@ -150,7 +155,7 @@ const Withdrawal: React.FC = () => {
                   )}
                 </View>
                 <View style={[globalStyles.containerCenter, {marginTop: 90}]}>
-                  <Button title="确定" cash style={styles.button} onPress={handleWithdrawal} />
+                  <Button title="确定" cash style={styles.button} loading={isLoadingApply} onPress={handleWithdrawal} />
                 </View>
               </View>
             )}
