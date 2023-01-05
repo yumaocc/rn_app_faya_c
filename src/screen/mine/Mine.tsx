@@ -96,6 +96,14 @@ const Mine: React.FC = () => {
     [isFocused, showFixTab],
   );
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return;
+    }
+    if (isFocused) {
+      userDispatcher.loadMyWork(Number(currentTabKey) as MyWorkTabType, true);
+    }
+  }, [currentTabKey, isLoggedIn, userDispatcher, isFocused]);
   function handleChangeTab(key: string) {
     userDispatcher.changeMyTab(Number(key) as MyWorkTabType);
   }
@@ -117,14 +125,11 @@ const Mine: React.FC = () => {
     navigation.navigate('MyShowcase');
   }
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      return;
+  function goFans(type = 'fans') {
+    if (isLoggedIn) {
+      navigation.navigate('MineFans', {type});
     }
-    if (isFocused) {
-      userDispatcher.loadMyWork(Number(currentTabKey) as MyWorkTabType, true);
-    }
-  }, [currentTabKey, isLoggedIn, userDispatcher, isFocused]);
+  }
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
@@ -179,14 +184,19 @@ const Mine: React.FC = () => {
                 </TouchableWithoutFeedback>
               </View>
               <View style={[globalStyles.containerRow, {justifyContent: 'space-around', flex: 1, height: 62}]}>
-                <View style={{alignItems: 'center', flex: 1}}>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(detail?.nums?.fansNums)}</Text>
-                  <Text style={[globalStyles.fontPrimary]}>粉丝</Text>
-                </View>
-                <View style={{alignItems: 'center', flex: 1}}>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(detail?.nums?.followNums)}</Text>
-                  <Text style={[globalStyles.fontPrimary]}>关注</Text>
-                </View>
+                <TouchableOpacity style={{flex: 1}} onPress={() => goFans()}>
+                  <View style={{alignItems: 'center'}}>
+                    <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(detail?.nums?.fansNums)}</Text>
+                    <Text style={[globalStyles.fontPrimary]}>粉丝</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity style={{flex: 1}} onPress={() => goFans('follows')}>
+                  <View style={{alignItems: 'center'}}>
+                    <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(detail?.nums?.followNums)}</Text>
+                    <Text style={[globalStyles.fontPrimary]}>关注</Text>
+                  </View>
+                </TouchableOpacity>
+
                 <View style={{alignItems: 'center', flex: 1}}>
                   <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(detail?.nums?.likeNums)}</Text>
                   <Text style={[globalStyles.fontPrimary]}>获赞</Text>

@@ -215,6 +215,10 @@ const User: React.FC = () => {
     }, 300);
   }
 
+  function goUserFans(type = 'fans') {
+    navigation.navigate('UserFans', {type, userId: id});
+  }
+
   return (
     <View style={styles.container}>
       <MyStatusBar barStyle="light-content" />
@@ -237,14 +241,18 @@ const User: React.FC = () => {
                 {!!userInfo?.avatar && <Image style={[styles.avatar]} source={{uri: userInfo.avatar}} />}
                 {!userInfo?.avatar && <Image style={[styles.avatar]} source={require('../../assets/avatar_def.png')} />}
                 <View style={[globalStyles.containerRow, {justifyContent: 'space-around', flex: 1, height: 62}]}>
-                  <View style={{alignItems: 'center', flex: 1}}>
-                    <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(userInfo?.nums?.fansNums)}</Text>
-                    <Text style={[globalStyles.fontPrimary]}>粉丝</Text>
-                  </View>
-                  <View style={{alignItems: 'center', flex: 1}}>
-                    <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(userInfo?.nums?.followNums)}</Text>
-                    <Text style={[globalStyles.fontPrimary]}>关注</Text>
-                  </View>
+                  <TouchableOpacity style={{flex: 1}} onPress={() => goUserFans()}>
+                    <View style={{alignItems: 'center'}}>
+                      <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(userInfo?.nums?.fansNums)}</Text>
+                      <Text style={[globalStyles.fontPrimary]}>粉丝</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{flex: 1}} onPress={() => goUserFans('follows')}>
+                    <View style={{alignItems: 'center'}}>
+                      <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(userInfo?.nums?.followNums)}</Text>
+                      <Text style={[globalStyles.fontPrimary]}>关注</Text>
+                    </View>
+                  </TouchableOpacity>
                   <View style={{alignItems: 'center', flex: 1}}>
                     <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{getPrettyNumber(userInfo?.nums?.likeNums)}</Text>
                     <Text style={[globalStyles.fontPrimary]}>获赞</Text>

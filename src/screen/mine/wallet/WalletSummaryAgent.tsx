@@ -67,8 +67,13 @@ const WalletSummaryAgent: React.FC = () => {
           </View>
         </View>
         <View style={[globalStyles.containerRow, {marginTop: 30}]}>
-          <View style={{flex: 1}}>
-            <Text style={[globalStyles.fontSecondary, {color: '#ffffff88'}]}>累计收益</Text>
+          <View>
+            <TouchableOpacity onPress={() => navigation.navigate('IncomeOrderList')}>
+              <View style={[globalStyles.containerRow]}>
+                <Text style={[globalStyles.fontSecondary, {color: '#ffffff88'}]}>累计收益</Text>
+                <Icon name="all_arrowR36" size={16} color="#ffffff88" />
+              </View>
+            </TouchableOpacity>
             <Text style={[globalStyles.fontPrimary, {fontSize: 25, color: '#fff'}]}>{showReal ? walletSummary?.totalMoneyYuan : '******'}</Text>
           </View>
         </View>

@@ -59,6 +59,12 @@ import PrivacySetting from '../screen/mine/settings/PrivacySetting';
 import WorkStream from '../screen/home/work/WorkStream';
 import AddAddress from '../screen/mine/settings/AddAddress';
 import ManageAddress from '../screen/mine/settings/ManageAddress';
+import UserFans from '../screen/mine/agent/UserFans';
+import MineFans from '../screen/mine/agent/MineFans';
+import TeamMember from '../screen/mine/agent/TeamMember';
+import TeamMemberDetail from '../screen/mine/agent/TeamMemberDetail';
+import IncomeOrderList from '../screen/mine/wallet/IncomeOrderList';
+import IncomeOrderDetail from '../screen/mine/wallet/IncomeOrderDetail';
 
 const Navigator: React.FC = () => {
   const isLoggedIn = useIsLoggedIn();
@@ -127,6 +133,12 @@ const Navigator: React.FC = () => {
           <Stack.Screen name="MyProfile" component={MyProfile} options={commonScreenOptions} />
           <Stack.Screen name="AddAddress" component={AddAddress} options={commonScreenOptions} />
           <Stack.Screen name="ManageAddress" component={ManageAddress} options={commonScreenOptions} />
+          <Stack.Screen name="MineFans" component={MineFans} options={commonScreenOptions} />
+          <Stack.Screen name="UserFans" component={UserFans} options={commonScreenOptions} />
+          <Stack.Screen name="TeamMember" component={TeamMember} options={commonScreenOptions} />
+          <Stack.Screen name="TeamMemberDetail" component={TeamMemberDetail} options={commonScreenOptions} />
+          <Stack.Screen name="IncomeOrderList" component={IncomeOrderList} options={commonScreenOptions} />
+          <Stack.Screen name="IncomeOrderDetail" component={IncomeOrderDetail} options={commonScreenOptions} />
         </>
       ) : (
         <></>

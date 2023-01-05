@@ -16,6 +16,8 @@ export type {
   ModifyProfileForm,
   MyCodeUrl,
   UserExpressAddress,
+  UserIncomeF,
+  TeamMemberF,
 } from './user';
 export type {
   AppHeader,
@@ -82,7 +84,7 @@ export type {
 } from './order';
 export type {CameraType, AppInstallCheckType, ImageCompressOptions, ImageCompressResult} from './device';
 
-export {UserState, CouponState, CouponType, UserLevel, CouponFilterState, UserCertificationStatus, UserFollowState} from './user';
+export {UserState, CouponState, CouponType, UserLevel, CouponFilterState, UserCertificationStatus, UserFollowState, UserIncomeState} from './user';
 export {WorkTabType, WorkType, WorkVisibleAuth, MyWorkTabType, UserWorkTabType} from './work';
 export {SPUStatus, SPUType, BookingType, PayChannel, SKUSaleState} from './spu';
 export {OrderStatus, OrderPayState} from './order';

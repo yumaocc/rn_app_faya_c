@@ -1,5 +1,5 @@
 import RNFS from 'react-native-fs';
-import {post} from './helper';
+import {post, postPaged} from './helper';
 import {
   AgentHomeInfo,
   BankCardF,
@@ -10,15 +10,17 @@ import {
   ModifyProfileForm,
   MyCodeUrl,
   OtherUserDetail,
+  TeamMemberF,
   UserCertificationForm,
   UserExpressAddress,
+  UserIncomeF,
   UserInfo,
   WalletInfo,
   WalletSummary,
   WithdrawalRecord,
 } from '../models';
 import {Platform} from 'react-native';
-import {SearchParam} from '../fst/models';
+import {PagedData, SearchParam} from '../fst/models';
 
 export async function userLogin(params: SearchParam): Promise<UserInfo> {
   return await post<UserInfo, SearchParam>('/user/login', params);
@@ -151,4 +153,37 @@ export async function editAddress(params: Partial<UserExpressAddress>): Promise<
 // 删除收货地址
 export async function deleteAddress(id: number): Promise<boolean> {
   return await post('/user/address/del/one', {id});
+}
+
+// 收益订单列表
+export async function getIncomeList(params: SearchParam): Promise<UserIncomeF[]> {
+  return await post('/user/wallet/revenue/details/page', params);
+}
+// 收益详情
+export async function getIncomeDetail(orderSmallId: string): Promise<UserIncomeF> {
+  return await post('/user/wallet/revenue/details/details', {orderSmallId});
+}
+// 我的团队列表
+export async function getMyTeamList(params: SearchParam): Promise<PagedData<TeamMemberF[]>> {
+  return await postPaged('/user/wallet/my/team/page', params);
+}
+// 我的团队成员详情
+export async function teamMemberDetail(shareSnowId: string): Promise<TeamMemberF> {
+  return await post('/user/wallet/my/team/details', {shareSnowId});
+}
+// 其他用户的粉丝
+export async function userFans(params: SearchParam): Promise<OtherUserDetail[]> {
+  return await post('/user/fans/fans/page', params);
+}
+// 其他用户的关注
+export async function userFollows(params: SearchParam): Promise<OtherUserDetail[]> {
+  return await post('/user/fans/follow/page', params);
+}
+// 我的粉丝
+export async function mineFans(params: SearchParam): Promise<OtherUserDetail[]> {
+  return await post('/user/fans/mine/fans/page', params);
+}
+// 我的关注
+export async function mineFollows(params: SearchParam): Promise<OtherUserDetail[]> {
+  return await post('/user/fans/mine/follow/page', params);
 }

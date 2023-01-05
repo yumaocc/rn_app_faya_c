@@ -142,7 +142,7 @@ const Profile: React.FC = () => {
                   <View style={[{paddingHorizontal: globalStyleVariables.MODULE_SPACE_BIGGER}]}>
                     <View style={globalStyles.lineHorizontal} />
                   </View>
-                  <OperateItem label="我的团队" styles={operateStyles}>
+                  <OperateItem label="我的团队" styles={operateStyles} onPress={() => navigation.navigate('TeamMember')}>
                     <Text style={globalStyles.fontPrimary}>{agentInfo?.developNewUsers ?? '-'}人</Text>
                   </OperateItem>
                 </View>

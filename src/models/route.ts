@@ -61,6 +61,12 @@ export type RootStackParamList = {
   WorkStream: {index: number; type: 'home' | 'mine' | 'user'; work: WorkF};
   AddAddress: undefined;
   ManageAddress: undefined;
+  MineFans: {type: 'fans' | 'follows'};
+  UserFans: {userId: number; type: 'fans' | 'follows'};
+  TeamMember: undefined;
+  TeamMemberDetail: {shareSnowId: string};
+  IncomeOrderList: undefined;
+  IncomeOrderDetail: {orderSmallId: string};
 };
 
 export type ValidRoute = keyof RootStackParamList;

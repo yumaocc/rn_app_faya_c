@@ -236,3 +236,44 @@ export interface UserExpressAddress {
   area: string;
   streetId: number;
 }
+
+export enum UserIncomeState {
+  CHECKED = 1, // 已核销
+  UNCHECKED = 2, // 已付款未核销
+  COMMENT_CHECKED = 3, // 评论红包已领取
+  COMMENT_EXPIRED = 4, // 评论红包已过期
+  REFUND = 5, // 已退款
+  LEVEL_STAGING = 6, // 等级暂存
+}
+export interface UserIncomeItem {
+  moneyYuan: string;
+  status: UserIncomeState;
+  title: string;
+}
+export interface UserIncomeF {
+  avatar: string;
+  boughtItSelf: BoolEnum;
+  fromTeam: BoolEnum;
+  nickName: string;
+  orderSmallIdStr: string;
+  spuName: string;
+  moneyYuan: string;
+  createdTime: string;
+  refundTime: string;
+  commentRedPackageNeedTimeInt: number;
+  status: UserIncomeState;
+  moneyList: UserIncomeItem[];
+  commentInfo: UserIncomeItem;
+}
+export interface TeamMemberF {
+  avatar: string;
+  hisTeamSize: number;
+  invitedTime: string;
+  nickName: string;
+  userId: number;
+  todayEarnings: number;
+  todayEarningsYuan: string;
+  totalEarnings: number;
+  totalEarningsYuan: string;
+  shareSnowId: string;
+}

@@ -71,7 +71,6 @@ const CommentModal = React.forwardRef<CommentModalRef, CommentModalProps>((props
             status: res.length < pageSize ? 'noMore' : 'none',
             index,
           };
-          console.log(newComments);
           setComment(newComments);
         } catch (error) {
           commonDispatcher.error(error);
