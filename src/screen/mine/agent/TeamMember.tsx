@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     backgroundColor: '#fff',
     marginBottom: 10,
+    paddingBottom: 10,
   },
   searchBar: {
     flex: 1,

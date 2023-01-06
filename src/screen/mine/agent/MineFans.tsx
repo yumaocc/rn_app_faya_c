@@ -106,7 +106,7 @@ const MineFans: React.FC = () => {
       <MyStatusBar />
       <SafeAreaView style={{flex: 1}} edges={['bottom']}>
         <ScrollView
-          style={{flex: 1, paddingHorizontal: 15}}
+          style={{flex: 1, paddingHorizontal: 15, paddingTop: 10}}
           onMomentumScrollEnd={handleScrollEnd}
           showsVerticalScrollIndicator={false}
           refreshControl={<RefreshControl refreshing={false} onRefresh={handleRefresh} />}>

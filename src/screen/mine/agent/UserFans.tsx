@@ -112,16 +112,16 @@ const UserFans: React.FC = () => {
       <MyStatusBar />
       <NavigationBar showBottomLine title={userInfo?.nickName || 'TA的粉丝/关注'} />
       <View style={[globalStyles.containerRow, {alignItems: 'center', justifyContent: 'center'}]}>
-        <TouchableOpacity activeOpacity={0.8} onPress={() => setCurrentType('fans')}>
-          <View style={[globalStyles.containerRow]}>
+        <TouchableOpacity activeOpacity={0.8} onPress={() => setCurrentType('fans')} style={[{flex: 1}]}>
+          <View style={[globalStyles.containerRow, {height: 30, justifyContent: 'center'}]}>
             {!canShowFans && <Icon name="empty_lock" color={currentType === 'fans' ? '#333' : '#999'} />}
             <Text style={[globalStyles.fontPrimary, {color: currentType === 'fans' ? globalStyleVariables.TEXT_COLOR_PRIMARY : globalStyleVariables.TEXT_COLOR_TERTIARY}]}>
               粉丝{getPrettyNumber(userInfo?.nums?.fansNums) || 0}
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.8} style={{marginLeft: 40}} onPress={() => setCurrentType('follows')}>
-          <View style={[globalStyles.containerRow]}>
+        <TouchableOpacity activeOpacity={0.8} style={{marginLeft: 40, flex: 1}} onPress={() => setCurrentType('follows')}>
+          <View style={[globalStyles.containerRow, {height: 30, justifyContent: 'center'}]}>
             {!canShowFollows && <Icon name="empty_lock" color={currentType === 'follows' ? '#333' : '#999'} />}
             <Text style={[globalStyles.fontPrimary, {color: currentType === 'follows' ? globalStyleVariables.TEXT_COLOR_PRIMARY : globalStyleVariables.TEXT_COLOR_TERTIARY}]}>
               关注{getPrettyNumber(userInfo?.nums?.followNums) || 0}
@@ -131,7 +131,7 @@ const UserFans: React.FC = () => {
       </View>
       <SafeAreaView style={{flex: 1}} edges={['bottom']}>
         <ScrollView
-          style={{flex: 1, paddingHorizontal: 15}}
+          style={{flex: 1, paddingHorizontal: 15, paddingTop: 10}}
           onMomentumScrollEnd={handleScrollEnd}
           showsVerticalScrollIndicator={false}
           refreshControl={<RefreshControl refreshing={false} onRefresh={handleRefresh} />}>
