@@ -211,7 +211,7 @@ const OrderComment: React.FC = () => {
                 fontSize={15}
                 onChange={val => setFormField('syncToVideo', val ? BoolEnum.TRUE : BoolEnum.FALSE)}
                 style={{marginTop: globalStyleVariables.MODULE_SPACE}}>
-                公开，同步到首页推荐和个人作品
+                公开，同步到个人作品
               </Radio>
             )}
           </View>

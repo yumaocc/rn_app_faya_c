@@ -79,9 +79,12 @@ const TeamMember: React.FC = () => {
       <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('TeamMemberDetail', {shareSnowId: item.shareSnowId})}>
         <View style={[globalStyles.containerRow, {paddingVertical: 5}]}>
           <Image source={{uri: item.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 50, height: 50, borderRadius: 50}} />
-          <View style={{marginLeft: 10, flex: 1}}>
+          <View style={[{marginLeft: 10, flex: 1}]}>
             <Text style={[globalStyles.fontPrimary]}>{item.nickName}</Text>
-            <Text style={[globalStyles.fontTertiary, {marginTop: 5}]}>{item.invitedTime}通过组队码加入团队</Text>
+            <View style={[globalStyles.containerLR, {marginTop: 5}]}>
+              <Text style={[globalStyles.fontTertiary]}>{item.invitedTime}</Text>
+              <Text style={[globalStyles.fontTertiary]}>通过组队码加入团队</Text>
+            </View>
           </View>
         </View>
       </TouchableOpacity>

@@ -86,6 +86,7 @@ const MineFans: React.FC = () => {
   return (
     <View style={styles.container}>
       <NavigationBar
+        showBottomLine
         title={
           <View style={globalStyles.containerRow}>
             <TouchableOpacity activeOpacity={0.8} onPress={() => setCurrentType('fans')}>
@@ -111,17 +112,13 @@ const MineFans: React.FC = () => {
           {userData.list.map(item => {
             return (
               <TouchableOpacity key={item.userId} activeOpacity={0.8} onPress={() => goUserDetail(item.userId)}>
-                <View style={[globalStyles.containerRow, {marginBottom: 10}]}>
+                <View style={[globalStyles.containerRow, {marginBottom: 20}]}>
                   <Image source={{uri: item.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 50, height: 50, borderRadius: 50}} />
                   <View style={{marginLeft: 10, flex: 1}}>
                     <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_LINK}]} numberOfLines={1}>
                       {item.nickName}
                     </Text>
-                    {!!item.say && (
-                      <Text style={[globalStyles.fontSecondary, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER, color: globalStyleVariables.TEXT_COLOR_TERTIARY}]}>
-                        {item.say}
-                      </Text>
-                    )}
+                    {!!item.say && <Text style={[globalStyles.fontTertiary, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>{item.say}</Text>}
                   </View>
                 </View>
               </TouchableOpacity>

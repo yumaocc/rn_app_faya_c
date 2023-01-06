@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, useWindowDimensions} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
 import Icon from '../../component/Icon';
 import QRCode from 'react-native-qrcode-svg';
 import {Modal as AntModal} from '@ant-design/react-native';
@@ -63,7 +63,7 @@ const OrderDetail: React.FC = () => {
   }, [orderCanUse, orderDetail?.list?.length, orderDetail?.needExpress]);
 
   const [commonDispatcher] = useCommonDispatcher();
-  const {height} = useWindowDimensions();
+  // const {height} = useWindowDimensions();
   const canShowRefund = useMemo(() => {
     return [OrderStatus.Paid, OrderStatus.Booked, OrderStatus.Completed].includes(orderDetail?.status);
   }, [orderDetail?.status]);
@@ -293,7 +293,7 @@ const OrderDetail: React.FC = () => {
       return null;
     }
     if (!expressExpand) {
-      // 未展开物流信息
+      // 物流信息收起状态
       const first = expressInfo.list[0];
       return (
         <>
@@ -302,7 +302,9 @@ const OrderDetail: React.FC = () => {
               <View style={[styles.dot]} />
             </View>
             <View style={{flex: 1}}>
-              <Text style={[globalStyles.fontPrimary, {lineHeight: 24}]}>{first.status}</Text>
+              <Text style={[globalStyles.fontPrimary, {lineHeight: 24}]} numberOfLines={2}>
+                {first.status}
+              </Text>
               <View>
                 <Text style={[globalStyles.fontTertiary]}>{first.time}</Text>
               </View>
@@ -317,7 +319,7 @@ const OrderDetail: React.FC = () => {
       );
     }
     return (
-      <ScrollView style={{maxHeight: height / 2}} nestedScrollEnabled={true}>
+      <View>
         {expressInfo.list.map((info, index) => {
           const isFirst = index === 0;
           const isLast = index === expressInfo.list.length - 1;
@@ -340,7 +342,12 @@ const OrderDetail: React.FC = () => {
             </View>
           );
         })}
-      </ScrollView>
+        <TouchableOpacity onPress={() => setExpressExpand(false)}>
+          <View style={[globalStyles.containerCenter, {height: 50}]}>
+            <Text style={[{color: globalStyleVariables.COLOR_LINK}]}>收起物流信息</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   }
 
@@ -350,6 +357,7 @@ const OrderDetail: React.FC = () => {
         <MyStatusBar />
         <NavigationBar
           title="订单详情"
+          showBottomLine={true}
           headerRight={
             // <Popover
             //   overlay={[
@@ -365,37 +373,42 @@ const OrderDetail: React.FC = () => {
             //   <Icon name="nav_more" size={24} color="#333" style={{marginRight: 20}} />
             // </Popover>
 
-            <Popover
-              isVisible={showMenu}
-              onRequestClose={() => setShowMenu(false)}
-              animationConfig={{
-                delay: 0,
-                duration: 16,
-              }}
-              from={
-                <TouchableOpacity activeOpacity={0.8} onPress={() => setShowMenu(true)}>
-                  <Icon name="nav_more" size={24} color="#333" style={{marginRight: 20}} />
-                </TouchableOpacity>
-              }
-              popoverStyle={{borderRadius: globalStyleVariables.RADIUS_MODAL}}
-              backgroundStyle={{backgroundColor: '#00000011'}}
-              arrowSize={{width: 0, height: 0}}>
-              <View style={styles.popoverMenu}>
-                {canShowRefund && (
-                  <TouchableOpacity activeOpacity={0.8} onPress={handleRefund}>
+            <View style={[globalStyles.containerRow]}>
+              <TouchableOpacity activeOpacity={0.8} onPress={() => openKf()} style={{marginRight: 20}}>
+                <Icon name="nav_kefu" size={24} color="#333" />
+              </TouchableOpacity>
+              <Popover
+                isVisible={showMenu}
+                onRequestClose={() => setShowMenu(false)}
+                animationConfig={{
+                  delay: 0,
+                  duration: 16,
+                }}
+                from={
+                  <TouchableOpacity activeOpacity={0.8} onPress={() => setShowMenu(true)}>
+                    <Icon name="nav_more" size={24} color="#333" style={{marginRight: 20}} />
+                  </TouchableOpacity>
+                }
+                popoverStyle={{borderRadius: globalStyleVariables.RADIUS_MODAL}}
+                backgroundStyle={{backgroundColor: '#00000011'}}
+                arrowSize={{width: 0, height: 0}}>
+                <View style={styles.popoverMenu}>
+                  {canShowRefund && (
+                    <TouchableOpacity activeOpacity={0.8} onPress={handleRefund}>
+                      <View style={styles.popoverItem}>
+                        <Text style={styles.popoverText}>申请退款</Text>
+                      </View>
+                    </TouchableOpacity>
+                  )}
+
+                  <TouchableOpacity activeOpacity={0.8} onPress={openKf}>
                     <View style={styles.popoverItem}>
-                      <Text style={styles.popoverText}>申请退款</Text>
+                      <Text style={styles.popoverText}>联系客服</Text>
                     </View>
                   </TouchableOpacity>
-                )}
-
-                <TouchableOpacity activeOpacity={0.8} onPress={openKf}>
-                  <View style={styles.popoverItem}>
-                    <Text style={styles.popoverText}>联系客服</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </Popover>
+                </View>
+              </Popover>
+            </View>
           }
         />
         {!orderDetail && <Loading style={{marginTop: 150}} />}

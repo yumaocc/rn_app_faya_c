@@ -48,7 +48,7 @@ const WorkItem: React.FC<WorkItemProps> = props => {
             ) : (
               <Image source={require('../../../assets/avatar_def.png')} style={styles.avatar} />
             )}
-            <Text style={[globalStyles.fontPrimary, {marginLeft: 3, flex: 1}]} numberOfLines={1}>
+            <Text style={[globalStyles.fontPrimary, {marginLeft: 3, flex: 1, fontSize: 12}]} numberOfLines={1}>
               {work.userName}
             </Text>
           </View>
@@ -58,7 +58,7 @@ const WorkItem: React.FC<WorkItemProps> = props => {
             ) : (
               <Icon name="home_zuopin_zan_nor20" size={15} color={globalStyleVariables.TEXT_COLOR_TERTIARY} />
             )}
-            <Text style={[globalStyles.fontPrimary, {marginLeft: 3}]}>{getPrettyNumber(work.numberOfLikes)}</Text>
+            <Text style={[globalStyles.fontPrimary, {marginLeft: 3, fontSize: 12}]}>{getPrettyNumber(work.numberOfLikes)}</Text>
           </View>
         </View>
       </View>

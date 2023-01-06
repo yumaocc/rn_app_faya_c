@@ -46,7 +46,8 @@ const TeamMemberDetail: React.FC = () => {
               <Image source={{uri: memberDetail?.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 90, height: 90, borderRadius: 90}} />
               <View style={[{flex: 1, marginHorizontal: 10}]}>
                 <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{memberDetail?.nickName}</Text>
-                <Text style={[globalStyles.fontTertiary, {marginTop: 5}]}>{memberDetail?.invitedTime}通过组队码加入团队</Text>
+                <Text style={[globalStyles.fontTertiary, {marginTop: 5}]}>{memberDetail?.invitedTime}</Text>
+                <Text style={[globalStyles.fontTertiary, {marginTop: 5}]}>通过组队码加入团队</Text>
               </View>
               <Icon name="all_arrowR36" size={18} color="#999" />
             </View>

@@ -183,7 +183,7 @@ const SelectLocationModal: React.FC<SelectLocationModalProps> = props => {
           <IndexedSectionList
             keyboardDismissMode="on-drag"
             onSelectIndex={handleSelectIndex}
-            initialNumToRender={30}
+            initialNumToRender={20}
             items={cities}
             titleKey="firstLetter"
             uniqueKey="id"
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
   },
   cityItem: {
     backgroundColor: '#fff',
-    height: 30,
+    height: 60,
     justifyContent: 'center',
     paddingHorizontal: 10,
   },

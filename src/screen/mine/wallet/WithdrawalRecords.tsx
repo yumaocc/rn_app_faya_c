@@ -69,7 +69,7 @@ const WithdrawalRecords: React.FC = () => {
                 </View>
                 <View style={[globalStyles.containerLR, {marginTop: 10}]}>
                   <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>{record.createdTime}</Text>
-                  <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>余额：{record.canWithdrawalMoneyYuan}</Text>
+                  <Text style={[globalStyles.fontTertiary, {fontSize: 15}]}>当时余额：{record.canWithdrawalMoneyYuan}</Text>
                 </View>
               </View>
             );

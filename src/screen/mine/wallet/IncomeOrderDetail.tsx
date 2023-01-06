@@ -20,7 +20,7 @@ const IncomeOrderDetail: React.FC = () => {
 
   const refund = incomeOrder?.status === UserIncomeState.REFUND;
   const showIcon = !refund;
-  const cashColor = refund ? '#999' : globalStyleVariables.COLOR_CASH;
+  const cashColor = refund ? '#333' : globalStyleVariables.COLOR_CASH;
   const commissionText = refund ? '订单退款，佣金已退回' : incomeOrder?.boughtItSelf === BoolEnum.TRUE ? '获得佣金' : '为你带来一份佣金';
   const moneyList = incomeOrder?.moneyList || [];
   const commentStatus = incomeOrder?.commentInfo?.status;
@@ -92,9 +92,11 @@ const IncomeOrderDetail: React.FC = () => {
                 <Text style={{fontSize: 30}}>{incomeOrder.moneyYuan}</Text>
               </Text>
               <View style={[{marginTop: 40}, globalStyles.lineHorizontal]} />
-              <View style={[globalStyles.containerLR, {height: 55}]}>
+              <View style={[globalStyles.containerLR, {paddingVertical: 20}]}>
                 <Text style={styles.textLabel}>商品</Text>
-                <Text style={styles.textValue}>{incomeOrder.spuName}</Text>
+                <Text style={styles.textValue} numberOfLines={2}>
+                  {incomeOrder.spuName}
+                </Text>
               </View>
               <View style={[globalStyles.lineHorizontal]} />
               {moneyList.map((commission, index) => {
@@ -206,10 +208,13 @@ const styles = StyleSheet.create({
   },
   textLabel: {
     fontSize: 15,
+    flex: 1,
     fontWeight: '500',
     color: globalStyleVariables.TEXT_COLOR_TERTIARY,
   },
   textValue: {
+    textAlign: 'right',
+    flex: 1,
     fontSize: 15,
     fontWeight: '600',
     color: globalStyleVariables.TEXT_COLOR_PRIMARY,

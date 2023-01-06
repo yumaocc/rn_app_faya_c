@@ -76,7 +76,7 @@ const IncomeOrderList: React.FC = () => {
   function renderIncomeOrderItem({item}: {item: UserIncomeF}) {
     const {status, boughtItSelf, fromTeam, moneyList, orderSmallIdStr} = item;
     const refund = status === UserIncomeState.REFUND;
-    const cashColor = refund ? '#999' : globalStyleVariables.COLOR_CASH;
+    const cashColor = refund ? '#333' : globalStyleVariables.COLOR_CASH;
     const commissionText = refund ? '订单退款，佣金已退回' : boughtItSelf === BoolEnum.TRUE ? '获得佣金' : '为你带来一份佣金';
     const commissionList = moneyList || [];
     const showIcon = !refund;
@@ -117,7 +117,7 @@ const IncomeOrderList: React.FC = () => {
             </View>
             <Text style={[globalStyles.fontTertiary]}>{item.createdTime}</Text>
           </View>
-          <View style={[globalStyles.containerLR, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
+          <View style={[globalStyles.containerLR, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
             <View style={[globalStyles.containerRow]}>
               <Text style={[{fontSize: 15, fontWeight: '600', color: cashColor}]}>{commissionText}</Text>
               {fromTeam === BoolEnum.TRUE && (
@@ -131,7 +131,7 @@ const IncomeOrderList: React.FC = () => {
               <Text style={{fontSize: 20}}>{item.moneyYuan}</Text>
             </Text>
           </View>
-          <View style={[styles.commissionDetail, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
+          <View style={[styles.commissionDetail, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
             {commissionList.map((commission, index) => {
               const {status} = commission;
               let icon = null as React.ReactElement;
@@ -203,10 +203,13 @@ const IncomeOrderList: React.FC = () => {
           ListHeaderComponent={
             <View>
               <View style={{height: 50}}>
-                <Text>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 30}]}>{walletSummary.totalMoneyYuan}</Text>
-                  <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>芽</Text>
-                </Text>
+                <View style={[globalStyles.containerRow]}>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>全部</Text>
+                  <Text style={{marginLeft: 20}}>
+                    <Text style={[globalStyles.fontPrimary, {fontSize: 30}]}>{walletSummary.totalMoneyYuan}</Text>
+                    <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>芽</Text>
+                  </Text>
+                </View>
               </View>
               <View style={globalStyles.lineHorizontal} />
             </View>
@@ -225,7 +228,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   orderItem: {
-    paddingVertical: globalStyleVariables.MODULE_SPACE_BIGGER,
+    paddingVertical: 20,
     backgroundColor: '#fff',
   },
   mineTag: {
@@ -245,7 +248,7 @@ const styles = StyleSheet.create({
   commissionDetail: {
     backgroundColor: '#f4f4f4',
     borderRadius: 5,
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
   },
   commissionItemText: {
     fontSize: 12,

@@ -4,7 +4,7 @@ import {View, Text, StyleSheet, TouchableOpacity, BackHandler} from 'react-nativ
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {StylePropView} from '../models';
 import Icon from '../component/Icon';
-import {globalStyleVariables} from '../constants/styles';
+import {globalStyles, globalStyleVariables} from '../constants/styles';
 
 interface NavigationBarProps {
   title?: string | React.ReactNode;
@@ -16,6 +16,7 @@ interface NavigationBarProps {
   color?: string;
   canBack?: boolean; // 安卓是否响应默认的返回按钮
   onBack?: () => void; // 返回按钮的点击事件，如果指定，会覆盖默认的返回事件
+  showBottomLine?: boolean;
 }
 
 // 延伸返回按钮的点击区域
@@ -93,6 +94,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <View style={styles.left}>{renderHeaderLeft()}</View>
         <View style={styles.right}>{renderHeaderRight()}</View>
       </View>
+      {props.showBottomLine && <View style={[globalStyles.lineHorizontal]} />}
     </View>
   );
 };
@@ -101,6 +103,7 @@ NavigationBar.defaultProps = {
   safeTop: true,
   color: '#333',
   canBack: true,
+  showBottomLine: false,
 };
 export default NavigationBar;
 const styles = StyleSheet.create({

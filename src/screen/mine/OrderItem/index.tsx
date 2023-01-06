@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {dictOrderState} from '../../../helper/dictionary';
 import {OrderF, OrderStatus} from '../../../models';

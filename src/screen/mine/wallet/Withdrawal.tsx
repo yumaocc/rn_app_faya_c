@@ -6,7 +6,7 @@ import {Button, InputNumber, NavigationBar, Popup} from '../../../component';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {stringToNumber} from '../../../fst/helper';
 import {useWalletSummary, useBankCards, useWallet, useCommonDispatcher, useAndroidBack, useUserDispatcher} from '../../../helper/hooks';
-import Popover from 'react-native-popover-view';
+// import Popover from 'react-native-popover-view';
 import {BankCardF, FakeNavigation, UserCertificationStatus} from '../../../models';
 import {useNavigation} from '@react-navigation/native';
 import * as api from '../../../apis';
@@ -15,7 +15,7 @@ import MyStatusBar from '../../../component/MyStatusBar';
 const Withdrawal: React.FC = () => {
   const [cashMoney, setCashMoney] = useState(0);
   const [showSelectBank, setShowSelectBank] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
+  // const [showMenu, setShowMenu] = useState(false);
   const [selectBankCard, setSelectBankCard] = useState<BankCardF>(null);
   const [isLoadingApply, setIsLoadingApply] = useState(false);
 
@@ -72,7 +72,7 @@ const Withdrawal: React.FC = () => {
   }
 
   function handleShowRecords() {
-    setShowMenu(false);
+    // setShowMenu(false);
     navigation.navigate('WithdrawalRecords');
   }
 
@@ -82,36 +82,36 @@ const Withdrawal: React.FC = () => {
         <MyStatusBar />
         <NavigationBar
           title="提现"
-          headerRight={
-            <Popover
-              isVisible={showMenu}
-              popoverStyle={{borderRadius: globalStyleVariables.RADIUS_MODAL}}
-              onRequestClose={() => {
-                setShowMenu(false);
-              }}
-              animationConfig={{
-                delay: 0,
-                duration: 200,
-              }}
-              from={
-                <TouchableOpacity activeOpacity={0.8} onPress={() => setShowMenu(true)}>
-                  <Icon name="nav_more" size={24} color="#333" style={{marginRight: 20}} />
-                </TouchableOpacity>
-              }
-              backgroundStyle={{backgroundColor: '#00000011'}}
-              arrowSize={{width: 0, height: 0}}>
-              <View style={styles.popoverMenu}>
-                <TouchableOpacity activeOpacity={0.8}>
-                  <View style={styles.popoverItem}>
-                    <Text style={styles.popoverText}>常见疑问</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </Popover>
-          }
+          // headerRight={
+          //   <Popover
+          //     isVisible={showMenu}
+          //     popoverStyle={{borderRadius: globalStyleVariables.RADIUS_MODAL}}
+          //     onRequestClose={() => {
+          //       setShowMenu(false);
+          //     }}
+          //     animationConfig={{
+          //       delay: 0,
+          //       duration: 200,
+          //     }}
+          //     from={
+          //       <TouchableOpacity activeOpacity={0.8} onPress={() => setShowMenu(true)}>
+          //         <Icon name="nav_more" size={24} color="#333" style={{marginRight: 20}} />
+          //       </TouchableOpacity>
+          //     }
+          //     backgroundStyle={{backgroundColor: '#00000011'}}
+          //     arrowSize={{width: 0, height: 0}}>
+          //     <View style={styles.popoverMenu}>
+          //       <TouchableOpacity activeOpacity={0.8}>
+          //         <View style={styles.popoverItem}>
+          //           <Text style={styles.popoverText}>常见疑问</Text>
+          //         </View>
+          //       </TouchableOpacity>
+          //     </View>
+          //   </Popover>
+          // }
         />
         <ScrollView style={[{flex: 1}]} keyboardDismissMode="on-drag">
-          <View style={{padding: globalStyleVariables.MODULE_SPACE}}>
+          <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER}}>
             {!bankCards?.length && (
               <View>
                 <Text style={globalStyles.fontPrimary}>到账银行卡</Text>
@@ -127,7 +127,7 @@ const Withdrawal: React.FC = () => {
               <View>
                 <Text style={globalStyles.fontPrimary}>到账银行卡</Text>
                 <TouchableOpacity activeOpacity={0.5} onPress={() => setShowSelectBank(true)}>
-                  <View style={[styles.bankCardItem, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
+                  <View style={[styles.bankCardItem, {marginTop: globalStyleVariables.MODULE_SPACE_SMALLER}]}>
                     <View style={[globalStyles.containerRow, {flex: 1}]}>
                       <Text style={[styles.bankText]}>
                         {selectBankCard?.bankCodeName}({selectBankCard?.accountNo})
@@ -136,18 +136,18 @@ const Withdrawal: React.FC = () => {
                     <Icon name="all_arrowR36" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                   </View>
                 </TouchableOpacity>
-                <View style={[globalStyles.lineHorizontal, {marginBottom: globalStyleVariables.MODULE_SPACE}]} />
+                <View style={[globalStyles.lineHorizontal, {marginVertical: 20}]} />
                 <Text style={globalStyles.fontPrimary}>提现金额</Text>
-                <View style={[globalStyles.containerRow, {height: 45, marginTop: 20}]}>
+                <View style={[globalStyles.containerRow, {height: 45, marginTop: 10}]}>
                   <Text style={[globalStyles.fontPrimary, {fontSize: 40, padding: 0, includeFontPadding: false}]}>¥</Text>
                   <InputNumber min={-Infinity} digit={2} controls={false} styles={inputStyle} value={cashMoney} onChange={setCashMoney} placeholder="0" />
                 </View>
-                <View style={[globalStyles.lineHorizontal, {marginBottom: globalStyleVariables.MODULE_SPACE}]} />
+                <View style={[globalStyles.lineHorizontal, {marginBottom: 10, marginTop: 20}]} />
                 <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
                   <Text style={[globalStyles.fontSecondary]}>当前可提现¥{walletSummary?.canWithdrawalMoneyYuan}</Text>
                   {!!walletSummary?.canWithdrawalMoney && (
                     <>
-                      <Text>，</Text>
+                      <View style={[globalStyles.lineVertical, {height: 6}, {marginHorizontal: 10}]} />
                       <TouchableOpacity activeOpacity={0.8} onPress={cashAll}>
                         <Text style={[globalStyles.fontSecondary, {color: globalStyleVariables.COLOR_CASH}]}>全部提现</Text>
                       </TouchableOpacity>
@@ -155,7 +155,7 @@ const Withdrawal: React.FC = () => {
                   )}
                 </View>
                 <View style={[globalStyles.containerCenter, {marginTop: 90}]}>
-                  <Button title="确定" cash style={styles.button} loading={isLoadingApply} onPress={handleWithdrawal} />
+                  <Button title="提现" cash style={styles.button} loading={isLoadingApply} onPress={handleWithdrawal} />
                 </View>
               </View>
             )}
@@ -213,14 +213,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: globalStyleVariables.TEXT_COLOR_PRIMARY,
     fontWeight: '500',
-    marginLeft: globalStyleVariables.MODULE_SPACE,
+    // marginLeft: globalStyleVariables.MODULE_SPACE,
   },
   bankCardItem: {
     flexDirection: 'row',
     alignItems: 'center',
     height: 48,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: globalStyleVariables.BORDER_COLOR,
+    // borderBottomWidth: StyleSheet.hairlineWidth,
+    // borderBottomColor: globalStyleVariables.BORDER_COLOR,
   },
   popoverMenu: {
     padding: globalStyleVariables.MODULE_SPACE,
