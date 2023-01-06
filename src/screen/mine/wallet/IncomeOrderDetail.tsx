@@ -131,13 +131,15 @@ const IncomeOrderDetail: React.FC = () => {
                   </View>
                 );
               })}
-              <View style={[globalStyles.containerLR, {marginTop: 20}]}>
-                <View style={[globalStyles.containerRow]}>
-                  <Text style={styles.textLabel}>{incomeOrder?.commentInfo?.title}</Text>
-                  {commentIcon}
+              {incomeOrder?.commentInfo && (
+                <View style={[globalStyles.containerLR, {marginTop: 20}]}>
+                  <View style={[globalStyles.containerRow]}>
+                    <Text style={styles.textLabel}>{incomeOrder?.commentInfo?.title}</Text>
+                    {commentIcon}
+                  </View>
+                  <Text style={styles.textValue}>{incomeOrder?.commentInfo?.moneyYuan}</Text>
                 </View>
-                <Text style={styles.textValue}>{incomeOrder?.commentInfo?.moneyYuan}</Text>
-              </View>
+              )}
               <View style={[globalStyles.lineHorizontal, {marginTop: 20}]} />
               <View style={[globalStyles.containerLR, {marginTop: 20}]}>
                 <Text style={styles.textLabel}>订单创建时间</Text>
