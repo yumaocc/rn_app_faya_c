@@ -1,6 +1,6 @@
 import React from 'react';
 import {useEffect} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {NavigationBar} from '../../../component';
 import Loading from '../../../component/Loading';
 import MyStatusBar from '../../../component/MyStatusBar';
@@ -8,7 +8,7 @@ import {useCommonDispatcher, useParams} from '../../../helper/hooks';
 import {FakeNavigation, TeamMemberF} from '../../../models';
 import * as api from '../../../apis';
 import {globalStyles, globalStyleVariables} from '../../../constants/styles';
-// import MyImage from '../../../component/MyImage';
+import MyImage from '../../../component/MyImage';
 import Icon from '../../../component/Icon';
 import {useNavigation} from '@react-navigation/native';
 
@@ -43,7 +43,7 @@ const TeamMemberDetail: React.FC = () => {
         <View style={{paddingTop: 20, flex: 1}}>
           <TouchableOpacity activeOpacity={0.8} onPress={goUserDetail}>
             <View style={[globalStyles.containerRow, styles.baseInfo]}>
-              <Image source={{uri: memberDetail?.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 90, height: 90, borderRadius: 90}} />
+              <MyImage source={{uri: memberDetail?.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 90, height: 90, borderRadius: 90}} />
               <View style={[{flex: 1, marginHorizontal: 10}]}>
                 <Text style={[globalStyles.fontPrimary, {fontSize: 20}]}>{memberDetail?.nickName}</Text>
                 <Text style={[globalStyles.fontTertiary, {marginTop: 5}]}>{memberDetail?.invitedTime}</Text>

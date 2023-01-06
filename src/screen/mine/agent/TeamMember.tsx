@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
-import {View, Text, StyleSheet, RefreshControl, Image, TextInput, TouchableOpacity, FlatList, Platform, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
+import {View, Text, StyleSheet, RefreshControl, TextInput, TouchableOpacity, FlatList, Platform, NativeSyntheticEvent, NativeScrollEvent} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../../component';
 import Empty from '../../../component/Empty';
@@ -12,6 +12,7 @@ import {FakeNavigation, LoadListState, TeamMemberF} from '../../../models';
 import * as api from '../../../apis';
 import {useEffect} from 'react';
 import {isReachBottom} from '../../../helper/system';
+import MyImage from '../../../component/MyImage';
 // import MyImage from '../../../component/MyImage';
 
 const TeamMember: React.FC = () => {
@@ -78,7 +79,7 @@ const TeamMember: React.FC = () => {
     return (
       <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('TeamMemberDetail', {shareSnowId: item.shareSnowId})}>
         <View style={[globalStyles.containerRow, {paddingVertical: 5}]}>
-          <Image source={{uri: item.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 50, height: 50, borderRadius: 50}} />
+          <MyImage source={{uri: item.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 50, height: 50, borderRadius: 50}} />
           <View style={[{marginLeft: 10, flex: 1}]}>
             <Text style={[globalStyles.fontPrimary]}>{item.nickName}</Text>
             <View style={[globalStyles.containerLR, {marginTop: 5}]}>

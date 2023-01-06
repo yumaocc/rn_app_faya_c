@@ -1,6 +1,6 @@
 import React from 'react';
 import {useEffect} from 'react';
-import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import {NavigationBar} from '../../../component';
 import MyStatusBar from '../../../component/MyStatusBar';
 import {useCommonDispatcher, useParams} from '../../../helper/hooks';
@@ -12,6 +12,7 @@ import {globalStyles, globalStyleVariables} from '../../../constants/styles';
 import {BoolEnum} from '../../../fst/models';
 import Icon from '../../../component/Icon';
 import {useNavigation} from '@react-navigation/native';
+import MyImage from '../../../component/MyImage';
 
 const IncomeOrderDetail: React.FC = () => {
   const {orderSmallId} = useParams<{orderSmallId: string}>();
@@ -71,7 +72,7 @@ const IncomeOrderDetail: React.FC = () => {
           ) : (
             <View style={{padding: globalStyleVariables.MODULE_SPACE_BIGGER}}>
               <View style={[globalStyles.containerRow]}>
-                <Image source={{uri: incomeOrder.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 20, height: 20, borderRadius: 20}} />
+                <MyImage source={{uri: incomeOrder.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 20, height: 20, borderRadius: 20}} />
                 <Text style={{marginHorizontal: 5, fontSize: 15, color: globalStyleVariables.COLOR_LINK}}>{incomeOrder.nickName}</Text>
                 {incomeOrder.boughtItSelf === BoolEnum.TRUE && (
                   <View style={[globalStyles.containerCenter, styles.mineTag]}>

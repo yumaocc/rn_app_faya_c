@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, useWindowDimensions, TouchableOpacity, Platform, Alert} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, useWindowDimensions, TouchableOpacity, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import {Button, Tabs} from '../../component';
@@ -264,8 +264,8 @@ const Home: React.FC = () => {
           </View>
 
           <View style={[{padding: 15}]}>
-            {showFullUpdate && <Button type="primary" style={{flex: 1}} onPress={handleFullUpdate} title="立即更新" />}
-            {downloadSuccess && <Button type="primary" style={{flex: 1}} onPress={handleRestart} title="立即重启" />}
+            {showFullUpdate && <Button type="primary" onPress={handleFullUpdate} title="立即更新" />}
+            {downloadSuccess && <Button type="primary" onPress={handleRestart} title="立即重启" />}
             {downloading && (
               <View style={{width: '100%'}}>
                 <Text style={{textAlign: 'center'}}>{progressData ? `${progressData.received}/${progressData.total}` : ''}正在更新</Text>

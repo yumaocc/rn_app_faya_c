@@ -1,7 +1,10 @@
 import React, {memo} from 'react';
 import {View, StyleSheet, ImageProps, Image, NativeSyntheticEvent, ImageLoadEventData} from 'react-native';
 
-export interface MyImageProps extends ImageProps {}
+export interface MyImageProps extends ImageProps {
+  // remoteUrl?: string;
+  isRemote?: boolean;
+}
 
 const MyImage: React.FC<MyImageProps> = props => {
   const {style, defaultSource, onLoad, ...rest} = props;
@@ -9,6 +12,12 @@ const MyImage: React.FC<MyImageProps> = props => {
 
   function handleLoad(e: NativeSyntheticEvent<ImageLoadEventData>) {
     onLoad && onLoad(e);
+    if (props.source && typeof props.source === 'object' && 'uri' in props.source) {
+      if (!props.source.uri && props.isRemote) {
+        setLoadSuccess(false);
+        return;
+      }
+    }
     setLoadSuccess(true);
   }
   return (
@@ -17,6 +26,10 @@ const MyImage: React.FC<MyImageProps> = props => {
       {!loadSuccess && <Image style={[styles.image, styles.placeholder]} source={defaultSource} resizeMode="cover" />}
     </View>
   );
+};
+
+MyImage.defaultProps = {
+  isRemote: true,
 };
 
 export default memo(MyImage);

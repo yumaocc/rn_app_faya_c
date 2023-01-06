@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, NativeSyntheticEvent, NativeScrollEvent, RefreshControl} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity, NativeSyntheticEvent, NativeScrollEvent, RefreshControl} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../../component';
 import MyStatusBar from '../../../component/MyStatusBar';
@@ -14,6 +14,7 @@ import {BoolEnum} from '../../../fst/models';
 import Icon from '../../../component/Icon';
 import Empty from '../../../component/Empty';
 import {getPrettyNumber} from '../../../fst/helper/data';
+import MyImage from '../../../component/MyImage';
 
 type ListType = 'fans' | 'follows';
 
@@ -138,7 +139,7 @@ const UserFans: React.FC = () => {
             return (
               <TouchableOpacity key={item.userId} activeOpacity={0.8} onPress={() => goUserDetail(item.userId)}>
                 <View style={[globalStyles.containerRow, {marginBottom: 20}]}>
-                  <Image source={{uri: item.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 50, height: 50, borderRadius: 50}} />
+                  <MyImage source={{uri: item.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 50, height: 50, borderRadius: 50}} />
                   <View style={{marginLeft: 10, flex: 1}}>
                     <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_LINK}]} numberOfLines={1}>
                       {item.nickName}

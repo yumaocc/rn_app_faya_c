@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {useEffect} from 'react';
-import {View, Text, StyleSheet, FlatList, Image, TouchableOpacity, NativeSyntheticEvent, NativeScrollEvent, RefreshControl} from 'react-native';
+import {View, Text, StyleSheet, FlatList, TouchableOpacity, NativeSyntheticEvent, NativeScrollEvent, RefreshControl} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NavigationBar} from '../../../component';
 import MyStatusBar from '../../../component/MyStatusBar';
@@ -14,6 +14,7 @@ import {isReachBottom} from '../../../helper/system';
 import Loading from '../../../component/Loading';
 import Empty from '../../../component/Empty';
 import {useNavigation} from '@react-navigation/native';
+import MyImage from '../../../component/MyImage';
 
 const IncomeOrderList: React.FC = () => {
   const [incomeOrderData, setIncomeOrderData] = useState<LoadListState<UserIncomeF>>({list: [], status: 'none', index: 0});
@@ -107,7 +108,7 @@ const IncomeOrderList: React.FC = () => {
         <View style={[styles.orderItem]}>
           <View style={[globalStyles.containerLR]}>
             <View style={[globalStyles.containerRow]}>
-              <Image source={{uri: item.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 20, height: 20, borderRadius: 20}} />
+              <MyImage source={{uri: item.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 20, height: 20, borderRadius: 20}} />
               <Text style={{fontSize: 15, color: globalStyleVariables.COLOR_LINK, marginHorizontal: 5}}>{item.nickName}</Text>
               {boughtItSelf === BoolEnum.TRUE && (
                 <View style={[globalStyles.containerCenter, styles.mineTag]}>
@@ -203,13 +204,11 @@ const IncomeOrderList: React.FC = () => {
           ListHeaderComponent={
             <View>
               <View style={{height: 50}}>
-                <View style={[globalStyles.containerRow]}>
+                <Text style={[{flex: 1}]}>
                   <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>全部</Text>
-                  <Text style={{marginLeft: 20}}>
-                    <Text style={[globalStyles.fontPrimary, {fontSize: 30}]}>{walletSummary.totalMoneyYuan}</Text>
-                    <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>芽</Text>
-                  </Text>
-                </View>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 30}]}>&ensp;{walletSummary.totalMoneyYuan}</Text>
+                  <Text style={[globalStyles.fontPrimary, {fontSize: 12}]}>芽</Text>
+                </Text>
               </View>
               <View style={globalStyles.lineHorizontal} />
             </View>
