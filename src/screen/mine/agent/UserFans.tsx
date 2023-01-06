@@ -110,8 +110,8 @@ const UserFans: React.FC = () => {
   return (
     <View style={styles.container}>
       <MyStatusBar />
-      <NavigationBar showBottomLine title={userInfo?.nickName || 'TA的粉丝/关注'} />
-      <View style={[globalStyles.containerRow, {alignItems: 'center', justifyContent: 'center'}]}>
+      <NavigationBar title={userInfo?.nickName || 'TA的粉丝/关注'} />
+      <View style={[globalStyles.containerRow, {alignItems: 'center', justifyContent: 'center', height: 40}]}>
         <TouchableOpacity activeOpacity={0.8} onPress={() => setCurrentType('fans')} style={[{flex: 1}]}>
           <View style={[globalStyles.containerRow, {height: 30, justifyContent: 'center'}]}>
             {!canShowFans && <Icon name="empty_lock" color={currentType === 'fans' ? '#333' : '#999'} />}
@@ -129,6 +129,7 @@ const UserFans: React.FC = () => {
           </View>
         </TouchableOpacity>
       </View>
+      <View style={[globalStyles.lineHorizontal]} />
       <SafeAreaView style={{flex: 1}} edges={['bottom']}>
         <ScrollView
           style={{flex: 1, paddingHorizontal: 15, paddingTop: 10}}

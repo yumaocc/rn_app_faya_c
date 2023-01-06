@@ -136,13 +136,13 @@ const Withdrawal: React.FC = () => {
                     <Icon name="all_arrowR36" size={24} color={globalStyleVariables.TEXT_COLOR_PRIMARY} />
                   </View>
                 </TouchableOpacity>
-                <View style={[globalStyles.lineHorizontal, {marginVertical: 20}]} />
+                <View style={[globalStyles.lineHorizontal, {marginBottom: 20, marginTop: 10}]} />
                 <Text style={globalStyles.fontPrimary}>提现金额</Text>
                 <View style={[globalStyles.containerRow, {height: 45, marginTop: 10}]}>
                   <Text style={[globalStyles.fontPrimary, {fontSize: 40, padding: 0, includeFontPadding: false}]}>¥</Text>
                   <InputNumber min={-Infinity} digit={2} controls={false} styles={inputStyle} value={cashMoney} onChange={setCashMoney} placeholder="0" />
                 </View>
-                <View style={[globalStyles.lineHorizontal, {marginBottom: 10, marginTop: 20}]} />
+                <View style={[globalStyles.lineHorizontal, {marginTop: 20}]} />
                 <View style={[globalStyles.containerRow, {marginTop: globalStyleVariables.MODULE_SPACE}]}>
                   <Text style={[globalStyles.fontSecondary]}>当前可提现¥{walletSummary?.canWithdrawalMoneyYuan}</Text>
                   {!!walletSummary?.canWithdrawalMoney && (

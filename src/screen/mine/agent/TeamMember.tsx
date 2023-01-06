@@ -78,7 +78,7 @@ const TeamMember: React.FC = () => {
   function renderItem({item}: {item: TeamMemberF}) {
     return (
       <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('TeamMemberDetail', {shareSnowId: item.shareSnowId})}>
-        <View style={[globalStyles.containerRow, {paddingVertical: 5}]}>
+        <View style={[globalStyles.containerRow, {paddingVertical: 10}]}>
           <MyImage source={{uri: item.avatar}} defaultSource={require('../../../assets/avatar_def.png')} style={{width: 50, height: 50, borderRadius: 50}} />
           <View style={[{marginLeft: 10, flex: 1}]}>
             <Text style={[globalStyles.fontPrimary]}>{item.nickName}</Text>

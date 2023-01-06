@@ -94,8 +94,8 @@ const IncomeOrderDetail: React.FC = () => {
               </Text>
               <View style={[{marginTop: 40}, globalStyles.lineHorizontal]} />
               <View style={[globalStyles.containerLR, {paddingVertical: 20}]}>
-                <Text style={styles.textLabel}>商品</Text>
-                <Text style={styles.textValue} numberOfLines={2}>
+                <Text style={[styles.textLabel, {flex: 1}]}>商品</Text>
+                <Text style={[styles.textValue, {flex: 1}]} numberOfLines={2}>
                   {incomeOrder.spuName}
                 </Text>
               </View>
@@ -209,15 +209,14 @@ const styles = StyleSheet.create({
   },
   textLabel: {
     fontSize: 15,
-    flex: 1,
+    // flex: 1,
     fontWeight: '500',
     color: globalStyleVariables.TEXT_COLOR_TERTIARY,
   },
   textValue: {
     textAlign: 'right',
-    flex: 1,
+    // flex: 1,
     fontSize: 15,
-    fontWeight: '600',
     color: globalStyleVariables.TEXT_COLOR_PRIMARY,
   },
   statusWrapper: {

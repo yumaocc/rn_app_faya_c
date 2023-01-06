@@ -74,7 +74,9 @@ const WalletSummaryAgent: React.FC = () => {
                 <Icon name="all_arrowR36" size={16} color="#ffffff88" />
               </View>
             </TouchableOpacity>
-            <Text style={[globalStyles.fontPrimary, {fontSize: 25, color: '#fff'}]}>{showReal ? walletSummary?.totalMoneyYuan : '******'}</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('IncomeOrderList')}>
+              <Text style={[globalStyles.fontPrimary, {fontSize: 25, color: '#fff'}]}>{showReal ? walletSummary?.totalMoneyYuan : '******'}</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
