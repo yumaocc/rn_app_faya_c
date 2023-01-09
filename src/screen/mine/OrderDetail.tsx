@@ -76,6 +76,14 @@ const OrderDetail: React.FC = () => {
     return needExpress === BoolEnum.TRUE && emsHasSend === BoolEnum.TRUE && receipted === BoolEnum.FALSE;
   }, [orderDetail]);
 
+  const canShowExpressInfo = useMemo(() => {
+    if (!orderDetail) {
+      return false;
+    }
+    const {status, needExpress} = orderDetail;
+    return needExpress === BoolEnum.TRUE && [OrderStatus.Paid, OrderStatus.Booked, OrderStatus.Completed].includes(status);
+  }, [orderDetail]);
+
   const {bottom} = useSafeAreaInsets();
   const isFocused = useIsFocused();
 
@@ -441,7 +449,7 @@ const OrderDetail: React.FC = () => {
                 </View>
               )}
               {/* 用户物流信息 */}
-              {orderDetail?.needExpress === BoolEnum.TRUE && (
+              {canShowExpressInfo && (
                 <View style={{marginBottom: 10}}>
                   {expressInfoList?.length ? (
                     <View style={[{paddingHorizontal: 15, paddingTop: 15, backgroundColor: '#fff'}]}>
@@ -468,7 +476,7 @@ const OrderDetail: React.FC = () => {
                     <View style={[{backgroundColor: '#fff', padding: 15}]}>
                       <Text>物流信息</Text>
                       <View style={[globalStyles.lineHorizontal, {marginVertical: 10}]} />
-                      <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_PRIMARY}]}>等待出货</Text>
+                      <Text style={[globalStyles.fontPrimary, {color: globalStyleVariables.COLOR_PRIMARY}]}>暂无物流信息</Text>
                     </View>
                   )}
                 </View>
